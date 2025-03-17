@@ -44,7 +44,9 @@ const WishList = () => {
                 </div>
 
                 {/* Centered Load More Button */}
-                <Buttons />
+                <div className="flex justify-center mt-6 mb-6">
+                    <Buttons />
+                </div>
             </div>
 
             <Footer />

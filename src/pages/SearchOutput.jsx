@@ -7,7 +7,7 @@ import { Buttons } from '../components/Buttons'
 const SearchOutput = () => {
     return (
         <div className='w-full h-auto'>
-            <SearchPageNavbar title="Search Result"/>
+            <SearchPageNavbar title="Search Result" />
 
             <div className='text-center py-8'>
                 <h2 className='text-2xl font-semibold text-gray-900'>
@@ -38,7 +38,9 @@ const SearchOutput = () => {
                 </div>
 
                 {/* Centered Load More Button */}
-                <Buttons />
+                <div className="flex justify-center mt-6 mb-6">
+                    <Buttons />
+                </div>
             </div>
 
             <Footer />
