@@ -9,7 +9,7 @@ const Product = () => {
     return (
         <div>
             <div className='relative bg-[#FBF4E8] rounded-[24px]'>
-                <p className="bg-red-400 font-semibold p-1 text-xs text-white w-max rounded-[24px] absolute top-[10px] left-[10px]">
+                <p className="bg-red-400 font-semibold px-3 py-1 text-xs text-white w-max rounded-[24px] absolute top-[10px] left-[10px]">
                     SALE
                 </p>
                 <button className="bg-white p-1 rounded-[24px] absolute top-[10px] right-[10px] cursor-pointer">
