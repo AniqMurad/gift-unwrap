@@ -5,16 +5,18 @@ import WishList from "./pages/WishList";
 import Blog from "./pages/Blog";
 import CustomerFeedback from "./pages/CustomerFeedback";
 import ContactUs from "./pages/ContactUs";
+import BlogOpen from "./pages/BlogOpen";
 
 function App() {
   return (
     <>
-      <Home />
+      {/* <Home />
       <SearchOutput />
       <WishList />
       <Blog />
       <CustomerFeedback />
-      <ContactUs />
+      <ContactUs /> */}
+      <BlogOpen />
     </>
   );
 }
