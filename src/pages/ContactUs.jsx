@@ -5,7 +5,7 @@ import Footer from '../components/Footer'
 const ContactUs = () => {
     return (
         <div>
-            <SearchPageNavbar title="Contact Us" />
+            <SearchPageNavbar title="Contact Us" titleHome="Home Page" />
 
             <div className='px-16 py-4 flex justify-between items-center mt-10'>
 

@@ -6,17 +6,21 @@ import Blog from "./pages/Blog";
 import CustomerFeedback from "./pages/CustomerFeedback";
 import ContactUs from "./pages/ContactUs";
 import BlogOpen from "./pages/BlogOpen";
+import Error from "./pages/Error";
+import ComingSoon from "./pages/ComingSoon";
 
 function App() {
   return (
     <>
-      {/* <Home />
+      <Home />
       <SearchOutput />
       <WishList />
       <Blog />
       <CustomerFeedback />
-      <ContactUs /> */}
+      <ContactUs />
       <BlogOpen />
+      <Error />
+      <ComingSoon />
     </>
   );
 }

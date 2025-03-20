@@ -8,7 +8,7 @@ import { ArrowDown, FiveBars, FourBars, ThreeBars } from '../components/icons'
 const WishList = () => {
     return (
         <div className='w-full h-auto'>
-            <SearchPageNavbar title="Wish List" />
+            <SearchPageNavbar title="Wish List" titleHome="Home Page" />
 
             <div className='px-16 py-4 mt-10 mb-10'>
                 <div className="flex items-center justify-between py-4 space-x-6">

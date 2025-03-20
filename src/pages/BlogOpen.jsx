@@ -13,7 +13,7 @@ import BlogSideBarSuggestion from '../components/BlogSideBarSuggestion'
 const BlogOpen = () => {
     return (
         <div>
-            <SearchPageNavbar title="Blog" />
+            <SearchPageNavbar title="Blog" title2="Blog" titleHome="Home Page" />
 
             <div className='px-16 py-4 mt-10 mb-10'>
 

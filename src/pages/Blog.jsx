@@ -12,8 +12,8 @@ const Blog = () => {
 
   return (
     <div className=''>
-      <SearchPageNavbar title="Blog" />
-      <div className="mt-[7%] container px-16 flex justify-between mb-10">
+      <SearchPageNavbar title="Blog" titleHome="Home Page" />
+      <div className="mt-[7%] px-16 flex justify-between mb-10">
 
         {/* Blog Posts Section */}
         <div className="w-[960px]">

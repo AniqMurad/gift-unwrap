@@ -6,7 +6,7 @@ import { StarRating } from '../components/icons';
 const CustomerFeedback = () => {
     return (
         <div className="w-full h-auto">
-            <SearchPageNavbar title="Customer Feedback" />
+            <SearchPageNavbar title="Customer Feedback" titleHome="Home Page" />
 
             <div className='px-16 py-4 flex justify-between'>
 

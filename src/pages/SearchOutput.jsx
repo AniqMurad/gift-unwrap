@@ -7,7 +7,7 @@ import { Buttons } from '../components/Buttons'
 const SearchOutput = () => {
     return (
         <div className='w-full h-auto'>
-            <SearchPageNavbar title="Search Result" />
+            <SearchPageNavbar title="Search Result" titleHome="Home Page" />
 
             <div className='text-center py-8'>
                 <h2 className='text-2xl font-semibold text-gray-900'>
