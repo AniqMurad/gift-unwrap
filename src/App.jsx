@@ -8,6 +8,7 @@ import ContactUs from "./pages/ContactUs";
 import BlogOpen from "./pages/BlogOpen";
 import Error from "./pages/Error";
 import ComingSoon from "./pages/ComingSoon";
+import FAQs from "./pages/FAQs";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <BlogOpen />
       <Error />
       <ComingSoon />
+      <FAQs />
     </>
   );
 }
