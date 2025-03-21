@@ -9,11 +9,12 @@ import BlogOpen from "./pages/BlogOpen";
 import Error from "./pages/Error";
 import ComingSoon from "./pages/ComingSoon";
 import FAQs from "./pages/FAQs";
+import Giftsforher from "./pages/Giftsforher";
 
 function App() {
   return (
     <>
-      <Home />
+      {/* <Home />
       <SearchOutput />
       <WishList />
       <Blog />
@@ -22,7 +23,8 @@ function App() {
       <BlogOpen />
       <Error />
       <ComingSoon />
-      <FAQs />
+      <FAQs /> */}
+      <Giftsforher/>
     </>
   );
 }

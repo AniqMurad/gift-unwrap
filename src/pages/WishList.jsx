@@ -14,9 +14,15 @@ const WishList = () => {
                 <div className="flex items-center justify-between py-4 space-x-6">
                     {/* Layout Switch Buttons */}
                     <div className="flex space-x-2">
-                        <ThreeBars />
-                        <FourBars />
-                        <FiveBars className="text-gray-500" />
+                        <div className="border border-[#E9E9E9] p-1 rounded">
+                            <ThreeBars fillColor="#A0A0A0"/>
+                        </div>
+                        <div className="bg-black p-1 rounded">
+                            <FourBars fillColor="white"/>
+                        </div>
+                        <div className='border border-[#E9E9E9] p-1 rounded'>
+                            <FiveBars fillColor="#A0A0A0"/>
+                        </div>
                     </div>
 
                     {/* Filters */}
