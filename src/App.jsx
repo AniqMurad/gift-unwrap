@@ -28,6 +28,7 @@ function App() {
         <Route path="/coming-soon" element={<ComingSoon />} />
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/giftforher" element={<Giftsforher />} />
+        <Route path="/search-output" element={<SearchOutput />} />
       </Routes>
       <FAQs />
     </Router>

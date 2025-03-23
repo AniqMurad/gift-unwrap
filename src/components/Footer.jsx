@@ -1,20 +1,23 @@
 import React from "react";
 import { FbIcon, InstaIcon, PintIcon, RarrowIcon, TwtIcon, YtIcon, VisaIcon, MastercardIcon, PaypalIcon, } from "./icons";
-
+import Logo from '../assets/logo.png';
 const Footer = () => {
   return (
     <div className="bg-gray-100 px-16 py-10 text-gray-700 text-sm">
       <div className="flex justify-between">
 
         <div className="w-[300px]">
-          <h3 className="text-2xl font-bold mb-3">Gift Unwrap</h3>
+          <div className="text-2xl font-bold mb-3">
+            {/* <img src={Logo} alt="" /> */}
+            Gift Unwrap
+          </div>
           <p><strong>Mail:</strong> giftunwrap@gmail.com</p>
           <p><strong>Phone:</strong> 1-333-345-6868</p>
           <p><strong>Address:</strong> Flat C9, Rehmani Garden Colony, Nistar Rd, Karachi</p>
         </div>
 
         <div className="flex justify-between gap-10 w-[500px]">
-          <div>
+          <div className="flex flex-col gap-4">
             <h4 className="font-semibold mb-2">INFORMATION</h4>
             <p>Contact us</p>
             <p>Reviews</p>
