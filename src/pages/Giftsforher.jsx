@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
-import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, SquareIcon, ThreeBars } from "../components/icons";
+import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
 
 const Giftsforher = () => {
@@ -327,7 +327,7 @@ const Giftsforher = () => {
                             {currentPage > 1 && (
                                 <button onClick={goToPreviousPage} className="px-3 py-1 border-r border-gray-400">
                                     {/* <FaChevronLeft className="text-gray-600 text-sm" /> */}
-                                    <PagenextIcon />
+                                    <PageprevIcon />
                                 </button>
                             )}
 
