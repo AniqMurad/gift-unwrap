@@ -29,8 +29,8 @@ function App() {
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/giftforher" element={<Giftsforher />} />
       </Routes>
+      <FAQs />
     </Router>
-    // <Button variant="secondary">Click me</Button>
   );
 }
 

@@ -1,166 +1,103 @@
-import React from 'react'
+import React, { useState } from "react";
 import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
-import { HalfArrowDown, HalfArrowUp } from '../components/icons'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";
 
 const FAQs = () => {
+    const categories = [
+        "How To Buy",
+        "Payment Methods",
+        "Delivery",
+        "Exchanges & Returns",
+        "Registration",
+        "Look After Your Garments",
+        "Contacts",
+    ];
+
+    const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+
+    const questionsByCategory = {
+        "How To Buy": [
+            { question: "NEW! Plus sizes for Woman", answer: "We have introduced a new range of plus sizes in our women's collection." },
+            { question: "Where is my order?", answer: "You can track your order status from your account section." }
+        ],
+        "Payment Methods": [
+            { question: "How can I pay for my purchases?", answer: "You can pay using credit/debit cards, PayPal, and other digital wallets." },
+            { question: "I have a promotional or discount code. How do I use it?", answer: "Enter your promo code at checkout to apply the discount." }
+        ],
+        "Delivery": [
+            { question: "What are the delivery types?", answer: "We offer standard, express, and same-day delivery options." },
+            { question: "How does COVID-19 affect my online orders?", answer: "Delivery times may be longer due to safety measures." }
+        ],
+        "Exchanges & Returns": [
+            { question: "How can I exchange or return an item?", answer: "You can return items within 30 days with the original receipt." },
+            { question: "The items received are incorrect or defective. What should I do?", answer: "Contact our support team for assistance with defective or incorrect items." }
+        ],
+        "Registration": [
+            { question: "Can I cancel or change my order?", answer: "Orders can only be modified within the first 2 hours of placement." },
+            { question: "I cannot find my size or color. What should I do?", answer: "Use our 'Notify Me' feature to get alerts when stock is available." }
+        ],
+        "Look After Your Garments": [
+            { question: "Can I save an item I like?", answer: "Yes, add it to your wishlist for later purchase." },
+            { question: "Are the items in my shopping basket reserved automatically?", answer: "No, items are only reserved after checkout is completed." }
+        ],
+        "Contacts": [
+            { question: "In which countries can I shop online?", answer: "Our online store ships to over 50 countries worldwide." },
+            { question: "I have not received all the items in my order. What should I do?", answer: "Check your order status or contact our support team." }
+        ]
+    };
+
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category);
+    };
+
     return (
         <div>
             <SearchPageNavbar title="FAQs" titleHome="Home Page" />
 
             <div className='px-16 py-14 flex justify-between'>
 
+                {/* Sidebar Categories */}
                 <div className='w-[300px]'>
                     <ul className="font-medium text-[#A0A0A0] text-[20px]">
-                        <li className="mb-2">How To Buy</li>
-                        <li className="font-bold text-[#1F1F1F] underline mb-2">Payment Methods</li>
-                        <li className="mb-2">Delivery</li>
-                        <li className="mb-2">Exchanges & Returns</li>
-                        <li className="mb-2">Registration</li>
-                        <li className="mb-2">Look After Your Garments</li>
-                        <li className="mb-2">Contacts</li>
+                        {categories.map((category) => (
+                            <li
+                                key={category}
+                                onClick={() => handleCategoryClick(category)}
+                                className={`mb-2 cursor-pointer px-4 py-1 rounded-lg transition text-[20px] ${selectedCategory === category
+                                    ? "font-bold text-black underline"
+                                    : "hover:bg-white"
+                                    }`}
+                            >
+                                {category}
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
+                {/* FAQ Section - Displays questions based on selected category */}
                 <div className='w-[850px]'>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>NEW! Plus sizes for Woman</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>How does COVID-19 affect my online orders and store purchases?</h1>
-                            <div className=''>
-                                <HalfArrowUp />
-                            </div>
-                        </div>
-                        <div className='px-6 pb-4 text-[#696C70] text-[18px]'>
-                            The courier companies have adapted their procedures to guarantee the safety of our employees and our community. We thank you for your patience, as there may be some delays to deliveries.
-                            We remind you that you can still find us at Mango.com and on all our online channels. Our customer services are still there for you, to answer any questions you may have, although due to the current situation, we are operating with longer waiting times.
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>Where is my order?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>How can I exchange or return an item purchased online?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>Can I cancel or change my order?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>I have a promotional or discount code. How do I use it for an online purchase?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>What are the delivery types?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>How can I pay for my purchases?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>Can I save an item I like?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>I cannot find my size or the colour I like. What should I do?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>I have not received all the items in my order. What should I do?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>The items received are incorrect or are defective. What should I do?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>Are the items included in the shopping basket reserved automatically?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='mb-5 border border-[#E9E9E9] rounded-[20px]'>
-                        <div className='w-full font-semibold text-[20px] flex justify-between items-center py-3 px-6'>
-                            <h1 className=''>In which countries can I shop online?</h1>
-                            <div className=''>
-                                <HalfArrowDown />
-                            </div>
-                        </div>
-                    </div>
-
+                    <Accordion type="multiple" className="space-y-4">
+                        {questionsByCategory[selectedCategory].map((item, index) => (
+                            <AccordionItem key={index} value={`item-${index}`} className="border-none">
+                                <div className="border border-[#E9E9E9] rounded-[20px] overflow-hidden">
+                                    <AccordionTrigger className="px-6 py-4 text-[20px] font-semibold w-full">
+                                        {item.question}
+                                    </AccordionTrigger>
+                                    <AccordionContent className="px-6 pb-4 text-gray-600 text-[18px]">
+                                        {item.answer}
+                                    </AccordionContent>
+                                </div>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
                 </div>
 
             </div>
 
             <Footer />
-        </div>
+        </div >
     )
 }
 
-export default FAQs
+export default FAQs;
