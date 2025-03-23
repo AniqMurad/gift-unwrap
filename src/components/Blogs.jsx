@@ -1,60 +1,28 @@
-import React from 'react'
-import blog1 from '../assets/blog1.png'
-import blog2 from '../assets/blog2.png'
-import blog3 from '../assets/blog3.png'
+import { Link } from 'react-router-dom';
+import { blogData } from '../components/BlogData';
 
 const Blogs = () => {
     return (
         <div className='px-16 py-12'>
             <h1 className='flex justify-center font-bold text-3xl'>Blogs</h1>
             <div className='flex justify-between gap-5 mt-8'>
-                <div className=''>
-                    <img src={blog1} className="w-full h-[260px] object-cover rounded-lg" />
-                    <div className="mt-3">
-                        <span className="bg-[#D2EF9A] text-black text-xs font-bold px-3 py-1 rounded-full">
-                            CORPORATE GIFT
-                        </span>
-                        <h3 className="mt-2 text-lg font-bold">
-                            The 2025 Q1 Corporate Gifting Trend Report Is LIVE!
-                        </h3>
-                        <p className="text-gray-500 text-sm mt-1">
-                            By Tony Nguyen — Oct 12, 2025
-                        </p>
-                    </div>
-                </div>
-
-                <div>
-                    <img src={blog2} className="w-full h-[260px] object-cover rounded-lg" />
-                    <div className="mt-3">
-                        <span className="bg-[#D2EF9A] text-black text-xs font-bold px-3 py-1 rounded-full">
-                            CORPORATE GIFT
-                        </span>
-                        <h3 className="mt-2 text-lg font-bold">
-                            The 2025 Q1 Corporate Gifting Trend Report Is LIVE!
-                        </h3>
-                        <p className="text-gray-500 text-sm mt-1">
-                            By Tony Nguyen — Oct 12, 2025
-                        </p>
-                    </div>
-                </div>
-
-                <div>
-                    <img src={blog3} className="w-full h-[260px] object-cover rounded-lg" />
-                    <div className="mt-3">
-                        <span className="bg-[#D2EF9A] text-black text-xs font-bold px-3 py-1 rounded-full">
-                            CORPORATE GIFT
-                        </span>
-                        <h3 className="mt-2 text-lg font-bold">
-                            The 2025 Q1 Corporate Gifting Trend Report Is LIVE!
-                        </h3>
-                        <p className="text-gray-500 text-sm mt-1">
-                            By Tony Nguyen — Oct 12, 2025
-                        </p>
-                    </div>
-                </div>
+                {blogData.slice(0, 3).map((blog) => (
+                    <Link key={blog.id} to={`/blog/${blog.id}`} className='w-[410px]'>
+                        <div className='cursor-pointer'>
+                            <img src={blog.image} className="w-full h-[275px] object-cover rounded-[20px]" />
+                            <div className="mt-6">
+                                <span className="bg-[#D2EF9A] text-[#1F1F1F] text-[14px] font-bold px-3 py-1 rounded-full uppercase">
+                                    {blog.category}
+                                </span>
+                                <h3 className="mt-2 text-[20px] font-bold">{blog.title}</h3>
+                                <p className="text-[#696C70] text-[14px] mt-3">{blog.authorDate}</p>
+                            </div>
+                        </div>
+                    </Link>
+                ))}
             </div>
         </div>
     )
 }
 
-export default Blogs
+export default Blogs;

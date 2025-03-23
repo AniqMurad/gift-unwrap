@@ -9,8 +9,18 @@ import Product from '../components/Product'
 import blog1 from '../assets/b1.png'
 import Footer from '../components/Footer'
 import BlogSideBarSuggestion from '../components/BlogSideBarSuggestion'
+import { useParams } from 'react-router-dom';
+import { blogData } from '../components/BlogData';
 
 const BlogOpen = () => {
+
+    const { id } = useParams();
+    const blog = blogData.find(item => item.id === parseInt(id));
+
+    if (!blog) {
+        return <h2 className="text-center text-2xl font-bold mt-10">Blog Not Found</h2>;
+    }
+
     return (
         <div>
             <SearchPageNavbar title="Blog" title2="Blog" titleHome="Home Page" />
@@ -27,25 +37,25 @@ const BlogOpen = () => {
                         {/* heading */}
                         <div className="mt-10">
                             <div>
-                                <span className="bg-[#D2EF9A] text-black px-3 py-1 rounded-full text-sm font-semibold">
-                                    BABY, CHILDREN
+                                <span className="bg-[#D2EF9A] text-black px-3 py-1 rounded-full text-[14px] font-semibold uppercase">
+                                    {blog.category}
                                 </span>
-                                <h1 className="text-4xl font-bold mt-2">
-                                    I'm Obsessed With The Dress Pippa Middleton Wore To Her Brother's Wedding.
+                                <h1 className="text-[36px] font-bold mt-2">
+                                    {blog.title}
                                 </h1>
                             </div>
                             <div className='flex items-center gap-2 mt-3'>
                                 <img src={avatar} className='h-[40px] w-[40px] rounded-[1000px]' />
-                                <p className="text-gray-500 mt-1">by Tony Nguyen — Oct 12, 2023</p>
+                                <p className="text-[#696C70] text-[14px] mt-1">{blog.authorDate}</p>
                             </div>
                         </div>
 
                         {/* image */}
                         <div className="mt-6">
                             <img
-                                src={main}
+                                src={blog.image}
                                 alt="Main"
-                                className="w-full rounded-lg"
+                                className="w-full rounded-lg h-[640px]"
                             />
                         </div>
 

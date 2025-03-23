@@ -1,12 +1,11 @@
 import React from 'react'
 import SearchPageNavbar from '../components/SearchPageNavbar'
-import blog1 from '../assets/b1.png'
+import { blogData } from '../components/BlogData';
 import { Buttons } from '../components/Buttons'
 import { SearchIcon } from '../components/icons'
 import Footer from '../components/Footer'
 import BlogSideBarSuggestion from '../components/BlogSideBarSuggestion'
-
-
+import { Link } from 'react-router-dom';
 
 const Blog = () => {
 
@@ -17,57 +16,24 @@ const Blog = () => {
 
         {/* Blog Posts Section */}
         <div className="w-[960px]">
-          <div className="flex bg-white items-center overflow-hidden mb-10">
-            <img src={blog1} className="w-[480px] h-[320px] rounded-[28px]" />
-            <div className="p-4">
-              <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">BABY, CHILDREN</span>
-              <h2 className="text-3xl font-semibold mt-2">Great Gifts For A Fun Children's Room</h2>
-              <p className="text-[#696C70] text-sm mt-4">
-                By Tony Nguyen — Oct 12, 2023
-              </p>
-              <p className="text-[#696C70] mt-4">I love splurging on some amazing designer bags but also finding cute budget-friendly ones as well...</p>
-              <a href="#" className="text-black font-bold mt-4 inline-block border-b">Read More</a>
-            </div>
-          </div>
-
-          <div className="flex bg-white items-center overflow-hidden mb-10">
-            <img src={blog1} className="w-[480px] h-[320px] rounded-[28px]" />
-            <div className="p-4">
-              <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">BABY, CHILDREN</span>
-              <h2 className="text-3xl font-semibold mt-2">Great Gifts For A Fun Children's Room</h2>
-              <p className="text-[#696C70] text-sm mt-4">
-                By Tony Nguyen — Oct 12, 2023
-              </p>
-              <p className="text-[#696C70] mt-4">I love splurging on some amazing designer bags but also finding cute budget-friendly ones as well...</p>
-              <a href="#" className="text-black font-bold mt-4 inline-block border-b">Read More</a>
-            </div>
-          </div>
-
-          <div className="flex bg-white items-center overflow-hidden mb-10">
-            <img src={blog1} className="w-[480px] h-[320px] rounded-[28px]" />
-            <div className="p-4">
-              <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">BABY, CHILDREN</span>
-              <h2 className="text-3xl font-semibold mt-2">Great Gifts For A Fun Children's Room</h2>
-              <p className="text-[#696C70] text-sm mt-4">
-                By Tony Nguyen — Oct 12, 2023
-              </p>
-              <p className="text-[#696C70] mt-4">I love splurging on some amazing designer bags but also finding cute budget-friendly ones as well...</p>
-              <a href="#" className="text-black font-bold mt-4 inline-block border-b">Read More</a>
-            </div>
-          </div>
-
-          <div className="flex bg-white items-center overflow-hidden mb-10">
-            <img src={blog1} className="w-[480px] h-[320px] rounded-[28px]" />
-            <div className="p-4">
-              <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">BABY, CHILDREN</span>
-              <h2 className="text-3xl font-semibold mt-2">Great Gifts For A Fun Children's Room</h2>
-              <p className="text-[#696C70] text-sm mt-4">
-                By Tony Nguyen — Oct 12, 2023
-              </p>
-              <p className="text-[#696C70] mt-4">I love splurging on some amazing designer bags but also finding cute budget-friendly ones as well...</p>
-              <a href="#" className="text-black font-bold mt-4 inline-block border-b">Read More</a>
-            </div>
-          </div>
+          {blogData.slice(3, 7).map((blog) => (
+            <Link key={blog.id} to={`/blog/${blog.id}`} className=''>
+              <div className='cursor-pointer'>
+                <div className="flex bg-white items-center overflow-hidden mb-10 gap-5 h-[320px]">
+                  <img src={blog.image} className="w-[480px] h-[320px] rounded-[28px]" />
+                  <div className="p-4">
+                    <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">{blog.category}</span>
+                    <h2 className="text-3xl font-semibold mt-5 capitalize">{blog.title}</h2>
+                    <p className="text-[#696C70] text-sm mt-4">
+                      {blog.authorDate}
+                    </p>
+                    <p className="text-[#696C70] mt-4">I love splurging on some amazing designer bags but also finding cute budget-friendly ones as well...</p>
+                    <a href="#" className="text-black font-bold mt-4 inline-block border-b">Read More</a>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
 
           <Buttons />
 
