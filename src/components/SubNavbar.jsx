@@ -23,7 +23,6 @@ const SubNavbar = () => {
             <div>
               <span className='text-sm font-normal'>Phone: </span> <span className='text-sm font-semibold'>+92-3465987104</span>
             </div>
-            <div></div>
         </div>
     )
 }
