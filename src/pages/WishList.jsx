@@ -2,10 +2,13 @@ import React from 'react'
 import SearchPageNavbar from '../components/SearchPageNavbar'
 import Product from '../components/Product'
 import Footer from '../components/Footer'
+import { useWishlist } from '../context/WishlistContext';
 import { Buttons } from '../components/Buttons'
 import { ArrowDown, FiveBars, FourBars, ThreeBars } from '../components/icons'
 
 const WishList = () => {
+    const { wishlist } = useWishlist();
+    
     return (
         <div className='w-full h-auto'>
             <SearchPageNavbar title="Wish List" titleHome="Home Page" />
@@ -40,13 +43,16 @@ const WishList = () => {
                 </div>
 
                 {/* Grid layout instead of flex */}
-                <div className='grid grid-cols-4 gap-6 mt-6'>
-                    <Product />
-                    <Product />
-                    <Product />
-                    <Product />
-                    <Product />
-                    <Product />
+                <div className=''>
+                    {wishlist.length === 0 ? (
+                        <p className="text-center mt-6 text-4xl font-bold">No items in wishlist</p>
+                    ) : (
+                        <div className='grid grid-cols-4 gap-6 mt-6'>
+                            {wishlist.map((item) => (
+                                <Product key={item.id} product={item} />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Centered Load More Button */}

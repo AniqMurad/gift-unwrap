@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { WishlistProvider } from "./context/WishlistContext";
 import Home from "./pages/Home";
 import SearchOutput from "./pages/SearchOutput";
 import WishList from "./pages/WishList";
@@ -15,20 +16,22 @@ import Giftsforher from "./pages/Giftsforher";
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search-output" element={<SearchOutput />} />
-        <Route path="/wishlist" element={<WishList />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/customer-feedback" element={<CustomerFeedback />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/blog/:id" element={<BlogOpen />} />
-        <Route path="/error" element={<Error />} />
-        <Route path="/coming-soon" element={<ComingSoon />} />
-        <Route path="/faqs" element={<FAQs />} />
-        <Route path="/giftforher" element={<Giftsforher />} />
-        <Route path="/search-output" element={<SearchOutput />} />
-      </Routes>
+      <WishlistProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search-output" element={<SearchOutput />} />
+          <Route path="/wishlist" element={<WishList />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/customer-feedback" element={<CustomerFeedback />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/blog/:id" element={<BlogOpen />} />
+          <Route path="/error" element={<Error />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/faqs" element={<FAQs />} />
+          <Route path="/giftforher" element={<Giftsforher />} />
+          <Route path="/search-output" element={<SearchOutput />} />
+        </Routes>
+      </WishlistProvider>
     </Router>
   );
 }
