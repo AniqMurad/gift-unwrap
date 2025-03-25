@@ -3,9 +3,11 @@ import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
+import ProductData from "../components/ProductData";
 
 const Giftsforher = () => {
 
+    const giftsForHerProducts = ProductData.giftsForHer;
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [minPrice, setMinPrice] = useState(150);
     const [maxPrice, setMaxPrice] = useState(750);
@@ -306,38 +308,24 @@ const Giftsforher = () => {
 
                     {/* products */}
                     <div className={`grid ${isSidebarOpen ? "grid-cols-3" : "grid-cols-4"} gap-6 mt-10 transition-all duration-300`}>
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
-                        <Product />
+                        {giftsForHerProducts.map((product) => (
+                            <Product key={product.id} product={product} />
+                        ))}
                     </div>
 
                     {/* paging */}
                     <div className="flex justify-center mt-10">
                         <div className="flex items-center space-x-1 border border-gray-400 rounded-md px-2 py-1">
-                            {/* Previous Button (Hidden on first page) */}
                             {currentPage > 1 && (
                                 <button onClick={goToPreviousPage} className="px-3 py-1 border-r border-gray-400">
-                                    {/* <FaChevronLeft className="text-gray-600 text-sm" /> */}
                                     <PageprevIcon />
                                 </button>
                             )}
 
-                            {/* Current Page */}
                             <button className="px-3 py-1 bg-black text-white rounded">{currentPage}</button>
 
-                            {/* Next Button (Hidden on last page) */}
                             {currentPage < totalPages && (
                                 <button onClick={goToNextPage} className="px-3 py-1 border-l border-gray-400">
-                                    {/* <FaChevronRight className="text-gray-600 text-sm" /> */}
                                     <PagenextIcon />
                                 </button>
                             )}

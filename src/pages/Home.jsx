@@ -19,9 +19,9 @@ const Home = () => {
             <SubNavbar />
             <HeroSection />
             <Trending />
-            <ProductPage title="Gifts for Him" />
+            <ProductPage title="Gifts for Him" category="giftsForHim" />
             <Categories />
-            <ProductPage title="Birthday Gifts" />
+            <ProductPage title="Birthday Gifts" category="birthday" />
             <Review />
             <Services />
             <Blogs />

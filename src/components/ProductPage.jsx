@@ -1,7 +1,10 @@
 import React from 'react'
 import Product from './Product'
+import ProductData from '../components/ProductData';
 
-const ProductPage = ({title}) => {
+const ProductPage = ({ title, category }) => {
+    const products = ProductData[category] ? ProductData[category].slice(0, 4) : [];
+
     return (
         <div className=''>
             <div className='px-16 py-4'>
@@ -29,12 +32,13 @@ const ProductPage = ({title}) => {
                         </button>
                     </div>
                 </div>
+
                 <div className='flex justify-between mt-5 gap-5'>
-                    <Product />
-                    <Product />
-                    <Product />
-                    <Product />
+                    {products.map((item) => (
+                        <Product key={item.id} product={item} />
+                    ))}
                 </div>
+
             </div>
         </div >
     )
