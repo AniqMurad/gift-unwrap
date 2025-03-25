@@ -6,10 +6,9 @@ const Footer = () => {
     <div className="bg-gray-100 px-16 py-10 text-gray-700 text-sm">
       <div className="flex justify-between">
 
-        <div className="w-[300px]">
+        <div className="w-[300px] flex flex-col gap-4">
           <div className="text-2xl font-bold mb-3">
-            {/* <img src={Logo} alt="" /> */}
-            Gift Unwrap
+            <img src={Logo} alt="" />
           </div>
           <p><strong>Mail:</strong> giftunwrap@gmail.com</p>
           <p><strong>Phone:</strong> 1-333-345-6868</p>
@@ -25,7 +24,7 @@ const Footer = () => {
             <p>FAQs</p>
           </div>
 
-          <div>
+          <div className="flex flex-col gap-4">
             <h4 className="font-semibold mb-2">QUICK SHOP</h4>
             <p>Gifts by Occasion</p>
             <p>Gift of Choice</p>
@@ -34,7 +33,7 @@ const Footer = () => {
             <p>Client Gifts</p>
           </div>
 
-          <div>
+          <div className="flex flex-col gap-4">
             <h4 className="font-semibold mb-2">CUSTOMER SERVICES</h4>
             <p>Orders FAQs</p>
             <p>Shipping</p>
@@ -43,7 +42,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="w-[300px]">
+        <div className="w-[300px] flex flex-col gap-4">
           <h4 className="font-semibold mb-2">NEWSLETTER</h4>
           <p>Sign up for our newsletter and get 10% off your first purchase</p>
           <div className="flex mt-3">
