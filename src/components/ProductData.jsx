@@ -26,6 +26,14 @@ const products = {
         { id: 4, name: "Chocolate Box", price: 40, originalPrice: 60, discount: 33, subcategory: "Accessories", image: birthdayimages },
         { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, subcategory: "Customized Gift", image: birthdayimages },
         { id: 6, name: "LED Lamp", price: 50, originalPrice: 70, discount: 28, subcategory: "Accessories", image: birthdayimages },
+    ],
+    Chocolates: [
+        { id: 1, name: "Birthday Mug", price: 25, originalPrice: 35, discount: 29, subcategory: "Gift Box", image: birthdayimages },
+        { id: 2, name: "Customized Frame", price: 55, originalPrice: 75, discount: 27, subcategory: "Customized Gift", image: birthdayimages },
+        { id: 3, name: "Birthday Hamper", price: 85, originalPrice: 110, discount: 23, subcategory: "Gift Box", image: birthdayimages },
+        { id: 4, name: "Chocolate Box", price: 40, originalPrice: 60, discount: 33, subcategory: "Accessories", image: birthdayimages },
+        { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, subcategory: "Customized Gift", image: birthdayimages },
+        { id: 6, name: "LED Lamp", price: 50, originalPrice: 70, discount: 28, subcategory: "Accessories", image: birthdayimages },
     ]
 };
 
