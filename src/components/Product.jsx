@@ -2,24 +2,23 @@ import React from 'react';
 import { HeartIcon2, HeartIcon3 } from './icons';
 import { useWishlist } from '../context/WishlistContext';
 
-const Product = ({ product }) => {
+const Product = ({ product, columns }) => {
     const { wishlist, toggleWishlist } = useWishlist();
-    const isInWishlist = wishlist.some((item) => item.id === product.id); // Check if item is in wishlist
+    const isInWishlist = wishlist.some((item) => item.id === product.id);
 
     return (
-        <div className='w-[300px] h-[468px]'>
+        <div className={`${columns === 5 ? 'w-auto' : 'w-[300px]'} h-[468px]`}>
             <div className='relative bg-[#FBF4E8] rounded-[24px]'>
                 <p className="bg-red-400 font-semibold px-3 py-1 text-xs text-white w-max rounded-[36px] absolute top-[10px] left-[10px]">
                     SALE
                 </p>
                 <button
-                    className={`p-1 rounded-full absolute top-[10px] right-[10px] cursor-pointer transition-all duration-300 
-        ${isInWishlist ? "bg-[#DB4444]" : "bg-white"}`}
+                    className={`p-1 rounded-full absolute top-[10px] right-[10px] cursor-pointer transition-all duration-300 ${isInWishlist ? "bg-[#DB4444]" : "bg-white"}`}
                     onClick={() => toggleWishlist(product)}
                 >
                     {isInWishlist ? <HeartIcon3 /> : <HeartIcon2 />}
                 </button>
-                <img src={product.image} alt={product.name} className='w-[300px] h-[400px] rounded-[16px]' />
+                <img src={product.image} alt={product.name} className={`w-[300px] h-[400px] rounded-[16px]`} />
             </div>
             <div className='mt-4'>
                 <p>{product.name}</p>

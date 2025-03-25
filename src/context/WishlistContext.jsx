@@ -7,9 +7,9 @@ export const WishlistProvider = ({ children }) => {
 
     const toggleWishlist = (product) => {
         if (wishlist.some((item) => item.id === product.id)) {
-            setWishlist(wishlist.filter((item) => item.id !== product.id)); // Remove from wishlist
+            setWishlist(wishlist.filter((item) => item.id !== product.id));
         } else {
-            setWishlist([...wishlist, product]); // Add to wishlist
+            setWishlist([...wishlist, product]); 
         }
     };
 
