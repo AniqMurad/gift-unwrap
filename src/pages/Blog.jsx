@@ -48,7 +48,7 @@ const Blog = () => {
               placeholder="Search"
               className=" w-auto"
             />
-            <SearchIcon />
+            <SearchIcon color="#A0A0A0"/>
           </div>
           <div className="bg-white border-b border-[#E9E9E9]">
             <BlogSideBarSuggestion />

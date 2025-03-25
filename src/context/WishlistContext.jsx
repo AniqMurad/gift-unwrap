@@ -5,11 +5,12 @@ const WishlistContext = createContext();
 export const WishlistProvider = ({ children }) => {
     const [wishlist, setWishlist] = useState([]);
 
-    const toggleWishlist = (product) => {
-        if (wishlist.some((item) => item.id === product.id)) {
-            setWishlist(wishlist.filter((item) => item.id !== product.id));
+    const toggleWishlist = (product, category) => {
+        const productIdentifier = `${category}-${product.id}`;
+        if (wishlist.some((item) => item.identifier === productIdentifier)) {
+            setWishlist(wishlist.filter((item) => item.identifier !== productIdentifier));
         } else {
-            setWishlist([...wishlist, product]); 
+            setWishlist([...wishlist, { ...product, identifier: productIdentifier, category }]);
         }
     };
 

@@ -4,7 +4,7 @@ import { useWishlist } from '../context/WishlistContext';
 
 const Product = ({ product, columns }) => {
     const { wishlist, toggleWishlist } = useWishlist();
-    const isInWishlist = wishlist.some((item) => item.id === product.id);
+    const isInWishlist = wishlist.some((item) => item.id === product.id && item.category === product.category);
 
     return (
         <div className={`${columns === 5 ? 'w-auto' : 'w-[300px]'} h-[468px]`}>
@@ -14,7 +14,7 @@ const Product = ({ product, columns }) => {
                 </p>
                 <button
                     className={`p-1 rounded-full absolute top-[10px] right-[10px] cursor-pointer transition-all duration-300 ${isInWishlist ? "bg-[#DB4444]" : "bg-white"}`}
-                    onClick={() => toggleWishlist(product)}
+                    onClick={() => toggleWishlist(product, product.category)} // Pass category here
                 >
                     {isInWishlist ? <HeartIcon3 /> : <HeartIcon2 />}
                 </button>

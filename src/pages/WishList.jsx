@@ -47,7 +47,7 @@ const WishList = () => {
                     ) : (
                         <div className={`justify-items-center grid gap-6 mt-6 ${columns === 3 ? 'grid-cols-3' : columns === 4 ? 'grid-cols-4' : 'grid-cols-5'}`}>
                             {wishlist.map((item) => (
-                                <div key={item.id} className={`${columns === 5 ? 'scale-90' : 'scale-100'} transition-transform`}>
+                                <div key={item.identifier} className={`${columns === 5 ? 'scale-90' : 'scale-100'} transition-transform`}>
                                     <Product product={item} columns={columns} />
                                 </div>
                             ))}
