@@ -37,7 +37,7 @@ const ProductPage = ({ title, category }) => {
                 </div>
             </div>
 
-            <div className={`flex gap-5 mt-5 ${products.length === 2 || 3 ? 'justify-start' : 'justify-between'}`}>
+            <div className={`flex gap-5 mt-5 ${products.length === 2 ? 'justify-start' : 'justify-between'}`}>
             {products.length > 0 ? (
                     products.map((item) => (
                         <Product key={`${category}-${item.id}`} product={{ ...item, category }} />
