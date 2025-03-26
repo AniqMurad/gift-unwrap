@@ -28,7 +28,7 @@ const ProductPage = ({ title, category }) => {
                         <button
                             key={sub}
                             onClick={() => setSelectedSubcategory(sub)}
-                            className={`font-bold text-[12px] px-3 py-1 rounded transition-all ${selectedSubcategory === sub ? 'bg-[#FFFFFF] text-[#1F1F1F] px-[20px] py-[8px]' : ''
+                            className={`font-bold text-[14px] px-3 py-1 rounded transition-all ${selectedSubcategory === sub ? 'bg-[#FFFFFF] text-[#1F1F1F] px-[20px] py-[8px] rounded-[12px] shadow-lg' : ''
                                 }`}
                         >
                             {sub.toUpperCase()}
