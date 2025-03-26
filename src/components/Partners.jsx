@@ -8,7 +8,7 @@ import i6 from "../assets/6.png";
 
 const Partners = () => {
   return (
-    <div className="flex justify-between px-16 py-6 mt-10 border">
+    <div className="flex justify-between px-16 py-6 mt-10">
       <div >
         <img src={i1} alt="Shangxi" className="partner-logo"  />
       </div>

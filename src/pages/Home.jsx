@@ -11,6 +11,7 @@ import Blogs from '../components/Blogs'
 import Partners from '../components/Partners'
 import Offer from '../components/Offer'
 import Footer from '../components/Footer'
+import InstaSpace from '../components/InstaSpace'
 
 const Home = () => {
     return (
@@ -24,6 +25,7 @@ const Home = () => {
             <ProductPage title="Birthday Gifts" category="birthday" />
             <Review />
             <Services />
+            <InstaSpace />
             <Blogs />
             <Partners />
             <Offer />

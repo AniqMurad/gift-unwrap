@@ -4,7 +4,7 @@ import { ShippingIcon, GuaranteeIcon, MoneyBack, PhoneIcon } from './icons'
 
 const Services = () => {
   return (
-    <div className='px-16 py-4'>
+    <div className='px-16 py-4 my-8'>
       <div className=' w-[100%] mx-auto px-8 py-4 justify-evenly bg-[#F7F7F7] rounded-2xl flex gap-3'>
         <div className=' flex flex-col gap-3 items-center text-center'>
           <PhoneIcon />

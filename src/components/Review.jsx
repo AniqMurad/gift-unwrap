@@ -13,7 +13,7 @@ const Review = () => {
         <div className="w-[630px] flex flex-col justify-between">
           <p className="text-[30px] mb-5">"{randomReview.review}"</p>
           <div className="w-[50%] flex gap-4 items-center">
-            <img src={Avatar} alt="User Avatar" />
+            <img src={Avatar} alt="User Avatar" className="w-[60px]" />
             <div>
               <p className="text-[18px] font-medium tracking-wide uppercase mb-1">{randomReview.name}</p>
               <StarRating rating={randomReview.rating} />
