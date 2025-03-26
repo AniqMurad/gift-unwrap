@@ -7,12 +7,15 @@ import ProductData from "../components/ProductData";
 
 const Giftsforher = () => {
 
+    const [columns, setColumns] = useState(4);
+    const [prevColumns, setPrevColumns] = useState(4);
+
     const giftsForHerProducts = ProductData.giftsForHer;
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const [minPrice, setMinPrice] = useState(150);
-    const [maxPrice, setMaxPrice] = useState(750);
-    const [selectedFilters, setSelectedFilters] = useState(["Cooking", "Decorations"]);
-    const [selectedCategory, setSelectedCategory] = useState("Clothing");
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(1000);
+    const [selectedFilters, setSelectedFilters] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
 
@@ -22,9 +25,34 @@ const Giftsforher = () => {
         }
     }, [selectedFilters, selectedCategory, minPrice, maxPrice]);
 
+    useEffect(() => {
+        if (isSidebarOpen) {
+            setPrevColumns(columns); // Store previous columns setting
+            setColumns(3); // Force 3 columns when sidebar is open
+        } else {
+            setColumns(prevColumns); // Restore previous setting when sidebar closes
+        }
+    }, [isSidebarOpen]);
+
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
+        if (!isSidebarOpen) {
+            setPrevColumns(columns); // Pehle ka column store karna
+            setColumns(3); // Sidebar open hone par 3 columns
+        } else {
+            setColumns(prevColumns); // Sidebar close hone par last selected column wapas
+        }
     };
+
+
+    const handleColumnChange = (col) => {
+        if (!isSidebarOpen) {
+            setColumns(col);
+        } else {
+            setPrevColumns(col); // Sidebar open ho toh bhi last selected column store rahe
+        }
+    };
+
 
     const goToPreviousPage = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -237,15 +265,21 @@ const Giftsforher = () => {
                                         Filters
                                     </button>
                                 )}
-                                <div className="bg-black p-1 rounded">
-                                    <ThreeBars fillColor="white" />
+                                <div className="flex space-x-2">
+                                    <div className={`border ${columns === 3 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                        onClick={() => handleColumnChange(3)}>
+                                        <ThreeBars fillColor={columns === 3 ? "white" : "#A0A0A0"} />
+                                    </div>
+                                    <div className={`border ${columns === 4 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                        onClick={() => handleColumnChange(4)}>
+                                        <FourBars fillColor={columns === 4 ? "white" : "#A0A0A0"} />
+                                    </div>
+                                    <div className={`border ${columns === 5 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                        onClick={() => handleColumnChange(5)}>
+                                        <FiveBars fillColor={columns === 5 ? "white" : "#A0A0A0"} />
+                                    </div>
                                 </div>
-                                <div className="border border-[#E9E9E9] p-1 rounded">
-                                    <FourBars fillColor="#A0A0A0" />
-                                </div>
-                                <div className="border border-[#E9E9E9] p-1 rounded">
-                                    <FiveBars fillColor="#A0A0A0" />
-                                </div>
+
                                 <div className="flex items-center ml-5 gap-2">
                                     <SquareIcon />
                                     <p className="">Show only products on sale</p>
@@ -307,9 +341,9 @@ const Giftsforher = () => {
                     </div>
 
                     {/* products */}
-                    <div className={`grid ${isSidebarOpen ? "grid-cols-3" : "grid-cols-4"} gap-6 mt-10 transition-all duration-300`}>
+                    <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
                         {giftsForHerProducts.map((product) => (
-                            <Product key={product.id} product={product} />
+                            <Product key={product.id} product={product} columns={columns}/>
                         ))}
                     </div>
 

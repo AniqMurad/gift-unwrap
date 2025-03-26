@@ -3,15 +3,18 @@ import SearchPageNavbar from '../components/SearchPageNavbar'
 import Product from '../components/Product'
 import Footer from '../components/Footer'
 import { Buttons } from '../components/Buttons'
+import ProductData from "../components/ProductData";
 
 const SearchOutput = () => {
+    const chocoProducts = ProductData.Chocolates;
+
     return (
         <div className='w-full h-auto'>
             <SearchPageNavbar title="Search Result" titleHome="Home Page" />
 
             <div className='text-center py-8'>
                 <h2 className='text-2xl font-semibold text-gray-900'>
-                    Found 8 Results For "Chocolates & Sweets"
+                    Found {chocoProducts.length} Results For "Chocolates & Sweets"
                 </h2>
                 <div className='flex items-center justify-center gap-0 text-sm text-gray-600 mt-4'>
                     <input
@@ -28,13 +31,19 @@ const SearchOutput = () => {
                 <h2 className=' font-bold'>Product Search: Chocolates & Sweets</h2>
 
                 {/* Grid layout instead of flex */}
-                <div className='grid grid-cols-4 gap-6 mt-6'>
+                {/* <div className='grid grid-cols-4 gap-6 mt-6'>
                     <Product />
                     <Product />
                     <Product />
                     <Product />
                     <Product />
                     <Product />
+                </div> */}
+
+                <div className="grid grid-cols-4 gap-6 mt-6">
+                    {chocoProducts.map((product) => (
+                        <Product key={product.id} product={product} />
+                    ))}
                 </div>
 
                 {/* Centered Load More Button */}

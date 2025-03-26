@@ -42,14 +42,15 @@ const Blog = () => {
         {/* Sidebar */}
         <div className="w-[270px]">
 
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full border border-gray-300 rounded-[12px] p-2 mb-6"
-          />
-          <SearchIcon />
-
-          <div className="bg-white border-b border-[#E9E9E9] mb-10">
+          <div className='flex justify-between px-[20px] py-[11px] items-center border rounded-[12px] mb-10 border-[#E9E9E9]'>
+            <input
+              type="text"
+              placeholder="Search"
+              className=" w-auto"
+            />
+            <SearchIcon color="#A0A0A0"/>
+          </div>
+          <div className="bg-white border-b border-[#E9E9E9]">
             <BlogSideBarSuggestion />
           </div>
 

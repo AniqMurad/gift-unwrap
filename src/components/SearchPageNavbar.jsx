@@ -33,7 +33,7 @@ const SearchPageNavbar = ({ title, title2, titleHome }) => {
                     </button>
                 </div>
                 <div className='flex gap-5 items-center'>
-                    <SearchIcon />
+                    <SearchIcon color="#1F1F1F"/>
                     <SearchLine />
                     <UsersIcon />
                     <HeartIcon />
