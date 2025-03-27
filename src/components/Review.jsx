@@ -8,7 +8,7 @@ const Review = () => {
   const randomReview = customerReviews[Math.floor(Math.random() * customerReviews.length)];
 
   return (
-    <div className="bg-[#F9F1F0] flex mb-3 pb-0 items-center">
+    <div className="bg-[#F9F1F0] flex mb-3 pb-0 items-center mt-10">
       <div className="w-[60%] px-26">
         <div className="w-[630px] flex flex-col justify-between">
           <p className="text-[30px] mb-5">"{randomReview.review}"</p>

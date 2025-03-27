@@ -36,8 +36,8 @@ const Navbar = () => {
 
   return (
     <div className="flex items-center justify-between bg-[#ffff] px-16 py-3 border-b-2 border-solid border-[#E9E9E9]">
-      <div lassName="cursor-pointer" onClick={handleLogoClick}>
-        <img src={Logo} alt="" />
+      <div className="cursor-pointer" onClick={handleLogoClick}>
+        <img src={Logo} alt="" className="w-[173px] h-[42px]"/>
       </div>
       <div className="text-sm">
         <input

@@ -1,6 +1,6 @@
 import React from "react";
 import { FbIcon, InstaIcon, PintIcon, RarrowIcon, TwtIcon, YtIcon, VisaIcon, MastercardIcon, PaypalIcon, } from "./icons";
-import Logo from '../assets/logo.png';
+import Logo from '../assets/logofooter.png';
 const Footer = () => {
   return (
     <div className="bg-gray-100 px-16 py-10 text-gray-700 text-sm">
@@ -8,7 +8,7 @@ const Footer = () => {
 
         <div className="w-[300px] flex flex-col gap-4">
           <div className="text-2xl font-bold mb-3">
-            <img src={Logo} alt="" />
+            <img src={Logo} alt="" className="w-[173px] h-[42px]"/>
           </div>
           <p><strong>Mail:</strong> giftunwrap@gmail.com</p>
           <p><strong>Phone:</strong> 1-333-345-6868</p>
