@@ -12,12 +12,17 @@ import Error from "./pages/Error";
 import ComingSoon from "./pages/ComingSoon";
 import FAQs from "./pages/FAQs";
 import Giftsforher from "./pages/Giftsforher";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ForgetPassword from "./pages/ForgetPassword";
+import OrderTracking from "./pages/OrderTracking";
+import MyAccount from "./pages/MyAccount";
 
 function App() {
   return (
     <Router>
       <WishlistProvider>
-        <Routes>
+        {/* <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search-output" element={<SearchOutput />} />
           <Route path="/wishlist" element={<WishList />} />
@@ -29,7 +34,12 @@ function App() {
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/giftforher" element={<Giftsforher />} />
-        </Routes>
+        </Routes> */}
+        <MyAccount />
+        <OrderTracking />
+        <ForgetPassword />
+        <Login />
+        <Signup />
       </WishlistProvider>
     </Router>
   );

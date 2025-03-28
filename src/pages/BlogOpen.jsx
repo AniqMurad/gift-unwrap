@@ -239,39 +239,19 @@ const BlogOpen = () => {
                 {/* news insight */}
                 <div className='mt-15'>
                     <h1 className='text-3xl font-bold text-center'>News insight</h1>
-                    <div className='flex mt-10 justify-between gap-5'>
-                        <div className="bg-white items-center overflow-hidden mb-10">
-                            <img src={blog1} className="w-[400px] h-[270px] rounded-[28px]" />
-                            <div className="mt-4">
-                                <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">BABY, CHILDREN</span>
-                                <h2 className="text-3xl font-semibold mt-2">Great Gifts For A Fun Children's Room</h2>
-                                <p className="text-[#696C70] text-sm mt-4">
-                                    By Tony Nguyen — Oct 12, 2023
-                                </p>
-                            </div>
-                        </div>
+                    <div className='flex mt-10 justify-between gap-5 flex-wrap'>
 
-                        <div className="bg-white items-center overflow-hidden mb-10">
-                            <img src={blog1} className="w-[400px] h-[270px] rounded-[28px]" />
-                            <div className="mt-4">
-                                <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">BABY, CHILDREN</span>
-                                <h2 className="text-3xl font-semibold mt-2">Great Gifts For A Fun Children's Room</h2>
-                                <p className="text-[#696C70] text-sm mt-4">
-                                    By Tony Nguyen — Oct 12, 2023
-                                </p>
+                        {blogData.slice(0, 3).map((item) => (
+                            <div key={item.id} className="bg-white items-center overflow-hidden mb-10 w-[400px]">
+                                <img src={item.image} alt={item.title} className="w-[400px] h-[270px] rounded-[28px]" />
+                                <div className="mt-4">
+                                    <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">{item.category}</span>
+                                    <h2 className="text-3xl font-semibold mt-2">{item.title}</h2>
+                                    <p className="text-[#696C70] text-sm mt-4">{item.authorDate}</p>
+                                </div>
                             </div>
-                        </div>
+                        ))}
 
-                        <div className="bg-white items-center overflow-hidden mb-10">
-                            <img src={blog1} className="w-[400px] h-[270px] rounded-[28px]" />
-                            <div className="mt-4">
-                                <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">BABY, CHILDREN</span>
-                                <h2 className="text-3xl font-semibold mt-2">Great Gifts For A Fun Children's Room</h2>
-                                <p className="text-[#696C70] text-sm mt-4">
-                                    By Tony Nguyen — Oct 12, 2023
-                                </p>
-                            </div>
-                        </div>
                     </div>
                 </div>
 

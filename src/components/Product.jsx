@@ -4,6 +4,7 @@ import { useWishlist } from '../context/WishlistContext';
 
 const Product = ({ product, columns }) => {
     const { wishlist, toggleWishlist } = useWishlist();
+    if (!product) return null;
     const isInWishlist = wishlist.some((item) => item.id === product.id && item.category === product.category);
 
     return (
@@ -18,7 +19,7 @@ const Product = ({ product, columns }) => {
                 >
                     {isInWishlist ? <HeartIcon3 /> : <HeartIcon2 />}
                 </button>
-                <img src={product.image} alt={product.name} className={`w-[300px] h-[400px] rounded-[16px]`} />
+                <img src={product?.image} alt={product.name} className={`w-[300px] h-[400px] rounded-[16px]`} />
             </div>
             <div className='mt-4'>
                 <p>{product.name}</p>
