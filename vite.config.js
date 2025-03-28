@@ -10,5 +10,12 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    // theme:{
+    //   extend: {
+    //     fontFamily: {
+    //       sans: ['Instrument Sans', 'sans-serif'],
+    //     },
+    //   }
+    // }
   },
 })

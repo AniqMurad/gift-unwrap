@@ -22,7 +22,7 @@ function App() {
   return (
     <Router>
       <WishlistProvider>
-        {/* <Routes>
+        <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search-output" element={<SearchOutput />} />
           <Route path="/wishlist" element={<WishList />} />
@@ -34,12 +34,18 @@ function App() {
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/giftforher" element={<Giftsforher />} />
-        </Routes> */}
-        <MyAccount />
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/OrderTracking" element={<OrderTracking />} />
+          <Route path="/myAccount" element={<MyAccount />} />
+          
+        </Routes>
+        {/* <MyAccount />
         <OrderTracking />
         <ForgetPassword />
         <Login />
-        <Signup />
+        <Signup /> */}
       </WishlistProvider>
     </Router>
   );

@@ -33,6 +33,12 @@ const Navbar = () => {
   const handleSeacrh =() => {
     navigate("/search-output");
   }
+  const handleLogin = () => {
+    navigate("/login");
+  }
+  const handleRegister = () => {
+    navigate("/signup");
+  }
 
   return (
     <div className="flex items-center justify-between bg-[#ffff] px-16 py-3 border-b-2 border-solid border-[#E9E9E9]">
@@ -58,7 +64,7 @@ const Navbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-white p-2 shadow-lg border border-grey-200">
               <DropdownMenuItem>
-                <Button className="bg-black text-white font-bold w-full">
+                <Button className="bg-black text-white font-bold w-full cursor-pointer" onClick={handleLogin}>
                   LOGIN
                 </Button>
               </DropdownMenuItem>
@@ -66,7 +72,7 @@ const Navbar = () => {
                 <div className="w-full flex justify-center whitespace-nowrap">
                   <span className="text-[#A0A0A0]">
                     Don't have an account?{" "}
-                    <strong className="text-black">Register</strong>
+                    <strong className="text-black cursor-pointer" onClick={handleRegister}>Register</strong>
                   </span>
                 </div>
               </DropdownMenuItem>

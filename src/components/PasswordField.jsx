@@ -1,34 +1,36 @@
 import React, { useState } from 'react'
-import { PassHiddenIcon, HeartIcon } from "../components/icons";
+import { PassHiddenIcon, PassShowIcon } from "../components/icons";
 
-const PasswordField = () => {
-    const [password, setPassword] = useState("");
+const PasswordField = ({ value, onChange, error }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <div className="relative mt-4 flex items-center">
-            <label
-                className={`absolute left-4 top-4 text-[#696C70] text-[16px] transition-all duration-200 
-                pointer-events-none z-0 bg-white
-                ${password ? "hidden" : ""}`}
-            >
-                Password <span className="text-[#DB4444]">*</span>
-            </label>
-            <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border rounded-[8px] px-[16px] py-[11px] mt-1 focus:outline-none z-20 bg-transparent"
-            />
-            <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 z-20"
-            >
-                {showPassword ? <HeartIcon /> : <PassHiddenIcon />}
-            </button>
+        <div className="mb-4">
+            <div className="relative">
+                <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={value}
+                    onChange={onChange}
+                    placeholder="Password *"
+                    className={`w-full p-4 border rounded-lg ${error ? 'border-red-500' : 'border-gray-300'}`}
+                />
+                <div 
+                    className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                >
+                    {showPassword ? (
+                        <PassShowIcon/>
+                    ) : (
+                        <PassHiddenIcon/>
+                    )}
+                </div>
+            </div>
+            {error && (
+                <p className="text-red-500 text-sm mt-1">{error}</p>
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default PasswordField
+export default PasswordField;
