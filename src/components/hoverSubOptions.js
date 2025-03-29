@@ -1,8 +1,10 @@
+
 const hoverSubOptions = {
     categories: [
         {
             title: "CLOTHING",
-            items: ["Men", "Women", "Children & Babies"]
+            items: ["Men", "Women", "Children & Babies"],
+            url: "/clothing"
         },
         {
             title: "JEWELLERY",
@@ -44,27 +46,33 @@ const hoverSubOptions = {
     recipients: [
         {
             title: "FOR HIM",
-            items: ["Husband", "Brother", "Friend"]
+            items: ["Husband", "Brother", "Friend"],
+            url: "/n"
         },
         {
             title: "FOR HER",
-            items: ["Wife", "Sister", "Friend"]
+            items: ["Wife", "Sister", "Friend"],
+            url: "/Giftforher"
         },
         {
             title: "FOR HIM",
-            items: ["Husband", "Brother", "Friend"]
+            items: ["Husband", "Brother", "Friend"],
+            url: "/GiftforHim",
         },
         {
             title: "FOR HER",
-            items: ["Wife", "Sister", "Friend"]
+            items: ["Wife", "Sister", "Friend"],
+            url: "/GiftforHim"
         },
         {
             title: "FOR HIM",
-            items: ["Husband", "Brother", "Friend"]
+            items: ["Husband", "Brother", "Friend"],
+            url: "/GiftforHim"
         },
         {
             title: "FOR HER",
-            items: ["Wife", "Sister", "Friend"]
+            items: ["Wife", "Sister", "Friend"],
+            url: "/GiftforHim"
         }
     ],
     occasions: [

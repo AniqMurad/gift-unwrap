@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import hover1 from "../assets/hover1.png"
 import hoverSubOptions from '../components/hoverSubOptions'
+import { useNavigate } from 'react-router-dom';
 
 const SubNavbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const navigate = useNavigate();
 
   const handleButtonClick = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
@@ -21,6 +23,12 @@ const SubNavbar = () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
+
+  const handleTitleClick = (url) => {
+    console.log("clicked", url);
+    navigate(url);
+    setActiveDropdown(null);
+  };
 
   return (
     <>
@@ -70,7 +78,7 @@ const SubNavbar = () => {
           <div className="grid grid-cols-5 gap-x-5 gap-y-8 w-[75%] text-sm">
             {hoverSubOptions?.categories?.map((column, index) => (
               <div key={index}>
-                <h4 className="font-semibold text-[14px] text-black mb-6">{column.title}</h4>
+                <h4 className="font-semibold text-[14px] text-black mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
                 {column.items.map((item, idx) => (
                   <p key={idx} className="text-[16px] text-[#696C70] mt-4">{item}</p>
                 ))}
@@ -102,7 +110,7 @@ const SubNavbar = () => {
           <div className="grid grid-cols-4 gap-x-5 gap-y-8 w-[75%] text-sm">
             {hoverSubOptions?.recipients?.map((column, index) => (
               <div key={index}>
-                <h4 className="font-semibold text-[14px] text-black mb-6">{column.title}</h4>
+                <h4 className="font-semibold text-[14px] text-black mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
                 {column.items.map((item, idx) => (
                   <p key={idx} className="text-[16px] text-[#696C70] mt-4">{item}</p>
                 ))}
@@ -134,7 +142,7 @@ const SubNavbar = () => {
           <div className="grid grid-cols-4 gap-x-5 gap-y-8 w-[75%] text-sm">
             {hoverSubOptions?.occasions?.map((column, index) => (
               <div key={index}>
-                <h4 className="font-semibold text-[14px] text-black mb-6">{column.title}</h4>
+                <h4 className="font-semibold text-[14px] text-black mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
                 {column.items.map((item, idx) => (
                   <p key={idx} className="text-[16px] text-[#696C70] mt-4">{item}</p>
                 ))}
@@ -166,7 +174,7 @@ const SubNavbar = () => {
           <div className="grid grid-cols-3 gap-x-10 gap-y-4 w-full text-sm">
             {hoverSubOptions?.personalization?.map((column, index) => (
               <div key={index}>
-                <h4 className="font-semibold text-[14px] text-black mb-6 uppercase">{column.title}</h4>
+                <h4 className="font-semibold text-[14px] text-black mb-6 uppercase" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
                 {column.items.map((item, idx) => (
                   <p key={idx} className="text-[16px] text-[#696C70] mt-4">{item}</p>
                 ))}
