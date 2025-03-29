@@ -15,7 +15,7 @@ const Product = ({ product, columns }) => {
                 </p>
                 <button
                     className={`p-1 rounded-full absolute top-[10px] right-[10px] cursor-pointer transition-all duration-300 ${isInWishlist ? "bg-[#DB4444]" : "bg-white"}`}
-                    onClick={() => toggleWishlist(product, product.category)} // Pass category here
+                    onClick={() => toggleWishlist(product, product.category)} 
                 >
                     {isInWishlist ? <HeartIcon3 /> : <HeartIcon2 />}
                 </button>

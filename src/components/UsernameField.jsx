@@ -1,25 +1,21 @@
 import React, { useState } from 'react'
 
-const UsernameField = () => {
-    const [username, setUsername] = useState("");
-
+const UsernameField = ({ value, onChange, error }) => {
     return (
-        <div className="relative mt-4 flex items-center">
-            <label
-                className={`absolute left-4 top-4 text-[#696C70] text-[16px] transition-all duration-200
-                pointer-events-none z-0 bg-white 
-                ${username ? "hidden" : ""}`}
-            >
-                Username or email address <span className="text-[#DB4444]">*</span>
-            </label>
+        <div className="mb-4">
             <input
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full border rounded-[8px] px-[16px] py-[11px] mt-1 focus:outline-none z-20 bg-transparent"
+                name="userId"
+                value={value}
+                onChange={onChange}
+                placeholder="Username or email address *"
+                className={`w-full p-4 border rounded-lg ${error ? 'border-red-500' : 'border-gray-300'}`}
             />
+            {error && (
+                <p className="text-red-500 text-sm mt-1">{error}</p>
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default UsernameField

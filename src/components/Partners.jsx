@@ -9,24 +9,24 @@ import i6 from "../assets/6.png";
 const Partners = () => {
   return (
     <div className="flex justify-between px-16 py-6 mt-10">
-      <div >
-        <img src={i1} alt="Shangxi" className="partner-logo"  />
-      </div>
-      <div >
-        <img src={i2} alt="Shangxi" className="partner-logo"  />
-      </div>
-      <div >
-        <img src={i3} alt="Shangxi" className="partner-logo" />
-      </div>
-      <div >
-        <img src={i4} alt="Shangxi" className="partner-logo"/>
-      </div>
-      <div >
-        <img src={i5} alt="Shangxi" className="partner-logo" />
-      </div>
-      <div >
-        <img src={i6} alt="Shangxi" className="partner-logo" />
-      </div>
+        <div>
+        <img src={i1}  alt="Shangxi" className="partner-logo w-[90%]"  />
+        </div>
+        <div>
+        <img src={i2} alt="Shangxi" className="partner-logo w-[90%]"  />
+        </div>
+        <div>
+        <img src={i3} alt="Shangxi" className="partner-logo w-[90%]" />
+        </div>
+        <div>
+        <img src={i4} alt="Shangxi" className="partner-logo w-[90%]"/>
+        </div>
+        <div>
+        <img src={i5} alt="Shangxi" className="partner-logo w-[90%]" />
+        </div>
+        <div>
+        <img src={i6} alt="Shangxi" className="partner-logo w-[90%]" />
+        </div>
       {/* <img src={i1} alt="Shangxi" className="partner-logo"/>
       <img src={i2} alt="Cheryl" className="partner-logo"/>
       <img src={i3} alt="Vanfaba" className="partner-logo"/>

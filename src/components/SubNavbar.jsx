@@ -27,31 +27,31 @@ const SubNavbar = () => {
       <div className="flex justify-between items-start bg-[#ffff] px-16 py-3 border-b-2 border-solid border-[#E9E9E9]">
         <div className="flex gap-8">
           <button
-            className={`font-bold text-sm dropdown-button ${activeDropdown === 'categories' ? 'border-b-2 border-black' : ''}`}
+            className={`font-bold cursor-pointer text-sm dropdown-button ${activeDropdown === 'categories' ? 'border-b-2 border-black' : ''}`}
             onClick={() => handleButtonClick('categories')}
           >
             CATEGORIES
           </button>
           <button
-            className={`font-bold text-sm dropdown-button ${activeDropdown === 'recipients' ? 'border-b-2 border-black' : ''}`}
+            className={`font-bold cursor-pointer text-sm dropdown-button ${activeDropdown === 'recipients' ? 'border-b-2 border-black' : ''}`}
             onClick={() => handleButtonClick('recipients')}
           >
             RECIPIENTS
           </button>
           <button
-            className={`font-bold text-sm dropdown-button ${activeDropdown === 'occasions' ? 'border-b-2 border-black' : ''}`}
+            className={`font-bold cursor-pointer text-sm dropdown-button ${activeDropdown === 'occasions' ? 'border-b-2 border-black' : ''}`}
             onClick={() => handleButtonClick('occasions')}
           >
             OCCASIONS
           </button>
           <button
-            className={`font-bold text-sm dropdown-button ${activeDropdown === 'personalization' ? 'border-b-2 border-black' : ''}`}
+            className={`font-bold cursor-pointer text-sm dropdown-button ${activeDropdown === 'personalization' ? 'border-b-2 border-black' : ''}`}
             onClick={() => handleButtonClick('personalization')}
           >
             PERSONALIZATION METHOD
           </button>
           <button
-            className={`font-bold text-sm text-red-300 dropdown-button ${activeDropdown === 'birthday' ? 'border-b-2 border-black' : ''}`}
+            className={`font-bold cursor-pointer text-sm text-red-300 dropdown-button ${activeDropdown === 'birthday' ? 'border-b-2 border-black' : ''}`}
             onClick={() => handleButtonClick('birthday')}
           >
             BIRTHDAY GIFT

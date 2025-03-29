@@ -5,8 +5,14 @@ import RememberIcon from '@/components/RememberIcon'
 import SearchPageNavbar from '@/components/SearchPageNavbar'
 import UsernameField from '@/components/UsernameField'
 import React from 'react'
+import { useNavigate } from "react-router-dom";
 
 const ForgetPassword = () => {
+    const navigate = useNavigate();
+    const handleRegister = () => {
+        navigate("/signup");
+      }
+      
     return (
         <div>
             <SearchPageNavbar title="Forget Your Password" titleHome="Home Page"/>
@@ -28,7 +34,7 @@ const ForgetPassword = () => {
                         Be part of our growing family of new customers! Join us today and unlock
                         a world of exclusive benefits, offers, and personalized experiences.
                     </p>
-                    <button className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 uppercase">REGISTER</button>
+                    <button className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 uppercase cursor-pointer" onClick={handleRegister}>REGISTER</button>
                 </div>
 
             </div>

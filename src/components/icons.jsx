@@ -380,6 +380,17 @@ export const PassHiddenIcon = () => {
     )
 }
 
+
+export const PassShowIcon = () => {
+  return (
+    <svg width="19" height="14" viewBox="0 0 19 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9.5 1.75C5.89 1.75 2.64 3.88 1 7c1.64 3.12 4.89 5.25 8.5 5.25S16.36 10.12 18 7c-1.64-3.12-4.89-5.25-8.5-5.25zm0 8.75a3.5 3.5 0 110-7 3.5 3.5 0 010 7zM9.5 5a2 2 0 100 4 2 2 0 000-4z" fill="#A0A0A0"/>
+  </svg>
+  
+  )
+}
+
+
 export const LoginLine = () => {
     return (
         <svg width="2" height="312" viewBox="0 0 2 312" fill="none" xmlns="http://www.w3.org/2000/svg">
