@@ -17,6 +17,7 @@ import Signup from "./pages/Signup";
 import ForgetPassword from "./pages/ForgetPassword";
 import OrderTracking from "./pages/OrderTracking";
 import MyAccount from "./pages/MyAccount";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/giftforher" element={<Giftsforher />} />
         </Routes> */}
+        <Checkout />
         <MyAccount />
         <OrderTracking />
         <ForgetPassword />
