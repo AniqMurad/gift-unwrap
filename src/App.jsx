@@ -18,6 +18,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import OrderTracking from "./pages/OrderTracking";
 import MyAccount from "./pages/MyAccount";
 import Checkout from "./pages/Checkout";
+import { ShoppingCart } from "./pages/ShoppingCart";
 
 function App() {
   return (
@@ -41,6 +42,8 @@ function App() {
           <Route path="/OrderTracking" element={<OrderTracking />} />
           <Route path="/myAccount" element={<MyAccount />} />
         </Routes>
+        <Checkout />
+        <ShoppingCart />
       </WishlistProvider>
     </Router>
   );
