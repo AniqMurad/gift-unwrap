@@ -19,6 +19,7 @@ import OrderTracking from "./pages/OrderTracking";
 import MyAccount from "./pages/MyAccount";
 import Checkout from "./pages/Checkout";
 import { ShoppingCart } from "./pages/ShoppingCart";
+import ProductDetail from "./components/ProductDetail";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/OrderTracking" element={<OrderTracking />} />
           <Route path="/myAccount" element={<MyAccount />} />
+          <Route path="/product/:productId" element={<ProductDetail />} />
         </Routes>
         <Checkout />
         <ShoppingCart />
