@@ -1,6 +1,6 @@
 
 const hoverSubOptions = {
-    categories: [
+    /* categories: [
         {
             title: "CLOTHING",
             items: ["Men", "Women", "Children & Babies"],
@@ -42,36 +42,31 @@ const hoverSubOptions = {
             title: "TOYS & PARTY",
             items: ["Soft Toys", "Party Accessories"]
         }
-    ],
+    ], */
     recipients: [
         {
             title: "FOR HIM",
-            items: ["Husband", "Brother", "Friend"],
+            items: ["Husband", "Brother", "Friend", "Son", "Father", "BoyFriend"],
             url: "/n"
         },
         {
             title: "FOR HER",
-            items: ["Wife", "Sister", "Friend"],
+            items: ["Wife", "Sister", "Friend", "Daughter", "Mother", "GirlFriend"],
             url: "/Giftforher"
         },
         {
-            title: "FOR HIM",
-            items: ["Husband", "Brother", "Friend"],
+            title: "FOR BABIES",
+            items: ["New Born", "Birthday"],
             url: "/GiftforHim",
         },
         {
-            title: "FOR HER",
-            items: ["Wife", "Sister", "Friend"],
+            title: "FOR COMPANIES",
+            items: ["New Hire", "Occasions", "Farewell", "Achievements", "Birthday"],
             url: "/GiftforHim"
         },
         {
-            title: "FOR HIM",
-            items: ["Husband", "Brother", "Friend"],
-            url: "/GiftforHim"
-        },
-        {
-            title: "FOR HER",
-            items: ["Wife", "Sister", "Friend"],
+            title: "FOR EVERYONE",
+            items: ["Couple", "Teacher", "Relatives"],
             url: "/GiftforHim"
         }
     ],
@@ -82,30 +77,26 @@ const hoverSubOptions = {
         },
         {
             title: "BIRTHDAY",
-            items: ["For Him", "For Her", "For Kids"]
+            items: ["For Him", "For Her", "For Employee"]
         },
         {
-            title: "WEDDING",
-            items: ["For Bride", "For Groom", "Bridal Party Gifts"]
+            title: "ANNIVERSARY",
+            items: ["Wedding Anniversary", "Work Anniversary"]
         },
         {
-            title: "BIRTHDAY",
-            items: ["For Him", "For Her", "For Kids"]
+            title: "THANKYOU",
+            items: ["For Everyone"]
         },
         {
-            title: "WEDDING",
-            items: ["For Bride", "For Groom", "Bridal Party Gifts"]
+            title: "BUSINESS GIFTS",
+            items: ["For Company"]
         },
         {
-            title: "BIRTHDAY",
-            items: ["For Him", "For Her", "For Kids"]
-        },
-        {
-            title: "WEDDING",
-            items: ["For Bride", "For Groom", "Bridal Party Gifts"]
+            title: "RELIGIOUS MOMENTS",
+            items: ["EID", "HOLI", "DIWALI", "Navroz", "Mother's Day", "Father's Day"]
         }
     ],
-    personalization: [
+    /* personalization: [
         {
             title: "METHODS",
             items: ["Engraving", "Print", "Custom Text"]
@@ -118,7 +109,7 @@ const hoverSubOptions = {
             title: "Personalisation Type",
             items: ["Engraving", "Print", "Custom Text"]
         }
-    ]
+    ] */
 };
 
 export default hoverSubOptions;
