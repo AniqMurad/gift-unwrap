@@ -9,13 +9,16 @@ const Giftsforher = () => {
 
     const [columns, setColumns] = useState(4);
     const [prevColumns, setPrevColumns] = useState(4);
-
-    const giftsForHerProducts = ProductData.giftsForHer;
+    const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
+    const giftsForHerProducts = ProductData.giftsForHer.filter(product =>
+        selectedCategory === '' || product.keyGift === selectedCategory
+    );
+    // const giftsForHerProducts = ProductData.giftsForHer;
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(1000);
     const [selectedFilters, setSelectedFilters] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState();
+    // const [selectedCategory, setSelectedCategory] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
 
@@ -82,6 +85,10 @@ const Giftsforher = () => {
         setSelectedFilters((prev) => prev.filter((f) => f !== filter));
     };
 
+    const handleCategorySelect = (category) => {
+        setSelectedCategory(category);
+    };
+
     // Function to clear all filters
     const clearAllFilters = () => {
         setSelectedCategory("");
@@ -130,9 +137,12 @@ const Giftsforher = () => {
 
             <SearchPageNavbar title="Gifts For Her" titleHome="Home Page" />
             <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-8'>
-                <p className='underline'>Gifts For Mum</p>
-                <p>Gifts For Sister</p>
-                <p>Gifts For Girlfriend</p>
+                <p className={`cursor-pointer ${selectedCategory === 'mum' ? 'underline' : ''}`} onClick={() => handleCategorySelect('mum')}>Gifts For Mum</p>
+                <p className={`cursor-pointer ${selectedCategory === 'sister' ? 'underline' : ''}`} onClick={() => handleCategorySelect('sister')}>Gifts For Sister</p>
+                <p className={`cursor-pointer ${selectedCategory === 'girlfriend' ? 'underline' : ''}`} onClick={() => handleCategorySelect('girlfriend')}>Gifts For Girlfriend</p>
+                <p className={`cursor-pointer ${selectedCategory === 'daughter' ? 'underline' : ''}`} onClick={() => handleCategorySelect('daughter')}>Gifts For Daughter</p>
+                <p className={`cursor-pointer ${selectedCategory === 'wife' ? 'underline' : ''}`} onClick={() => handleCategorySelect('wife')}>Gifts For Wife</p>
+                <p className={`cursor-pointer ${selectedCategory === 'friend' ? 'underline' : ''}`} onClick={() => handleCategorySelect('friend')}>Gifts For Friend</p>
             </div>
 
             <div className="px-16 py-10 flex justify-between">
@@ -343,7 +353,7 @@ const Giftsforher = () => {
                     {/* products */}
                     <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
                         {giftsForHerProducts.map((product) => (
-                            <Product key={product.id} product={product} columns={columns}/>
+                            <Product key={product.id} product={product} columns={columns} />
                         ))}
                     </div>
 

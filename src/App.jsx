@@ -20,6 +20,11 @@ import MyAccount from "./pages/MyAccount";
 import Checkout from "./pages/Checkout";
 import { ShoppingCart } from "./pages/ShoppingCart";
 import ProductDetail from "./components/ProductDetail";
+import Giftsforhim from "./pages/Giftsforhim";
+import Giftsforbabies from "./pages/Giftsforbabies";
+import Giftsforeveryone from "./pages/Giftsforeveryone";
+import Forcompanies from "./pages/Forcompanies";
+import Giftsforwedding from "./pages/Giftsforwedding";
 
 function App() {
   return (
@@ -37,15 +42,20 @@ function App() {
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/giftforher" element={<Giftsforher />} />
+          <Route path="/giftforhim" element={<Giftsforhim />} />
           <Route path="/forgetPassword" element={<ForgetPassword />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/OrderTracking" element={<OrderTracking />} />
           <Route path="/myAccount" element={<MyAccount />} />
           <Route path="/product/:productId" element={<ProductDetail />} />
+          <Route path="/giftforbabies" element={<Giftsforbabies />} />
+          <Route path="/giftforeveryone" element={<Giftsforeveryone />} />
+          <Route path="/giftforcompanies" element={<Forcompanies />} />
+          <Route path="/giftforwedding" element={<Giftsforwedding />} />
         </Routes>
-        <Checkout />
-        <ShoppingCart />
+        {/* <Checkout />
+        <ShoppingCart /> */}
       </WishlistProvider>
     </Router>
   );

@@ -1,115 +1,78 @@
 
 const hoverSubOptions = {
-    /* categories: [
-        {
-            title: "CLOTHING",
-            items: ["Men", "Women", "Children & Babies"],
-            url: "/clothing"
-        },
-        {
-            title: "JEWELLERY",
-            items: ["Necklace & Pendants", "Bracelets", "Rings"]
-        },
-        {
-            title: "CHOCOLATE & SWEETS",
-            items: ["Sweets", "Chocolate Bars", "Chocolate Boxes"]
-        },
-        {
-            title: "DRINKWARE",
-            items: ["Mugs", "Drinking Glasses", "Bottles"]
-        },
-        {
-            title: "TOYS & PARTY",
-            items: ["Soft Toys", "Party Accessories"]
-        },
-        {
-            title: "CLOTHING",
-            items: ["Men", "Women", "Children & Babies"]
-        },
-        {
-            title: "JEWELLERY",
-            items: ["Necklace & Pendants", "Bracelets", "Rings", "Accessories"]
-        },
-        {
-            title: "CHOCOLATE & SWEETS",
-            items: ["Sweets", "Chocolate Bars", "Chocolate Boxes"]
-        },
-        {
-            title: "DRINKWARE",
-            items: ["Mugs", "Drinking Glasses", "Bottles"]
-        },
-        {
-            title: "TOYS & PARTY",
-            items: ["Soft Toys", "Party Accessories"]
-        }
-    ], */
     recipients: [
         {
             title: "FOR HIM",
-            items: ["Husband", "Brother", "Friend", "Son", "Father", "BoyFriend"],
-            url: "/n"
+            items: ["Father", "Brother", "BoyFriend", "Son", "Husband", "Friend"],
+            url: "/Giftforhim"
         },
         {
             title: "FOR HER",
-            items: ["Wife", "Sister", "Friend", "Daughter", "Mother", "GirlFriend"],
+            items: ["Mother", "Sister", "GirlFriend", "Daughter", "Wife", "Friend"],
             url: "/Giftforher"
         },
         {
             title: "FOR BABIES",
             items: ["New Born", "Birthday"],
-            url: "/GiftforHim",
+            url: "/Giftforbabies",
         },
         {
             title: "FOR COMPANIES",
             items: ["New Hire", "Occasions", "Farewell", "Achievements", "Birthday"],
-            url: "/GiftforHim"
+            url: "/Giftforcompanies"
         },
         {
             title: "FOR EVERYONE",
             items: ["Couple", "Teacher", "Relatives"],
-            url: "/GiftforHim"
+            url: "/Giftforeveryone"
         }
     ],
     occasions: [
         {
             title: "WEDDING",
-            items: ["For Bride", "For Groom", "Bridal Party Gifts"]
+            items: [
+                { name: "For Bride", url: "/Giftforwedding" },
+                { name: "For Groom", url: "/Giftforwedding" },
+                { name: "Bridal Party Gifts", url: "/Giftforwedding" }
+            ],
+            url: "/Giftforwedding"
         },
         {
             title: "BIRTHDAY",
-            items: ["For Him", "For Her", "For Employee"]
+            items: [
+                { name: "For Him", url: "/Giftforhim" },
+                { name: "For Her", url: "/Giftforher" },
+                { name: "For Employee", url: "/Giftforcompanies" }
+            ]
         },
         {
             title: "ANNIVERSARY",
-            items: ["Wedding Anniversary", "Work Anniversary"]
+            items: [
+                { name: "Wedding Anniversary", url: "/Giftforwedding" },
+                { name: "Work Anniversary", url: "/Giftforcompanies" },
+            ],
+            url: "/Giftforwedding"
         },
         {
             title: "THANKYOU",
-            items: ["For Everyone"]
+            items: [
+                { name: "For Everyone", url: "/Giftforeveryone" },
+            ],
+            url: "/Giftforeveryone"
         },
         {
             title: "BUSINESS GIFTS",
-            items: ["For Company"]
+            items: [
+                {name: "For Company", url: "/Giftforcompanies" },
+            ],
+            url: "/Giftforcompanies"
         },
         {
             title: "RELIGIOUS MOMENTS",
-            items: ["EID", "HOLI", "DIWALI", "Navroz", "Mother's Day", "Father's Day"]
+            items: ["EID", "HOLI", "DIWALI", "Navroz", "Mother's Day", "Father's Day"],
+            url: "/Giftforeveryone"
         }
     ],
-    /* personalization: [
-        {
-            title: "METHODS",
-            items: ["Engraving", "Print", "Custom Text"]
-        },
-        {
-            title: "METHODS",
-            items: ["Engraving", "Print", "Custom Text"]
-        },
-        {
-            title: "Personalisation Type",
-            items: ["Engraving", "Print", "Custom Text"]
-        }
-    ] */
 };
 
 export default hoverSubOptions;
