@@ -3,12 +3,26 @@ const hoverSubOptions = {
     recipients: [
         {
             title: "FOR HIM",
-            items: ["Father", "Brother", "BoyFriend", "Son", "Husband", "Friend"],
+            items: [
+                { name: "Father", url: "/Giftforhim?category=pop" },
+                { name: "Brother", url: "/Giftforhim?category=brother" },
+                { name: "BoyFriend", url: "/Giftforhim?category=boyfriend" },
+                { name: "Son", url: "/Giftforhim?category=son" },
+                { name: "Husband", url: "/Giftforhim?category=husband" },
+                { name: "Friend", url: "/Giftforhim?category=friend" }
+            ],
             url: "/Giftforhim"
         },
         {
             title: "FOR HER",
-            items: ["Mother", "Sister", "GirlFriend", "Daughter", "Wife", "Friend"],
+            items: [
+                { name: "Mother", url: "/Giftforher?category=mum" },
+                { name: "Sister", url: "/Giftforher?category=sister" },
+                { name: "GirlFriend", url: "/Giftforher?category=girlfriend" },
+                { name: "Daughter", url: "/Giftforher?category=daughter" },
+                { name: "Wife", url: "/Giftforher?category=wife" },
+                { name: "Friend", url: "/Giftforher?category=friend" }
+            ],
             url: "/Giftforher"
         },
         {

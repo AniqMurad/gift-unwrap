@@ -29,6 +29,8 @@ const SubNavbar = () => {
     navigate(url);
     setActiveDropdown(null);
   };
+  
+  
 
   return (
     <>
@@ -63,14 +65,33 @@ const SubNavbar = () => {
         <div className="w-[91%] p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center">
 
           <div className="grid grid-cols-4 gap-x-5 gap-y-8 w-[75%] text-sm cursor-pointer">
-            {hoverSubOptions?.recipients?.map((column, index) => (
+            {/* {hoverSubOptions?.recipients?.map((column, index) => (
               <div key={index}>
                 <h4 className="font-semibold text-[14px] text-black mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
                 {column.items.map((item, idx) => (
                   <p key={idx} className="text-[16px] text-[#696C70] mt-4">{item}</p>
                 ))}
               </div>
-            ))}
+            ))} */}
+          {hoverSubOptions?.recipients?.map((column, index) => (
+            <div key={index}>
+              <h4 className="font-semibold text-[14px] text-black mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
+              {column.items.map((item, idx) => (
+                typeof item === 'string' ? (
+                  <p key={idx} className="text-[16px] text-[#696C70] mt-4">{item}</p>
+                ) : (
+                  <p 
+                    key={idx} 
+                    className="text-[16px] text-[#696C70] mt-4"
+                    onClick={() => handleTitleClick(item.url)}
+                  >
+                    {item.name || item}
+                  </p>
+                )
+              ))}
+            </div>
+          ))}
+
           </div>
 
           <div className="w-[25%]">

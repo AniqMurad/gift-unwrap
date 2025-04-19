@@ -4,21 +4,21 @@ import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
 import ProductData from "../components/ProductData";
+import { useLocation } from 'react-router-dom';
 
 const Giftsforher = () => {
 
+    const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [prevColumns, setPrevColumns] = useState(4);
     const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
     const giftsForHerProducts = ProductData.giftsForHer.filter(product =>
         selectedCategory === '' || product.keyGift === selectedCategory
     );
-    // const giftsForHerProducts = ProductData.giftsForHer;
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(1000);
     const [selectedFilters, setSelectedFilters] = useState([]);
-    // const [selectedCategory, setSelectedCategory] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
 
@@ -47,6 +47,14 @@ const Giftsforher = () => {
         }
     };
 
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const categoryParam = queryParams.get('category');
+        
+        if (categoryParam) {
+            setSelectedCategory(categoryParam);
+        }
+    }, [location.search]); 
 
     const handleColumnChange = (col) => {
         if (!isSidebarOpen) {

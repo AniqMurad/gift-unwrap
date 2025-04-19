@@ -4,13 +4,15 @@ import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
 import ProductData from "../components/ProductData";
+import { useLocation } from 'react-router-dom';
 
 const Giftsforhim = () => {
 
+    const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [prevColumns, setPrevColumns] = useState(4);
     const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
-    const giftsForHerProducts = ProductData.giftsForHer.filter(product =>
+    const giftsForHimProducts = ProductData.giftsForHim.filter(product =>
         selectedCategory === '' || product.keyGift === selectedCategory
     );
     // const giftsForHerProducts = ProductData.giftsForHer;
@@ -36,6 +38,15 @@ const Giftsforhim = () => {
             setColumns(prevColumns); // Restore previous setting when sidebar closes
         }
     }, [isSidebarOpen]);
+
+    useEffect(() => {
+            const queryParams = new URLSearchParams(location.search);
+            const categoryParam = queryParams.get('category');
+            
+            if (categoryParam) {
+                setSelectedCategory(categoryParam);
+            }
+        }, [location.search]); 
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -352,7 +363,7 @@ const Giftsforhim = () => {
 
                     {/* products */}
                     <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
-                        {giftsForHerProducts.map((product) => (
+                        {giftsForHimProducts.map((product) => (
                             <Product key={product.id} product={product} columns={columns} />
                         ))}
                     </div>
