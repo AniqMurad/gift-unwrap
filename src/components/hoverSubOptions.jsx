@@ -83,8 +83,8 @@ const hoverSubOptions = {
         },
         {
             title: "RELIGIOUS MOMENTS",
-            items: ["EID", "HOLI", "DIWALI", "Navroz", "Mother's Day", "Father's Day"],
-            url: "/Giftforeveryone"
+            items: ["EID", "HOLI", "DIWALI", "Navroz"],
+            url: "/Giftforreligions"
         }
     ],
 };

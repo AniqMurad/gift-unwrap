@@ -42,6 +42,22 @@ const products = {
         { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, keyGift: "newborn", subcategory: "Customized Gift", image: birthdayimages },
         { id: 6, name: "LED Lamp", price: 50, originalPrice: 70, discount: 28, subcategory: "Accessories", image: birthdayimages },
     ],
+    giftsForEveryone: [
+        { id: 1, name: "Birthday Mug", price: 25, originalPrice: 35, discount: 29, keyGift: "couple", subcategory: "Gift Box", image: birthdayimages },
+        { id: 2, name: "Customized Frame", price: 55, originalPrice: 75, discount: 27, keyGift: "relative", subcategory: "Customized Gift", image: birthdayimages },
+        { id: 3, name: "Birthday Hamper", price: 85, originalPrice: 110, discount: 23, keyGift: "relative", subcategory: "Gift Box", image: birthdayimages },
+        { id: 4, name: "Chocolate Box", price: 40, originalPrice: 60, discount: 33, keyGift: "couple", subcategory: "Accessories", image: birthdayimages },
+        { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, keyGift: "relative", subcategory: "Customized Gift", image: birthdayimages },
+        { id: 6, name: "LED Lamp", price: 50, originalPrice: 70, discount: 28, keyGift: "teacher", subcategory: "Accessories", image: birthdayimages },
+    ],
+    giftsForReligions: [
+        { id: 1, name: "Birthday Mug", price: 25, originalPrice: 35, discount: 29, keyGift: "eid", subcategory: "Gift Box", image: birthdayimages },
+        { id: 2, name: "Customized Frame", price: 55, originalPrice: 75, discount: 27, keyGift: "eid", subcategory: "Customized Gift", image: birthdayimages },
+        { id: 3, name: "Birthday Hamper", price: 85, originalPrice: 110, discount: 23, keyGift: "diwali", subcategory: "Gift Box", image: birthdayimages },
+        { id: 4, name: "Chocolate Box", price: 40, originalPrice: 60, discount: 33, keyGift: "navroz", subcategory: "Accessories", image: birthdayimages },
+        { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, keyGift: "navroz", subcategory: "Customized Gift", image: birthdayimages },
+        { id: 6, name: "LED Lamp", price: 50, originalPrice: 70, discount: 28, keyGift: "holi", subcategory: "Accessories", image: birthdayimages },
+    ],
     giftsForCompany: [
         { id: 1, name: "Birthday Mug", price: 25, originalPrice: 35, discount: 29, keyGift: "farewell", subcategory: "Gift Box", image: birthdayimages },
         { id: 2, name: "Customized Frame", price: 55, originalPrice: 75, discount: 27, keyGift: "newhire", subcategory: "Customized Gift", image: birthdayimages },

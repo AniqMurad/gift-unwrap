@@ -25,6 +25,7 @@ import Giftsforbabies from "./pages/Giftsforbabies";
 import Giftsforeveryone from "./pages/Giftsforeveryone";
 import Forcompanies from "./pages/Forcompanies";
 import Giftsforwedding from "./pages/Giftsforwedding";
+import Giftforreligions from "./pages/Giftforreligions";
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path="/giftforeveryone" element={<Giftsforeveryone />} />
           <Route path="/giftforcompanies" element={<Forcompanies />} />
           <Route path="/giftforwedding" element={<Giftsforwedding />} />
+          <Route path="/Giftforreligions" element={<Giftforreligions />} />
         </Routes>
         {/* <Checkout />
         <ShoppingCart /> */}
