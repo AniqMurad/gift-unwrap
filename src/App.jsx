@@ -49,7 +49,7 @@ function App() {
           <Route path="/OrderTracking" element={<OrderTracking />} />
           <Route path="/myAccount" element={<MyAccount />} />
           <Route path="/product/:productId" element={<ProductDetail />} />
-          <Route path="/giftforbabies" element={<Giftsforbabies />} />
+          <Route path="/Giftforbabies" element={<Giftsforbabies />} />
           <Route path="/giftforeveryone" element={<Giftsforeveryone />} />
           <Route path="/giftforcompanies" element={<Forcompanies />} />
           <Route path="/giftforwedding" element={<Giftsforwedding />} />

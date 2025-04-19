@@ -34,14 +34,32 @@ const products = {
         { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, subcategory: "Customized Gift", image: birthdayimages },
         { id: 6, name: "LED Lamp", price: 50, originalPrice: 70, discount: 28, subcategory: "Accessories", image: birthdayimages },
     ],
-    Chocolates: [
-        { id: 1, name: "Birthday Mug", price: 25, originalPrice: 35, discount: 29, subcategory: "Gift Box", image: birthdayimages },
+    giftsForBabies: [
+        { id: 1, name: "Birthday Mug", price: 25, originalPrice: 35, discount: 29, keyGift: "newborn", subcategory: "Gift Box", image: birthdayimages },
         { id: 2, name: "Customized Frame", price: 55, originalPrice: 75, discount: 27, subcategory: "Customized Gift", image: birthdayimages },
-        { id: 3, name: "Birthday Hamper", price: 85, originalPrice: 110, discount: 23, subcategory: "Gift Box", image: birthdayimages },
+        { id: 3, name: "Birthday Hamper", price: 85, originalPrice: 110, discount: 23, keyGift: "newborn", subcategory: "Gift Box", image: birthdayimages },
         { id: 4, name: "Chocolate Box", price: 40, originalPrice: 60, discount: 33, subcategory: "Accessories", image: birthdayimages },
-        { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, subcategory: "Customized Gift", image: birthdayimages },
+        { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, keyGift: "newborn", subcategory: "Customized Gift", image: birthdayimages },
         { id: 6, name: "LED Lamp", price: 50, originalPrice: 70, discount: 28, subcategory: "Accessories", image: birthdayimages },
-    ]
+    ],
+    giftsForCompany: [
+        { id: 1, name: "Birthday Mug", price: 25, originalPrice: 35, discount: 29, keyGift: "farewell", subcategory: "Gift Box", image: birthdayimages },
+        { id: 2, name: "Customized Frame", price: 55, originalPrice: 75, discount: 27, keyGift: "newhire", subcategory: "Customized Gift", image: birthdayimages },
+        { id: 3, name: "Birthday Hamper", price: 85, originalPrice: 110, discount: 23, keyGift: "ocassion", subcategory: "Gift Box", image: birthdayimages },
+        { id: 4, name: "Chocolate Box", price: 40, originalPrice: 60, discount: 33, keyGift: "achievement", subcategory: "Accessories", image: birthdayimages },
+        { id: 5, name: "Photo Album", price: 70, originalPrice: 95, discount: 26, keyGift: "workanniversary", subcategory: "Customized Gift", image: birthdayimages },
+        { id: 6, name: "LED Lamp", price: 50, originalPrice: 70, discount: 28, keyGift: "achievement", subcategory: "Accessories", image: birthdayimages },
+    ],
+    giftsForWedding: [
+        { id: 1, name: "Shadi krlo", price: 68, originalPrice: 98, discount: 25, keyGift: "bride", image: giftsforherimages },
+        { id: 2, name: "Shadi hogai", price: 45, originalPrice: 60, discount: 25, keyGift: "groom", image: giftsforherimages },
+        { id: 3, name: "shadi ke baad", price: 80, originalPrice: 100, discount: 20, keyGift: "bridalparty", image: giftsforherimages },
+        { id: 4, name: "shadi ke bache", price: 60, originalPrice: 85, discount: 30, keyGift: "groom", image: giftsforherimages },
+        { id: 5, name: "bacho ki shadi", price: 120, originalPrice: 150, discount: 20, keyGift: "bride", image: giftsforherimages },
+        { id: 6, name: "shadi mai bache", price: 55, originalPrice: 75, discount: 27, keyGift: "groom", image: giftsforherimages },
+        { id: 7, name: "bacho ke lie shadi", price: 35, originalPrice: 50, discount: 30, keyGift: "weddinganniversary", image: giftsforherimages },
+        { id: 8, name: "shadi bhencho", price: 80, originalPrice: 100, discount: 20, keyGift: "bride", image: giftsforherimages },
+    ],
 };
 
 export default products;
