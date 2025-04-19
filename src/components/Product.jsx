@@ -19,14 +19,14 @@ const Product = ({ product, columns }) => {
                 >
                     {isInWishlist ? <HeartIcon3 /> : <HeartIcon2 />}
                 </button>
-                <img src={product?.image} alt={product.name} className={`w-[300px] h-[400px] rounded-[16px]`} />
+                <img src={product?.image} alt={product.name} className={`w-[300px] h-[360px] rounded-[16px]`} />
             </div>
             <div className='mt-4'>
                 <p>{product.name}</p>
                 <div className='flex items-center gap-2 text-sm mt-1'>
-                    <span>${product.price}</span>
-                    <span className='line-through text-[#A0A0A0]'>${product.originalPrice}</span>
-                    <span className='bg-[#D2EF9A] rounded-[24px] p-1'>-{product.discount}%</span>
+                    <span>Rs {product.price}</span>
+                    {/* <span className='line-through text-[#A0A0A0]'>${product.originalPrice}</span> */}
+                    {/* <span className='bg-[#D2EF9A] rounded-[24px] p-1'>-{product.discount}%</span> */}
                 </div>
             </div>
         </div>
