@@ -11,7 +11,7 @@ const Giftsforhim = () => {
     const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [prevColumns, setPrevColumns] = useState(4);
-    const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
+    const [selectedCategory, setSelectedCategory] = useState(''); 
     const giftsForHimProducts = ProductData.giftsForHim.filter(product =>
         selectedCategory === '' || product.keyGift === selectedCategory
     );
@@ -148,7 +148,7 @@ const Giftsforhim = () => {
 
             <SearchPageNavbar title="Gifts For Him" titleHome="Home Page" />
             <div className='bg-[#DEFBFF] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-8'>
-                <p className={`cursor-pointer ${selectedCategory === 'pop' ? 'underline' : ''}`} onClick={() => handleCategorySelect('pop')}>Gifts For Pop</p>
+                <p className={`cursor-pointer ${selectedCategory === 'pop' ? 'underline' : ''}`} onClick={() => handleCategorySelect('pop')}>Gifts For Father</p>
                 <p className={`cursor-pointer ${selectedCategory === 'brother' ? 'underline' : ''}`} onClick={() => handleCategorySelect('brother')}>Gifts For Brother</p>
                 <p className={`cursor-pointer ${selectedCategory === 'boyfriend' ? 'underline' : ''}`} onClick={() => handleCategorySelect('boyfriend')}>Gifts For BoyFriend</p>
                 <p className={`cursor-pointer ${selectedCategory === 'son' ? 'underline' : ''}`} onClick={() => handleCategorySelect('son')}>Gifts For Son</p>
