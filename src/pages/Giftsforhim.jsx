@@ -58,7 +58,6 @@ const Giftsforhim = () => {
         }
     };
 
-
     const handleColumnChange = (col) => {
         if (!isSidebarOpen) {
             setColumns(col);
@@ -66,7 +65,6 @@ const Giftsforhim = () => {
             setPrevColumns(col); // Sidebar open ho toh bhi last selected column store rahe
         }
     };
-
 
     const goToPreviousPage = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);

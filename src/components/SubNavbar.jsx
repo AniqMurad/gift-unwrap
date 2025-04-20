@@ -2,10 +2,17 @@ import React, { useState, useEffect } from 'react';
 import hover1 from "../assets/hover1.png"
 import hoverSubOptions from '../components/hoverSubOptions'
 import { useNavigate } from 'react-router-dom';
+import Product from './Product';
+import ProductData from './ProductData';
 
 const SubNavbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const navigate = useNavigate();
+
+  const featuredProduct = {
+    ...ProductData.giftsForHim[0], // Use the first product from giftsForHer
+    category: 'giftsForHim'  // Add category for wishlist functionality
+  };
 
   const handleButtonClick = (dropdown) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
@@ -88,15 +95,7 @@ const SubNavbar = () => {
 
           <div className="w-[25%]">
             <h4 className="font-semibold mb-4">RECENT PRODUCTS</h4>
-            <img src={hover1} alt="Recent" className="rounded-md w-[300px]" />
-            <div className='mt-4'>
-              <p>Faux Leather Leggings</p>
-              <div className='flex items-center gap-2 text-sm mt-1'>
-                <span>$68</span>
-                <span className='line-through text-[#A0A0A0]'>$98</span>
-                <span className='bg-[#D2EF9A] rounded-[24px] p-1'>-25%</span>
-              </div>
-            </div>
+            <Product product={featuredProduct} />
           </div>
 
         </div>
@@ -130,15 +129,7 @@ const SubNavbar = () => {
 
           <div className="w-[25%]">
             <h4 className="font-semibold mb-4">RECENT PRODUCTS</h4>
-            <img src={hover1} alt="Recent" className="rounded-md w-[300px]" />
-            <div className='mt-4'>
-              <p>Faux Leather Leggings</p>
-              <div className='flex items-center gap-2 text-sm mt-1'>
-                <span>$68</span>
-                <span className='line-through text-[#A0A0A0]'>$98</span>
-                <span className='bg-[#D2EF9A] rounded-[24px] p-1'>-25%</span>
-              </div>
-            </div>
+            <Product product={featuredProduct} />
           </div>
 
         </div>
