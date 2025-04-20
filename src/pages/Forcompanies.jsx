@@ -147,7 +147,7 @@ const Forcompanies = () => {
         <div>
 
             <SearchPageNavbar title="Gifts For Companies" titleHome="Home Page" />
-            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-8'>
+            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
                 <p className={`cursor-pointer ${selectedCategory === 'newhire' ? 'underline' : ''}`} onClick={() => handleCategorySelect('newhire')}>Gifts For New Hire</p>
                 <p className={`cursor-pointer ${selectedCategory === 'ocassion' ? 'underline' : ''}`} onClick={() => handleCategorySelect('ocassion')}>Gifts For Ocassions</p>
                 <p className={`cursor-pointer ${selectedCategory === 'farewell' ? 'underline' : ''}`} onClick={() => handleCategorySelect('farewell')}>Gifts For Farewell</p>

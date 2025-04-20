@@ -147,7 +147,7 @@ const Giftforreligions = () => {
         <div>
 
             <SearchPageNavbar title="Religious Gifts" titleHome="Home Page" />
-            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-8'>
+            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
                 <p className={`cursor-pointer ${selectedCategory === 'eid' ? 'underline' : ''}`} onClick={() => handleCategorySelect('eid')}>Eid Gifts</p>
                 <p className={`cursor-pointer ${selectedCategory === 'holi' ? 'underline' : ''}`} onClick={() => handleCategorySelect('holi')}>Holi Gifts</p>
                 <p className={`cursor-pointer ${selectedCategory === 'diwali' ? 'underline' : ''}`} onClick={() => handleCategorySelect('diwali')}>Diwali Gifts</p>

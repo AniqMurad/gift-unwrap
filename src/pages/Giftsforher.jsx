@@ -144,7 +144,7 @@ const Giftsforher = () => {
         <div>
 
             <SearchPageNavbar title="Gifts For Her" titleHome="Home Page" />
-            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-8'>
+            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
                 <p className={`cursor-pointer ${selectedCategory === 'mum' ? 'underline' : ''}`} onClick={() => handleCategorySelect('mum')}>Gifts For Mum</p>
                 <p className={`cursor-pointer ${selectedCategory === 'sister' ? 'underline' : ''}`} onClick={() => handleCategorySelect('sister')}>Gifts For Sister</p>
                 <p className={`cursor-pointer ${selectedCategory === 'girlfriend' ? 'underline' : ''}`} onClick={() => handleCategorySelect('girlfriend')}>Gifts For Girlfriend</p>

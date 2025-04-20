@@ -6,11 +6,11 @@ const ProductPage = ({ title, category }) => {
     const [selectedSubcategory, setSelectedSubcategory] = useState("All");
 
     // Extract unique subcategories from data
-    const subcategories = ["All", ...new Set(ProductData[category].map(item => item.subcategory))];
+    const subcategories = ["All", ...new Set(ProductData[category].map(item => item.keyGift))];
 
     // Filter products based on selected subcategory
     let products = ProductData[category].filter(item =>
-        selectedSubcategory === "All" || item.subcategory === selectedSubcategory
+        selectedSubcategory === "All" || item.keyGift === selectedSubcategory
     );
 
     // If "All" is selected, show only random 4 products
@@ -38,7 +38,7 @@ const ProductPage = ({ title, category }) => {
             </div>
 
             <div className={`flex gap-5 mt-5 ${products.length === 2 ? 'justify-start' : 'justify-between'}`}>
-            {products.length > 0 ? (
+                {products.length > 0 ? (
                     products.map((item) => (
                         <Product key={`${category}-${item.id}`} product={{ ...item, category }} />
                     ))

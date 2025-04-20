@@ -65,10 +65,10 @@ const hoverSubOptions = {
         {
             title: "BIRTHDAY",
             items: [
-                { name: "For Him", url: "/Giftforhim?category=birthday" },
-                { name: "For Her", url: "/Giftforher?category=birthday" },
-                { name: "For Employee", url: "/Giftforcompanies?category=birthday" },
-                { name: "For Babies", url: "/Giftforbabies?category=birthday" }
+                { name: "For Him", url: "/Giftforbirthday?category=his birthday" },
+                { name: "For Her", url: "/Giftforbirthday?category=her birthday" },
+                { name: "For Employee", url: "/Giftforbirthday?category=employee birthday" },
+                { name: "For Babies", url: "/Giftforbirthday?category=baby birthday" }
             ],
             url: "/Giftforbirthday"
         },
@@ -84,8 +84,6 @@ const hoverSubOptions = {
             title: "THANKYOU",
             items: [
                 { name: "For Everyone", url: "/Giftforeveryone" },
-                // { name: "Corporate Thanks", url: "/Giftforcompanies?category=thankyou" },
-                // { name: "Teacher Thanks", url: "/Giftforeveryone?category=teacher-thanks" }
             ],
             url: "/Giftforeveryone"
         },
@@ -93,9 +91,6 @@ const hoverSubOptions = {
             title: "BUSINESS GIFTS",
             items: [
                 { name: "For Company", url: "/Giftforcompanies" },
-                // { name: "For Clients", url: "/Giftforcompanies?category=clients" },
-                // { name: "For Boss", url: "/Giftforcompanies?category=boss" },
-                // { name: "Corporate Events", url: "/Giftforcompanies?category=events" }
             ],
             url: "/Giftforcompanies"
         },
