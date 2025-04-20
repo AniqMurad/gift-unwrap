@@ -1,6 +1,11 @@
 import birthdayimages from '../assets/1pp.png';
 import giftsforhimimages from '../assets/2pp.png';
 import giftsforherimages from '../assets/flowers.png';
+import box1 from '../assets/box1.jpg';
+import box2 from '../assets/box2.jpg';
+import box3 from '../assets/box3.jpg';
+import box4 from '../assets/box4.jpg';
+
 
 const products = {
     giftsForHer: [
@@ -19,12 +24,12 @@ const products = {
         { id: 13, name: "Girlfriend's Makeup Kit", price: 45, originalPrice: 65, discount: 30, keyGift: "girlfriend", image: giftsforherimages },
     ],
     giftsForHim: [
-        { id: 1, name: "Classic Wallet", price: 50, originalPrice: 70, discount: 28, keyGift: "pop", subcategory: "Accessories", image: giftsforhimimages },
-        { id: 2, name: "Leather Belt", price: 40, originalPrice: 55, discount: 27, keyGift: "brother", subcategory: "Accessories", image: giftsforhimimages },
-        { id: 3, name: "Shaving Kit", price: 45, originalPrice: 65, discount: 30, keyGift: "boyfriend", subcategory: "Personal Care", image: giftsforhimimages },
-        { id: 4, name: "T-Shirt Pack", price: 70, originalPrice: 100, discount: 30, keyGift: "son", subcategory: "Apparels", image: giftsforhimimages },
-        { id: 5, name: "Cologne Set", price: 90, originalPrice: 120, discount: 25, keyGift: "husband", subcategory: "Personal Care", image: giftsforhimimages },
-        { id: 6, name: "Personalized Keychain", price: 30, originalPrice: 50, keyGift: "friend", discount: 40, subcategory: "Customized Gift", image: giftsforhimimages },
+        { id: 1, name: "Classic Wallet", price: 50, originalPrice: 70, discount: 28, keyGift: "pop", subcategory: "Accessories", image: box1 },
+        { id: 2, name: "Leather Belt", price: 40, originalPrice: 55, discount: 27, keyGift: "brother", subcategory: "Accessories", image: box2 },
+        { id: 3, name: "Shaving Kit", price: 45, originalPrice: 65, discount: 30, keyGift: "boyfriend", subcategory: "Personal Care", image: box3 },
+        { id: 4, name: "T-Shirt Pack", price: 70, originalPrice: 100, discount: 30, keyGift: "son", subcategory: "Apparels", image: box4 },
+        { id: 5, name: "Cologne Set", price: 90, originalPrice: 120, discount: 25, keyGift: "husband", subcategory: "Personal Care", image: box4 },
+        { id: 6, name: "Personalized Keychain", price: 30, originalPrice: 50, keyGift: "friend", discount: 40, subcategory: "Customized Gift", image: box4 },
     ],
     birthday: [
         { id: 1, name: "Birthday Mug", price: 25, originalPrice: 35, discount: 29, subcategory: "Gift Box", image: birthdayimages },
