@@ -16,21 +16,21 @@ const SearchPageNavbar = ({ title, title2, titleHome }) => {
                     <div className='cursor-pointer' onClick={handleLogoClick}>
                         <img src={Logo} alt='Gift Unwrap' className='h-10' />
                     </div>
-                    <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
+                    {/* <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
                         CATEGORIES
-                    </button>
+                    </button> */}
                     <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
                         RECIPIENTS
                     </button>
                     <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
                         OCCASIONS
                     </button>
-                    <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
+                    {/* <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
                         PERSONALIZATION METHOD
                     </button>
                     <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
                         BLOG
-                    </button>
+                    </button> */}
                 </div>
                 <div className='flex gap-5 items-center'>
                     <SearchIcon color="#1F1F1F"/>
@@ -42,7 +42,7 @@ const SearchPageNavbar = ({ title, title2, titleHome }) => {
             </div>
 
             {/* Search Result Section */}
-            <div className='text-center py-8 mt-16'>
+            <div className='text-center py-8 mt-2'>
                 <h2 className='text-4xl font-semibold text-gray-900'>{title}</h2>
                 <div className='flex items-center justify-center gap-2 text-sm text-gray-600 mt-2'>
                     {titleHome && (

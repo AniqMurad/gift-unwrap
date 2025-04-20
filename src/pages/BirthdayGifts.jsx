@@ -147,11 +147,11 @@ const BirthdayGifts = () => {
         <div>
 
             <SearchPageNavbar title="Birthday Gifts" titleHome="Home Page" />
-            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-8'>
-                <p className={`cursor-pointer ${selectedCategory === 'babybirthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('babybirthday')}>Babies Birthday</p>
-                <p className={`cursor-pointer ${selectedCategory === 'employeebirthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('employeebirthday')}>Employee Birthday</p>
-                <p className={`cursor-pointer ${selectedCategory === 'hisbirthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('hisbirthday')}>His Birthday</p>
-                <p className={`cursor-pointer ${selectedCategory === 'herbirthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('herbirthday')}>Her birthday</p>
+            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
+                <p className={`cursor-pointer ${selectedCategory === 'his birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('his birthday')}>His Birthday</p>
+                <p className={`cursor-pointer ${selectedCategory === 'her birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('her birthday')}>Her birthday</p>
+                <p className={`cursor-pointer ${selectedCategory === 'employee birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('employee birthday')}>Employee Birthday</p>
+                <p className={`cursor-pointer ${selectedCategory === 'baby birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('baby birthday')}>Babies Birthday</p>
             </div>
 
             <div className="px-16 py-10 flex justify-between">
