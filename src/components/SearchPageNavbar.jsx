@@ -42,7 +42,7 @@ const SearchPageNavbar = ({ title, title2, titleHome }) => {
             </div>
 
             {/* Search Result Section */}
-            <div className='text-center py-8 mt-16'>
+            <div className='text-center py-8 mt-2'>
                 <h2 className='text-4xl font-semibold text-gray-900'>{title}</h2>
                 <div className='flex items-center justify-center gap-2 text-sm text-gray-600 mt-2'>
                     {titleHome && (

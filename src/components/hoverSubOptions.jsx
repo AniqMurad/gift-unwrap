@@ -36,9 +36,9 @@ const hoverSubOptions = {
             title: "FOR COMPANIES",
             items: [
                 { name: "New Hire", url: "/Giftforcompanies?category=newhire" },
-                { name: "Occasions", url: "/Giftforcompanies?category=occasions" },
+                { name: "Occasions", url: "/Giftforcompanies?category=ocassion" },
                 { name: "Farewell", url: "/Giftforcompanies?category=farewell" },
-                { name: "Achievements", url: "/Giftforcompanies?category=achievements" },
+                { name: "Achievements", url: "/Giftforcompanies?category=achievement" },
             ],
             url: "/Giftforcompanies"
         },
@@ -58,7 +58,7 @@ const hoverSubOptions = {
             items: [
                 { name: "For Bride", url: "/Giftforwedding?category=bride" },
                 { name: "For Groom", url: "/Giftforwedding?category=groom" },
-                { name: "Bridal Party Gifts", url: "/Giftforwedding?category=bridal-party" }
+                { name: "Bridal Party Gifts", url: "/Giftforwedding?category=bridalparty" }
             ],
             url: "/Giftforwedding"
         },
@@ -75,27 +75,27 @@ const hoverSubOptions = {
         {
             title: "ANNIVERSARY",
             items: [
-                { name: "Wedding Anniversary", url: "/Giftforwedding?category=anniversary" },
-                { name: "Work Anniversary", url: "/Giftforcompanies?category=work-anniversary" }
+                { name: "Wedding Anniversary", url: "/Giftforwedding?category=weddinganniversary" },
+                { name: "Work Anniversary", url: "/Giftforcompanies?category=workanniversary" }
             ],
-            url: "/Giftforanniversary"
+            url: "/Giftforwedding"
         },
         {
             title: "THANKYOU",
             items: [
-                { name: "For Everyone", url: "/Giftforeveryone?category=thankyou" },
-                { name: "Corporate Thanks", url: "/Giftforcompanies?category=thankyou" },
-                { name: "Teacher Thanks", url: "/Giftforeveryone?category=teacher-thanks" }
+                { name: "For Everyone", url: "/Giftforeveryone" },
+                // { name: "Corporate Thanks", url: "/Giftforcompanies?category=thankyou" },
+                // { name: "Teacher Thanks", url: "/Giftforeveryone?category=teacher-thanks" }
             ],
-            url: "/Giftforthankyou"
+            url: "/Giftforeveryone"
         },
         {
             title: "BUSINESS GIFTS",
             items: [
-                { name: "For Company", url: "/Giftforcompanies?category=company" },
-                { name: "For Clients", url: "/Giftforcompanies?category=clients" },
-                { name: "For Boss", url: "/Giftforcompanies?category=boss" },
-                { name: "Corporate Events", url: "/Giftforcompanies?category=events" }
+                { name: "For Company", url: "/Giftforcompanies" },
+                // { name: "For Clients", url: "/Giftforcompanies?category=clients" },
+                // { name: "For Boss", url: "/Giftforcompanies?category=boss" },
+                // { name: "Corporate Events", url: "/Giftforcompanies?category=events" }
             ],
             url: "/Giftforcompanies"
         },
