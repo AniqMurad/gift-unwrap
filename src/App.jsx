@@ -50,7 +50,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/OrderTracking" element={<OrderTracking />} />
           <Route path="/myAccount" element={<MyAccount />} />
-          <Route path="/product/:productId" element={<ProductDetail />} />
+          {/* <Route path="/product/:productId" element={<ProductDetail />} /> */}
+          <Route path="/product/:category/:productId" element={<ProductDetail />} />
+
           <Route path="/Giftforbabies" element={<Giftsforbabies />} />
           <Route path="/giftforeveryone" element={<Giftsforeveryone />} />
           <Route path="/giftforcompanies" element={<Forcompanies />} />
@@ -58,8 +60,6 @@ function App() {
           <Route path="/Giftforreligions" element={<Giftforreligions />} />
           <Route path="/Giftforbirthday" element={<BirthdayGifts />} />
         </Routes>
-        {/* <Checkout />
-        <ShoppingCart /> */}
       </WishlistProvider>
     </Router>
   );
