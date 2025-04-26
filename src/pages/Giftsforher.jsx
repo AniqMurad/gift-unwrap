@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from "react";
 import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
@@ -63,6 +65,7 @@ const Giftsforher = () => {
             setPrevColumns(col); // Sidebar open ho toh bhi last selected column store rahe
         }
     };
+
 
     const goToPreviousPage = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -359,9 +362,16 @@ const Giftsforher = () => {
 
                     {/* products */}
                     <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
-                        {giftsForHerProducts.map((product) => (
+                        {/* {giftsForHerProducts.map((product) => (
                             <Product key={product.id} product={product} columns={columns} />
-                        ))}
+                        ))} */}
+                        {giftsForHerProducts.map((product) => (
+                            <Product 
+                                key={product.id} 
+                                product={{...product, category: "giftsForHer"}} 
+                                columns={columns} 
+                            />
+                            ))}
                     </div>
 
                     {/* paging */}
