@@ -38,9 +38,6 @@ const Product = ({ product, columns }) => {
                     <p>{product.name}</p>
                     <div className='flex items-center gap-2 text-sm mt-1'>
                         <span>Rs {product.price}</span>
-                        {/* Uncomment if you add discounts */}
-                        {/* <span className='line-through text-[#A0A0A0]'>${product.originalPrice}</span> */}
-                        {/* <span className='bg-[#D2EF9A] rounded-[24px] p-1'>-{product.discount}%</span> */}
                     </div>
                 </div>
             </Link>
