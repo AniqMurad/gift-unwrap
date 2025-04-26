@@ -50,11 +50,11 @@ const Giftsforher = () => {
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
         const categoryParam = queryParams.get('category');
-        
+
         if (categoryParam) {
             setSelectedCategory(categoryParam);
         }
-    }, [location.search]); 
+    }, [location.search]);
 
     const handleColumnChange = (col) => {
         if (!isSidebarOpen) {
