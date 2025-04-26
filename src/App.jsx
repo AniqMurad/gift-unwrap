@@ -27,10 +27,12 @@ import Forcompanies from "./pages/Forcompanies";
 import Giftsforwedding from "./pages/Giftsforwedding";
 import Giftforreligions from "./pages/Giftforreligions";
 import BirthdayGifts from "./pages/BirthdayGifts";
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <WishlistProvider>
         <Routes>
           <Route path="/" element={<Home />} />

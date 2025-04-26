@@ -21,6 +21,7 @@ const ProductDetail = () => {
     }
 
     const categoryProducts = ProductData[category];
+    console.log("Category Products:", categoryProducts);
 
     if (categoryProducts) {
       const foundProduct = categoryProducts.find(p => p.id.toString() === productId);
