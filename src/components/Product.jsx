@@ -47,7 +47,7 @@ const Product = ({ product, columns }) => {
 
                 {/* Product Image - Base layer */}
                 <img
-                    src={product?.image}
+                    src={product.image || (product.images && product.images[0])}
                     alt={product.name}
                     className={`w-full h-auto aspect-[3/4] object-cover rounded-[16px] transition-transform duration-300 group-hover:scale-105`}
                 />
@@ -92,15 +92,6 @@ const Product = ({ product, columns }) => {
                 >
                     {isInWishlist ? <HeartIcon3 /> : <HeartIcon2 />}
                 </button>
-
-                {/* Wrap image in a Link */}
-                <Link to={`/product/${product.category}/${product.id}`}>
-                    <img
-                        src={product.image || (product.images && product.images[0])}
-                        alt={product.name}
-                        className={`w-[300px] h-[360px] rounded-[16px]`}
-                    />
-                </Link>
 
             </div>
 
