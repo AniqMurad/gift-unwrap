@@ -18,7 +18,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import OrderTracking from "./pages/OrderTracking";
 import MyAccount from "./pages/MyAccount";
 import Checkout from "./pages/Checkout";
-import { ShoppingCart } from "./pages/ShoppingCart";
+import ShoppingCart  from "./pages/ShoppingCart";
 import ProductDetail from "./components/ProductDetail";
 import Giftsforhim from "./pages/Giftsforhim";
 import Giftsforbabies from "./pages/Giftsforbabies";
@@ -52,15 +52,16 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/OrderTracking" element={<OrderTracking />} />
           <Route path="/myAccount" element={<MyAccount />} />
-          {/* <Route path="/product/:productId" element={<ProductDetail />} /> */}
           <Route path="/product/:category/:productId" element={<ProductDetail />} />
-
           <Route path="/Giftforbabies" element={<Giftsforbabies />} />
           <Route path="/giftforeveryone" element={<Giftsforeveryone />} />
           <Route path="/giftforcompanies" element={<Forcompanies />} />
           <Route path="/giftforwedding" element={<Giftsforwedding />} />
           <Route path="/Giftforreligions" element={<Giftforreligions />} />
           <Route path="/Giftforbirthday" element={<BirthdayGifts />} />
+          <Route path="/Checkout" element={<Checkout />} />
+          <Route path="/ShoppingCart" element={<ShoppingCart />} />  
+          
         </Routes>
       </WishlistProvider>
     </Router>

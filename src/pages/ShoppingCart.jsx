@@ -1,9 +1,8 @@
 import Footer from '@/components/Footer'
 import { Couponbg, DiscountLineGreen, DiscountLineWhite } from '@/components/icons';
 import SearchPageNavbar from '@/components/SearchPageNavbar'
-import React from 'react'
 
-export const ShoppingCart = () => {
+const ShoppingCart = () => {
     const cartItems = [
         {
             name: 'Contrasting Sheepskin Sweatshirt',
@@ -248,3 +247,4 @@ export const ShoppingCart = () => {
         </div>
     )
 }
+export default ShoppingCart

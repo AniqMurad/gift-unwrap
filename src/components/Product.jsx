@@ -54,10 +54,8 @@ const Product = ({ product, columns }) => {
 
                 {/* Overlay - Transparent by default, light grey on hover */}
                 {/* Reduced opacity to 30 for a lighter effect */}
-                <div className="absolute inset-0 bg-transparent group-hover:bg-gray-200 group-hover:bg-opacity-10 transition-opacity duration-300 flex items-center justify-center z-10">
-                    {/* Icons Container - Fades in on hover */}
+                {/* <div className="absolute inset-0 bg-transparent group-hover:bg-gray-100 group-hover:bg-opacity-0 transition-opacity duration-300 flex items-center justify-center z-10">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex space-x-3">
-                        {/* Eye Icon Button */}
                         <button
                             onClick={handleNavigateToDetail}
                             className="p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer" // Added cursor-pointer
@@ -66,7 +64,6 @@ const Product = ({ product, columns }) => {
                             <DetailEyeIcon className="w-5 h-5 text-black" />
                         </button>
 
-                        {/* Cart Icon Button */}
                         <button
                             onClick={handleAddToCart}
                             className="p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer" // Added cursor-pointer
@@ -75,7 +72,29 @@ const Product = ({ product, columns }) => {
                             <CartIcon className="w-5 h-5 text-black" />
                         </button>
                     </div>
+                </div> */}
+                <div className="absolute inset-0 flex items-center justify-center z-10">
+                {/* Icons Container - Fades in on hover */}
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex space-x-3">
+                    {/* Eye Icon Button */}
+                    <button
+                        onClick={handleNavigateToDetail}
+                        className="p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer"
+                        aria-label="View Product"
+                    >
+                        <DetailEyeIcon className="w-5 h-5 text-black" />
+                    </button>
+
+                    {/* Cart Icon Button */}
+                    <button
+                        onClick={handleAddToCart}
+                        className="p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer"
+                        aria-label="Add to Cart"
+                    >
+                        <CartIcon className="w-5 h-5 text-black" />
+                    </button>
                 </div>
+            </div>
 
                 {/* Sale Badge - Above overlay */}
                 {product.discountPercentage > 0 && (
