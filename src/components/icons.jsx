@@ -390,6 +390,15 @@ export const PassShowIcon = () => {
     )
 }
 
+export const eyeDetailIcon = () => {
+    return (
+        <svg width="22" height="24" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 12C1 12 5 4 11 4C17 4 21 12 21 12C21 12 17 20 11 20C5 20 1 12 1 12Z" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="11" cy="12" r="3" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+    )
+}
+
 
 export const LoginLine = () => {
     return (
@@ -420,8 +429,8 @@ export const TickIcon = () => {
 export const MyUserIcon = () => {
     return (
         <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 19V17C17 15.9391 16.5786 14.9217 15.8284 14.1716C15.0783 13.4214 14.0609 13 13 13H5C3.93913 13 2.92172 13.4214 2.17157 14.1716C1.42143 14.9217 1 15.9391 1 17V19" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M9 9C11.2091 9 13 7.20914 13 5C13 2.79086 11.2091 1 9 1C6.79086 1 5 2.79086 5 5C5 7.20914 6.79086 9 9 9Z" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M17 19V17C17 15.9391 16.5786 14.9217 15.8284 14.1716C15.0783 13.4214 14.0609 13 13 13H5C3.93913 13 2.92172 13.4214 2.17157 14.1716C1.42143 14.9217 1 15.9391 1 17V19" stroke="#1F1F1F" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" />
+            <path d="M9 9C11.2091 9 13 7.20914 13 5C13 2.79086 11.2091 1 9 1C6.79086 1 5 2.79086 5 5C5 7.20914 6.79086 9 9 9Z" stroke="#1F1F1F" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" />
         </svg>
     )
 }
@@ -429,7 +438,7 @@ export const MyUserIcon = () => {
 export const MyOrderIcon = () => {
     return (
         <svg width="22" height="24" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15.5078 10.8724V6.36589C15.5078 5.17068 15.033 4.02444 14.1879 3.1793C13.3428 2.33417 12.1965 1.85938 11.0013 1.85938C9.8061 1.85938 8.65985 2.33417 7.81472 3.1793C6.96958 4.02444 6.49479 5.17068 6.49479 6.36589V10.8724M3.11491 8.61914H18.8877L20.0143 22.1387H1.98828L3.11491 8.61914Z" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M15.5078 10.8724V6.36589C15.5078 5.17068 15.033 4.02444 14.1879 3.1793C13.3428 2.33417 12.1965 1.85938 11.0013 1.85938C9.8061 1.85938 8.65985 2.33417 7.81472 3.1793C6.96958 4.02444 6.49479 5.17068 6.49479 6.36589V10.8724M3.11491 8.61914H18.8877L20.0143 22.1387H1.98828L3.11491 8.61914Z" stroke="#1F1F1F" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" />
         </svg>
     )
 }
@@ -437,8 +446,8 @@ export const MyOrderIcon = () => {
 export const MyAddressIcon = () => {
     return (
         <svg width="20" height="24" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M19 10C19 17 10 23 10 23C10 23 1 17 1 10C1 7.61305 1.94821 5.32387 3.63604 3.63604C5.32387 1.94821 7.61305 1 10 1C12.3869 1 14.6761 1.94821 16.364 3.63604C18.0518 5.32387 19 7.61305 19 10Z" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M10 13C11.6569 13 13 11.6569 13 10C13 8.34315 11.6569 7 10 7C8.34315 7 7 8.34315 7 10C7 11.6569 8.34315 13 10 13Z" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M19 10C19 17 10 23 10 23C10 23 1 17 1 10C1 7.61305 1.94821 5.32387 3.63604 3.63604C5.32387 1.94821 7.61305 1 10 1C12.3869 1 14.6761 1.94821 16.364 3.63604C18.0518 5.32387 19 7.61305 19 10Z" stroke="#1F1F1F" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" />
+            <path d="M10 13C11.6569 13 13 11.6569 13 10C13 8.34315 11.6569 7 10 7C8.34315 7 7 8.34315 7 10C7 11.6569 8.34315 13 10 13Z" stroke="#1F1F1F" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" />
         </svg>
     )
 }
@@ -446,9 +455,9 @@ export const MyAddressIcon = () => {
 export const MyLogoutIcon = () => {
     return (
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 19H3C2.46957 19 1.96086 18.7893 1.58579 18.4142C1.21071 18.0391 1 17.5304 1 17V3C1 2.46957 1.21071 1.96086 1.58579 1.58579C1.96086 1.21071 2.46957 1 3 1H7" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M14 15L19 10L14 5" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M19 10H7" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M7 19H3C2.46957 19 1.96086 18.7893 1.58579 18.4142C1.21071 18.0391 1 17.5304 1 17V3C1 2.46957 1.21071 1.96086 1.58579 1.58579C1.96086 1.21071 2.46957 1 3 1H7" stroke="#1F1F1F" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" />
+            <path d="M14 15L19 10L14 5" stroke="#1F1F1F" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" />
+            <path d="M19 10H7" stroke="#1F1F1F" stroke-width="2" strokeLinecap="round" stroke-linejoin="round" />
         </svg>
     )
 }
@@ -599,5 +608,13 @@ export const BlueCheckbox = () => {
             <circle cx="7" cy="7" r="6.5" fill="white" stroke="#2E72D2" />
             <circle cx="7" cy="7" r="4" fill="#2E72D2" />
         </svg>
+    )
+}
+
+export const DetailEyeIcon = () => {
+    return(
+        <svg width="22" height="24" viewBox="0 0 19 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9.5 1.75C5.89 1.75 2.64 3.88 1 7c1.64 3.12 4.89 5.25 8.5 5.25S16.36 10.12 18 7c-1.64-3.12-4.89-5.25-8.5-5.25zm0 8.75a3.5 3.5 0 110-7 3.5 3.5 0 010 7zM9.5 5a2 2 0 100 4 2 2 0 000-4z" fill="#000000" />
+    </svg>
     )
 }
