@@ -100,7 +100,7 @@ const ProductDetail = () => {
 
             {/* Description */}
             <div className="text-[#696C70] border-b border-gray-200 pb-6">
-              <p>{product.description}</p>
+              <p>{product.ShortDescription}</p>
             </div>
 
             {/* Quantity and Add to Cart */}
