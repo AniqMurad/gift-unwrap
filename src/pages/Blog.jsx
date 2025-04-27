@@ -11,7 +11,7 @@ const Blog = () => {
 
   return (
     <div className=''>
-      <SearchPageNavbar title="Blog" titleHome="Home Page" />
+      <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
       <div className="mt-[7%] px-16 flex justify-between mb-10">
 
         {/* Blog Posts Section */}

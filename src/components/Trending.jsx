@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'; // Removed useState
 import ramadanimage from '../assets/ramadan.png';
 import eidimage from '../assets/eid.png';
 import birthdayimage from '../assets/birthday.png';
-import anniversaryimage from '../assets/anniversary.png';
+import companyimage from '../assets/company.webp';
 import weddingGiftImg from '../assets/weddingGiftsImg.jpg';
 import box2 from '../assets/box2.jpg';
 import giftForhimImg from '../assets/giftForhimImg.webp';
@@ -11,30 +11,26 @@ import { useNavigate } from 'react-router-dom';
 
 const Trending = () => {
     const sliderRef = useRef(null);
-    // Removed isHovered state: const [isHovered, setIsHovered] = useState(false);
     const navigate = useNavigate();
 
-    // Original items with URLs
     const originalItems = [
-        { image: anniversaryimage, title: "Anniversary", count: 12, url: "/Giftforanniversary" }, // Corrected URL
-        { image: birthdayimage, title: "Birthday Gifts", count: 12, url: "/Giftforbirthday" },
-        { image: giftForKids, title: "Kids Gifts", count: 12, url: "/Giftforbabies" },
-        { image: box2, title: "Gift for her", count: 12, url: "/Giftforher" }, // Corrected case
-        { image: giftForhimImg, title: "Gifts for him", count: 12, url: "/Giftforhim" }, // Corrected case
-        { image: weddingGiftImg, title: "Wedding Gifts", count: 12, url: "/Giftforwedding" },
-        { image: eidimage, title: "Religious Events Gifts", count: 12, url: "/Giftforreligions" },
+        { image: companyimage, title: "Business", count: 12, url: "/Giftforcompanies" },
+        { image: birthdayimage, title: "Birthday", count: 12, url: "/Giftforbirthday" },
+        { image: giftForKids, title: "Kids", count: 12, url: "/Giftforbabies" },
+        { image: box2, title: "For Her", count: 12, url: "/Giftforher" },
+        { image: giftForhimImg, title: "For Him", count: 12, url: "/Giftforhim" },
+        { image: weddingGiftImg, title: "Wedding", count: 12, url: "/Giftforwedding" },
+        { image: eidimage, title: "Religious Events", count: 12, url: "/Giftforreligions" },
     ];
 
-    // Duplicate the first few items (e.g., 5) for a seamless loop
     const itemsToDuplicate = 5;
     const trendingItems = [...originalItems, ...originalItems.slice(0, itemsToDuplicate)];
 
-    // Define the navigation handler function
     const handleItemClick = (url) => {
         if (url) {
             navigate(url);
         } else {
-            console.warn("Navigation URL is missing for this item."); // Add a warning if URL is missing
+            console.warn("Navigation URL is missing for this item.");
         }
     };
 
@@ -80,7 +76,6 @@ const Trending = () => {
                 <div className='text-4xl flex justify-center mb-8'>Trending Right Now</div>
                 <div
                     className='relative overflow-hidden my-5 mx-auto cursor-grab active:cursor-grabbing'
-                    // Removed onMouseEnter and onMouseLeave handlers
                 >
                     <div
                         ref={sliderRef}
@@ -90,8 +85,8 @@ const Trending = () => {
                         {trendingItems.map((item, index) => (
                             <div
                                 key={index}
-                                className='flex flex-col items-center min-w-[200px] flex-shrink-0 cursor-pointer group' // Added cursor-pointer and group
-                                onClick={() => handleItemClick(item.url)} // Ensure this calls the defined handler
+                                className='flex flex-col items-center min-w-[200px] flex-shrink-0 cursor-pointer group'
+                                onClick={() => handleItemClick(item.url)}
                             >
                                 <div className='rounded-full overflow-hidden w-[180px] h-[180px] shadow-md group-hover:shadow-lg transition-shadow duration-200'>
                                     <img src={item.image} alt={item.title} className='w-full h-full object-cover' />

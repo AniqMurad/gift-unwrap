@@ -53,7 +53,7 @@ const FAQs = () => {
 
     return (
         <div>
-            <SearchPageNavbar title="FAQs" titleHome="Home Page" />
+            <SearchPageNavbar title="FAQs" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
 
             <div className='px-16 py-14 flex justify-between'>
 

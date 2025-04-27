@@ -10,8 +10,8 @@ const SubNavbar = () => {
   const navigate = useNavigate();
 
   const featuredProduct = {
-    ...ProductData.giftsForHim[0], // Use the first product from giftsForHer
-    category: 'giftsForHim'  // Add category for wishlist functionality
+    ...ProductData.giftsForHim[0],
+    category: 'giftsForHim'
   };
 
   const handleButtonClick = (dropdown) => {

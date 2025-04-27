@@ -29,7 +29,7 @@ const Checkout = () => {
 
     return (
         <div>
-            <SearchPageNavbar title="Checkout" titleHome="Home Page" />
+            <SearchPageNavbar title="Checkout" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
 
             <div className="flex px-16 py-20 justify-between">
 

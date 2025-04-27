@@ -87,7 +87,7 @@ const Signup = () => {
     };
     return (
         <div>
-            <SearchPageNavbar title="Create An Account" titleHome="Home Page" />
+            <SearchPageNavbar title="Create An Account" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
 
             <div className="flex px-16 py-20 justify-between items-center">
 

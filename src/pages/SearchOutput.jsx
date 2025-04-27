@@ -10,7 +10,7 @@ const SearchOutput = () => {
 
     return (
         <div className='w-full h-auto'>
-            <SearchPageNavbar title="Search Result" titleHome="Home Page" />
+            <SearchPageNavbar title="Search Result" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
 
             <div className='text-center py-8'>
                 <h2 className='text-2xl font-semibold text-gray-900'>

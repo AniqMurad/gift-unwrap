@@ -11,8 +11,8 @@ const Footer = () => {
             <img src={Logo} alt="" className="w-[173px] h-[42px]"/>
           </div>
           <p><strong>Mail:</strong> giftunwrap@gmail.com</p>
-          <p><strong>Phone:</strong> 1-333-345-6868</p>
-          <p><strong>Address:</strong> Flat C9, Rehmani Garden Colony, Nistar Rd, Karachi</p>
+          <p><strong>Phone:</strong> +92 326 8927354</p>
+          <p><strong>Address:</strong> Shop No. 226 PIB Colony near Jail Chowrangi, Karachi</p>
         </div>
 
         <div className="flex justify-between gap-10 w-[500px]">
@@ -20,17 +20,15 @@ const Footer = () => {
             <h4 className="font-semibold mb-2">INFORMATION</h4>
             <p>Contact us</p>
             <p>Reviews</p>
-            <p>Track Order</p>
             <p>FAQs</p>
           </div>
 
           <div className="flex flex-col gap-4">
             <h4 className="font-semibold mb-2">QUICK SHOP</h4>
-            <p>Gifts by Occasion</p>
-            <p>Gift of Choice</p>
-            <p>Gift Cards</p>
-            <p>Employee Gifts</p>
-            <p>Client Gifts</p>
+            <p>Universal Joy</p>
+            <p>Forever Beginnings</p>
+            <p>Her Desires</p>
+            <p>His Desires</p>
           </div>
 
           <div className="flex flex-col gap-4">
