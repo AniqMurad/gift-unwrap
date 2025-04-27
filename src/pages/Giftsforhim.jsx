@@ -11,7 +11,7 @@ const Giftsforhim = () => {
     const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [prevColumns, setPrevColumns] = useState(4);
-    const [selectedCategory, setSelectedCategory] = useState(''); 
+    const [selectedCategory, setSelectedCategory] = useState('');
     const giftsForHimProducts = ProductData.giftsForHim.filter(product =>
         selectedCategory === '' || product.keyGift === selectedCategory
     );
@@ -40,13 +40,13 @@ const Giftsforhim = () => {
     }, [isSidebarOpen]);
 
     useEffect(() => {
-            const queryParams = new URLSearchParams(location.search);
-            const categoryParam = queryParams.get('category');
-            
-            if (categoryParam) {
-                setSelectedCategory(categoryParam);
-            }
-        }, [location.search]); 
+        const queryParams = new URLSearchParams(location.search);
+        const categoryParam = queryParams.get('category');
+
+        if (categoryParam) {
+            setSelectedCategory(categoryParam);
+        }
+    }, [location.search]);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -362,7 +362,11 @@ const Giftsforhim = () => {
                     {/* products */}
                     <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
                         {giftsForHimProducts.map((product) => (
-                            <Product key={product.id} product={product} columns={columns} />
+                            <Product
+                                key={product.id}
+                                product={{ ...product, category: "giftsForHim" }}
+                                columns={columns}
+                            />
                         ))}
                     </div>
 

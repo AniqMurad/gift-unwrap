@@ -362,7 +362,11 @@ const Giftforreligions = () => {
                     {/* products */}
                     <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
                         {giftsForReligiousProducts.map((product) => (
-                            <Product key={product.id} product={product} columns={columns} />
+                            <Product
+                                key={product.id}
+                                product={{ ...product, category: "giftsForReligions" }}
+                                columns={columns}
+                            />
                         ))}
                     </div>
 

@@ -363,7 +363,11 @@ const Forcompanies = () => {
                     {/* products */}
                     <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
                         {giftsForCompanyProducts.map((product) => (
-                            <Product key={product.id} product={product} columns={columns} />
+                            <Product
+                                key={product.id}
+                                product={{ ...product, category: "giftsForCompany" }}
+                                columns={columns}
+                            />
                         ))}
                     </div>
 

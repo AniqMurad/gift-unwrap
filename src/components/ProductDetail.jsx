@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import ProductData from "../components/ProductData";
 
 const ProductDetail = () => {
+  const [selectedImage, setSelectedImage] = useState('');
   const { productId, category } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
@@ -63,7 +64,7 @@ const ProductDetail = () => {
           <div className="space-y-8">
             <div className="bg-gray-50 p-8 rounded-lg flex items-center justify-center">
               <img
-                src={product.image}
+                src={selectedImage || product.image || (product.images && product.images[0])}
                 alt={product.name}
                 className="w-full h-auto object-contain max-h-[600px]"
               />
@@ -71,18 +72,20 @@ const ProductDetail = () => {
 
             {/* Thumbnails - Add if you have multiple images */}
             <div className="grid grid-cols-4 gap-4">
-              <div className="border border-black p-2 rounded">
-                <img src={product.image} alt={product.name} className="w-full h-auto object-cover" />
-              </div>
-              <div className="border border-gray-200 p-2 rounded">
-                <img src={product.image} alt={product.name} className="w-full h-auto object-cover opacity-70" />
-              </div>
-              <div className="border border-gray-200 p-2 rounded">
-                <img src={product.image} alt={product.name} className="w-full h-auto object-cover opacity-70" />
-              </div>
-              <div className="border border-gray-200 p-2 rounded">
-                <img src={product.image} alt={product.name} className="w-full h-auto object-cover opacity-70" />
-              </div>
+              {product.images && product.images.map((imgSrc, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 p-2 rounded cursor-pointer"
+                  onMouseEnter={() => setSelectedImage(imgSrc)} // <-- when hover
+                  onClick={() => setSelectedImage(imgSrc)}      // <-- when click
+                >
+                  <img
+                    src={imgSrc}
+                    alt={`${product.name} ${index + 1}`}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
@@ -92,60 +95,12 @@ const ProductDetail = () => {
 
             {/* Price Section */}
             <div className="flex items-center gap-4">
-              <span className="text-2xl font-semibold">${product.currentPrice}</span>
-              {product.oldPrice && (
-                <>
-                  <span className="text-xl line-through text-[#A0A0A0]">${product.oldPrice}</span>
-                  <span className="bg-[#D2EF9A] text-[#1F1F1F] px-3 py-1 rounded-full text-sm font-medium">
-                    {Math.round((1 - product.currentPrice / product.oldPrice) * 100)}% OFF
-                  </span>
-                </>
-              )}
-            </div>
-
-            {/* Rating */}
-            <div className="flex items-center gap-2">
-              <div className="flex text-yellow-400">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <svg
-                    key={index}
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={`h-5 w-5 ${index < product.rating ? 'fill-current' : 'text-gray-300'}`}
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <span className="text-sm text-gray-600">({product.reviews || 0} reviews)</span>
+              <span className="text-2xl font-semibold">Rs {product.price}</span>
             </div>
 
             {/* Description */}
             <div className="text-[#696C70] border-b border-gray-200 pb-6">
-              <p>{product.description || "This beautiful gift is perfect for any occasion. Made with high-quality materials and attention to detail, it's sure to bring joy to the recipient."}</p>
-            </div>
-
-            {/* Color Selection - if applicable */}
-            <div className="space-y-3">
-              <h3 className="font-medium">Color</h3>
-              <div className="flex gap-3">
-                <div className="h-8 w-8 rounded-full bg-red-500 border-2 border-gray-300"></div>
-                <div className="h-8 w-8 rounded-full bg-blue-500"></div>
-                <div className="h-8 w-8 rounded-full bg-green-500"></div>
-                <div className="h-8 w-8 rounded-full bg-yellow-500"></div>
-              </div>
-            </div>
-
-            {/* Size Selection - if applicable */}
-            <div className="space-y-3">
-              <h3 className="font-medium">Size</h3>
-              <div className="flex gap-3">
-                <button className="h-10 w-10 flex items-center justify-center border border-gray-300 rounded-md">S</button>
-                <button className="h-10 w-10 flex items-center justify-center border border-gray-300 rounded-md bg-black text-white">M</button>
-                <button className="h-10 w-10 flex items-center justify-center border border-gray-300 rounded-md">L</button>
-                <button className="h-10 w-10 flex items-center justify-center border border-gray-300 rounded-md">XL</button>
-              </div>
+              <p>{product.description}</p>
             </div>
 
             {/* Quantity and Add to Cart */}
@@ -192,80 +147,72 @@ const ProductDetail = () => {
                 <span>30-day returns</span>
               </div>
             </div>
+
+            {/* Product Details Tabs */}
+            <div className="mt-16">
+              <div className="flex border-b border-gray-200">
+                <button
+                  className={`py-3 px-6 font-medium ${activeTab === 'description' ? 'border-b-2 border-black' : 'text-gray-500'}`}
+                  onClick={() => setActiveTab('description')}
+                >
+                  Description
+                </button>
+                <button
+                  className={`py-3 px-6 font-medium ${activeTab === 'reviews' ? 'border-b-2 border-black' : 'text-gray-500'}`}
+                  onClick={() => setActiveTab('reviews')}
+                >
+                  Reviews
+                </button>
+                <button
+                  className={`py-3 px-6 font-medium ${activeTab === 'shipping' ? 'border-b-2 border-black' : 'text-gray-500'}`}
+                  onClick={() => setActiveTab('shipping')}
+                >
+                  Shipping & Returns
+                </button>
+              </div>
+
+              <div className="py-8">
+                {activeTab === 'description' && (
+                  <div>
+                    <p className="text-[#696C70]">
+                      {product.LongDescription}
+                    </p>
+                  </div>
+                )}
+
+                {activeTab === 'reviews' && (
+                  <div>
+                    <p className="text-[#696C70]">Customer reviews will appear here.</p>
+                  </div>
+                )}
+
+                {activeTab === 'shipping' && (
+                  <div>
+                    <p className="text-[#696C70]">
+                      Shipping Information:
+                      <br /><br />
+                      • Free standard shipping on orders over $50
+                      <br />
+                      • Express shipping available for an additional fee
+                      <br />
+                      • Most orders ship within 1-2 business days
+                      <br /><br />
+                      Return Policy:
+                      <br /><br />
+                      • 30-day return window for unused items
+                      <br />
+                      • Return shipping is free for defective items
+                      <br />
+                      • Contact customer service for return authorization
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Product Details Tabs */}
-        <div className="mt-16">
-          <div className="flex border-b border-gray-200">
-            <button
-              className={`py-3 px-6 font-medium ${activeTab === 'description' ? 'border-b-2 border-black' : 'text-gray-500'}`}
-              onClick={() => setActiveTab('description')}
-            >
-              Description
-            </button>
-            <button
-              className={`py-3 px-6 font-medium ${activeTab === 'reviews' ? 'border-b-2 border-black' : 'text-gray-500'}`}
-              onClick={() => setActiveTab('reviews')}
-            >
-              Reviews
-            </button>
-            <button
-              className={`py-3 px-6 font-medium ${activeTab === 'shipping' ? 'border-b-2 border-black' : 'text-gray-500'}`}
-              onClick={() => setActiveTab('shipping')}
-            >
-              Shipping & Returns
-            </button>
-          </div>
 
-          <div className="py-8">
-            {activeTab === 'description' && (
-              <div>
-                <p className="text-[#696C70]">
-                  {product.longDescription ||
-                    `This premium gift is crafted with attention to detail and made from high-quality materials. 
-                    Perfect for any occasion, it comes in elegant packaging ready to gift. 
-                    The ${product.name} is designed to last and bring joy for years to come.
-                    
-                    Features:
-                    • High-quality materials
-                    • Beautiful design
-                    • Durable construction
-                    • Perfect gift for any occasion`
-                  }
-                </p>
-              </div>
-            )}
-
-            {activeTab === 'reviews' && (
-              <div>
-                <p className="text-[#696C70]">Customer reviews will appear here.</p>
-              </div>
-            )}
-
-            {activeTab === 'shipping' && (
-              <div>
-                <p className="text-[#696C70]">
-                  Shipping Information:
-                  <br /><br />
-                  • Free standard shipping on orders over $50
-                  <br />
-                  • Express shipping available for an additional fee
-                  <br />
-                  • Most orders ship within 1-2 business days
-                  <br /><br />
-                  Return Policy:
-                  <br /><br />
-                  • 30-day return window for unused items
-                  <br />
-                  • Return shipping is free for defective items
-                  <br />
-                  • Contact customer service for return authorization
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
 
         {/* Related Products */}
         <div className="mt-16">
@@ -275,22 +222,18 @@ const ProductDetail = () => {
               <div
                 key={relatedProduct.id}
                 className="cursor-pointer"
-                // onClick={() => navigate(`/product/${relatedProduct.id}`)}
                 onClick={() => navigate(`/product/${category}/${relatedProduct.id}`)}
               >
                 <div className="bg-gray-50 rounded-lg p-4 mb-3">
                   <img
-                    src={relatedProduct.image}
+                    src={product.image || (product.images && product.images[0])}
                     alt={relatedProduct.name}
                     className="w-full h-[200px] object-cover"
                   />
                 </div>
                 <h3 className="font-medium">{relatedProduct.name}</h3>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="font-semibold">${relatedProduct.currentPrice}</span>
-                  {relatedProduct.oldPrice && (
-                    <span className="text-sm line-through text-[#A0A0A0]">${relatedProduct.oldPrice}</span>
-                  )}
+                  <span className="font-semibold">Rs {relatedProduct.price}</span>
                 </div>
               </div>
             ))}
