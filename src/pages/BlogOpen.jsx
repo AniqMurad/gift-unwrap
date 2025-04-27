@@ -23,7 +23,7 @@ const BlogOpen = () => {
 
     return (
         <div>
-            <SearchPageNavbar title="Blog" title2="Blog" titleHome="Home Page" />
+            <SearchPageNavbar title="Blog" title2="Blog" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
 
             <div className='px-16 py-4 mt-10 mb-10'>
 

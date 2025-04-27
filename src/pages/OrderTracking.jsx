@@ -8,7 +8,7 @@ import React from 'react'
 const OrderTracking = () => {
     return (
         <div>
-            <SearchPageNavbar title="Order Tracking" titleHome="Home Page" />
+            <SearchPageNavbar title="Order Tracking" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
 
             <div className="flex px-16 py-20 justify-between items-center">
 

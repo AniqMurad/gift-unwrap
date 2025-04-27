@@ -10,7 +10,7 @@ import avatar from "../assets/avatar.png"
 const MyAccount = () => {
     return (
         <div>
-            <SearchPageNavbar />
+            <SearchPageNavbar title="My Account" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className="flex px-16 py-20 justify-between">
                 <div className="w-[28%] bg-[#F7F7F7] shadow-lg rounded-[20px] px-[32px] py-[40px]">

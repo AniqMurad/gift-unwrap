@@ -15,7 +15,7 @@ const ForgetPassword = () => {
       
     return (
         <div>
-            <SearchPageNavbar title="Forget Your Password" titleHome="Home Page"/>
+            <SearchPageNavbar title="Forget Your Password" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
 
             <div className="flex px-16 py-20 justify-between items-center">
 

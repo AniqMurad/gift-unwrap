@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { HeartIcon2, HeartIcon3, DetailEyeIcon, CartIcon } from './icons'; // Using PassShowIcon as EyeIcon based on your code
+import { HeartIcon2, HeartIcon3, DetailEyeIcon, CartIcon } from './icons';
 import { useWishlist } from '../context/WishlistContext';
-// import { useCart } from '../context/CartContext';
 
 const Product = ({ product, columns }) => {
     const { wishlist, toggleWishlist } = useWishlist();
-    // const { addToCart } = useCart();
     const navigate = useNavigate();
 
     if (!product) return null;
@@ -19,7 +17,6 @@ const Product = ({ product, columns }) => {
     const handleAddToCart = (e) => {
         e.stopPropagation();
         e.preventDefault();
-        // addToCart(product);
         console.log("Add to cart clicked:", product);
     };
 
@@ -120,10 +117,7 @@ const Product = ({ product, columns }) => {
                     <p className="font-medium text-gray-800 group-hover:text-black transition-colors truncate">{product.name}</p>
                 </Link>
                 <div className='flex items-center gap-2 text-sm mt-1'>
-                    <span className="font-semibold text-black">Rs {product.currentPrice || product.price}</span>
-                    {product.originalPrice && product.originalPrice > (product.currentPrice || product.price) && (
-                        <span className="line-through text-[#A0A0A0]">Rs {product.originalPrice}</span>
-                    )}
+                    <span className="font-semibold text-black">Rs {product.price}</span>
                 </div>
             </div>
         </div>

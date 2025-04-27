@@ -146,7 +146,7 @@ const Giftsforbabies = () => {
     return (
         <div>
 
-            <SearchPageNavbar title="Gifts For Babies" titleHome="Home Page" />
+            <SearchPageNavbar title="Gifts For Babies" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
             <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
                 <p className={`cursor-pointer ${selectedCategory === 'newborn' ? 'underline' : ''}`} onClick={() => handleCategorySelect('newborn')}>Gifts For New Born</p>
             </div>

@@ -7,7 +7,7 @@ import Footer from '../components/Footer'
 const Error = () => {
     return (
         <div>
-            <SearchPageNavbar />
+            <SearchPageNavbar backgroundColor = '#FBF4E8'/>
             <div className='bg-[#FBF4E8] flex items-center justify-between py-16'>
                 <div className='w-[670px]'>
                     <img src={error} alt="404 Error" className='max-w-full h-auto' />

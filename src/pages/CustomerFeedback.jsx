@@ -7,7 +7,7 @@ import { customerReviews } from "../components/ReviewsData";
 const CustomerFeedback = () => {
     return (
         <div className="w-full h-auto">
-            <SearchPageNavbar title="Customer Feedback" titleHome="Home Page" />
+            <SearchPageNavbar title="Customer Feedback" titleHome="Home Page" backgroundColor = '#FBF4E8' />
 
             <div className="px-16 py-4 flex flex-wrap gap-6 justify-between">
                 {customerReviews.map((review) => (

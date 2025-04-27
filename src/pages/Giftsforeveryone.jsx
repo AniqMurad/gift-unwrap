@@ -146,7 +146,7 @@ const Giftsforeveryone = () => {
     return (
         <div>
 
-            <SearchPageNavbar title="Gifts For Everyone" titleHome="Home Page" />
+            <SearchPageNavbar title="Gifts For Everyone" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
             <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
                 <p className={`cursor-pointer ${selectedCategory === 'couple' ? 'underline' : ''}`} onClick={() => handleCategorySelect('couple')}>Gifts For Couples</p>
                 <p className={`cursor-pointer ${selectedCategory === 'teacher' ? 'underline' : ''}`} onClick={() => handleCategorySelect('teacher')}>Gifts For Teachers</p>
