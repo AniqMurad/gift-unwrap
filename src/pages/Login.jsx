@@ -17,11 +17,11 @@ const Login = () => {
         navigate("/forgetPassword");
       }
       const [formData, setFormData] = useState({
-        userId: '',
+        email: '',
         password: ''
     });
     const [errors, setErrors] = useState({
-        userId: '',
+        email: '',
         password: ''
     });
 
@@ -41,8 +41,8 @@ const Login = () => {
     const handleLogin = () => {
         const newErrors = {};
         
-        if (!formData.userId.trim()) {
-            newErrors.userId = 'User ID is required';
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
         }
         
         if (!formData.password.trim()) {
@@ -66,9 +66,9 @@ const Login = () => {
                     <h2 className="text-[30px] font-semibold mb-6">Login</h2>
                     <div>
                     <UsernameField 
-                            value={formData.userId}
+                            value={formData.email}
                             onChange={handleInputChange}
-                            error={errors.userId}
+                            error={errors.email}
                         />
                         <PasswordField 
                             value={formData.password}

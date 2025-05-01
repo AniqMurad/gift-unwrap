@@ -55,7 +55,7 @@ const ProductDetail = () => {
   console.log("Product ID:", productId);
   return (
     <div>
-      <SearchPageNavbar title={product.name} titleHome="Home" />
+      <SearchPageNavbar title={product.name} titleHome="Home" backgroundColor='#FBF4E8' />
 
       <div className="container mx-auto px-16 py-12">
         {/* Product Detail Section */}

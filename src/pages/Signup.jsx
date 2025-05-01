@@ -11,14 +11,14 @@ import React,{useState} from 'react'
 const Signup = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        userId: '',
+        email: '',
         password: '',
         confirmPassword: '',
         agreeToTerms: false
     });
 
     const [errors, setErrors] = useState({
-        userId: '',
+        email: '',
         password: '',
         confirmPassword: '',
         agreeToTerms: ''
@@ -52,8 +52,8 @@ const Signup = () => {
         const newErrors = {};
         
         // Username validation
-        if (!formData.userId.trim()) {
-            newErrors.userId = 'Username is required';
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
         }
         
         // Password validation
@@ -95,9 +95,9 @@ const Signup = () => {
                     <h2 className="text-[30px] font-semibold mb-6">Register</h2>
                     <div>
                     <UsernameField 
-                            value={formData.userId}
+                            value={formData.email}
                             onChange={handleInputChange}
-                            error={errors.userId}
+                            error={errors.email}
                         />
                         <PasswordField 
                             value={formData.password}
