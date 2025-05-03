@@ -41,7 +41,7 @@ const ShoppingCart = () => {
 
     return (
         <div>
-            <SearchPageNavbar title="Shopping Cart" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+            <SearchPageNavbar title="Shopping Cart" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className="flex px-16 py-20 justify-between">
                 <div className='w-[850px]'>
@@ -119,7 +119,7 @@ const ShoppingCart = () => {
                     </div>
 
                     <div className='flex items-center mt-8 border border-[#F7F7F7] bg-[#E9E9E9] rounded-[8px] px-[8px] h-[50px] relative'>
-                        <input placeholder='Add voucher discount'/>
+                        <input placeholder='Add voucher discount' />
                         <button className='absolute right-2 bg-black text-white py-[6px] px-[20px] rounded-[8px] text-[14px]'>Apply Code</button>
                     </div>
 
@@ -242,7 +242,7 @@ const ShoppingCart = () => {
                     </div>
                 </div>
             </div>
-
+            
             <Footer />
         </div>
     )

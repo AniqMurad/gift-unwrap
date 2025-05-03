@@ -5,7 +5,7 @@ const UsernameField = ({ value, onChange, error }) => {
         <div className="mb-4">
             <input
                 type="text"
-                name="userId"
+                name="email"
                 value={value}
                 onChange={onChange}
                 placeholder="Username or email address *"
