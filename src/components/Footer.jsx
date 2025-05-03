@@ -1,7 +1,17 @@
 import React from "react";
 import { FbIcon, InstaIcon, PintIcon, RarrowIcon, TwtIcon, YtIcon, VisaIcon, MastercardIcon, PaypalIcon, } from "./icons";
 import Logo from '../assets/logofooter.png';
+import { useNavigate } from "react-router-dom"; 
+
 const Footer = () => {
+    const navigate = useNavigate();
+    const goToContact = () => navigate('/contact-us');
+    const goToReviews = () => navigate('/customer-feedback');
+    const goToFaqs = () => navigate('/faqs'); 
+    const goToJoy = () => navigate('/giftforeveryone'); 
+    const goToForever = () => navigate('/giftforwedding'); 
+    const goToHer = () => navigate('/giftforher'); 
+    const goToHis = () => navigate('/giftforhim'); 
   return (
     <div className="bg-gray-100 px-16 py-10 text-gray-700 text-sm">
       <div className="flex justify-between">
@@ -18,24 +28,24 @@ const Footer = () => {
         <div className="flex justify-between gap-10 w-[500px]">
           <div className="flex flex-col gap-4">
             <h4 className="font-semibold mb-2">INFORMATION</h4>
-            <p>Contact us</p>
-            <p>Reviews</p>
-            <p>FAQs</p>
+            <p className="cursor-pointer hover:text-black transition-colors" onClick={goToContact}>Contact us</p>
+            <p className="cursor-pointer hover:text-black transition-colors" onClick={goToReviews}>Reviews</p>
+            <p className="cursor-pointer hover:text-black transition-colors" onClick={goToFaqs}>FAQs</p>
           </div>
 
           <div className="flex flex-col gap-4">
             <h4 className="font-semibold mb-2">QUICK SHOP</h4>
-            <p>Universal Joy</p>
-            <p>Forever Beginnings</p>
-            <p>Her Desires</p>
-            <p>His Desires</p>
+            <p className="cursor-pointer hover:text-black transition-colors" onClick={goToJoy}>Universal Joy</p>
+            <p className="cursor-pointer hover:text-black transition-colors" onClick={goToForever}>Forever Beginnings</p>
+            <p className="cursor-pointer hover:text-black transition-colors" onClick={goToHer}>Her Desires</p>
+            <p className="cursor-pointer hover:text-black transition-colors" onClick={goToHis}>His Desires</p>
           </div>
 
           <div className="flex flex-col gap-4">
             <h4 className="font-semibold mb-2">CUSTOMER SERVICES</h4>
-            <p>Orders FAQs</p>
+            <p>High Quality Product</p>
             <p>Shipping</p>
-            <p>Privacy Policy</p>
+            <p>Customer Service</p>
             <p>Return & Refund</p>
           </div>
         </div>
@@ -69,7 +79,7 @@ const Footer = () => {
 
         <div className="flex items-center space-x-2 w-[200px]">
           <span className="text-gray-600 w-[70px]">Payment:</span>
-          <div className="flex w-[130px] flex justify-between">
+          <div className="flex w-[130px] justify-between">
             <div className="border border-gray-300 rounded-md p-1 content-center">
               <VisaIcon />
             </div>
