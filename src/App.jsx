@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { WishlistProvider } from "./context/WishlistContext";
+import { CartProvider } from './context/CartContext';
 import Home from "./pages/Home";
 import SearchOutput from "./pages/SearchOutput";
 import WishList from "./pages/WishList";
@@ -34,35 +35,36 @@ function App() {
     <Router>
       <ScrollToTop />
       <WishlistProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search-output" element={<SearchOutput />} />
-          <Route path="/wishlist" element={<WishList />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/customer-feedback" element={<CustomerFeedback />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/blog/:id" element={<BlogOpen />} />
-          <Route path="/error" element={<Error />} />
-          <Route path="/coming-soon" element={<ComingSoon />} />
-          <Route path="/faqs" element={<FAQs />} />
-          <Route path="/giftforher" element={<Giftsforher />} />
-          <Route path="/giftforhim" element={<Giftsforhim />} />
-          <Route path="/forgetPassword" element={<ForgetPassword />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/OrderTracking" element={<OrderTracking />} />
-          <Route path="/myAccount" element={<MyAccount />} />
-          <Route path="/product/:category/:productId" element={<ProductDetail />} />
-          <Route path="/Giftforbabies" element={<Giftsforbabies />} />
-          <Route path="/giftforeveryone" element={<Giftsforeveryone />} />
-          <Route path="/giftforcompanies" element={<Forcompanies />} />
-          <Route path="/giftforwedding" element={<Giftsforwedding />} />
-          <Route path="/Giftforreligions" element={<Giftforreligions />} />
-          <Route path="/Giftforbirthday" element={<BirthdayGifts />} />
-          <Route path="/Checkout" element={<Checkout />} />
-          <Route path="/ShoppingCart" element={<ShoppingCart />} />  
-          
-        </Routes>
+        <CartProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/search-output" element={<SearchOutput />} />
+            <Route path="/wishlist" element={<WishList />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/customer-feedback" element={<CustomerFeedback />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/blog/:id" element={<BlogOpen />} />
+            <Route path="/error" element={<Error />} />
+            <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/giftforher" element={<Giftsforher />} />
+            <Route path="/giftforhim" element={<Giftsforhim />} />
+            <Route path="/forgetPassword" element={<ForgetPassword />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/OrderTracking" element={<OrderTracking />} />
+            <Route path="/myAccount" element={<MyAccount />} />
+            <Route path="/product/:category/:productId" element={<ProductDetail />} />
+            <Route path="/Giftforbabies" element={<Giftsforbabies />} />
+            <Route path="/giftforeveryone" element={<Giftsforeveryone />} />
+            <Route path="/giftforcompanies" element={<Forcompanies />} />
+            <Route path="/giftforwedding" element={<Giftsforwedding />} />
+            <Route path="/Giftforreligions" element={<Giftforreligions />} />
+            <Route path="/Giftforbirthday" element={<BirthdayGifts />} />
+            <Route path="/Checkout" element={<Checkout />} />
+            <Route path="/ShoppingCart" element={<ShoppingCart />} />  
+          </Routes>
+        </CartProvider>
       </WishlistProvider>
     </Router>
   );

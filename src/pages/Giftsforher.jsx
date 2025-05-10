@@ -7,6 +7,7 @@ import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLin
 import Product from "../components/Product";
 import ProductData from "../components/ProductData";
 import { useLocation } from 'react-router-dom';
+import Navbar from "@/components/Navbar";
 
 const Giftsforher = () => {
 
@@ -145,7 +146,11 @@ const Giftsforher = () => {
     return (
         <div>
 
-            <SearchPageNavbar title="Gifts For Her" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+            {/* <SearchPageNavbar title="Gifts For Her" titleHome="Home Page" backgroundColor = '#FBF4E8'/> */}
+            <Navbar showSearchInput={false}/>
+            <div>
+
+            </div>
             <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
                 <p className={`cursor-pointer ${selectedCategory === 'mum' ? 'underline' : ''}`} onClick={() => handleCategorySelect('mum')}>Gifts For Mum</p>
                 <p className={`cursor-pointer ${selectedCategory === 'sister' ? 'underline' : ''}`} onClick={() => handleCategorySelect('sister')}>Gifts For Sister</p>

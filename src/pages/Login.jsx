@@ -1,12 +1,14 @@
 import Footer from "../components/Footer";
 import { LoginLine } from "../components/icons";
 import SearchPageNavbar from "../components/SearchPageNavbar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Import useEffect
 import UsernameField from "@/components/UsernameField";
 import PasswordField from "@/components/PasswordField";
 import RememberIcon from "@/components/RememberIcon";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loader from "../components/Loader";
+import NotificationBar from "../components/NotificationBar"; // --- 1. Import NotificationBar ---
 
 const Login = () => {
     const navigate = useNavigate();
@@ -16,7 +18,23 @@ const Login = () => {
     });
 
     const [errors, setErrors] = useState({});
-    const [generalError, setGeneralError] = useState('');
+    // const [generalError, setGeneralError] = useState(''); // Can be removed
+    const [isLoading, setIsLoading] = useState(false);
+    const [notification, setNotification] = useState({ // --- 2. Add Notification State ---
+        show: false,
+        type: 'success', // Default, will be 'error' for login failures
+        message: ''
+    });
+
+    // --- 4. Effect to auto-hide notification ---
+    useEffect(() => {
+        if (notification.show) {
+            const timer = setTimeout(() => {
+                setNotification(prev => ({ ...prev, show: false }));
+            }, 3000); // Hide after 3 seconds
+            return () => clearTimeout(timer);
+        }
+    }, [notification.show]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -28,16 +46,21 @@ const Login = () => {
             ...prev,
             [name]: ''
         }));
+        // setGeneralError(''); // Remove if not using
+        setNotification(prev => ({ ...prev, show: false })); // Hide notification on input change
     };
 
     const handleLogin = async () => {
         const newErrors = {};
-        setGeneralError('');
+        // setGeneralError(''); // Remove if not using
+        setNotification(prev => ({ ...prev, show: false })); // Hide previous notification
 
+        // Basic frontend validation
         if (!formData.email.trim()) {
             newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Email address is invalid';
         }
-
         if (!formData.password.trim()) {
             newErrors.password = 'Password is required';
         }
@@ -47,6 +70,7 @@ const Login = () => {
             return;
         }
 
+        setIsLoading(true);
         try {
             const res = await axios.post('http://localhost:5000/api/auth/login', {
                 email: formData.email,
@@ -54,16 +78,27 @@ const Login = () => {
             });
 
             const { token, user } = res.data;
-
-            // Save token (or user info) as needed
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
 
-            // Navigate to home or dashboard
-            navigate('/');
+            // Optionally show success notification before navigating
+            // setNotification({ show: true, type: 'success', message: 'Login successful! Redirecting...' });
+            // setTimeout(() => navigate('/'), 1000);
+
+            navigate('/'); // Navigate immediately on success for now
+
         } catch (err) {
-            const msg = err.response?.data?.message || 'Invalid email or password';
-            setGeneralError(msg);
+            const msg = err.response?.data?.message || 'Invalid email or password. Please try again.';
+            // --- 3. Show Error Notification ---
+            setNotification({
+                show: true,
+                type: 'error',
+                message: msg
+            });
+            // Optionally clear password field on error
+            // setFormData(prev => ({ ...prev, password: '' }));
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -77,35 +112,51 @@ const Login = () => {
 
     return (
         <>
+            {/* --- 5. Render Loader and NotificationBar --- */}
+            {isLoading && <Loader />}
+            {notification.show && (
+                <NotificationBar type={notification.type} message={notification.message} />
+            )}
+
             <SearchPageNavbar title="Login" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-            <div className="flex px-16 py-20 justify-between items-center">
+            <div className="flex px-16 py-20 justify-between items-start">
 
                 <div className="w-[580px]">
                     <h2 className="text-[30px] font-semibold mb-6">Login</h2>
-                    {generalError && <p className="text-red-600 mb-4">{generalError}</p>}
-                    <UsernameField 
+                    {/* --- 6. Removed old generalError display --- */}
+                    {/* {generalError && <p className="text-red-600 mb-4 text-sm">{generalError}</p>} */}
+                    <UsernameField
                         value={formData.email}
                         onChange={handleInputChange}
                         error={errors.email}
+                        disabled={isLoading}
                     />
-                    <PasswordField 
+                    <PasswordField
                         value={formData.password}
                         onChange={handleInputChange}
                         error={errors.password}
+                        disabled={isLoading}
                     />
                     <div className="flex justify-between items-center mt-4 mb-4">
-                        <div className="flex items-center cursor-pointer">
+                        <div className={`flex items-center ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={!isLoading ? () => {/* Handle remember me toggle */} : undefined}>
                             <RememberIcon />
-                            <span className="text-[#1F1F1F]">Remember me</span>
+                            <span className="text-[#1F1F1F] ml-2">Remember me</span>
                         </div>
-                        <a className="text-[16px] underline font-semibold cursor-pointer" onClick={handleForgotPass}>
+                        <a className={`text-[16px] underline font-semibold ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`} onClick={!isLoading ? handleForgotPass : undefined}>
                             Forgot Your Password?
                         </a>
                     </div>
-                    <button className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 uppercase cursor-pointer" onClick={handleLogin}>
-                        LOGIN
-                    </button>
+                    {/* Button remains, not replaced by loader */}
+                    <div className="mt-4 h-[58px]">
+                        <button
+                            className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50"
+                            onClick={handleLogin}
+                            disabled={isLoading}
+                        >
+                            LOGIN
+                        </button>
+                    </div>
                 </div>
 
                 <LoginLine />
@@ -116,7 +167,11 @@ const Login = () => {
                         Be part of our growing family of new customers! Join us today and unlock
                         a world of exclusive benefits, offers, and personalized experiences.
                     </p>
-                    <button className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 uppercase cursor-pointer" onClick={handleSignup}>
+                    <button
+                        className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200"
+                        onClick={handleSignup}
+                        disabled={isLoading}
+                    >
                         REGISTER
                     </button>
                 </div>
