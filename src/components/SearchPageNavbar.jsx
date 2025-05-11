@@ -11,7 +11,7 @@ const SearchPageNavbar = ({ title, title2, titleHome, backgroundColor }) => {
 
     return (
         <div style={{ backgroundColor }}>
-            <div className="flex items-center justify-between px-16 py-4 border-[#E9E9E9]">
+{/*             <div className="flex items-center justify-between px-16 py-4 border-[#E9E9E9]">
                 <div className='flex items-center gap-8'>
                     <div className='cursor-pointer' onClick={handleLogoClick}>
                         <img src={Logo} alt='Gift Unwrap' className='h-10' />
@@ -30,10 +30,10 @@ const SearchPageNavbar = ({ title, title2, titleHome, backgroundColor }) => {
                     <HeartIcon />
                     <CartIcon />
                 </div>
-            </div>
+            </div> */}
 
             {/* Search Result Section */}
-            <div className='text-center py-8 mt-2'>
+            <div className='text-center py-8'>
                 <h2 className='text-4xl font-semibold text-gray-900'>{title}</h2>
                 <div className='flex items-center justify-center gap-2 text-sm text-gray-600 mt-2'>
                     {titleHome && (

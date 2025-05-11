@@ -7,6 +7,7 @@ import UsernameField from '@/components/UsernameField';
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import Navbar from '@/components/Navbar';
 
 const ForgetPassword = () => {
     const navigate = useNavigate();
@@ -70,6 +71,7 @@ const ForgetPassword = () => {
 
     return (
         <div>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Forget Your Password" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className="flex px-16 py-20 justify-between items-center">

@@ -4,6 +4,7 @@ import SearchPageNavbar from '../components/SearchPageNavbar';
 import Footer from '../components/Footer';
 import ProductData from "../components/ProductData";
 import { useCart } from '../context/CartContext'; // --- 1. Import useCart ---
+import Navbar from './Navbar';
 
 const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState('');
@@ -68,6 +69,7 @@ const ProductDetail = () => {
 
   return (
     <div>
+      <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <SearchPageNavbar title={product.name} titleHome="Home" backgroundColor='#FBF4E8' />
 
       <div className="container mx-auto px-16 py-12">
@@ -250,26 +252,26 @@ const ProductDetail = () => {
               .filter(p => p.id.toString() !== productId) // Exclude current product
               .slice(0, 4) // Limit to 4 related products
               .map((relatedProduct) => (
-              <div
-                key={relatedProduct.id}
-                className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
-                onClick={() => navigate(`/product/${category}/${relatedProduct.id}`)}
-              >
-                <div className="bg-gray-50 p-4 aspect-square flex items-center justify-center">
-                  <img
-                    src={relatedProduct.image || (relatedProduct.images && relatedProduct.images[0]) || 'https://via.placeholder.com/200'}
-                    alt={relatedProduct.name}
-                    className="w-full h-full object-contain transition-transform group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-medium text-sm truncate" title={relatedProduct.name}>{relatedProduct.name}</h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="font-semibold text-red-500">Rs {relatedProduct.price.toFixed(2)}</span>
+                <div
+                  key={relatedProduct.id}
+                  className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+                  onClick={() => navigate(`/product/${category}/${relatedProduct.id}`)}
+                >
+                  <div className="bg-gray-50 p-4 aspect-square flex items-center justify-center">
+                    <img
+                      src={relatedProduct.image || (relatedProduct.images && relatedProduct.images[0]) || 'https://via.placeholder.com/200'}
+                      alt={relatedProduct.name}
+                      className="w-full h-full object-contain transition-transform group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-medium text-sm truncate" title={relatedProduct.name}>{relatedProduct.name}</h3>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="font-semibold text-red-500">Rs {relatedProduct.price.toFixed(2)}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>

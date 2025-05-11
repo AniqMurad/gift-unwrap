@@ -2,7 +2,8 @@ import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import { CloseIcon } from '@/components/icons'; // Make sure this icon is available
+import { CloseIcon } from '@/components/icons';
+import SearchPageNavbar from '@/components/SearchPageNavbar';
 
 const ShoppingCart = () => {
     const { cartItems, removeFromCart, updateQuantity, getTotalCartAmount } = useCart();
@@ -32,7 +33,8 @@ const ShoppingCart = () => {
 
     return (
         <div>
-            <Navbar showSearchInput={false}/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="Shopping Cart" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className="flex flex-col lg:flex-row px-4 sm:px-8 md:px-16 py-10 md:py-20 justify-between gap-8">
                 <div className='w-full lg:w-[65%] xl:w-[850px]'>
                     {/* ... cart expiration and free shipping notice ... */}

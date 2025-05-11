@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";
+import Navbar from "@/components/Navbar";
 
 const FAQs = () => {
     const categories = [
@@ -53,7 +54,8 @@ const FAQs = () => {
 
     return (
         <div>
-            <SearchPageNavbar title="FAQs" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="FAQs" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className='px-16 py-14 flex justify-between'>
 

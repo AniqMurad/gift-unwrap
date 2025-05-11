@@ -4,12 +4,14 @@ import Product from '../components/Product'
 import Footer from '../components/Footer'
 import { Buttons } from '../components/Buttons'
 import ProductData from "../components/ProductData";
+import Navbar from '@/components/Navbar'
 
 const SearchOutput = () => {
     const chocoProducts = ProductData.Chocolates;
 
     return (
         <div className='w-full h-auto'>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Search Result" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
 
             <div className='text-center py-8'>

@@ -146,8 +146,8 @@ const Giftsforher = () => {
     return (
         <div>
 
-            {/* <SearchPageNavbar title="Gifts For Her" titleHome="Home Page" backgroundColor = '#FBF4E8'/> */}
-            <Navbar showSearchInput={false}/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="Gifts For Her" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div>
 
             </div>
@@ -371,12 +371,12 @@ const Giftsforher = () => {
                             <Product key={product.id} product={product} columns={columns} />
                         ))} */}
                         {giftsForHerProducts.map((product) => (
-                            <Product 
-                                key={product.id} 
-                                product={{...product, category: "giftsForHer"}} 
-                                columns={columns} 
+                            <Product
+                                key={product.id}
+                                product={{ ...product, category: "giftsForHer" }}
+                                columns={columns}
                             />
-                            ))}
+                        ))}
                     </div>
 
                     {/* paging */}
