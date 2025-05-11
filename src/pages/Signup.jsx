@@ -8,6 +8,7 @@ import UsernameField from '@/components/UsernameField'
 import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
 import axios from 'axios';
+import Navbar from '@/components/Navbar'
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -93,6 +94,7 @@ const Signup = () => {
 
     return (
         <div>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Create An Account" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className="flex px-16 py-20 justify-between items-center">

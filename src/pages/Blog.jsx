@@ -6,12 +6,14 @@ import { SearchIcon } from '../components/icons'
 import Footer from '../components/Footer'
 import BlogSideBarSuggestion from '../components/BlogSideBarSuggestion'
 import { Link } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
 
 const Blog = () => {
 
   return (
     <div className=''>
-      <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+      <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+      <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
       <div className="mt-[7%] px-16 flex justify-between mb-10">
 
         {/* Blog Posts Section */}
@@ -48,7 +50,7 @@ const Blog = () => {
               placeholder="Search"
               className=" w-auto"
             />
-            <SearchIcon color="#A0A0A0"/>
+            <SearchIcon color="#A0A0A0" />
           </div>
           <div className="bg-white border-b border-[#E9E9E9]">
             <BlogSideBarSuggestion />

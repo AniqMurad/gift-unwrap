@@ -6,10 +6,12 @@ import PasswordField from '@/components/PasswordField'
 import SearchPageNavbar from '@/components/SearchPageNavbar'
 import React from 'react'
 import avatar from "../assets/avatar.png"
+import Navbar from '@/components/Navbar'
 
 const MyAccount = () => {
     return (
         <div>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="My Account" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className="flex px-16 py-20 justify-between">

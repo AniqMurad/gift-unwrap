@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
 import NotificationBar from "../components/NotificationBar"; // --- 1. Import NotificationBar ---
+import Navbar from "@/components/Navbar";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -117,7 +118,7 @@ const Login = () => {
             {notification.show && (
                 <NotificationBar type={notification.type} message={notification.message} />
             )}
-
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Login" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className="flex px-16 py-20 justify-between items-start">
@@ -139,7 +140,7 @@ const Login = () => {
                         disabled={isLoading}
                     />
                     <div className="flex justify-between items-center mt-4 mb-4">
-                        <div className={`flex items-center ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={!isLoading ? () => {/* Handle remember me toggle */} : undefined}>
+                        <div className={`flex items-center ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={!isLoading ? () => {/* Handle remember me toggle */ } : undefined}>
                             <RememberIcon />
                             <span className="text-[#1F1F1F] ml-2">Remember me</span>
                         </div>

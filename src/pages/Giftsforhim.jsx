@@ -5,6 +5,7 @@ import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLin
 import Product from "../components/Product";
 import ProductData from "../components/ProductData";
 import { useLocation } from 'react-router-dom';
+import Navbar from "@/components/Navbar";
 
 const Giftsforhim = () => {
 
@@ -143,8 +144,8 @@ const Giftsforhim = () => {
 
     return (
         <div>
-
-            <SearchPageNavbar title="Gifts For Him" titleHome="Home Page" backgroundColor = '#DEFBFF'/>
+            <Navbar showSearchInput={false} bgColor="#DEFBFF" />
+            <SearchPageNavbar title="Gifts For Him" titleHome="Home Page" backgroundColor='#DEFBFF' />
             <div className='bg-[#DEFBFF] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
                 <p className={`cursor-pointer ${selectedCategory === 'pop' ? 'underline' : ''}`} onClick={() => handleCategorySelect('pop')}>Gifts For Father</p>
                 <p className={`cursor-pointer ${selectedCategory === 'brother' ? 'underline' : ''}`} onClick={() => handleCategorySelect('brother')}>Gifts For Brother</p>

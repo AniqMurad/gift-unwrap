@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import { useWishlist } from '../context/WishlistContext';
 import { Buttons } from '../components/Buttons';
 import { ArrowDown, FiveBars, FourBars, ThreeBars } from '../components/icons';
+import Navbar from '@/components/Navbar';
 
 const WishList = () => {
     const { wishlist } = useWishlist();
@@ -12,7 +13,8 @@ const WishList = () => {
 
     return (
         <div className='w-full h-auto'>
-            <SearchPageNavbar title="Wish List" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="Wish List" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className='px-16 py-4 mt-10 mb-10'>
                 <div className="flex items-center justify-between py-4 space-x-6">

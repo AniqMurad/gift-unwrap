@@ -3,11 +3,13 @@ import SearchPageNavbar from '../components/SearchPageNavbar';
 import Footer from '../components/Footer';
 import { StarRating } from '../components/icons';
 import { customerReviews } from "../components/ReviewsData";
+import Navbar from '@/components/Navbar';
 
 const CustomerFeedback = () => {
     return (
         <div className="w-full h-auto">
-            <SearchPageNavbar title="Customer Feedback" titleHome="Home Page" backgroundColor = '#FBF4E8' />
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="Customer Feedback" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className="px-16 py-4 flex flex-wrap gap-6 justify-between">
                 {customerReviews.map((review) => (

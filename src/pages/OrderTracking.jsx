@@ -1,6 +1,7 @@
 import BillingEmailField from '@/components/BillingEmailField'
 import Footer from '@/components/Footer'
 import { LoginLine } from '@/components/icons'
+import Navbar from '@/components/Navbar'
 import SearchPageNavbar from '@/components/SearchPageNavbar'
 import UsernameField from '@/components/UsernameField'
 import React from 'react'
@@ -8,7 +9,8 @@ import React from 'react'
 const OrderTracking = () => {
     return (
         <div>
-            <SearchPageNavbar title="Order Tracking" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="Order Tracking" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className="flex px-16 py-20 justify-between items-center">
 

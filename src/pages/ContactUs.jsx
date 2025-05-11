@@ -1,11 +1,13 @@
 import React from 'react'
 import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
+import Navbar from '@/components/Navbar'
 
 const ContactUs = () => {
     return (
         <div>
-            <SearchPageNavbar title="Contact Us" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="Contact Us" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className='px-16 py-4 flex justify-between items-center mt-10'>
 

@@ -11,6 +11,7 @@ import Footer from '../components/Footer'
 import BlogSideBarSuggestion from '../components/BlogSideBarSuggestion'
 import { useParams } from 'react-router-dom';
 import { blogData } from '../components/BlogData';
+import Navbar from '@/components/Navbar'
 
 const BlogOpen = () => {
 
@@ -23,7 +24,8 @@ const BlogOpen = () => {
 
     return (
         <div>
-            <SearchPageNavbar title="Blog" title2="Blog" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="Blog" title2="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className='px-16 py-4 mt-10 mb-10'>
 
