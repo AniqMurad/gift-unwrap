@@ -11,26 +11,6 @@ const SearchPageNavbar = ({ title, title2, titleHome, backgroundColor }) => {
 
     return (
         <div style={{ backgroundColor }}>
-{/*             <div className="flex items-center justify-between px-16 py-4 border-[#E9E9E9]">
-                <div className='flex items-center gap-8'>
-                    <div className='cursor-pointer' onClick={handleLogoClick}>
-                        <img src={Logo} alt='Gift Unwrap' className='h-10' />
-                    </div>
-                    <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
-                        RECIPIENTS
-                    </button>
-                    <button className='font-medium font-semibold text-sm tracking-wide hover:text-gray-600 transition'>
-                        OCCASIONS
-                    </button>
-                </div>
-                <div className='flex gap-5 items-center'>
-                    <SearchIcon color="#1F1F1F"/>
-                    <SearchLine />
-                    <UsersIcon />
-                    <HeartIcon />
-                    <CartIcon />
-                </div>
-            </div> */}
 
             {/* Search Result Section */}
             <div className='text-center py-8'>

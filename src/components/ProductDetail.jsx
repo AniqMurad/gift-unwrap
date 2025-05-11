@@ -171,9 +171,8 @@ const ProductDetail = () => {
                 <span>30-day returns</span>
               </div>
             </div>
-            {/* ... (rest of your Product Details Tabs and Related Products) ... */}
-// ...existing code...
-            <div className="mt-16">
+            
+            <div className="mt-32">
               <div className="flex border-b border-gray-200">
                 <button
                   className={`py-3 px-6 font-medium ${activeTab === 'description' ? 'border-b-2 border-black text-black' : 'text-gray-500 hover:text-black'}`}
