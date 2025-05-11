@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'; // --- 1. Using Navbar for consistency
 import React, { useState, useEffect } from 'react' // --- 2. Import useEffect ---
 import { useCart } from '../context/CartContext'; // --- 3. Import useCart ---
 import { useNavigate } from 'react-router-dom'; // --- 4. Import useNavigate ---
+import SearchPageNavbar from '@/components/SearchPageNavbar';
 
 const Checkout = () => {
     const { cartItems, getTotalCartAmount, clearCart } = useCart(); // --- 5. Get cart data ---
@@ -94,7 +95,8 @@ const Checkout = () => {
     return (
         <div>
             {/* Using Navbar for consistency, can be SearchPageNavbar if preferred */}
-            <Navbar showSearchInput={false} />
+            <Navbar showSearchInput={false} bgColor="#FBF4E8"/>
+            <SearchPageNavbar title="Checkout" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <form onSubmit={handleSubmitOrder}> {/* --- Wrap in a form element --- */}
                 <div className="flex flex-col lg:flex-row px-4 sm:px-8 md:px-16 py-10 lg:py-20 justify-between gap-8">
