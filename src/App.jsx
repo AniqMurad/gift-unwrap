@@ -38,7 +38,6 @@ function App() {
         <CartProvider>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/search-output" element={<SearchOutput />} />
             <Route path="/wishlist" element={<WishList />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/customer-feedback" element={<CustomerFeedback />} />
@@ -63,6 +62,7 @@ function App() {
             <Route path="/Giftforbirthday" element={<BirthdayGifts />} />
             <Route path="/Checkout" element={<Checkout />} />
             <Route path="/ShoppingCart" element={<ShoppingCart />} />  
+            <Route path="/SearchOutput" element={<SearchOutput />} />  
           </Routes>
         </CartProvider>
       </WishlistProvider>
