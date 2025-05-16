@@ -3,17 +3,19 @@ import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
-import ProductData from "../components/ProductData";
+// import ProductData from "../components/ProductData";
+import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Navbar from "@/components/Navbar";
 
 const Giftsforbabies = () => {
 
+    const [products, setProducts] = useState([]);
     const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [prevColumns, setPrevColumns] = useState(4);
     const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
-    const giftsForBabiesProducts = ProductData.giftsForBabies.filter(product =>
+    const giftsForBabiesProducts = products.filter(product =>
         selectedCategory === '' || product.keyGift === selectedCategory
     );
     // const giftsForHerProducts = ProductData.giftsForHer;
@@ -24,6 +26,19 @@ const Giftsforbabies = () => {
     // const [selectedCategory, setSelectedCategory] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
+
+    const category = "giftsForBabies";
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/products')
+            .then(res => {
+                const categoryData = res.data.find(item => item.category === category);
+                if (categoryData) {
+                    setProducts(categoryData.products);
+                }
+            })
+            .catch(err => console.error("Failed to load products:", err));
+    }, [category]);
 
     useEffect(() => {
         if (selectedFilters.length === 0 && !selectedCategory && minPrice === 0 && maxPrice === 1000) {

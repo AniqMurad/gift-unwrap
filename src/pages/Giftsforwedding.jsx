@@ -3,16 +3,19 @@ import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
-import ProductData from "../components/ProductData";
+import axios from 'axios';
+// import ProductData from "../components/ProductData";
 import { useLocation } from 'react-router-dom';
+import Navbar from "@/components/Navbar";
 
 const Giftsforwedding = () => {
 
+    const [products, setProducts] = useState([]);
     const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [prevColumns, setPrevColumns] = useState(4);
     const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
-    const giftsForWeddingProducts = ProductData.giftsForWedding.filter(product =>
+    const giftsForWeddingProducts = products.filter(product =>
         selectedCategory === '' || product.keyGift === selectedCategory
     );
     // const giftsForHerProducts = ProductData.giftsForHer;
@@ -23,6 +26,19 @@ const Giftsforwedding = () => {
     // const [selectedCategory, setSelectedCategory] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
+
+    const category = "giftsForWedding";
+
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/products')
+            .then(res => {
+                const categoryData = res.data.find(item => item.category === category);
+                if (categoryData) {
+                    setProducts(categoryData.products);
+                }
+            })
+            .catch(err => console.error("Failed to load products:", err));
+    }, [category]);
 
     useEffect(() => {
         if (selectedFilters.length === 0 && !selectedCategory && minPrice === 0 && maxPrice === 1000) {
@@ -145,8 +161,8 @@ const Giftsforwedding = () => {
 
     return (
         <div>
-
-            <SearchPageNavbar title="Wedding Gifts" titleHome="Home Page" backgroundColor = '#FBF4E8'/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <SearchPageNavbar title="Wedding Gifts" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
                 <p className={`cursor-pointer ${selectedCategory === 'bride' ? 'underline' : ''}`} onClick={() => handleCategorySelect('bride')}>Gifts For Bride</p>
                 <p className={`cursor-pointer ${selectedCategory === 'groom' ? 'underline' : ''}`} onClick={() => handleCategorySelect('groom')}>Gifts For Groom</p>
@@ -362,12 +378,12 @@ const Giftsforwedding = () => {
                     {/* products */}
                     <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
                         {giftsForWeddingProducts.map((product) => (
-                            <Product 
-                                key={product.id} 
-                                product={{...product, category: "giftsForWedding"}} 
-                                columns={columns} 
+                            <Product
+                                key={product.id}
+                                product={{ ...product, category: "giftsForWedding" }}
+                                columns={columns}
                             />
-                            ))}
+                        ))}
                     </div>
 
                     {/* paging */}

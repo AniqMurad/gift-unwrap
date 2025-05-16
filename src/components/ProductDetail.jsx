@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import SearchPageNavbar from '../components/SearchPageNavbar';
 import Footer from '../components/Footer';
 import ProductData from "../components/ProductData";
-import { useCart } from '../context/CartContext'; // --- 1. Import useCart ---
+import { useCart } from '../context/CartContext';
 import Navbar from './Navbar';
 
 const ProductDetail = () => {
@@ -13,7 +13,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
-  const { addToCart } = useCart(); // --- 2. Get addToCart function from context ---
+  const { addToCart } = useCart();
 
   useEffect(() => {
     if (!category || !productId) {

@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
-import ProductData from "../components/ProductData";
+// import ProductData from "../components/ProductData";
 import { useLocation } from 'react-router-dom';
 import Navbar from "@/components/Navbar";
 
 const Giftsforhim = () => {
-
+    const [products, setProducts] = useState([]);
     const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [prevColumns, setPrevColumns] = useState(4);
     const [selectedCategory, setSelectedCategory] = useState('');
-    const giftsForHimProducts = ProductData.giftsForHim.filter(product =>
+    const giftsForHimProducts = products.filter(product =>
         selectedCategory === '' || product.keyGift === selectedCategory
     );
     // const giftsForHerProducts = ProductData.giftsForHer;
@@ -24,6 +25,38 @@ const Giftsforhim = () => {
     // const [selectedCategory, setSelectedCategory] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
+
+    const category = "giftsForHim";
+
+/*     useEffect(() => {
+        setLoading(true);
+        axios.get("http://localhost:5000/api/products")
+            .then((res) => {
+                const categoryData = res.data.find(item => item.category === category);
+                if (categoryData && categoryData.products) {
+                    setProducts(categoryData.products);
+                } else {
+                    setProducts([]);
+                }
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.error("Failed to fetch products:", err);
+                setError("Failed to load products.");
+                setLoading(false);
+            });
+    }, [category]); */
+
+    useEffect(() => {
+            axios.get('http://localhost:5000/api/products')
+                .then(res => {
+                    const categoryData = res.data.find(item => item.category === category);
+                    if (categoryData) {
+                        setProducts(categoryData.products);
+                    }
+                })
+                .catch(err => console.error("Failed to load products:", err));
+        }, [category]);
 
     useEffect(() => {
         if (selectedFilters.length === 0 && !selectedCategory && minPrice === 0 && maxPrice === 1000) {
