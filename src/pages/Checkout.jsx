@@ -47,7 +47,7 @@ const Checkout = () => {
     const discountAmount = 0; // Placeholder for discount logic
     const totalOrderAmount = subtotal + shippingCost - discountAmount;
 
-    /* const handleSubmitOrder = (e) => {
+    const handleSubmitOrder = (e) => {
         e.preventDefault();
         // Basic Validation (can be more extensive)
         if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.street || !formData.city || !formData.postalCode) {
@@ -77,56 +77,7 @@ const Checkout = () => {
         alert(`Order placed successfully! Total: Rs ${totalOrderAmount.toFixed(2)}`);
         clearCart(); // Clear cart after successful order
         navigate('/order-confirmation'); // Navigate to an order confirmation page
-    }; */
-
-    const handleSubmitOrder = async (e) => {
-        e.preventDefault();
-
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.street || !formData.city || !formData.postalCode) {
-            alert("Please fill in all required shipping information.");
-            return;
-        }
-        if (paymentMethod === 'creditCard') {
-            if (!cardName || !cardNumber || !expiry || !cvv) {
-                alert("Please fill in all credit card details.");
-                return;
-            }
-        }
-
-        const orderPayload = {
-            shippingInfo: formData,
-            paymentMethod,
-            cardDetails: paymentMethod === 'creditCard' ? { cardName, cardNumber, expiry, cvv, saveCardDetails } : null,
-            orderItems: cartItems,
-            subtotal,
-            shippingCost,
-            discountAmount,
-            totalOrderAmount,
-        };
-
-        try {
-            const response = await fetch('https://your-backend-api.com/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderPayload),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to place order');
-            }
-
-            const data = await response.json();
-            alert(`Order placed successfully! Order ID: ${data.orderId}`);
-            clearCart();
-            navigate('/order-confirmation');
-        } catch (error) {
-            alert('Error placing order. Please try again later.');
-            console.error(error);
-        }
     };
-
 
     // Example: Apply discount
     useEffect(() => {
@@ -144,7 +95,7 @@ const Checkout = () => {
     return (
         <div>
             {/* Using Navbar for consistency, can be SearchPageNavbar if preferred */}
-            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <Navbar showSearchInput={false} bgColor="#FBF4E8"/>
             <SearchPageNavbar title="Checkout" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <form onSubmit={handleSubmitOrder}> {/* --- Wrap in a form element --- */}
@@ -170,13 +121,13 @@ const Checkout = () => {
                                 <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
                                 <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
                                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
-
+                                
                                 {/* Country - Consider using a select dropdown component */}
                                 <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country/Region *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
-
+                                
                                 <input type="text" name="street" value={formData.street} onChange={handleChange} placeholder="Street Address *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
                                 <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="Town / City *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
-
+                                
                                 {/* State - Consider using a select dropdown component */}
                                 <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder="State *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
                                 <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Postal Code *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
@@ -198,7 +149,7 @@ const Checkout = () => {
                             {/* Credit Card Option */}
                             <div className={`rounded-[8px] p-[20px] ${paymentMethod === 'creditCard' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`}>
                                 <div className='flex items-center gap-2 mb-2 cursor-pointer' onClick={() => setPaymentMethod('creditCard')}>
-                                    <input type="radio" id="creditCard" name="paymentMethod" value="creditCard" checked={paymentMethod === 'creditCard'} onChange={() => setPaymentMethod('creditCard')} className="form-radio h-4 w-4 text-blue-600" />
+                                    <input type="radio" id="creditCard" name="paymentMethod" value="creditCard" checked={paymentMethod === 'creditCard'} onChange={() => setPaymentMethod('creditCard')} className="form-radio h-4 w-4 text-blue-600"/>
                                     <label htmlFor="creditCard" className="font-medium">Credit Card</label>
                                 </div>
                                 {paymentMethod === 'creditCard' && (
@@ -226,11 +177,11 @@ const Checkout = () => {
                             {/* Cash on Delivery Option */}
                             <div className={`rounded-[8px] p-[20px] cursor-pointer ${paymentMethod === 'cod' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`} onClick={() => setPaymentMethod('cod')}>
                                 <div className='flex items-center gap-2'>
-                                    <input type="radio" id="cod" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="form-radio h-4 w-4 text-blue-600" />
+                                    <input type="radio" id="cod" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="form-radio h-4 w-4 text-blue-600"/>
                                     <label htmlFor="cod" className="font-medium">Cash on Delivery</label>
                                 </div>
                                 {paymentMethod === 'cod' && (
-                                    <p className='text-[14px] text-[#696C70] mt-2'>Pay with cash upon delivery.</p>
+                                     <p className='text-[14px] text-[#696C70] mt-2'>Pay with cash upon delivery.</p>
                                 )}
                             </div>
                         </div>
