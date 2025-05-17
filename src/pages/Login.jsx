@@ -19,7 +19,6 @@ const Login = () => {
     });
 
     const [errors, setErrors] = useState({});
-    // const [generalError, setGeneralError] = useState(''); // Can be removed
     const [isLoading, setIsLoading] = useState(false);
     const [notification, setNotification] = useState({ // --- 2. Add Notification State ---
         show: false,
@@ -27,7 +26,6 @@ const Login = () => {
         message: ''
     });
 
-    // --- 4. Effect to auto-hide notification ---
     useEffect(() => {
         if (notification.show) {
             const timer = setTimeout(() => {
@@ -47,7 +45,6 @@ const Login = () => {
             ...prev,
             [name]: ''
         }));
-        // setGeneralError(''); // Remove if not using
         setNotification(prev => ({ ...prev, show: false })); // Hide notification on input change
     };
 
@@ -82,22 +79,15 @@ const Login = () => {
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
 
-            // Optionally show success notification before navigating
-            // setNotification({ show: true, type: 'success', message: 'Login successful! Redirecting...' });
-            // setTimeout(() => navigate('/'), 1000);
-
-            navigate('/'); // Navigate immediately on success for now
+            navigate('/'); 
 
         } catch (err) {
             const msg = err.response?.data?.message || 'Invalid email or password. Please try again.';
-            // --- 3. Show Error Notification ---
             setNotification({
                 show: true,
                 type: 'error',
                 message: msg
             });
-            // Optionally clear password field on error
-            // setFormData(prev => ({ ...prev, password: '' }));
         } finally {
             setIsLoading(false);
         }
@@ -113,7 +103,6 @@ const Login = () => {
 
     return (
         <>
-            {/* --- 5. Render Loader and NotificationBar --- */}
             {isLoading && <Loader />}
             {notification.show && (
                 <NotificationBar type={notification.type} message={notification.message} />
@@ -125,8 +114,6 @@ const Login = () => {
 
                 <div className="w-[580px]">
                     <h2 className="text-[30px] font-semibold mb-6">Login</h2>
-                    {/* --- 6. Removed old generalError display --- */}
-                    {/* {generalError && <p className="text-red-600 mb-4 text-sm">{generalError}</p>} */}
                     <UsernameField
                         value={formData.email}
                         onChange={handleInputChange}
@@ -148,7 +135,6 @@ const Login = () => {
                             Forgot Your Password?
                         </a>
                     </div>
-                    {/* Button remains, not replaced by loader */}
                     <div className="mt-4 h-[58px]">
                         <button
                             className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50"

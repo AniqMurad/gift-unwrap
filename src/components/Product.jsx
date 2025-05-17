@@ -27,7 +27,8 @@ const Product = ({ product, columns }) => {
         e.stopPropagation();
         e.preventDefault();
         if (id !== 'no-id' && category !== 'unknown') {
-            navigate(`/product/${category}/${id}`);
+            // Pass the product data in the navigation state
+            navigate(`/product/${category}/${id}`, { state: { productData: product } });
         } else {
             console.error("Missing product category or ID for navigation");
         }

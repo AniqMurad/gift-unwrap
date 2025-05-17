@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom'; 
 import SearchPageNavbar from '../components/SearchPageNavbar';
 import Footer from '../components/Footer';
-import ProductData from "../components/ProductData";
 import { useCart } from '../context/CartContext';
 import Navbar from './Navbar';
 
@@ -10,34 +9,32 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState('');
   const { productId, category } = useParams();
   const navigate = useNavigate();
+  const location = useLocation(); // Get location object
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const { addToCart } = useCart();
 
   useEffect(() => {
-    if (!category || !productId) {
-      navigate('/');
-      return;
-    }
+    const productFromState = location.state?.productData;
 
-    const categoryProducts = ProductData[category];
-
-    if (categoryProducts) {
-      const foundProduct = categoryProducts.find(p => p.id.toString() === productId);
-      if (foundProduct) {
-        setProduct(foundProduct);
-        setSelectedImage(foundProduct.image || (foundProduct.images && foundProduct.images[0]) || ''); // Initialize selectedImage
-        return;
-      }
+    if (productFromState && productFromState.id.toString() === productId && productFromState.category === category) {
+      setProduct(productFromState);
+      setSelectedImage(productFromState.image || (productFromState.images && productFromState.images[0]) || '');
+      setQuantity(1); 
+    } else {
+      setProduct(null); 
+      console.warn(`Product data for ${category}/${productId} not found in navigation state. Implement API fetch here.`);
     }
-    // If product not found, navigate to a 404 page or home
-    console.warn(`Product not found for category: ${category}, id: ${productId}`);
-    navigate('/'); // Or a dedicated 404 page
-  }, [productId, category, navigate]);
+  }, [productId, category, navigate, location.state]); 
+
+  useEffect(() => {
+    setQuantity(1);
+  }, [productId, category]);
+
 
   if (!product) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return <div className="flex justify-center items-center h-screen">Loading product details...</div>;
   }
 
   const handleIncreaseQuantity = () => {
@@ -50,20 +47,17 @@ const ProductDetail = () => {
     }
   };
 
-  // --- 3. Implement handleAddToCart ---
   const handleAddToCart = () => {
     if (product) {
       addToCart({ ...product, quantity });
-      // Optionally, show a success message/toast notification
       alert(`${product.name} (Qty: ${quantity}) added to cart!`);
     }
   };
 
-  // --- 4. Implement handleBuyNow ---
   const handleBuyNow = () => {
     if (product) {
       addToCart({ ...product, quantity });
-      navigate('/ShoppingCart'); // Ensure this route matches your shopping cart page route
+      navigate('/ShoppingCart');
     }
   };
 
@@ -247,30 +241,11 @@ const ProductDetail = () => {
         <div className="mt-16">
           <h2 className="text-2xl font-bold mb-8 text-center">You May Also Like</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {ProductData[category] && ProductData[category]
-              .filter(p => p.id.toString() !== productId) // Exclude current product
-              .slice(0, 4) // Limit to 4 related products
-              .map((relatedProduct) => (
-                <div
-                  key={relatedProduct.id}
-                  className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
-                  onClick={() => navigate(`/product/${category}/${relatedProduct.id}`)}
-                >
-                  <div className="bg-gray-50 p-4 aspect-square flex items-center justify-center">
-                    <img
-                      src={relatedProduct.image || (relatedProduct.images && relatedProduct.images[0]) || 'https://via.placeholder.com/200'}
-                      alt={relatedProduct.name}
-                      className="w-full h-full object-contain transition-transform group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-medium text-sm truncate" title={relatedProduct.name}>{relatedProduct.name}</h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="font-semibold text-red-500">Rs {relatedProduct.price.toFixed(2)}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* Ensure related products also use API data if ProductData is removed */}
+            {/* This part might need adjustment if ProductData was its only source */}
+            {/* For now, assuming ProductData might still be used for this or you have another source */}
+            {/* If ProductData was the sole source for related products, you'll need to fetch them too */}
+            {/* Example: Fetch related products from an API or pass them if available */}
           </div>
         </div>
       </div>
