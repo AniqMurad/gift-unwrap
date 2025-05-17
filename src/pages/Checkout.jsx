@@ -47,10 +47,11 @@ const Checkout = () => {
     const discountAmount = 0; // Placeholder for discount logic
     const totalOrderAmount = subtotal + shippingCost - discountAmount;
 
-    const handleSubmitOrder = (e) => {
+    const handleSubmitOrder = async (e) => { // --- Make function async ---
         e.preventDefault();
-        // Basic Validation (can be more extensive)
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.street || !formData.city || !formData.postalCode) {
+
+        // Basic Frontend Validation (Backend does full validation)
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.street || !formData.city || !formData.postalCode || !formData.country || !formData.state) {
             alert("Please fill in all required shipping information.");
             return;
         }
@@ -59,24 +60,72 @@ const Checkout = () => {
                 alert("Please fill in all credit card details.");
                 return;
             }
-            // Add more specific card validation here (e.g., Luhn algorithm for card number)
+            // Add more specific card validation here if needed (e.g., Luhn algorithm for card number)
+        }
+        if (cartItems.length === 0) {
+             alert("Your cart is empty. Please add items before placing an order.");
+             return;
         }
 
-        console.log("Order Submitted:", {
-            shippingInfo: formData,
-            paymentMethod,
-            cardDetails: paymentMethod === 'creditCard' ? { cardName, cardNumber, expiry, cvv, saveCardDetails } : null,
-            orderItems: cartItems,
-            subtotal,
-            shippingCost,
-            discountAmount,
-            totalOrderAmount,
-        });
 
-        // Placeholder for actual order processing (e.g., API call)
-        alert(`Order placed successfully! Total: Rs ${totalOrderAmount.toFixed(2)}`);
-        clearCart(); // Clear cart after successful order
-        navigate('/order-confirmation'); // Navigate to an order confirmation page
+        // Prepare data to send to the backend API
+        const orderData = {
+            shippingInfo: formData,
+            paymentMethod: paymentMethod,
+            cardDetails: paymentMethod === 'creditCard' ? {
+                cardName,
+                cardNumber,
+                expiry,
+                cvv,
+                saveCardDetails
+            } : null,
+            // Ensure orderItems sent contain category and the nested product ID (item.id)
+            orderItems: cartItems.map(item => ({
+                category: item.category, // Make sure your cart items include the category
+                id: item.id,           // Make sure your cart items include the nested product ID
+                name: item.name,
+                quantity: item.quantity,
+                price: item.price, // Send price, but backend will verify
+                image: item.image || (item.images && item.images[0])
+            })),
+            // Do NOT send calculated totals from frontend - backend will recalculate
+            // subtotal: subtotal,
+            // shippingCost: shippingCost,
+            // discountAmount: discountAmount,
+            // totalOrderAmount: totalOrderAmount,
+        };
+
+        console.log("Sending order data:", orderData); // Log data being sent
+
+        // --- API Call to Backend ---
+        try {
+            const response = await fetch('http://localhost:5000/api/orders/', { // Replace with your actual backend URL if different
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${yourAuthToken}`, // Include if using authentication
+                },
+                body: JSON.stringify(orderData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Order placed successfully:', data);
+                alert(`Order placed successfully! Order ID: ${data._id}. Total: Rs ${data.totalAmount.toFixed(2)}`); // Use total from backend response
+                clearCart(); // Clear cart after successful order
+                navigate('/order-confirmation', { state: { orderId: data._id } }); // Navigate to confirmation page, maybe pass order ID
+            } else {
+                console.error('Failed to place order:', data.message);
+                alert(`Failed to place order: ${data.message || 'Server error'}`);
+                 // If payment failed, data.message might contain gateway error
+            }
+
+        } catch (error) {
+            console.error('Error submitting order:', error);
+            alert('An error occurred while submitting your order. Please try again.');
+        }
+        // --- End API Call ---
     };
 
     // Example: Apply discount
@@ -105,30 +154,23 @@ const Checkout = () => {
                     <div className='w-full lg:w-[60%] xl:w-[630px] space-y-8'>
 
                         {/* Login Prompt */}
-                        <div>
-                            <p className="text-[16px] text-[#A0A0A0] mb-3 px-[16px] py-[11px] rounded-[8px] bg-[#F7F7F7]">
-                                Already have an account? <span className="font-semibold text-[#1F1F1F] underline cursor-pointer" onClick={handleLoginRedirect}>Login Here</span>
-                            </p>
-                            {/* Optional: Static login form if not redirecting */}
-                        </div>
+                         {/* ... (Your existing login prompt) ... */}
 
                         {/* Shipping Information */}
                         <div className="space-y-5">
                             <h2 className="text-[24px] md:text-[30px] font-semibold">Shipping Information</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {/* Form Fields (simplified for brevity, keep your existing structure) */}
+                                {/* --- Your existing form fields with value, name, and onChange --- */}
                                 <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
                                 <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
                                 <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
                                 <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
-                                
-                                {/* Country - Consider using a select dropdown component */}
+
                                 <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country/Region *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
-                                
+
                                 <input type="text" name="street" value={formData.street} onChange={handleChange} placeholder="Street Address *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
                                 <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="Town / City *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
-                                
-                                {/* State - Consider using a select dropdown component */}
+
                                 <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder="State *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
                                 <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Postal Code *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
 
@@ -181,12 +223,17 @@ const Checkout = () => {
                                     <label htmlFor="cod" className="font-medium">Cash on Delivery</label>
                                 </div>
                                 {paymentMethod === 'cod' && (
-                                     <p className='text-[14px] text-[#696C70] mt-2'>Pay with cash upon delivery.</p>
+                                       <p className='text-[14px] text-[#696C70] mt-2'>Pay with cash upon delivery.</p>
                                 )}
                             </div>
                         </div>
 
-                        <button type="submit" className='w-full bg-black text-white text-[16px] font-semibold mt-8 px-[40px] py-[14px] rounded-[12px] uppercase hover:bg-gray-800 transition-colors disabled:opacity-50' disabled={cartItems.length === 0}>
+                         {/* Submit Button - Ensure it's inside the form */}
+                        <button
+                            type="submit"
+                            className='w-full bg-black text-white text-[16px] font-semibold mt-8 px-[40px] py-[14px] rounded-[12px] uppercase hover:bg-gray-800 transition-colors disabled:opacity-50'
+                            disabled={cartItems.length === 0} // Disable if cart is empty
+                        >
                             Place Order
                         </button>
                     </div>
