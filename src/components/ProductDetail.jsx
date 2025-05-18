@@ -25,11 +25,28 @@ const ProductDetail = () => {
     } else {
       setProduct(null); 
       console.warn(`Product data for ${category}/${productId} not found in navigation state. Implement API fetch here.`);
+      // Placeholder for API fetch if not in state
+      // async function fetchProduct() {
+      //   try {
+      //     const response = await fetch(`/api/products/${category}/${productId}`); // Adjust your API endpoint
+      //     if (!response.ok) throw new Error('Product not found');
+      //     const data = await response.json();
+      //     setProduct(data);
+      //     setSelectedImage(data.image || (data.images && data.images[0]) || '');
+      //     setQuantity(1);
+      //   } catch (error) {
+      //     console.error("Failed to fetch product:", error);
+      //     navigate('/'); // Or to a 404 page
+      //   }
+      // }
+      // if (productId && category) fetchProduct();
     }
   }, [productId, category, navigate, location.state]); 
 
   useEffect(() => {
     setQuantity(1);
+    // Scroll to top when component mounts or product changes
+    window.scrollTo(0, 0);
   }, [productId, category]);
 
 
@@ -104,12 +121,13 @@ const ProductDetail = () => {
             <h1 className="text-2xl md:text-3xl font-bold text-[#1F1F1F]">{product.name}</h1>
 
             <div className="flex items-center gap-4">
-              <span className="text-xl md:text-2xl font-semibold text-red-500">Rs {product.price.toFixed(2)}</span>
+              <span className="text-xl md:text-2xl font-semibold text-red-500">Rs {product.price ? product.price.toFixed(2) : 'N/A'}</span>
               {/* Add original price and discount if applicable */}
             </div>
 
             <div className="text-[#696C70] border-b border-gray-200 pb-4 md:pb-6 text-sm md:text-base">
-              <p>{product.ShortDescription || "No short description available."}</p>
+              {/* Use product.shortDescription from API */}
+              <p>{product.shortDescription || "No short description available."}</p>
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 pt-4">
@@ -191,8 +209,9 @@ const ProductDetail = () => {
               <div className="py-8 text-gray-700 leading-relaxed">
                 {activeTab === 'description' && (
                   <div>
+                    {/* Use product.longDescription from API */}
                     <p>
-                      {product.LongDescription || "Detailed description not available."}
+                      {product.longDescription || "Detailed description not available."}
                     </p>
                   </div>
                 )}

@@ -20,7 +20,7 @@ const Product = ({ product, columns }) => {
         e.stopPropagation();
         e.preventDefault();
         addToCart(product); 
-        console.log("Add to cart clicked:", product);
+        window.scrollTo(0, 0);
     };
 
     const handleNavigateToDetail = (e) => {
