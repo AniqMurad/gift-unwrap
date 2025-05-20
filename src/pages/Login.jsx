@@ -50,10 +50,8 @@ const Login = () => {
 
     const handleLogin = async () => {
         const newErrors = {};
-        // setGeneralError(''); // Remove if not using
         setNotification(prev => ({ ...prev, show: false })); // Hide previous notification
 
-        // Basic frontend validation
         if (!formData.email.trim()) {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {

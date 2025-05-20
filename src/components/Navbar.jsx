@@ -23,6 +23,7 @@ const Navbar = ({ showSearchInput = true,
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems, removeFromCart, getTotalCartAmount, getTotalCartItems } = useCart();
   const cartRef = useRef(null);
+  const prevTotalQuantityRef = useRef(getTotalCartItems()); // --- Store previous total quantity ---
 
   const handleWishlistClick = () => navigate("/wishlist");
   const handleLogoClick = () => navigate("/");
@@ -57,8 +58,18 @@ const Navbar = ({ showSearchInput = true,
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isCartOpen]);
 
+  // --- Modified useEffect to open cart when total quantity increases ---
+  useEffect(() => {
+    const currentTotalQuantity = getTotalCartItems();
+    // Open if the total number of items (sum of quantities) has increased
+    if (currentTotalQuantity > prevTotalQuantityRef.current) {
+      setIsCartOpen(true);
+    }
+    // Update the ref to the current total quantity for the next comparison
+    prevTotalQuantityRef.current = currentTotalQuantity;
+  }, [cartItems, getTotalCartItems]); // Rerun when cartItems changes, use getTotalCartItems for comparison
+
   return (
-    // <div className="flex items-center justify-between bg-[#ffff] px-16 py-3 border-b-2 border-solid border-[#E9E9E9] relative">
     <div
       className="flex items-center justify-between px-16 py-3 relative"
       style={{
