@@ -29,6 +29,7 @@ import Giftsforwedding from "./pages/Giftsforwedding";
 import Giftforreligions from "./pages/Giftforreligions";
 import BirthdayGifts from "./pages/BirthdayGifts";
 import ScrollToTop from './components/ScrollToTop';
+import SuccessScreen from "./pages/SuccessScreen";
 
 function App() {
   return (
@@ -62,7 +63,8 @@ function App() {
             <Route path="/Giftforbirthday" element={<BirthdayGifts />} />
             <Route path="/Checkout" element={<Checkout />} />
             <Route path="/ShoppingCart" element={<ShoppingCart />} />  
-            <Route path="/SearchOutput" element={<SearchOutput />} />  
+            <Route path="/SearchOutput" element={<SearchOutput />} /> 
+            <Route path="/successScreen" element={<SuccessScreen/>}></Route> 
           </Routes>
         </CartProvider>
       </WishlistProvider>
