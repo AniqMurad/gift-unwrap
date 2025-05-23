@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 const Home = () => {
-  const [isModalOpen, setIsModalOpen] = useState(true); // Modal is open by default
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <div className='w-full h-auto'>
