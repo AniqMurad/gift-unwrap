@@ -393,8 +393,8 @@ export const PassShowIcon = () => {
 export const eyeDetailIcon = () => {
     return (
         <svg width="22" height="24" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 12C1 12 5 4 11 4C17 4 21 12 21 12C21 12 17 20 11 20C5 20 1 12 1 12Z" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="11" cy="12" r="3" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M1 12C1 12 5 4 11 4C17 4 21 12 21 12C21 12 17 20 11 20C5 20 1 12 1 12Z" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="11" cy="12" r="3" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     )
 }
@@ -612,64 +612,18 @@ export const BlueCheckbox = () => {
 }
 
 export const DetailEyeIcon = () => {
-    return(
+    return (
         <svg width="22" height="24" viewBox="0 0 19 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9.5 1.75C5.89 1.75 2.64 3.88 1 7c1.64 3.12 4.89 5.25 8.5 5.25S16.36 10.12 18 7c-1.64-3.12-4.89-5.25-8.5-5.25zm0 8.75a3.5 3.5 0 110-7 3.5 3.5 0 010 7zM9.5 5a2 2 0 100 4 2 2 0 000-4z" fill="#000000" />
-    </svg>
+            <path d="M9.5 1.75C5.89 1.75 2.64 3.88 1 7c1.64 3.12 4.89 5.25 8.5 5.25S16.36 10.12 18 7c-1.64-3.12-4.89-5.25-8.5-5.25zm0 8.75a3.5 3.5 0 110-7 3.5 3.5 0 010 7zM9.5 5a2 2 0 100 4 2 2 0 000-4z" fill="#000000" />
+        </svg>
     )
 }
 
 export const CloseIcon = () => {
     return(
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" strokeLinecap="round" strokeLinejoin="round" class="feather feather-x">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x">
     <line x1="18" y1="6" x2="6" y2="18"/>
     <line x1="6" y1="6" x2="18" y2="18"/>
     </svg>
     )
 }
-
-export const UserCheckIcon = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" {...props}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-);
-
-export const LogOutIcon = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" {...props}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-  </svg>
-);
-
-export const ShoppingBagIcon = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" {...props}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-  </svg>
-);
-
-export const UserCircleIcon = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6" {...props}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-  </svg>
-);
-
-export const LoggedInUserIcon = ({ className }) => {
-  return (
-    <svg 
-      width="24" 
-      height="24" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2"/>
-      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2"/>
-      <path 
-        d="M4.5 19.5C6.27975 16.3275 9.07975 14.5 12 14.5C14.9203 14.5 17.7203 16.3275 19.5 19.5" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-};
