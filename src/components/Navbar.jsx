@@ -1,6 +1,8 @@
 import Logo from "../assets/logo.png";
 import React, { useState, useEffect, useRef } from "react";
-import { UsersIcon, CartIcon, HeartIcon, CloseIcon } from "./icons";
+// Assuming you might want specific icons for logged-in state, add them here
+// For example: import { ProfileIcon, OrderIcon, LogoutIcon } from "./icons";
+import { UsersIcon, CartIcon, HeartIcon, CloseIcon } from "./icons"; // Keep existing icons
 import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
@@ -23,7 +25,67 @@ const Navbar = ({ showSearchInput = true,
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems, removeFromCart, getTotalCartAmount, getTotalCartItems } = useCart();
   const cartRef = useRef(null);
-  const prevTotalQuantityRef = useRef(getTotalCartItems()); // --- Store previous total quantity ---
+  const prevTotalQuantityRef = useRef(getTotalCartItems());
+
+  // --- State for Login Status ---
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userNameInitial, setUserNameInitial] = useState(''); // To display user's first initial
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const userString = localStorage.getItem('user');
+    if (token && userString) {
+      setIsLoggedIn(true);
+      try {
+        const userData = JSON.parse(userString);
+        // Assuming user object has 'firstName' or 'name'
+        if (userData.firstName) {
+          setUserNameInitial(userData.firstName.charAt(0).toUpperCase());
+        } else if (userData.name) {
+          setUserNameInitial(userData.name.charAt(0).toUpperCase());
+        } else {
+          setUserNameInitial('U'); // Default initial if name not found
+        }
+      } catch (e) {
+        console.error("Failed to parse user data from localStorage", e);
+        setUserNameInitial('U'); // Fallback initial
+      }
+    } else {
+      setIsLoggedIn(false);
+      setUserNameInitial('');
+    }
+    // Listen for custom event that signals login/logout to re-check
+    const handleAuthChange = () => {
+        const currentToken = localStorage.getItem('token');
+        const currentUserString = localStorage.getItem('user');
+        if (currentToken && currentUserString) {
+            setIsLoggedIn(true);
+            try {
+                const userData = JSON.parse(currentUserString);
+                 if (userData.firstName) {
+                    setUserNameInitial(userData.firstName.charAt(0).toUpperCase());
+                } else if (userData.name) {
+                    setUserNameInitial(userData.name.charAt(0).toUpperCase());
+                } else {
+                    setUserNameInitial('U'); 
+                }
+            } catch (e) {
+                setUserNameInitial('U');
+            }
+        } else {
+            setIsLoggedIn(false);
+            setUserNameInitial('');
+        }
+    };
+
+    window.addEventListener('authChanged', handleAuthChange);
+    // Initial check
+    handleAuthChange(); 
+
+    return () => {
+        window.removeEventListener('authChanged', handleAuthChange);
+    };
+  }, []); // Empty dependency array, authChanged event will trigger updates
 
   const handleWishlistClick = () => navigate("/wishlist");
   const handleLogoClick = () => navigate("/");
@@ -32,6 +94,18 @@ const Navbar = ({ showSearchInput = true,
   const handleSearch = () => navigate("/search-output");
   const handleLogin = () => navigate("/login");
   const handleRegister = () => navigate("/signup");
+  const handleMyProfile = () => navigate("/myAccount", { state: { activeTab: 'account' } }); 
+  const handleMyOrders = () => navigate("/myAccount", { state: { activeTab: 'orders' } });   
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    setUserNameInitial('');
+    // Dispatch a custom event to notify other components if needed, or rely on navigation
+    window.dispatchEvent(new CustomEvent('authChanged'));
+    navigate("/login"); // Or to homepage
+  };
 
   const handleViewCartPage = () => {
     setIsCartOpen(false);
@@ -58,16 +132,13 @@ const Navbar = ({ showSearchInput = true,
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isCartOpen]);
 
-  // --- Modified useEffect to open cart when total quantity increases ---
   useEffect(() => {
     const currentTotalQuantity = getTotalCartItems();
-    // Open if the total number of items (sum of quantities) has increased
     if (currentTotalQuantity > prevTotalQuantityRef.current) {
       setIsCartOpen(true);
     }
-    // Update the ref to the current total quantity for the next comparison
     prevTotalQuantityRef.current = currentTotalQuantity;
-  }, [cartItems, getTotalCartItems]); // Rerun when cartItems changes, use getTotalCartItems for comparison
+  }, [cartItems, getTotalCartItems]);
 
   return (
     <div
@@ -96,17 +167,42 @@ const Navbar = ({ showSearchInput = true,
         <div className="cursor-pointer">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline border-0"><UsersIcon /></Button>
+              <Button variant="outline border-0">
+                {isLoggedIn && userNameInitial ? (
+                  <span className="flex items-center justify-center h-7 w-7 bg-black text-white rounded-full text-sm font-semibold">
+                    {userNameInitial}
+                  </span>
+                ) : (
+                  <UsersIcon />
+                )}
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-white p-2 shadow-lg border border-grey-200">
-              <DropdownMenuItem>
-                <Button className="bg-black text-white font-bold w-full cursor-pointer" onClick={handleLogin}>LOGIN</Button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <div className="w-full flex justify-center whitespace-nowrap">
-                  <span className="text-[#A0A0A0]">Don't have an account? <strong className="text-black cursor-pointer" onClick={handleRegister}>Register</strong></span>
-                </div>
-              </DropdownMenuItem>
+              {isLoggedIn ? (
+                <>
+                  <DropdownMenuItem onSelect={handleMyProfile} className="cursor-pointer">
+                    My Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleMyOrders} className="cursor-pointer">
+                    My Orders
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onSelect={handleLogout} className="cursor-pointer text-red-600">
+                    Logout
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <>
+                  <DropdownMenuItem>
+                    <Button className="bg-black text-white font-bold w-full cursor-pointer" onClick={handleLogin}>LOGIN</Button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <div className="w-full flex justify-center whitespace-nowrap">
+                      <span className="text-[#A0A0A0]">Don't have an account? <strong className="text-black cursor-pointer" onClick={handleRegister}>Register</strong></span>
+                    </div>
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
