@@ -77,6 +77,9 @@ const Login = () => {
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
 
+            // Dispatch custom event to notify Navbar
+            window.dispatchEvent(new CustomEvent('authChanged'));
+
             navigate('/'); 
 
         } catch (err) {
