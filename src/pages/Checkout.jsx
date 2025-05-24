@@ -130,9 +130,7 @@ const Checkout = () => {
 
     // Example: Apply discount
     useEffect(() => {
-        if (subtotal > 50) { // Example condition for discount
-            // In a real app, you'd apply a coupon code or have other logic
-            // setDiscountAmount(subtotal * 0.1); // 10% discount
+        if (subtotal > 50) { 
             setShowDiscountApplied(true);
         } else {
             // setDiscountAmount(0);
@@ -143,7 +141,6 @@ const Checkout = () => {
 
     return (
         <div>
-            {/* Using Navbar for consistency, can be SearchPageNavbar if preferred */}
             <Navbar showSearchInput={false} bgColor="#FBF4E8"/>
             <SearchPageNavbar title="Checkout" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
@@ -154,9 +151,7 @@ const Checkout = () => {
                     <div className='w-full lg:w-[60%] xl:w-[630px] space-y-8'>
 
                         {/* Login Prompt */}
-                         {/* ... (Your existing login prompt) ... */}
-
-                        {/* Shipping Information */}
+                      
                         <div className="space-y-5">
                             <h2 className="text-[24px] md:text-[30px] font-semibold">Shipping Information</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
