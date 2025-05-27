@@ -22,6 +22,7 @@ const Navbar = ({ showSearchInput = true,
   bgColor,
 }) => {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems, removeFromCart, getTotalCartAmount, getTotalCartItems } = useCart();
   const cartRef = useRef(null);
@@ -56,34 +57,34 @@ const Navbar = ({ showSearchInput = true,
     }
     // Listen for custom event that signals login/logout to re-check
     const handleAuthChange = () => {
-        const currentToken = localStorage.getItem('token');
-        const currentUserString = localStorage.getItem('user');
-        if (currentToken && currentUserString) {
-            setIsLoggedIn(true);
-            try {
-                const userData = JSON.parse(currentUserString);
-                 if (userData.firstName) {
-                    setUserNameInitial(userData.firstName.charAt(0).toUpperCase());
-                } else if (userData.name) {
-                    setUserNameInitial(userData.name.charAt(0).toUpperCase());
-                } else {
-                    setUserNameInitial('U'); 
-                }
-            } catch (e) {
-                setUserNameInitial('U');
-            }
-        } else {
-            setIsLoggedIn(false);
-            setUserNameInitial('');
+      const currentToken = localStorage.getItem('token');
+      const currentUserString = localStorage.getItem('user');
+      if (currentToken && currentUserString) {
+        setIsLoggedIn(true);
+        try {
+          const userData = JSON.parse(currentUserString);
+          if (userData.firstName) {
+            setUserNameInitial(userData.firstName.charAt(0).toUpperCase());
+          } else if (userData.name) {
+            setUserNameInitial(userData.name.charAt(0).toUpperCase());
+          } else {
+            setUserNameInitial('U');
+          }
+        } catch (e) {
+          setUserNameInitial('U');
         }
+      } else {
+        setIsLoggedIn(false);
+        setUserNameInitial('');
+      }
     };
 
     window.addEventListener('authChanged', handleAuthChange);
     // Initial check
-    handleAuthChange(); 
+    handleAuthChange();
 
     return () => {
-        window.removeEventListener('authChanged', handleAuthChange);
+      window.removeEventListener('authChanged', handleAuthChange);
     };
   }, []); // Empty dependency array, authChanged event will trigger updates
 
@@ -91,11 +92,15 @@ const Navbar = ({ showSearchInput = true,
   const handleLogoClick = () => navigate("/");
   const handleCartClick = () => setIsCartOpen(prev => !prev);
   const handleCloseCart = () => setIsCartOpen(false);
-  const handleSearch = () => navigate("/search-output");
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      navigate(`/searchoutput?query=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
   const handleLogin = () => navigate("/login");
   const handleRegister = () => navigate("/signup");
-  const handleMyProfile = () => navigate("/myAccount", { state: { activeTab: 'account' } }); 
-  const handleMyOrders = () => navigate("/myAccount", { state: { activeTab: 'orders' } });   
+  const handleMyProfile = () => navigate("/myAccount", { state: { activeTab: 'account' } });
+  const handleMyOrders = () => navigate("/myAccount", { state: { activeTab: 'orders' } });
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -156,8 +161,14 @@ const Navbar = ({ showSearchInput = true,
           <input
             className="rounded-tl-md rounded-bl-md text-[#A0A0A0] w-96 border border-[#E9E9E9] py-2 px-4 focus:outline-none focus:border-black"
             placeholder="What are you looking for today?"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           />
-          <button className="rounded-tr-md rounded-br-md text-sm font-normal cursor-pointer border border-black bg-black text-white py-2 px-6 hover:bg-gray-800 transition-colors" onClick={handleSearch}>
+          <button
+            className="rounded-tr-md rounded-br-md text-sm font-normal cursor-pointer border border-black bg-black text-white py-2 px-6 hover:bg-gray-800 transition-colors"
+            onClick={handleSearch}
+          >
             SEARCH
           </button>
         </div>

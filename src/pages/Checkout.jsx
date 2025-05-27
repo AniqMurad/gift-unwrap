@@ -53,11 +53,15 @@ const Checkout = () => {
         e.preventDefault();
         setIsLoading(true); // <--- 2. Set isLoading to true
 
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.street || !formData.city || !formData.postalCode || !formData.country || !formData.state) {
-            alert("Please fill in all required shipping information.");
-            setIsLoading(false); // <--- 3. Reset isLoading on validation failure
-            return;
+        const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'street', 'city', 'postalCode', 'country', 'state'];
+        for (let field of requiredFields) {
+            if (!formData[field]) {
+                alert("Please fill in all required shipping information.");
+                setIsLoading(false);
+                return;
+            }
         }
+
         if (paymentMethod === 'creditCard') {
             if (!cardName || !cardNumber || !expiry || !cvv) {
                 alert("Please fill in all credit card details.");
@@ -66,13 +70,16 @@ const Checkout = () => {
             }
         }
         if (cartItems.length === 0) {
-             alert("Your cart is empty. Please add items before placing an order.");
-             setIsLoading(false); // <--- 3. Reset isLoading on validation failure
-             return;
+            alert("Your cart is empty. Please add items before placing an order.");
+            setIsLoading(false); // <--- 3. Reset isLoading on validation failure
+            return;
         }
 
+        const userId = localStorage.getItem('userId');
+        console.log("Checkout userId from localStorage:", userId);
 
         const orderData = {
+            userId,
             shippingInfo: formData,
             paymentMethod: paymentMethod,
             cardDetails: paymentMethod === 'creditCard' ? {
@@ -94,7 +101,6 @@ const Checkout = () => {
 
         console.log("Sending order data:", orderData); // Log data being sent
 
-        // --- API Call to Backend ---
         try {
             const response = await fetch('http://localhost:5000/api/orders/', { // Replace with your actual backend URL if different
                 method: 'POST',
@@ -109,7 +115,7 @@ const Checkout = () => {
 
             if (response.ok) {
                 console.log('Order placed successfully:', data);
-                
+
                 // Prepare summary data to pass to success screen
                 const orderSummaryData = {
                     cartItems: cartItems.map(item => ({ // Pass a snapshot of cart items
@@ -138,14 +144,14 @@ const Checkout = () => {
                 };
 
                 // alert(`Order placed successfully! Order ID: ${data._id}. Total: Rs ${data.totalAmount.toFixed(2)}`);
-                clearCart(); 
-                navigate('/order-confirmation', { 
-                    state: { 
-                        orderId: data._id, 
-                        orderSummary: orderSummaryData, 
+                clearCart();
+                navigate('/order-confirmation', {
+                    state: {
+                        orderId: data._id,
+                        orderSummary: orderSummaryData,
                         customerName: formData.firstName,
                         shippingInfo: shippingDetails // Add shipping info here
-                    } 
+                    }
                 });
                 // No need to set isLoading to false here if navigating away immediately
             } else {
@@ -164,7 +170,7 @@ const Checkout = () => {
 
     // Example: Apply discount
     useEffect(() => {
-        if (subtotal > 50) { 
+        if (subtotal > 50) {
             setShowDiscountApplied(true);
         } else {
             // setDiscountAmount(0);
@@ -175,7 +181,7 @@ const Checkout = () => {
 
     return (
         <div>
-            <Navbar showSearchInput={false} bgColor="#FBF4E8"/>
+            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Checkout" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <form onSubmit={handleSubmitOrder}>
@@ -185,7 +191,7 @@ const Checkout = () => {
                     <div className='w-full lg:w-[60%] xl:w-[630px] space-y-8'>
 
                         {/* Login Prompt */}
-                      
+
                         <div className="space-y-5">
                             <h2 className="text-[24px] md:text-[30px] font-semibold">Shipping Information</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -220,7 +226,7 @@ const Checkout = () => {
                             {/* Credit Card Option */}
                             <div className={`rounded-[8px] p-[20px] ${paymentMethod === 'creditCard' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`}>
                                 <div className='flex items-center gap-2 mb-2 cursor-pointer' onClick={() => setPaymentMethod('creditCard')}>
-                                    <input type="radio" id="creditCard" name="paymentMethod" value="creditCard" checked={paymentMethod === 'creditCard'} onChange={() => setPaymentMethod('creditCard')} className="form-radio h-4 w-4 text-blue-600"/>
+                                    <input type="radio" id="creditCard" name="paymentMethod" value="creditCard" checked={paymentMethod === 'creditCard'} onChange={() => setPaymentMethod('creditCard')} className="form-radio h-4 w-4 text-blue-600" />
                                     <label htmlFor="creditCard" className="font-medium">Credit Card</label>
                                 </div>
                                 {paymentMethod === 'creditCard' && (
@@ -248,16 +254,16 @@ const Checkout = () => {
                             {/* Cash on Delivery Option */}
                             <div className={`rounded-[8px] p-[20px] cursor-pointer ${paymentMethod === 'cod' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`} onClick={() => setPaymentMethod('cod')}>
                                 <div className='flex items-center gap-2'>
-                                    <input type="radio" id="cod" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="form-radio h-4 w-4 text-blue-600"/>
+                                    <input type="radio" id="cod" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="form-radio h-4 w-4 text-blue-600" />
                                     <label htmlFor="cod" className="font-medium">Cash on Delivery</label>
                                 </div>
                                 {paymentMethod === 'cod' && (
-                                       <p className='text-[14px] text-[#696C70] mt-2'>Pay with cash upon delivery.</p>
+                                    <p className='text-[14px] text-[#696C70] mt-2'>Pay with cash upon delivery.</p>
                                 )}
                             </div>
                         </div>
 
-                         {/* Submit Button - Ensure it's inside the form */}
+                        {/* Submit Button - Ensure it's inside the form */}
                         <button
                             type="submit"
                             className='w-full bg-black text-white text-[16px] font-semibold mt-8 px-[40px] py-[14px] rounded-[12px] uppercase hover:bg-gray-800 transition-colors disabled:opacity-50'

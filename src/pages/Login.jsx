@@ -76,11 +76,14 @@ const Login = () => {
             const { token, user } = res.data;
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('userId', user._id);
+
+            console.log("Login successful. User ID stored:", user._id);
 
             // Dispatch custom event to notify Navbar
             window.dispatchEvent(new CustomEvent('authChanged'));
 
-            navigate('/'); 
+            navigate('/');
 
         } catch (err) {
             const msg = err.response?.data?.message || 'Invalid email or password. Please try again.';
