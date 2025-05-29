@@ -98,7 +98,7 @@ const OrderHistory = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <MyorderRightArrow />
+                                {/* <MyorderRightArrow /> */}
                             </div>
                         </div>
                     ))
