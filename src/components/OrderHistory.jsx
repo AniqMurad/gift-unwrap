@@ -26,8 +26,14 @@ const OrderHistory = () => {
 
                 // Filter orders for the logged-in user
                 const userOrders = allOrders.filter(order => order.user === loggedInUserId);
-                setOrders(userOrders);
-                setFilteredOrders(userOrders); // Initialize filtered orders
+
+                // Sort orders by createdAt in descending order (latest first)
+                const sortedOrders = userOrders.sort((a, b) =>
+                    new Date(b.createdAt) - new Date(a.createdAt)
+                );
+
+                setOrders(sortedOrders); // Set the sorted orders
+                // The second useEffect will handle setting filteredOrders based on the initial activeFilter
             } catch (error) {
                 console.error('Error fetching orders:', error);
             }
@@ -36,12 +42,33 @@ const OrderHistory = () => {
         fetchOrders();
     }, []);
 
-    useEffect(() => {
+    /* useEffect(() => {
         // Apply the active filter to the orders
         const filtered = activeFilter === 'All'
             ? orders
             : orders.filter(order => order.status === activeFilter.toUpperCase());
         setFilteredOrders(filtered);
+    }, [activeFilter, orders]); */
+
+    useEffect(() => {
+        // Define the status mappings
+        const inProgressStatuses = ['pending', 'processing', 'shipped'];
+        const deliveredStatuses = ['delivered'];
+        const cancelledStatuses = ['cancelled', 'returned']; // Assuming 'failed' also goes under cancelled based on common practice. If you have 'returned', add it here.
+
+        let currentFilteredOrders = [];
+
+        if (activeFilter === 'All') {
+            currentFilteredOrders = orders;
+        } else if (activeFilter === 'In Progress') {
+            currentFilteredOrders = orders.filter(order => inProgressStatuses.includes(order.status));
+        } else if (activeFilter === 'Delivered') {
+            currentFilteredOrders = orders.filter(order => deliveredStatuses.includes(order.status));
+        } else if (activeFilter === 'Cancelled') {
+            currentFilteredOrders = orders.filter(order => cancelledStatuses.includes(order.status));
+        }
+
+        setFilteredOrders(currentFilteredOrders);
     }, [activeFilter, orders]);
 
     return (
