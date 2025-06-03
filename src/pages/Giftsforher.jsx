@@ -8,7 +8,6 @@ import { useLocation } from 'react-router-dom';
 import Navbar from "@/components/Navbar";
 
 const Giftsforher = () => {
-
     const [products, setProducts] = useState([]);
     const location = useLocation();
     const [columns, setColumns] = useState(4);
