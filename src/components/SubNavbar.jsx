@@ -59,7 +59,7 @@ const SubNavbar = () => {
             className={`font-bold cursor-pointer text-sm text-red-300 dropdown-button ${activeDropdown === 'birthday' ? 'border-b-2 border-black' : ''}`}
             onClick={() => handleButtonClick('birthday')}
           >
-            BIRTHDAY GIFT
+            Flower & Chocolate Bouquet
           </button>
         </div>
         <div>
