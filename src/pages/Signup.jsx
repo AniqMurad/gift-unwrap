@@ -5,15 +5,20 @@ import PasswordField from '@/components/PasswordField'
 import RememberIcon from '@/components/RememberIcon'
 import SearchPageNavbar from '@/components/SearchPageNavbar'
 import UsernameField from '@/components/UsernameField'
-import { useNavigate } from "react-router-dom";
-import React, { useState } from 'react';
+import PhoneNumberField from '@/components/PhoneNumberField'
+import Namefield from '@/components/Namefield'
+import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '@/components/Navbar'
 
 const Signup = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [formData, setFormData] = useState({
         email: '',
+        name: '',
+        phoneNumber: '',
         password: '',
         confirmPassword: '',
         agreeToTerms: false
@@ -21,6 +26,16 @@ const Signup = () => {
 
     const [errors, setErrors] = useState({});
     const [generalError, setGeneralError] = useState('');
+
+    // Effect to handle pre-filled email from navigation state
+    useEffect(() => {
+        if (location.state?.prefillEmail) {
+            setFormData(prev => ({
+                ...prev,
+                email: location.state.prefillEmail
+            }));
+        }
+    }, [location.state]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -102,10 +117,20 @@ const Signup = () => {
                 <div className="w-[580px]">
                     <h2 className="text-[30px] font-semibold mb-6">Register</h2>
                     {generalError && <p className="text-red-600 mb-4">{generalError}</p>}
+                    <Namefield
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        error={errors.name}
+                    />
                     <UsernameField 
                         value={formData.email}
                         onChange={handleInputChange}
                         error={errors.email}
+                    />
+                    <PhoneNumberField 
+                        value={formData.phoneNumber}
+                        onChange={handleInputChange}
+                        error={errors.phoneNumber}
                     />
                     <PasswordField 
                         value={formData.password}
