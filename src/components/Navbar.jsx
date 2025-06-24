@@ -15,16 +15,14 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext"; // Add this import
 
-const Navbar = ({ showSearchInput = true,
-  borderBottom,
-  borderColor,
-  bgColor,
-}) => {
+const Navbar = ({ showSearchInput = true, borderBottom, borderColor, bgColor }) => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartItems, removeFromCart, getTotalCartAmount, getTotalCartItems } = useCart();
+  const { wishlist, toggleWishlist } = useWishlist(); // Use wishlist context
   const cartRef = useRef(null);
   const prevTotalQuantityRef = useRef(getTotalCartItems());
 
@@ -218,20 +216,53 @@ const Navbar = ({ showSearchInput = true,
           </DropdownMenu>
         </div>
         {/* Wishlist Dropdown */}
-        <div className="cursor-pointer">
+        <div className="cursor-pointer relative">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline border-0"><HeartIcon /></Button>
+              <Button variant="outline border-0" className="relative">
+                <HeartIcon />
+                {wishlist.length > 0 && (
+                  <span className="absolute top-[10px] right-[10px] transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                    {wishlist.length}
+                  </span>
+                )}
+              </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-white p-2 border border-grey-200">
-              <DropdownMenuLabel className="text-xl font-bold">Wish List</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem><div className="w-full flex justify-center">No Items Available</div></DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Button className="bg-black text-white font-bold w-full" onClick={handleWishlistClick}>VIEW ALL WISH LIST</Button>
-              </DropdownMenuItem>
+            <DropdownMenuContent className="w-96 bg-white p-4 border rounded-2xl shadow-2xl z-30">
+              <div className="flex justify-between items-center mb-3 border-b-2 pb-2">
+                <h1 className="font-bold text-lg">WISH LIST ({wishlist.length})</h1>
+              </div>
+              {wishlist.length === 0 ? (
+                <p className="text-center text-gray-500 py-4">No items in your wishlist.</p>
+              ) : (
+                <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
+                  {wishlist.map((item) => (
+                    <div key={item.identifier} className="flex items-center gap-3 border-b pb-3 last:border-b-0">
+                      <img
+                        src={item.image || (item.images && item.images[0])}
+                        alt={item.name}
+                        className="w-16 h-16 object-cover rounded-md"
+                      />
+                      <div className="flex-grow">
+                        <p className="text-sm font-medium truncate w-48" title={item.name}>{item.name}</p>
+                        <p className="text-xs text-gray-500">{item.category}</p>
+                      </div>
+                      <div className="text-sm font-semibold">
+                        Rs {item.price}
+                      </div>
+                      {/* Remove from wishlist button */}
+                      <button onClick={() => toggleWishlist(item, item.category)} className="p-1 hover:bg-gray-100 rounded-full">
+                        <CloseIcon className="w-4 h-4 text-red-500" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="mt-4 pt-4 border-t">
+                <Button className="bg-black text-white font-bold w-full" onClick={handleWishlistClick}>
+                  VIEW ALL WISH LIST
+                </Button>
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
