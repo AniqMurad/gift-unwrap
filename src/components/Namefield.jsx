@@ -5,7 +5,7 @@ const Namefield = ({ value, onChange, error }) => {
      <div className="mb-4">
             <input
                 type="text"
-                name="email"
+                name="name"
                 value={value}
                 onChange={onChange}
                 placeholder="Name*"

@@ -5,7 +5,7 @@ const PhoneNumberField = ({ value, onChange, error }) => {
    <div className="mb-4">
             <input
                 type="text"
-                name="email"
+                name="phoneNumber"
                 value={value}
                 onChange={onChange}
                 placeholder="Phone Number *"
