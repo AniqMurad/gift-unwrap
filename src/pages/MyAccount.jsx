@@ -7,15 +7,15 @@ import {
     MyUserIcon
 } from '@/components/icons';
 import NewPasswordField from '@/components/NewPasswordField';
-import PasswordField from '@/components/PasswordField'; 
+import PasswordField from '@/components/PasswordField';
 import SearchPageNavbar from '@/components/SearchPageNavbar';
 import React, { useState, useEffect } from 'react';
 import avatar from "../assets/avatar.png";
 import Navbar from '@/components/Navbar';
 import OrderHistory from '@/components/OrderHistory';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
-import NotificationBar from '@/components/NotificationBar'; 
+import axios from 'axios';
+import NotificationBar from '@/components/NotificationBar';
 
 const MyAccount = () => {
     const location = useLocation();
@@ -23,7 +23,7 @@ const MyAccount = () => {
     const [activeTab, setActiveTab] = useState('account');
     const [userData, setUserData] = useState({ firstName: '', lastName: '', email: '', phone: '', country: '' });
 
-    
+
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -65,15 +65,15 @@ const MyAccount = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        localStorage.removeItem('userId'); 
+        localStorage.removeItem('userId');
         window.dispatchEvent(new CustomEvent('authChanged'));
         navigate("/login");
     };
 
     const handleChangePassword = async () => {
         setIsLoading(true);
-        setPasswordChangeErrors({}); 
-        setNotification({ show: false, type: '', message: '' }); 
+        setPasswordChangeErrors({});
+        setNotification({ show: false, type: '', message: '' });
 
         const errors = {};
         if (!currentPassword) {
@@ -96,7 +96,7 @@ const MyAccount = () => {
 
         try {
             const response = await axios.post('http://localhost:5000/api/auth/change-password', {
-                email: userData.email, 
+                email: userData.email,
                 currentPassword: currentPassword,
                 newPassword: newPassword
             });
@@ -165,11 +165,11 @@ const MyAccount = () => {
                         <div>
                             <h2 className="text-[24px] font-semibold mb-4">Information</h2>
                             <div className="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="First Name" value={userData.firstName} onChange={(e) => setUserData({ ...userData, firstName: e.target.value })} className="border p-3 rounded-md w-full" />
-                                <input type="text" placeholder="Last Name" value={userData.lastName} onChange={(e) => setUserData({ ...userData, lastName: e.target.value })} className="border p-3 rounded-md w-full" />
+                                <input type="text" placeholder="First Name" value={userData.firstName} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
+                                <input type="text" placeholder="Last Name" value={userData.lastName} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
                                 <input type="email" placeholder="Email" value={userData.email} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
-                                <input type="text" placeholder="Phone Number" value={userData.phone} onChange={(e) => setUserData({ ...userData, phone: e.target.value })} className="border p-3 rounded-md" />
-                                
+                                <input type="text" placeholder="Phone Number" value={userData.phone} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
+
                             </div>
 
                             <h2 className="text-[24px] font-semibold mt-8 mb-4">Change Password</h2>
