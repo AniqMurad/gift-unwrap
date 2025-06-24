@@ -79,7 +79,8 @@ const Login = () => {
             localStorage.setItem('userId', user._id);
 
             console.log("Login successful. User ID stored:", user._id);
-
+            console.log("Logged in user name:", user.name);
+            console.log("Logged in user phone number:", user.phoneNumber);
             // Dispatch custom event to notify Navbar
             window.dispatchEvent(new CustomEvent('authChanged'));
 

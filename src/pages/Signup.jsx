@@ -64,6 +64,14 @@ const Signup = () => {
         const newErrors = {};
         setGeneralError('');
 
+        if (!formData.name.trim()) {
+            newErrors.name = 'Name is required';
+        }
+
+        if (!formData.phoneNumber.trim()) {
+            newErrors.phoneNumber = 'Phone number is required';
+        }
+
         if (!formData.email.trim()) {
             newErrors.email = 'Email is required';
         }
@@ -92,11 +100,17 @@ const Signup = () => {
             const res = await axios.post('http://localhost:5000/api/auth/register', {
                 email: formData.email,
                 password: formData.password,
-                confirmPassword: formData.confirmPassword
+                confirmPassword: formData.confirmPassword,
+                name: formData.name,
+                phoneNumber: formData.phoneNumber
             });
 
-            alert('Registration successful. Please log in.');
-            navigate('/login');
+            /*alert('Registration successful. Please log in.');
+                        navigate('/login'); */
+            setGeneralError('Registration successful. Please log in.'); // Using generalError for success message, or you can implement a dedicated success notification.
+            setTimeout(() => {
+                navigate('/login');
+            }, 1000);
         } catch (err) {
             const msg = err.response?.data?.message || 'Something went wrong';
             setGeneralError(msg);
@@ -116,28 +130,32 @@ const Signup = () => {
 
                 <div className="w-[580px]">
                     <h2 className="text-[30px] font-semibold mb-6">Register</h2>
-                    {generalError && <p className="text-red-600 mb-4">{generalError}</p>}
+                    {generalError && (
+                        <p className={`mb-4 ${generalError.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+                            {generalError}
+                        </p>
+                    )}
                     <Namefield
                         value={formData.name}
                         onChange={handleInputChange}
                         error={errors.name}
                     />
-                    <UsernameField 
+                    <UsernameField
                         value={formData.email}
                         onChange={handleInputChange}
                         error={errors.email}
                     />
-                    <PhoneNumberField 
+                    <PhoneNumberField
                         value={formData.phoneNumber}
                         onChange={handleInputChange}
                         error={errors.phoneNumber}
                     />
-                    <PasswordField 
+                    <PasswordField
                         value={formData.password}
                         onChange={handleInputChange}
                         error={errors.password}
                     />
-                    <ConfirmPasswordField 
+                    <ConfirmPasswordField
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         error={errors.confirmPassword}
