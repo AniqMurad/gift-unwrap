@@ -23,7 +23,7 @@ const FlowerChocolate = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
 
-    const category = "giftsForEveryone";
+    const category = "FlowersChocolates";
 
     useEffect(() => {
         axios.get('http://localhost:5000/api/products')
@@ -75,11 +75,11 @@ const FlowerChocolate = () => {
     return (
         <div>
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
-            <SearchPageNavbar title="Gifts For Everyone" titleHome="Home Page" backgroundColor='#FBF4E8' />
+            <SearchPageNavbar title="Flowers & Chocolates Bouquets" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
-                <p className={`cursor-pointer ${selectedCategory === 'couple' ? 'underline' : ''}`} onClick={() => handleCategorySelect('couple')}>Gifts For Couples</p>
-                <p className={`cursor-pointer ${selectedCategory === 'teacher' ? 'underline' : ''}`} onClick={() => handleCategorySelect('teacher')}>Gifts For Teachers</p>
-                <p className={`cursor-pointer ${selectedCategory === 'relative' ? 'underline' : ''}`} onClick={() => handleCategorySelect('relative')}>Gifts For Relatives</p>
+                <p className={`cursor-pointer ${selectedCategory === 'flowers' ? 'underline' : ''}`} onClick={() => handleCategorySelect('flowers')}>Flowers Bouquets</p>
+                <p className={`cursor-pointer ${selectedCategory === 'chocolates' ? 'underline' : ''}`} onClick={() => handleCategorySelect('chocolates')}>Chocolates Bouquets</p>
+                <p className={`cursor-pointer ${selectedCategory === 'flowerschocolates' ? 'underline' : ''}`} onClick={() => handleCategorySelect('flowerschocolates')}>Flowers & Chocolates Bouquets</p>
             </div>
 
             <div className="px-16 py-10 flex justify-between">
@@ -155,7 +155,7 @@ const FlowerChocolate = () => {
                         {giftsForEveryoneProducts.map((product) => (
                             <Product
                                 key={product.id}
-                                product={{ ...product, category: "giftsForEveryone" }}
+                                product={{ ...product, category: "FlowersChocolates" }}
                                 columns={columns}
                             />
                         ))}
