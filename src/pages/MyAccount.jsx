@@ -7,15 +7,15 @@ import {
     MyUserIcon
 } from '@/components/icons';
 import NewPasswordField from '@/components/NewPasswordField';
-import PasswordField from '@/components/PasswordField'; // This will be for the current password
+import PasswordField from '@/components/PasswordField'; 
 import SearchPageNavbar from '@/components/SearchPageNavbar';
 import React, { useState, useEffect } from 'react';
 import avatar from "../assets/avatar.png";
 import Navbar from '@/components/Navbar';
 import OrderHistory from '@/components/OrderHistory';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios for API calls
-import NotificationBar from '@/components/NotificationBar'; // Assuming you have this component
+import axios from 'axios'; 
+import NotificationBar from '@/components/NotificationBar'; 
 
 const MyAccount = () => {
     const location = useLocation();
@@ -23,7 +23,7 @@ const MyAccount = () => {
     const [activeTab, setActiveTab] = useState('account');
     const [userData, setUserData] = useState({ firstName: '', lastName: '', email: '', phone: '', country: '' });
 
-    // State for password change form
+    
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -65,15 +65,15 @@ const MyAccount = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        localStorage.removeItem('userId'); // Also remove userId if stored
+        localStorage.removeItem('userId'); 
         window.dispatchEvent(new CustomEvent('authChanged'));
         navigate("/login");
     };
 
     const handleChangePassword = async () => {
         setIsLoading(true);
-        setPasswordChangeErrors({}); // Clear previous errors
-        setNotification({ show: false, type: '', message: '' }); // Clear previous notifications
+        setPasswordChangeErrors({}); 
+        setNotification({ show: false, type: '', message: '' }); 
 
         const errors = {};
         if (!currentPassword) {
@@ -96,13 +96,12 @@ const MyAccount = () => {
 
         try {
             const response = await axios.post('http://localhost:5000/api/auth/change-password', {
-                email: userData.email, // Get email from userData
+                email: userData.email, 
                 currentPassword: currentPassword,
                 newPassword: newPassword
             });
 
             setNotification({ show: true, type: 'success', message: response.data.message });
-            // Clear password fields on success
             setCurrentPassword('');
             setNewPassword('');
             setConfirmNewPassword('');
@@ -170,10 +169,7 @@ const MyAccount = () => {
                                 <input type="text" placeholder="Last Name" value={userData.lastName} onChange={(e) => setUserData({ ...userData, lastName: e.target.value })} className="border p-3 rounded-md w-full" />
                                 <input type="email" placeholder="Email" value={userData.email} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
                                 <input type="text" placeholder="Phone Number" value={userData.phone} onChange={(e) => setUserData({ ...userData, phone: e.target.value })} className="border p-3 rounded-md" />
-                                <div className="flex justify-between items-center border p-3 rounded-md w-full col-span-2">
-                                    {userData.country}
-                                    <HalfArrowDown2 />
-                                </div>
+                                
                             </div>
 
                             <h2 className="text-[24px] font-semibold mt-8 mb-4">Change Password</h2>

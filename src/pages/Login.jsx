@@ -48,55 +48,71 @@ const Login = () => {
         setNotification(prev => ({ ...prev, show: false })); // Hide notification on input change
     };
 
-    const handleLogin = async () => {
-        const newErrors = {};
-        setNotification(prev => ({ ...prev, show: false })); // Hide previous notification
+const handleLogin = async () => {
+    const newErrors = {};
+    setNotification(prev => ({ ...prev, show: false })); // Hide previous notification
 
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email address is invalid';
-        }
-        if (!formData.password.trim()) {
-            newErrors.password = 'Password is required';
-        }
+    if (!formData.email.trim()) {
+        newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+        newErrors.email = 'Email address is invalid';
+    }
+    if (!formData.password.trim()) {
+        newErrors.password = 'Password is required';
+    }
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-            return;
-        }
+    if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+    }
 
-        setIsLoading(true);
-        try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', {
-                email: formData.email,
-                password: formData.password
-            });
+    setIsLoading(true);
+    try {
+        const res = await axios.post('http://localhost:5000/api/auth/login', {
+            email: formData.email,
+            password: formData.password
+        });
 
-            const { token, user } = res.data;
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem('userId', user._id);
+        const { token, user } = res.data;
+        
+        // Split the name into firstName and lastName
+        const nameParts = user.name.trim().split(' ');
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+        
+        // Create enhanced user object with additional fields
+        const enhancedUser = {
+            ...user,
+            firstName: firstName,
+            lastName: lastName,
+            phone: user.phoneNumber, // Map phoneNumber to phone
+            country: 'United States' // Default country
+        };
+        
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(enhancedUser));
+        localStorage.setItem('userId', user._id);
 
-            console.log("Login successful. User ID stored:", user._id);
-            console.log("Logged in user name:", user.name);
-            console.log("Logged in user phone number:", user.phoneNumber);
-            // Dispatch custom event to notify Navbar
-            window.dispatchEvent(new CustomEvent('authChanged'));
+        console.log("Login successful. User ID stored:", user._id);
+        console.log("Logged in user name:", user.name);
+        console.log("Logged in user phone number:", user.phoneNumber);
+        
+        // Dispatch custom event to notify Navbar
+        window.dispatchEvent(new CustomEvent('authChanged'));
 
-            navigate('/');
+        navigate('/');
 
-        } catch (err) {
-            const msg = err.response?.data?.message || 'Invalid email or password. Please try again.';
-            setNotification({
-                show: true,
-                type: 'error',
-                message: msg
-            });
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    } catch (err) {
+        const msg = err.response?.data?.message || 'Invalid email or password. Please try again.';
+        setNotification({
+            show: true,
+            type: 'error',
+            message: msg
+        });
+    } finally {
+        setIsLoading(false);
+    }
+};
 
     const handleSignup = () => {
         navigate("/signup");
