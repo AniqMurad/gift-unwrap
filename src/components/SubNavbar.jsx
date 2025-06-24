@@ -32,10 +32,12 @@ const SubNavbar = () => {
   }, []);
 
   const handleTitleClick = (url) => {
-    console.log("clicked", url);
     navigate(url);
     setActiveDropdown(null);
   };
+  const navigateToFlowers = () => {
+    navigate('flower-chocolate');
+  }
   
   
 
@@ -57,7 +59,7 @@ const SubNavbar = () => {
           </button>
           <button
             className={`font-bold cursor-pointer text-sm text-red-300 dropdown-button ${activeDropdown === 'birthday' ? 'border-b-2 border-black' : ''}`}
-            onClick={() => handleButtonClick('birthday')}
+            onClick={navigateToFlowers}
           >
             Flower & Chocolate Bouquet
           </button>

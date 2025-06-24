@@ -30,6 +30,7 @@ import Giftforreligions from "./pages/Giftforreligions";
 import BirthdayGifts from "./pages/BirthdayGifts";
 import ScrollToTop from './components/ScrollToTop';
 import SuccessScreen from "./pages/SuccessScreen";
+import FlowerChocolate from './pages/FlowerChocolate'
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
             <Route path="/ShoppingCart" element={<ShoppingCart />} />  
             <Route path="/SearchOutput" element={<SearchOutput />} /> 
             <Route path="/order-confirmation" element={<SuccessScreen/>}></Route> 
+            <Route path="/flower-chocolate" element={<FlowerChocolate/>}></Route>
           </Routes>
         </CartProvider>
       </WishlistProvider>
