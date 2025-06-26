@@ -156,7 +156,7 @@ const BirthdayGifts = () => {
                     </div>
 
                     {/* paging */}
-                    <div className="flex justify-center mt-10">
+                    {/* <div className="flex justify-center mt-10">
                         <div className="flex items-center space-x-1 border border-gray-400 rounded-md px-2 py-1">
                             {currentPage > 1 && (
                                 <button onClick={goToPreviousPage} className="px-3 py-1 border-r border-gray-400">
@@ -172,7 +172,7 @@ const BirthdayGifts = () => {
                                 </button>
                             )}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

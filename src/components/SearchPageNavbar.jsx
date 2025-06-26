@@ -18,7 +18,12 @@ const SearchPageNavbar = ({ title, title2, titleHome, backgroundColor }) => {
                 <div className='flex items-center justify-center gap-2 text-sm text-gray-600 mt-2'>
                     {titleHome && (
                         <>
-                            <span>{titleHome}</span>
+                            <span 
+                                className="cursor-pointer hover:text-gray-800 transition-colors duration-200"
+                                onClick={handleLogoClick}
+                            >
+                                {titleHome}
+                            </span>
                             <RightHalfIcon className="w-4 h-4 text-gray-500" />
                         </>
                     )}
