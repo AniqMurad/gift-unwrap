@@ -16,7 +16,7 @@ const Checkout = () => {
     const [cardNumber, setCardNumber] = useState("");
     const [expiry, setExpiry] = useState("");
     const [cvv, setCvv] = useState("");
-    const [paymentMethod, setPaymentMethod] = useState('creditCard'); // 'creditCard' or 'cod'
+    const [paymentMethod, setPaymentMethod] = useState('cod'); // Changed default to 'cod' since credit card is disabled
     const [saveCardDetails, setSaveCardDetails] = useState(false);
     const [showDiscountApplied, setShowDiscountApplied] = useState(false); // Example state for discount message
     const [isLoading, setIsLoading] = useState(false); // <--- 1. Add isLoading state
@@ -223,32 +223,24 @@ const Checkout = () => {
                         {/* Payment Option */}
                         <div className="space-y-5">
                             <h2 className="text-[24px] md:text-[30px] font-semibold">Payment Option</h2>
-                            {/* Credit Card Option */}
-                            <div className={`rounded-[8px] p-[20px] ${paymentMethod === 'creditCard' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`}>
-                                <div className='flex items-center gap-2 mb-2 cursor-pointer' onClick={() => setPaymentMethod('creditCard')}>
-                                    <input type="radio" id="creditCard" name="paymentMethod" value="creditCard" checked={paymentMethod === 'creditCard'} onChange={() => setPaymentMethod('creditCard')} className="form-radio h-4 w-4 text-blue-600" />
-                                    <label htmlFor="creditCard" className="font-medium">Credit Card</label>
+                            
+                            {/* Credit Card Option - DISABLED */}
+                            <div className="rounded-[8px] p-[20px] bg-[#F5F5F5] border border-[#E0E0E0] opacity-60">
+                                <div className='flex items-center gap-2 mb-2'>
+                                    <input 
+                                        type="radio" 
+                                        id="creditCard" 
+                                        name="paymentMethod" 
+                                        value="creditCard" 
+                                        disabled 
+                                        className="form-radio h-4 w-4 text-gray-400 cursor-not-allowed" 
+                                    />
+                                    <label htmlFor="creditCard" className="font-medium text-gray-500 cursor-not-allowed">Credit Card</label>
+                                    <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full ml-2">Disabled</span>
                                 </div>
-                                {paymentMethod === 'creditCard' && (
-                                    <div className="mt-4 space-y-3">
-                                        <p className='text-[14px] text-[#696C70]'>Securely pay with your credit card.</p>
-                                        <input type="text" value={cardName} onChange={(e) => setCardName(e.target.value)} placeholder="Name on Card *" className="w-full bg-white border px-[16px] py-[11px] rounded-[8px]" required={paymentMethod === 'creditCard'} />
-                                        <div className="relative">
-                                            <input type="text" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} placeholder="Card Number *" className="w-full bg-white border px-[16px] py-[11px] rounded-[8px]" required={paymentMethod === 'creditCard'} />
-                                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                                                <VisaIcon2 /> <Cardicon2 /> <Cardicon3 /> <Cardicon4 />
-                                            </div>
-                                        </div>
-                                        <div className='flex space-x-4'>
-                                            <input type="text" value={expiry} onChange={(e) => setExpiry(e.target.value)} placeholder="MM/YY *" className="w-1/2 bg-white border px-[16px] py-[11px] rounded-[8px]" required={paymentMethod === 'creditCard'} />
-                                            <input type="password" value={cvv} onChange={(e) => setCvv(e.target.value)} placeholder="CVV *" className="w-1/2 bg-white border px-[16px] py-[11px] rounded-[8px]" required={paymentMethod === 'creditCard'} />
-                                        </div>
-                                        <div className="flex items-center cursor-pointer mt-2" onClick={() => setSaveCardDetails(!saveCardDetails)}>
-                                            {saveCardDetails ? <BlueCheckbox /> : <RememberIcon />}
-                                            <span className="text-[#1F1F1F] text-[14px] ml-2">Save Card Details for future payments</span>
-                                        </div>
-                                    </div>
-                                )}
+                                <p className='text-[14px] text-[#999999] mt-2'>
+                                    Online payment is not available right now. Please use Cash on Delivery.
+                                </p>
                             </div>
 
                             {/* Cash on Delivery Option */}
@@ -256,6 +248,7 @@ const Checkout = () => {
                                 <div className='flex items-center gap-2'>
                                     <input type="radio" id="cod" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="form-radio h-4 w-4 text-blue-600" />
                                     <label htmlFor="cod" className="font-medium">Cash on Delivery</label>
+                                    <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full ml-2">Available</span>
                                 </div>
                                 {paymentMethod === 'cod' && (
                                     <p className='text-[14px] text-[#696C70] mt-2'>Pay with cash upon delivery.</p>

@@ -1,3 +1,4 @@
+// Home.js
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import SubNavbar from '../components/SubNavbar';
@@ -24,31 +25,33 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 const Home = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className='w-full h-auto'>
+    <div className="w-full h-auto overflow-x-hidden">
       <Navbar bgColor="#ffff" borderBottom="2px" borderColor="#E9E9E9" />
       <SubNavbar />
-      <HeroSection />
-      <Trending />
-      <ProductPage title="Gifts for Him" category="giftsForHim" />
-      <Categories />
-      <ProductPage title="Birthday Gifts" category="birthday" />
-      <Review />
-      <Services />
-      <InstaSpace />
-      <Blogs />
-      <Partners />
-      <Offer />
+      <main className="flex flex-col gap-6 md:gap-8 lg:gap-12">
+        <HeroSection />
+        <Trending />
+        <ProductPage title="Gifts for Him" category="giftsForHim" />
+        <Categories />
+        <ProductPage title="Birthday Gifts" category="birthday" />
+        <Review />
+        <Services />
+        <InstaSpace />
+        <Blogs />
+        <Partners />
+        <Offer />
+      </main>
       <Footer />
 
       {/* Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] w-full mx-4">
           <DialogHeader>
-            <DialogTitle>Receive 10% OFF Your Next Order</DialogTitle>
-            <DialogDescription>Exclusive Offers & More!</DialogDescription>
+            <DialogTitle className="text-base sm:text-lg md:text-xl">Receive 10% OFF Your Next Order</DialogTitle>
+            <DialogDescription className="text-sm sm:text-base">Exclusive Offers & More!</DialogDescription>
           </DialogHeader>
           <form className="grid gap-4 py-4">
             <Input

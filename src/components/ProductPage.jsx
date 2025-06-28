@@ -19,7 +19,6 @@ const ProductPage = ({ title, category }) => {
     }, [category]);
 
     useEffect(() => {
-        // Only randomize when "All" is selected
         if (selectedSubcategory === "All" && products.length) {
             const shuffled = [...products].sort(() => 0.5 - Math.random());
             setRandomFour(shuffled.slice(0, 4));
@@ -28,7 +27,6 @@ const ProductPage = ({ title, category }) => {
 
     const handleSubcategoryClick = (sub) => {
         setSelectedSubcategory(sub);
-        // Only randomize when "All" is clicked
         if (sub === "All" && products.length) {
             const shuffled = [...products].sort(() => 0.5 - Math.random());
             setRandomFour(shuffled.slice(0, 4));
@@ -44,7 +42,6 @@ const ProductPage = ({ title, category }) => {
         )
     ];
 
-    // Only show 4 random products for "All", otherwise filter by keyGift
     const filteredProducts = selectedSubcategory === "All"
         ? randomFour
         : products.filter(item =>
@@ -52,10 +49,12 @@ const ProductPage = ({ title, category }) => {
         );
 
     return (
-        <div className='px-16 py-4'>
-            <div className='flex justify-between'>
+        <div className='px-4 sm:px-6 lg:px-16 py-4'>
+            <div className='flex flex-col lg:flex-row justify-between gap-4'>
                 <h2 className="text-3xl font-bold">{title}</h2>
-                <div className='flex gap-[8px] bg-[#F7F7F7] rounded-[16px] py-[4px] px-[8px]'>
+
+                {/* Filter: Hidden below lg */}
+                <div className='hidden lg:flex flex-wrap gap-[8px] bg-[#F7F7F7] rounded-[16px] py-[4px] px-[8px]'>
                     {subcategories.map((sub) => (
                         <button
                             key={sub}
@@ -71,13 +70,22 @@ const ProductPage = ({ title, category }) => {
                 </div>
             </div>
 
-            <div className={`flex gap-5 mt-5 ${filteredProducts.length === 2 ? 'justify-start' : 'justify-between'}`}>
+            {/* Products: Flex layout for better centering */}
+            <div className={`flex flex-wrap gap-5 mt-6 
+                justify-center 
+                sm:justify-center 
+                lg:justify-between`}>
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((item) => (
-                        <Product key={item.id} product={{ ...item, category }} />
+                        <div
+                            key={item.id}
+                            className='w-full sm:w-[48%] lg:w-[23%] flex justify-center'
+                        >
+                            <Product product={{ ...item, category }} />
+                        </div>
                     ))
                 ) : (
-                    <p>No products available</p>
+                    <p className="mt-5 text-center w-full">No products available</p>
                 )}
             </div>
         </div>

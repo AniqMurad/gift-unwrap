@@ -64,10 +64,10 @@ const SubNavbar = () => {
             Flower & Chocolate Bouquet
           </button>
         </div>
-        <div>
+        {/* <div>
           <span className="text-sm font-normal">Phone: </span>
           <span className="text-sm font-semibold">+92-3465987104</span>
-        </div>
+        </div> */}
       </div>
 
       {activeDropdown === 'recipients' && (

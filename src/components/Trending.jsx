@@ -72,23 +72,23 @@ const Trending = () => {
 
     return (
         <div className='bg-[#FCFCFC]'>
-            <div className='m-4 p-4 px-16'>
+            <div className='m-4 p-4 px-4 sm:px-8 md:px-12 lg:px-16'>
                 <div className='text-4xl flex justify-center mb-8'>Trending Right Now</div>
                 <div
                     className='relative overflow-hidden my-5 mx-auto cursor-grab active:cursor-grabbing'
                 >
                     <div
                         ref={sliderRef}
-                        className='flex gap-6'
+                        className='flex gap-4 sm:gap-5 md:gap-6'
                         style={{ width: 'fit-content' }}
                     >
                         {trendingItems.map((item, index) => (
                             <div
                                 key={index}
-                                className='flex flex-col items-center min-w-[200px] flex-shrink-0 cursor-pointer group'
+                                className='flex flex-col items-center flex-shrink-0 cursor-pointer group min-w-[140px] sm:min-w-[160px] md:min-w-[180px]'
                                 onClick={() => handleItemClick(item.url)}
                             >
-                                <div className='rounded-full overflow-hidden w-[180px] h-[180px] shadow-md group-hover:shadow-lg transition-shadow duration-200'>
+                                <div className='rounded-full overflow-hidden w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] md:w-[180px] md:h-[180px] shadow-md group-hover:shadow-lg transition-shadow duration-200'>
                                     <img src={item.image} alt={item.title} className='w-full h-full object-cover' />
                                 </div>
                                 <div className='flex justify-center mt-3 text-center'>
