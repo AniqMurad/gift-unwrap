@@ -1,3 +1,4 @@
+// OrderHistory.js
 import React, { useState, useEffect } from 'react';
 import { MyorderLine, MyorderRightArrow } from './icons';
 import axios from 'axios';
@@ -6,51 +7,42 @@ const filters = ['All', 'In Progress', 'Delivered', 'Cancelled'];
 
 const OrderHistory = () => {
     const [activeFilter, setActiveFilter] = useState('All');
-    const [orders, setOrders] = useState([]); // State to store orders from API
+    const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
-    const [reviewInputs, setReviewInputs] = useState({}); // { orderId: reviewText }
-    const [reviewSubmitting, setReviewSubmitting] = useState({}); // { orderId: boolean }
+    const [reviewInputs, setReviewInputs] = useState({});
+    const [reviewSubmitting, setReviewSubmitting] = useState({});
+    const [reviewSuccess, setReviewSuccess] = useState({});
+    const [reviewError, setReviewError] = useState({});
+
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                // Get the logged-in user's ID from localStorage
                 const loggedInUserId = localStorage.getItem('userId');
                 if (!loggedInUserId) {
                     console.error('No user is logged in.');
-                    setOrders([]); // Clear orders if no user is logged in
+                    setOrders([]);
                     return;
                 }
 
-                // Fetch orders from the API
-                const response = await axios.get('http://localhost:5000/api/orders/'); // Replace with your API endpoint
+                const response = await axios.get('http://localhost:5000/api/orders/');
                 const allOrders = response.data;
-
-                // Filter orders for the logged-in user
                 const userOrders = allOrders.filter(order => order.user === loggedInUserId);
-
-                // Sort orders by createdAt in descending order (latest first)
                 const sortedOrders = userOrders.sort((a, b) =>
                     new Date(b.createdAt) - new Date(a.createdAt)
                 );
-
-                setOrders(sortedOrders); // Set the sorted orders
-                // The second useEffect will handle setting filteredOrders based on the initial activeFilter
+                setOrders(sortedOrders);
             } catch (error) {
                 console.error('Error fetching orders:', error);
             }
         };
-
         fetchOrders();
     }, []);
 
-
-
     useEffect(() => {
-        // Define the status mappings
         const inProgressStatuses = ['pending', 'processing', 'shipped'];
         const deliveredStatuses = ['delivered'];
-        const cancelledStatuses = ['cancelled', 'returned']; // Assuming 'failed' also goes under cancelled based on common practice. If you have 'returned', add it here.
+        const cancelledStatuses = ['cancelled', 'returned'];
 
         let currentFilteredOrders = [];
 
@@ -67,25 +59,69 @@ const OrderHistory = () => {
         setFilteredOrders(currentFilteredOrders);
     }, [activeFilter, orders]);
 
-    // Handle review input change
-    const handleReviewChange = (orderId, value) => {
+    // Handle review input change - now takes productId (which is item.productId)
+    const handleReviewChange = (productId, value) => {
+        console.log(`handleReviewChange - ProductId: ${productId}, Value: ${value}`);
         setReviewInputs((prev) => ({
             ...prev,
-            [orderId]: value,
+            [productId]: value, // Key by productId
         }));
     };
 
-    // Handle review submit (you can connect this to your API)
-    const handleSubmitReview = async (orderId) => {
-        setReviewSubmitting((prev) => ({ ...prev, [orderId]: true }));
+    // Handle review submit - now takes productId and productCategory
+    // You have access to item.productCategory from the orderItemSchema
+    const handleSubmitReview = async (productId, productCategory) => { // ADDED productCategory here
+        console.log(`Frontend - Submitting review for productId: ${productId}, category: ${productCategory}`); // Debug log
+
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            setReviewError((prev) => ({ ...prev, [productId]: 'Please log in to submit a review.' }));
+            return;
+        }
+
+        const reviewText = reviewInputs[productId];
+        if (!reviewText || reviewText.trim() === "") {
+            setReviewError((prev) => ({ ...prev, [productId]: 'Review cannot be empty.' }));
+            return;
+        }
+
+        setReviewSubmitting((prev) => ({ ...prev, [productId]: true }));
+        setReviewSuccess((prev) => ({ ...prev, [productId]: false }));
+        setReviewError((prev) => ({ ...prev, [productId]: null })); // Clear previous error
+
         try {
-            // Example: await axios.post('/api/reviews', { orderId, review: reviewInputs[orderId] });
-            // Show a toast or notification if needed
-            setReviewInputs((prev) => ({ ...prev, [orderId]: "" }));
-        } catch (e) {
-            // Handle error
+            console.log("Frontend - Review payload:", {
+                productId: productId,
+                productCategory: productCategory, // NEW: Include productCategory in payload
+                userId: userId,
+                comment: reviewText,
+            });
+
+            const response = await axios.post('http://localhost:5000/api/reviews/', {
+                productId: productId,
+                productCategory: productCategory, // NEW: Send productCategory
+                userId: userId,
+                comment: reviewText,
+            });
+
+            console.log('Review submitted successfully:', response.data);
+            setReviewSuccess((prev) => ({ ...prev, [productId]: true }));
+            setReviewInputs((prev) => ({ ...prev, [productId]: "" })); // Clear input after success
+
+        } catch (error) {
+            console.error('Error submitting review:', error);
+            let errorMessage = 'Failed to submit review. Please try again.';
+            if (error.response && error.response.data && error.response.data.message) {
+                errorMessage = error.response.data.message;
+            }
+            setReviewError((prev) => ({ ...prev, [productId]: errorMessage }));
         } finally {
-            setReviewSubmitting((prev) => ({ ...prev, [orderId]: false }));
+            setReviewSubmitting((prev) => ({ ...prev, [productId]: false }));
+            // Set a timeout to clear success/error messages after a few seconds
+            setTimeout(() => {
+                setReviewSuccess((prev) => ({ ...prev, [productId]: false }));
+                setReviewError((prev) => ({ ...prev, [productId]: null }));
+            }, 5000); // Clear after 5 seconds
         }
     };
 
@@ -110,9 +146,9 @@ const OrderHistory = () => {
             {/* Order Cards */}
             <div className="space-y-4">
                 {filteredOrders.length > 0 ? (
-                    filteredOrders.map((order, index) => (
+                    filteredOrders.map((order) => ( // Use order._id as key for the order card
                         <div
-                            key={index}
+                            key={order._id} // Use order._id for the key of the order
                             className="border border-[#E9E9E9] py-[11px] px-[16px] rounded-[8px] shadow-sm hover:shadow-md transition"
                         >
                             <div className="flex items-center justify-between">
@@ -143,30 +179,40 @@ const OrderHistory = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <MyorderRightArrow /> */}
                             </div>
-                            {/* Review input for delivered orders */}
-                            {order.status === "delivered" && (
-                                <div className="mt-4 border-t pt-4">
+
+                            {/* Loop through each item in the order to allow individual reviews */}
+                            {order.status === "delivered" && order.orderItems && order.orderItems.map((item) => (
+                                <div key={item.productId} className="mt-4 border-t pt-4">
+                                    <h4 className="text-md font-semibold mb-2">Review for: {item.name}</h4>
                                     <label className="block text-sm font-medium mb-1 text-gray-700">
-                                        Add a Review for this product:
+                                        Add a Review:
                                     </label>
                                     <textarea
                                         className="border rounded-md p-2 w-full min-h-[60px] resize-y focus:outline-none focus:border-black"
                                         placeholder="Write your review here..."
-                                        value={reviewInputs[order._id] || ""}
-                                        onChange={e => handleReviewChange(order._id, e.target.value)}
-                                        disabled={reviewSubmitting[order._id]}
+                                        value={reviewInputs[item.productId] || ""}
+                                        onChange={e => handleReviewChange(item.productId, e.target.value)}
+                                        disabled={reviewSubmitting[item.productId]}
                                     />
                                     <button
                                         className="mt-2 bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 transition-colors"
-                                        onClick={() => handleSubmitReview(order._id)}
-                                        disabled={reviewSubmitting[order._id] || !(reviewInputs[order._id] && reviewInputs[order._id].trim())}
+                                        // NEW: Pass item.productCategory to handleSubmitReview
+                                        onClick={() => handleSubmitReview(item.productId, item.productCategory)}
+                                        disabled={reviewSubmitting[item.productId] || !(reviewInputs[item.productId] && reviewInputs[item.productId].trim())}
                                     >
-                                        {reviewSubmitting[order._id] ? "Submitting..." : "Submit Review"}
+                                        {reviewSubmitting[item.productId] ? "Submitting..." : "Submit Review"}
                                     </button>
+
+                                    {/* Success/Error Messages for THIS product review */}
+                                    {reviewSuccess[item.productId] && (
+                                        <p className="text-green-600 text-sm mt-1">Review submitted successfully for {item.name}!</p>
+                                    )}
+                                    {reviewError[item.productId] && (
+                                        <p className="text-red-600 text-sm mt-1">{reviewError[item.productId]}</p>
+                                    )}
                                 </div>
-                            )}
+                            ))}
                         </div>
                     ))
                 ) : (
