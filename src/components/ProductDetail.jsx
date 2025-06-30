@@ -274,7 +274,7 @@ const ProductDetail = () => {
                 {relatedProducts.length > 0 && (
                     <div className="mt-16">
                         <h2 className="text-2xl font-bold mb-8 text-center">You May Also Like</h2>
-                        <div className="flex gap-5 mt-5 justify-between">
+                        <div className="flex gap-5 mt-5">
                             {relatedProducts.map((p) => (
                                 <Product key={p.id} product={{ ...p, category: category }} columns={4} />
                             ))}
