@@ -1,6 +1,5 @@
-import React, { useRef, useEffect } from 'react'; // Removed useState
-import ramadanimage from '../assets/ramadan.png';
-import eidimage from '../assets/eid.png';
+import React, { useRef, useEffect } from 'react';
+import eidimage from '../assets/Eid.png';
 import birthdayimage from '../assets/birthday.png';
 import companyimage from '../assets/company.webp';
 import weddingGiftImg from '../assets/weddingGiftsImg.jpg';
