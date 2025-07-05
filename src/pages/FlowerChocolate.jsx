@@ -76,32 +76,41 @@ const FlowerChocolate = () => {
         <div>
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Flowers & Chocolates Bouquets" titleHome="Home Page" backgroundColor='#FBF4E8' />
-            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
-                <p className={`cursor-pointer ${selectedCategory === 'flowers' ? 'underline' : ''}`} onClick={() => handleCategorySelect('flowers')}>Flowers Bouquets</p>
-                <p className={`cursor-pointer ${selectedCategory === 'chocolates' ? 'underline' : ''}`} onClick={() => handleCategorySelect('chocolates')}>Chocolates Bouquets</p>
-                <p className={`cursor-pointer ${selectedCategory === 'flowerschocolates' ? 'underline' : ''}`} onClick={() => handleCategorySelect('flowerschocolates')}>Flowers & Chocolates Bouquets</p>
+            <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2'>
+                <p className={`cursor-pointer ${selectedCategory === 'flowers' ? 'underline' : ''}`} onClick={() => handleCategorySelect('flowers')}>
+                    <span className="hidden sm:inline">Flowers Bouquets</span>
+                    <span className="sm:hidden">Flowers</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'chocolates' ? 'underline' : ''}`} onClick={() => handleCategorySelect('chocolates')}>
+                    <span className="hidden sm:inline">Chocolates Bouquets</span>
+                    <span className="sm:hidden">Chocolates</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'flowerschocolates' ? 'underline' : ''}`} onClick={() => handleCategorySelect('flowerschocolates')}>
+                    <span className="hidden sm:inline">Flowers & Chocolates Bouquets</span>
+                    <span className="sm:hidden">Both</span>
+                </p>
             </div>
 
-            <div className="px-16 py-10 flex justify-between">
+            <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
                 {/* Left sidebar is removed from here */}
 
                 <div className="w-full transition-all duration-300"> {/* Adjusted width to w-full */}
                     {/* filters */}
                     <div className="flex flex-col flex-wrap gap-3">
-                        <div className="flex items-center justify-between space-x-6">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0 sm:space-x-6">
                             {/* Layout Switch Buttons */}
                             <div className="flex items-center space-x-4">
                                 {/* Removed Filters button */}
                                 <div className="flex space-x-2">
-                                    <div className={`border ${columns === 3 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                    <div className={`border ${columns === 3 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer hidden sm:block`}
                                         onClick={() => handleColumnChange(3)}>
                                         <ThreeBars fillColor={columns === 3 ? "white" : "#A0A0A0"} />
                                     </div>
-                                    <div className={`border ${columns === 4 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                    <div className={`border ${columns === 4 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer hidden sm:block`}
                                         onClick={() => handleColumnChange(4)}>
                                         <FourBars fillColor={columns === 4 ? "white" : "#A0A0A0"} />
                                     </div>
-                                    <div className={`border ${columns === 5 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                    <div className={`border ${columns === 5 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer hidden sm:block`}
                                         onClick={() => handleColumnChange(5)}>
                                         <FiveBars fillColor={columns === 5 ? "white" : "#A0A0A0"} />
                                     </div>
@@ -109,15 +118,15 @@ const FlowerChocolate = () => {
                             </div>
                         </div>
 
-                        <div className="flex gap-3 items-center mt-2">
-                            <span className="text-[#696C70] font-medium">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
+                        <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
+                            <span className="text-[#696C70] font-medium text-xs sm:text-sm">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
 
                             <HerLine />
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-1 sm:gap-2">
                                 {/* Selected Category */}
                                 {selectedCategory && (
-                                    <span className="px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center">
-                                        <button onClick={() => setSelectedCategory("")} className="mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
+                                    <span className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => setSelectedCategory("")} className="mr-1 sm:mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
                                         {selectedCategory}
 
                                     </span>
@@ -125,16 +134,16 @@ const FlowerChocolate = () => {
 
                                 {/* Price Range */}
                                 {(minPrice > 0 || maxPrice < 1000) && (
-                                    <span className="px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center">
-                                        <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-2 text-green-800 hover:text-green-900"><HerHorLine /></button>
+                                    <span className="px-2 sm:px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-1 sm:mr-2 text-green-800 hover:text-green-900"><HerHorLine /></button>
                                         PKR {minPrice} - PKR {maxPrice}
                                     </span>
                                 )}
 
                                 {/* Selected Hobbies & Interests */}
                                 {selectedFilters.map((filter) => (
-                                    <span key={filter} className="px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center">
-                                        <button onClick={() => removeFilter(filter)} className="mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
+                                    <span key={filter} className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => removeFilter(filter)} className="mr-1 sm:mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
                                         {filter}
                                     </span>
                                 ))}
@@ -142,8 +151,10 @@ const FlowerChocolate = () => {
 
                             {/* Clear All Button */}
                             {(selectedFilters.length > 0 || selectedCategory || minPrice > 0 || maxPrice < 1000) && (
-                                <button onClick={clearAllFilters} className="flex items-center gap-2 border border-[#DB4444] px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full ml-4">
-                                    <HerCross strokeColor="#DB4444" /> Clear All
+                                <button onClick={clearAllFilters} className="flex items-center gap-1 sm:gap-2 border border-[#DB4444] px-2 sm:px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full ml-2 sm:ml-4 text-xs sm:text-sm">
+                                    <HerCross strokeColor="#DB4444" /> 
+                                    <span className="hidden sm:inline">Clear All</span>
+                                    <span className="sm:hidden">Clear</span>
                                 </button>
                             )}
 
@@ -151,7 +162,7 @@ const FlowerChocolate = () => {
                     </div>
 
                     {/* products */}
-                    <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
+                    <div className={`justify-items-center grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-${columns} gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300`}>
                         {giftsForEveryoneProducts.map((product) => (
                             <Product
                                 key={product.id}

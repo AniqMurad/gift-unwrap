@@ -185,29 +185,29 @@ const Checkout = () => {
             <SearchPageNavbar title="Checkout" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <form onSubmit={handleSubmitOrder}>
-                <div className="flex flex-col lg:flex-row px-4 sm:px-8 md:px-16 py-10 lg:py-20 justify-between gap-8">
+                <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between gap-6 lg:gap-8">
 
                     {/* Left div - Information & Payment */}
-                    <div className='w-full lg:w-[60%] xl:w-[630px] space-y-8'>
+                    <div className='w-full lg:w-[60%] xl:w-[630px] space-y-5 lg:space-y-6'>
 
                         {/* Login Prompt */}
 
-                        <div className="space-y-5">
-                            <h2 className="text-[24px] md:text-[30px] font-semibold">Shipping Information</h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-3 sm:space-y-4">
+                            <h2 className="text-xl sm:text-2xl lg:text-[30px] font-semibold">Shipping Information</h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 {/* --- Your existing form fields with value, name, and onChange --- */}
-                                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
-                                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
-                                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
-                                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
+                                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
+                                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
+                                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" required />
+                                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" required />
 
-                                <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country/Region *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
+                                <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country/Region *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" required />
 
-                                <input type="text" name="street" value={formData.street} onChange={handleChange} placeholder="Street Address *" className="border px-[16px] py-[11px] rounded-[8px] w-full sm:col-span-2" required />
-                                <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="Town / City *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
+                                <input type="text" name="street" value={formData.street} onChange={handleChange} placeholder="Street Address *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" required />
+                                <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="Town / City *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
 
-                                <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder="State *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
-                                <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Postal Code *" className="border px-[16px] py-[11px] rounded-[8px] w-full" required />
+                                <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder="State *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
+                                <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Postal Code *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
 
                                 <textarea
                                     name="additionalInfo"
@@ -215,17 +215,17 @@ const Checkout = () => {
                                     placeholder='Order notes (optional)...'
                                     value={formData.additionalInfo}
                                     onChange={handleChange}
-                                    className="w-full border border-[#E9E9E9] rounded-[8px] px-[16px] py-[11px] bg-transparent focus:outline-none resize-none sm:col-span-2"
+                                    className="w-full border border-[#E9E9E9] rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 bg-transparent focus:outline-none resize-none sm:col-span-2 text-sm sm:text-base"
                                 />
                             </div>
                         </div>
 
                         {/* Payment Option */}
-                        <div className="space-y-5">
-                            <h2 className="text-[24px] md:text-[30px] font-semibold">Payment Option</h2>
+                        <div className="space-y-4 sm:space-y-5">
+                            <h2 className="text-xl sm:text-2xl lg:text-[30px] font-semibold">Payment Option</h2>
                             
                             {/* Credit Card Option - DISABLED */}
-                            <div className="rounded-[8px] p-[20px] bg-[#F5F5F5] border border-[#E0E0E0] opacity-60">
+                            <div className="rounded-lg p-4 sm:p-5 bg-[#F5F5F5] border border-[#E0E0E0] opacity-60">
                                 <div className='flex items-center gap-2 mb-2'>
                                     <input 
                                         type="radio" 
@@ -235,23 +235,23 @@ const Checkout = () => {
                                         disabled 
                                         className="form-radio h-4 w-4 text-gray-400 cursor-not-allowed" 
                                     />
-                                    <label htmlFor="creditCard" className="font-medium text-gray-500 cursor-not-allowed">Credit Card</label>
+                                    <label htmlFor="creditCard" className="font-medium text-gray-500 cursor-not-allowed text-sm sm:text-base">Credit Card</label>
                                     <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full ml-2">Disabled</span>
                                 </div>
-                                <p className='text-[14px] text-[#999999] mt-2'>
+                                <p className='text-xs sm:text-sm text-[#999999] mt-2'>
                                     Online payment is not available right now. Please use Cash on Delivery.
                                 </p>
                             </div>
 
                             {/* Cash on Delivery Option */}
-                            <div className={`rounded-[8px] p-[20px] cursor-pointer ${paymentMethod === 'cod' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`} onClick={() => setPaymentMethod('cod')}>
+                            <div className={`rounded-lg p-4 sm:p-5 cursor-pointer ${paymentMethod === 'cod' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`} onClick={() => setPaymentMethod('cod')}>
                                 <div className='flex items-center gap-2'>
                                     <input type="radio" id="cod" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="form-radio h-4 w-4 text-blue-600" />
-                                    <label htmlFor="cod" className="font-medium">Cash on Delivery</label>
+                                    <label htmlFor="cod" className="font-medium text-sm sm:text-base">Cash on Delivery</label>
                                     <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full ml-2">Available</span>
                                 </div>
                                 {paymentMethod === 'cod' && (
-                                    <p className='text-[14px] text-[#696C70] mt-2'>Pay with cash upon delivery.</p>
+                                    <p className='text-xs sm:text-sm text-[#696C70] mt-2'>Pay with cash upon delivery.</p>
                                 )}
                             </div>
                         </div>
@@ -259,17 +259,17 @@ const Checkout = () => {
                         {/* Submit Button - Ensure it's inside the form */}
                         <button
                             type="submit"
-                            className='w-full bg-black text-white text-[16px] font-semibold mt-8 px-[40px] py-[14px] rounded-[12px] uppercase hover:bg-gray-800 transition-colors disabled:opacity-50'
+                            className='w-full bg-black text-white text-sm sm:text-base font-semibold mt-6 lg:mt-8 px-6 sm:px-10 py-3 sm:py-4 rounded-lg uppercase hover:bg-gray-800 transition-colors disabled:opacity-50'
                             disabled={cartItems.length === 0 || isLoading} // <--- 5. Disable button when loading or cart is empty
                         >
                             {isLoading ? 'Processing...' : 'Place Order'} {/* <--- 4. Show loader text */}
                         </button>
                     </div>
 
-                    <CheckoutLine className="hidden lg:block" />
+                    {/* <CheckoutLine className="hidden lg:block" /> */}
 
                     {/* Right div - Order Summary */}
-                    <div className='w-full lg:w-[40%] xl:w-[520px] mt-10 lg:mt-0'>
+                    <div className='w-full lg:w-[40%] xl:w-[520px] mt-6 lg:mt-0'>
                         <OrderSummary
                             cartItems={cartItems}
                             subtotal={subtotal}

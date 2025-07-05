@@ -126,12 +126,12 @@ const Signup = () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Create An Account" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-            <div className="flex px-16 py-20 justify-between items-center">
+            <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between items-start gap-6 lg:gap-8">
 
-                <div className="w-[580px]">
-                    <h2 className="text-[30px] font-semibold mb-6">Register</h2>
+                <div className="w-full lg:w-[580px]">
+                    <h2 className="text-2xl sm:text-3xl lg:text-[30px] font-semibold mb-4 sm:mb-6">Register</h2>
                     {generalError && (
-                        <p className={`mb-4 ${generalError.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
+                        <p className={`mb-4 text-sm sm:text-base ${generalError.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
                             {generalError}
                         </p>
                     )}
@@ -160,28 +160,28 @@ const Signup = () => {
                         onChange={handleInputChange}
                         error={errors.confirmPassword}
                     />
-                    <div className="flex justify-between items-center mt-4 mb-4">
-                        <div className="flex items-center cursor-pointer" onClick={handleTermsChange}>
+                    <div className="flex items-start mt-4 mb-4">
+                        <div className="flex items-start cursor-pointer" onClick={handleTermsChange}>
                             <RememberIcon checked={formData.agreeToTerms} />
-                            <span className="text-[#A0A0A0] ml-2">
+                            <span className="text-[#A0A0A0] ml-2 text-xs sm:text-sm lg:text-base leading-tight">
                                 I agree to the <span className="text-[#1F1F1F]">Terms of Use</span>
                             </span>
                         </div>
                     </div>
-                    {errors.agreeToTerms && <p className="text-red-600 mb-2">{errors.agreeToTerms}</p>}
-                    <button className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 uppercase cursor-pointer" onClick={handleRegister}>
+                    {errors.agreeToTerms && <p className="text-red-600 mb-2 text-sm sm:text-base">{errors.agreeToTerms}</p>}
+                    <button className="bg-black text-xs sm:text-sm text-white px-6 sm:px-8 lg:px-[40px] py-3 sm:py-4 lg:py-[16px] rounded-lg lg:rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200" onClick={handleRegister}>
                         REGISTER
                     </button>
                 </div>
 
-                <LoginLine />
+                {/* <LoginLine className="hidden lg:block" /> */}
 
-                <div className="w-[580px]">
-                    <h2 className="text-[30px] font-semibold mb-2">Already have an account?</h2>
-                    <p className="text-[#696C70] text-[16px] mb-4">
+                <div className="w-full lg:w-[580px] mt-6 lg:mt-0">
+                    <h2 className="text-2xl sm:text-3xl lg:text-[30px] font-semibold mb-2">Already have an account?</h2>
+                    <p className="text-[#696C70] text-sm sm:text-base mb-4">
                         Welcome back. Sign in to access your personalized experience, saved preferences, and more. We're thrilled to have you with us again!
                     </p>
-                    <button className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 uppercase cursor-pointer" onClick={handleLogin}>
+                    <button className="bg-black text-xs sm:text-sm text-white px-6 sm:px-8 lg:px-[40px] py-3 sm:py-4 lg:py-[16px] rounded-lg lg:rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200" onClick={handleLogin}>
                         LOGIN
                     </button>
                 </div>

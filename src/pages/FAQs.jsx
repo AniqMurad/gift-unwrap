@@ -57,16 +57,32 @@ const FAQs = () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="FAQs" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-            <div className='px-16 py-14 flex justify-between'>
+            <div className='px-4 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-14 flex flex-col lg:flex-row gap-6 lg:gap-8'>
 
                 {/* Sidebar Categories */}
-                <div className='w-[300px]'>
-                    <ul className="font-medium text-[#A0A0A0] text-[20px]">
+                <div className='w-full lg:w-[300px] order-2 lg:order-1'>
+                    {/* Mobile dropdown for categories */}
+                    <div className="lg:hidden mb-4">
+                        <select 
+                            value={selectedCategory} 
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="w-full p-3 border border-gray-300 rounded-lg text-base bg-white"
+                        >
+                            {categories.map((category) => (
+                                <option key={category} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    {/* Desktop sidebar */}
+                    <ul className="hidden lg:block font-medium text-[#A0A0A0] text-lg">
                         {categories.map((category) => (
                             <li
                                 key={category}
                                 onClick={() => handleCategoryClick(category)}
-                                className={`mb-2 cursor-pointer px-4 py-1 rounded-lg transition text-[20px] ${selectedCategory === category
+                                className={`mb-2 cursor-pointer px-4 py-2 rounded-lg transition text-base lg:text-lg ${selectedCategory === category
                                     ? "font-bold text-black underline"
                                     : "hover:bg-white"
                                     }`}
@@ -78,15 +94,15 @@ const FAQs = () => {
                 </div>
 
                 {/* FAQ Section - Displays questions based on selected category */}
-                <div className='w-[850px]'>
-                    <Accordion type="multiple" className="space-y-4">
+                <div className='w-full lg:w-[850px] order-1 lg:order-2'>
+                    <Accordion type="multiple" className="space-y-3 sm:space-y-4">
                         {questionsByCategory[selectedCategory].map((item, index) => (
                             <AccordionItem key={index} value={`item-${index}`} className="border-none">
-                                <div className="border border-[#E9E9E9] rounded-[20px] overflow-hidden">
-                                    <AccordionTrigger className="px-6 py-4 text-[20px] font-semibold w-full">
+                                <div className="border border-[#E9E9E9] rounded-lg sm:rounded-[20px] overflow-hidden">
+                                    <AccordionTrigger className="px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg lg:text-[20px] font-semibold w-full text-left">
                                         {item.question}
                                     </AccordionTrigger>
-                                    <AccordionContent className="px-6 pb-4 text-gray-600 text-[18px]">
+                                    <AccordionContent className="px-4 sm:px-6 pb-3 sm:pb-4 text-gray-600 text-sm sm:text-base lg:text-[18px] leading-relaxed">
                                         {item.answer}
                                     </AccordionContent>
                                 </div>

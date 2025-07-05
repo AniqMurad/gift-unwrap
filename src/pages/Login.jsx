@@ -131,10 +131,10 @@ const handleLogin = async () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Login" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-            <div className="flex px-16 py-20 justify-between items-start">
+            <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between items-start gap-6 lg:gap-8">
 
-                <div className="w-[580px]">
-                    <h2 className="text-[30px] font-semibold mb-6">Login</h2>
+                <div className="w-full lg:w-[580px]">
+                    <h2 className="text-2xl sm:text-3xl lg:text-[30px] font-semibold mb-4 sm:mb-6">Login</h2>
                     <UsernameField
                         value={formData.email}
                         onChange={handleInputChange}
@@ -147,18 +147,18 @@ const handleLogin = async () => {
                         error={errors.password}
                         disabled={isLoading}
                     />
-                    <div className="flex justify-between items-center mt-4 mb-4">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mt-4 mb-4">
                         <div className={`flex items-center ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={!isLoading ? () => {/* Handle remember me toggle */ } : undefined}>
                             <RememberIcon />
-                            <span className="text-[#1F1F1F] ml-2">Remember me</span>
+                            <span className="text-[#1F1F1F] ml-2 text-sm sm:text-base">Remember me</span>
                         </div>
-                        <a className={`text-[16px] underline font-semibold ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`} onClick={!isLoading ? handleForgotPass : undefined}>
+                        <a className={`text-sm sm:text-base underline font-semibold ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`} onClick={!isLoading ? handleForgotPass : undefined}>
                             Forgot Your Password?
                         </a>
                     </div>
                     <div className="mt-4 h-[58px]">
                         <button
-                            className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50"
+                            className="bg-black text-xs sm:text-sm text-white px-6 sm:px-8 lg:px-[40px] py-3 sm:py-4 lg:py-[16px] rounded-lg lg:rounded-[12px] w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50"
                             onClick={handleLogin}
                             disabled={isLoading}
                         >
@@ -167,16 +167,16 @@ const handleLogin = async () => {
                     </div>
                 </div>
 
-                <LoginLine />
+                {/* <LoginLine className="hidden lg:block" /> */}
 
-                <div className="w-[580px]">
-                    <h2 className="text-[30px] font-semibold mb-2">New Customer</h2>
-                    <p className="text-[#696C70] text-[16px] mb-4">
+                <div className="w-full lg:w-[580px] mt-6 lg:mt-0">
+                    <h2 className="text-2xl sm:text-3xl lg:text-[30px] font-semibold mb-2">New Customer</h2>
+                    <p className="text-[#696C70] text-sm sm:text-base mb-4">
                         Be part of our growing family of new customers! Join us today and unlock
                         a world of exclusive benefits, offers, and personalized experiences.
                     </p>
                     <button
-                        className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200"
+                        className="bg-black text-xs sm:text-sm text-white px-6 sm:px-8 lg:px-[40px] py-3 sm:py-4 lg:py-[16px] rounded-lg lg:rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200"
                         onClick={handleSignup}
                         disabled={isLoading}
                     >
