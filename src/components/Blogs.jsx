@@ -3,11 +3,11 @@ import { blogData } from '../components/BlogData';
 
 const Blogs = () => {
     return (
-        <div className='px-16 py-12'>
+        <div className='px-4 sm:px-8 lg:px-16 py-12'>
             <h1 className='flex justify-center font-bold text-3xl'>Blogs</h1>
-            <div className='flex justify-between gap-5 mt-8'>
+            <div className='flex flex-col sm:flex-row sm:justify-between gap-5 mt-8'>
                 {blogData.slice(0, 3).map((blog) => (
-                    <Link key={blog.id} to={`/blog/${blog.id}`} className='w-[410px]'>
+                    <Link key={blog.id} to={`/blog/${blog.id}`} className='w-full sm:w-[410px]'>
                         <div className='cursor-pointer'>
                             <img src={blog.image} className="w-full h-[275px] object-cover rounded-[20px]" />
                             <div className="mt-6">
