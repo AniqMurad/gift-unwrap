@@ -95,7 +95,7 @@ const MyAccount = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/change-password', {
+            const response = await axios.post('https://giftunwrap-puce.vercel.app/api/auth/change-password', {
                 email: userData.email,
                 currentPassword: currentPassword,
                 newPassword: newPassword

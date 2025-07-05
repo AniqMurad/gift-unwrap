@@ -28,7 +28,7 @@ const SearchOutput = () => {
     
         // Refetching only if allProducts is empty (first load)
         if (allProducts.length === 0) {
-            fetch('http://localhost:5000/api/products/')
+            fetch('https://giftunwrap-puce.vercel.app/api/products/')
                 .then(res => {
                     if (!res.ok) throw new Error('Failed to fetch products');
                     return res.json();
