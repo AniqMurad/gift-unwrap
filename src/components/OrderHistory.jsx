@@ -24,7 +24,7 @@ const OrderHistory = () => {
                     return;
                 }
 
-                const response = await axios.get('https://giftunwrap-puce.vercel.app/api/orders/');
+                const response = await axios.get('https://giftunwrapbackend.vercel.app/api/orders/');
                 const allOrders = response.data;
                 const userOrders = allOrders.filter(order => order.user === loggedInUserId);
                 const sortedOrders = userOrders.sort((a, b) =>
@@ -96,7 +96,7 @@ const OrderHistory = () => {
         setReviewSubmitting((prev) => ({ ...prev, [orderItemNumericProductId]: true }));
         try {
             // The productId in the URL is now the NUMERIC 'id' of the product from orderItem
-            await axios.post(`https://giftunwrap-puce.vercel.app/api/products/${orderItemNumericProductId}/reviews`, {
+            await axios.post(`https://giftunwrapbackend.vercel.app/api/products/${orderItemNumericProductId}/reviews`, {
                 userId,
                 rating,
                 comment: reviewText.trim()

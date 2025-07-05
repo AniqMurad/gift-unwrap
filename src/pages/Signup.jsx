@@ -97,7 +97,7 @@ const Signup = () => {
 
         // 🔗 API call
         try {
-            const res = await axios.post('https://giftunwrap-puce.vercel.app/api/auth/register', {
+            const res = await axios.post('https://giftunwrapbackend.vercel.app/api/auth/register', {
                 email: formData.email,
                 password: formData.password,
                 confirmPassword: formData.confirmPassword,

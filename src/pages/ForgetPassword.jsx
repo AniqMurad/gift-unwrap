@@ -35,7 +35,7 @@ const ForgetPassword = () => {
         }
 
         try {
-            const res = await axios.post('https://giftunwrap-puce.vercel.app/api/auth/forgot-password', { email: formData.email });
+            const res = await axios.post('https://giftunwrapbackend.vercel.app/api/auth/forgot-password', { email: formData.email });
             console.log('Response:', res.data); // Log response here
             setToken(res.data.token); // Assuming your backend sends a token
             setStep('reset');
@@ -57,7 +57,7 @@ const ForgetPassword = () => {
 
         try {
             // Send email and password for reset
-            await axios.post('https://giftunwrap-puce.vercel.app/api/auth/reset-password', {
+            await axios.post('https://giftunwrapbackend.vercel.app/api/auth/reset-password', {
                 email: formData.email, // Include email here
                 password: formData.password,
             });
