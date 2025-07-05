@@ -165,15 +165,28 @@ const BirthdayGifts = () => {
                     </div>
 
                     {/* products */}
-                    <div className={`justify-items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-${columns} gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300`}>
-                        {giftsForBirthdayProducts.map((product) => (
-                            <Product
-                                key={product.id}
-                                product={{ ...product, category: "birthday" }}
-                                columns={columns}
-                            />
-                        ))}
-                    </div>
+                    {giftsForBirthdayProducts.length > 0 ? (
+                        <div className={`justify-items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-${columns} gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300`}>
+                            {giftsForBirthdayProducts.map((product) => (
+                                <Product
+                                    key={product.id}
+                                    product={{ ...product, category: "birthday" }}
+                                    columns={columns}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center py-16 sm:py-20 lg:py-24">
+                            <div className="text-center">
+                                <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-600 mb-4">
+                                    No Products Available
+                                </h3>
+                                <p className="text-sm sm:text-base text-gray-500">
+                                    Sorry, there are no products available in this category at the moment.
+                                </p>
+                            </div>
+                        </div>
+                    )}
 
                     {/* paging */}
                     {/* <div className="flex justify-center mt-10">
