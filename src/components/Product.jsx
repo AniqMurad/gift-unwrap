@@ -40,7 +40,10 @@ const Product = ({ product, columns }) => {
         toggleWishlist(product, category);
     };
 
-    const containerWidthClass = columns === 5 ? 'w-auto' : 'w-[300px]';
+    // Updated responsive width classes
+    const containerWidthClass = columns === 5 
+        ? 'w-auto' 
+        : 'w-full max-w-[160px] sm:max-w-[200px] lg:max-w-[300px]';
 
     return (
         <div className={`${containerWidthClass} group mb-6`}>
@@ -53,33 +56,33 @@ const Product = ({ product, columns }) => {
                 />
                 
                 <div className="absolute inset-0 flex items-center justify-center z-10">
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex space-x-3">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex space-x-2 sm:space-x-3">
                     <button
                         onClick={handleNavigateToDetail}
-                        className="p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer"
+                        className="p-2 sm:p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer"
                         aria-label="View Product"
                     >
-                        <DetailEyeIcon className="w-5 h-5 text-black" />
+                        <DetailEyeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
                     </button>
 
                     <button
                         onClick={handleAddToCart}
-                        className="p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer"
+                        className="p-2 sm:p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer"
                         aria-label="Add to Cart"
                     >
-                        <CartIcon className="w-5 h-5 text-black" />
+                        <CartIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
                     </button>
                 </div>
             </div>
 
                 {product.discountPercentage > 0 && (
-                    <p className="bg-red-400 font-semibold px-3 py-1 text-xs text-white w-max rounded-[36px] absolute top-[10px] left-[10px] z-20">
+                    <p className="bg-red-400 font-semibold px-2 sm:px-3 py-1 text-xs text-white w-max rounded-[36px] absolute top-[8px] sm:top-[10px] left-[8px] sm:left-[10px] z-20">
                         SALE
                     </p>
                 )}
 
                 <button
-                    className={`p-1 rounded-full absolute top-[10px] right-[10px] cursor-pointer transition-all duration-300 z-20 ${isInWishlist ? "bg-[#DB4444]" : "bg-white"}`}
+                    className={`p-1 rounded-full absolute top-[8px] sm:top-[10px] right-[8px] sm:right-[10px] cursor-pointer transition-all duration-300 z-20 ${isInWishlist ? "bg-[#DB4444]" : "bg-white"}`}
                     onClick={handleWishlistClick}
                     aria-label="Toggle Wishlist"
                 >
@@ -88,11 +91,11 @@ const Product = ({ product, columns }) => {
 
             </div>
 
-            <div className='mt-4'>
+            <div className='mt-3 sm:mt-4'>
                 <Link to={id !== 'no-id' && category !== 'unknown' ? `/product/${category}/${id}` : '#'} className="block">
-                    <p className="font-medium text-gray-800 group-hover:text-black transition-colors truncate">{product.name}</p>
+                    <p className="font-medium text-gray-800 group-hover:text-black transition-colors truncate text-sm sm:text-base">{product.name}</p>
                 </Link>
-                <div className='flex items-center gap-2 text-sm mt-1'>
+                <div className='flex items-center gap-2 text-xs sm:text-sm mt-1'>
                     <span className="font-semibold text-black">Rs {product.price}</span>
                 </div>
             </div>

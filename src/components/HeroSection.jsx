@@ -76,7 +76,7 @@ const HeroSection = () => {
       <div className="w-full md:w-[35%] flex flex-row md:flex-col gap-4">
         {/* Gifts For Him */}
         <div
-            className="w-1/2 md:w-full bg-[#DEFBFF] cursor-pointer flex flex-col justify-between py-5 px-4 rounded-[24px] shadow-md"
+            className="w-1/2 md:w-full bg-[#DEFBFF] cursor-pointer flex flex-row justify-between py-5 px-4 rounded-[24px] shadow-md md:flex-1"
             onClick={() => navigate('/giftforhim')}
         >
             <div>
@@ -95,7 +95,7 @@ const HeroSection = () => {
 
         {/* Gifts For Her */}
         <div
-            className="w-1/2 md:w-full bg-[#F9F1F0] cursor-pointer flex flex-col justify-between py-5 px-4 rounded-[24px] shadow-md"
+            className="w-1/2 md:w-full bg-[#F9F1F0] cursor-pointer flex flex-row justify-between py-5 px-4 rounded-[24px] shadow-md md:flex-1"
             onClick={() => navigate('/giftforher')}
         >
             <div>

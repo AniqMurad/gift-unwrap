@@ -52,7 +52,6 @@ const ProductPage = ({ title, category }) => {
         <div className='px-4 sm:px-6 lg:px-16 py-4'>
             <div className='flex flex-col lg:flex-row justify-between gap-4'>
                 <h2 className="text-3xl font-bold">{title}</h2>
-
                 {/* Filter: Hidden below lg */}
                 <div className='hidden lg:flex flex-wrap gap-[8px] bg-[#F7F7F7] rounded-[16px] py-[4px] px-[8px]'>
                     {subcategories.map((sub) => (
@@ -69,23 +68,20 @@ const ProductPage = ({ title, category }) => {
                     ))}
                 </div>
             </div>
-
-            {/* Products: Flex layout for better centering */}
-            <div className={`flex flex-wrap gap-5 mt-6 
-                justify-center 
-                sm:justify-center 
-                lg:justify-between`}>
+            
+            {/* Products: Grid layout for better responsive control */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 mt-6 justify-items-center">
                 {filteredProducts.length > 0 ? (
                     filteredProducts.map((item) => (
-                        <div
-                            key={item.id}
-                            className='w-full sm:w-[48%] lg:w-[23%] flex justify-center'
-                        >
-                            <Product product={{ ...item, category }} />
-                        </div>
+                        <Product 
+                            key={item.id} 
+                            product={{ ...item, category }} 
+                        />
                     ))
                 ) : (
-                    <p className="mt-5 text-center w-full">No products available</p>
+                    <div className="col-span-full">
+                        <p className="text-center">No products available</p>
+                    </div>
                 )}
             </div>
         </div>
