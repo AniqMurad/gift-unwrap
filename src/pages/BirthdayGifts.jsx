@@ -74,20 +74,32 @@ const BirthdayGifts = () => {
         <div>
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Birthday Gifts" titleHome="Home Page" backgroundColor='#FBF4E8' />
-            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
-                <p className={`cursor-pointer ${selectedCategory === 'his birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('his birthday')}>His Birthday</p>
-                <p className={`cursor-pointer ${selectedCategory === 'her birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('her birthday')}>Her birthday</p>
-                <p className={`cursor-pointer ${selectedCategory === 'employee birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('employee birthday')}>Employee Birthday</p>
-                <p className={`cursor-pointer ${selectedCategory === 'baby birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('baby birthday')}>Babies Birthday</p>
+            <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-xs sm:text-sm lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2 sm:px-4'>
+                <p className={`cursor-pointer ${selectedCategory === 'his birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('his birthday')}>
+                    <span className="sm:hidden">His Birthday</span>
+                    <span className="hidden sm:inline">His Birthday</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'her birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('her birthday')}>
+                    <span className="sm:hidden">Her Birthday</span>
+                    <span className="hidden sm:inline">Her birthday</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'employee birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('employee birthday')}>
+                    <span className="sm:hidden">Employee</span>
+                    <span className="hidden sm:inline">Employee Birthday</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'baby birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('baby birthday')}>
+                    <span className="sm:hidden">Baby</span>
+                    <span className="hidden sm:inline">Babies Birthday</span>
+                </p>
             </div>
 
-            <div className="px-16 py-10 flex justify-between">
+            <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
                 <div className="w-full transition-all duration-300">
                     {/* filters */}
-                    <div className="flex flex-col flex-wrap gap-3">
-                        <div className="flex items-center justify-between space-x-6">
-                            {/* Layout Switch Buttons */}
-                            <div className="flex items-center space-x-4">
+                    <div className="flex flex-col gap-3">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
+                            {/* Layout Switch Buttons - Hidden on mobile */}
+                            <div className="hidden sm:flex items-center space-x-4">
                                 <div className="flex space-x-2">
                                     <div className={`border ${columns === 3 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
                                         onClick={() => handleColumnChange(3)}>
@@ -105,31 +117,38 @@ const BirthdayGifts = () => {
                             </div>
                         </div>
 
-                        <div className="flex gap-3 items-center mt-2">
-                            <span className="text-[#696C70] font-medium">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
+                        <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
+                            <span className="text-[#696C70] font-medium text-xs sm:text-sm">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
 
                             <HerLine />
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-1 sm:gap-2">
                                 {/* Selected Category */}
                                 {selectedCategory && (
-                                    <span className="px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center">
-                                        <button onClick={() => setSelectedCategory("")} className="mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
-                                        {selectedCategory}
+                                    <span className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => setSelectedCategory("")} className="mr-1 sm:mr-2 text-gray-500 hover:text-black">X</button>
+                                        <span className="sm:hidden">
+                                            {selectedCategory === 'his birthday' ? 'His Birthday' : 
+                                             selectedCategory === 'her birthday' ? 'Her Birthday' :
+                                             selectedCategory === 'employee birthday' ? 'Employee' :
+                                             selectedCategory === 'baby birthday' ? 'Baby' : selectedCategory}
+                                        </span>
+                                        <span className="hidden sm:inline">{selectedCategory}</span>
                                     </span>
                                 )}
 
                                 {/* Price Range */}
                                 {(minPrice > 0 || maxPrice < 1000) && (
-                                    <span className="px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center">
-                                        <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-2 text-green-800 hover:text-green-900"><HerHorLine /></button>
-                                        PKR {minPrice} - PKR {maxPrice}
+                                    <span className="px-2 sm:px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-1 sm:mr-2 text-green-800 hover:text-green-900">-</button>
+                                        <span className="sm:hidden">₨{minPrice}-{maxPrice}</span>
+                                        <span className="hidden sm:inline">PKR {minPrice} - PKR {maxPrice}</span>
                                     </span>
                                 )}
 
                                 {/* Selected Hobbies & Interests */}
                                 {selectedFilters.map((filter) => (
-                                    <span key={filter} className="px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center">
-                                        <button onClick={() => removeFilter(filter)} className="mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
+                                    <span key={filter} className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => removeFilter(filter)} className="mr-1 sm:mr-2 text-gray-500 hover:text-black">X</button>
                                         {filter}
                                     </span>
                                 ))}
@@ -137,15 +156,16 @@ const BirthdayGifts = () => {
 
                             {/* Clear All Button */}
                             {(selectedFilters.length > 0 || selectedCategory || minPrice > 0 || maxPrice < 1000) && (
-                                <button onClick={clearAllFilters} className="flex items-center gap-2 border border-[#DB4444] px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full ml-4">
-                                    <HerCross strokeColor="#DB4444" /> Clear All
+                                <button onClick={clearAllFilters} className="flex items-center gap-1 sm:gap-2 border border-[#DB4444] px-2 sm:px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full text-xs sm:text-sm">
+                                    <span className="sm:hidden">Clear</span>
+                                    <span className="hidden sm:inline">X Clear All</span>
                                 </button>
                             )}
                         </div>
                     </div>
 
                     {/* products */}
-                    <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
+                    <div className={`justify-items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-${columns} gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300`}>
                         {giftsForBirthdayProducts.map((product) => (
                             <Product
                                 key={product.id}

@@ -74,21 +74,36 @@ const Forcompanies = () => {
         <div>
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Gifts For Companies" titleHome="Home Page" backgroundColor='#FBF4E8' />
-            <div className='bg-[#FBF4E8] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
-                <p className={`cursor-pointer ${selectedCategory === 'newhire' ? 'underline' : ''}`} onClick={() => handleCategorySelect('newhire')}>Gifts For New Hire</p>
-                <p className={`cursor-pointer ${selectedCategory === 'ocassion' ? 'underline' : ''}`} onClick={() => handleCategorySelect('ocassion')}>Gifts For Ocassions</p>
-                <p className={`cursor-pointer ${selectedCategory === 'farewell' ? 'underline' : ''}`} onClick={() => handleCategorySelect('farewell')}>Gifts For Farewell</p>
-                <p className={`cursor-pointer ${selectedCategory === 'achievement' ? 'underline' : ''}`} onClick={() => handleCategorySelect('achievement')}>Gifts for Achievement</p>
-                <p className={`cursor-pointer ${selectedCategory === 'workanniversary' ? 'underline' : ''}`} onClick={() => handleCategorySelect('workanniversary')}>Work Anniversary Gifts</p>
+            <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-xs sm:text-sm lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2 sm:px-4'>
+                <p className={`cursor-pointer ${selectedCategory === 'newhire' ? 'underline' : ''}`} onClick={() => handleCategorySelect('newhire')}>
+                    <span className="sm:hidden">New Hire</span>
+                    <span className="hidden sm:inline">Gifts For New Hire</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'ocassion' ? 'underline' : ''}`} onClick={() => handleCategorySelect('ocassion')}>
+                    <span className="sm:hidden">Occasions</span>
+                    <span className="hidden sm:inline">Gifts For Occasions</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'farewell' ? 'underline' : ''}`} onClick={() => handleCategorySelect('farewell')}>
+                    <span className="sm:hidden">Farewell</span>
+                    <span className="hidden sm:inline">Gifts For Farewell</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'achievement' ? 'underline' : ''}`} onClick={() => handleCategorySelect('achievement')}>
+                    <span className="sm:hidden">Achievement</span>
+                    <span className="hidden sm:inline">Gifts for Achievement</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'workanniversary' ? 'underline' : ''}`} onClick={() => handleCategorySelect('workanniversary')}>
+                    <span className="sm:hidden">Anniversary</span>
+                    <span className="hidden sm:inline">Work Anniversary Gifts</span>
+                </p>
             </div>
 
-            <div className="px-16 py-10 flex justify-between">
+            <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
                 <div className="w-full transition-all duration-300">
                     {/* filters */}
-                    <div className="flex flex-col flex-wrap gap-3">
-                        <div className="flex items-center justify-between space-x-6">
-                            {/* Layout Switch Buttons */}
-                            <div className="flex items-center space-x-4">
+                    <div className="flex flex-col gap-3">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
+                            {/* Layout Switch Buttons - Hidden on mobile */}
+                            <div className="hidden sm:flex items-center space-x-4">
                                 <div className="flex space-x-2">
                                     <div className={`border ${columns === 3 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
                                         onClick={() => handleColumnChange(3)}>
@@ -106,31 +121,39 @@ const Forcompanies = () => {
                             </div>
                         </div>
 
-                        <div className="flex gap-3 items-center mt-2">
-                            <span className="text-[#696C70] font-medium">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
+                        <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
+                            <span className="text-[#696C70] font-medium text-xs sm:text-sm">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
 
                             <HerLine />
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-1 sm:gap-2">
                                 {/* Selected Category */}
                                 {selectedCategory && (
-                                    <span className="px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center">
-                                        <button onClick={() => setSelectedCategory("")} className="mr-2 text-gray-500 hover:text-black">X</button> {/* Replaced HerCross with simple X */}
-                                        {selectedCategory}
+                                    <span className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => setSelectedCategory("")} className="mr-1 sm:mr-2 text-gray-500 hover:text-black">X</button>
+                                        <span className="sm:hidden">
+                                            {selectedCategory === 'newhire' ? 'New Hire' : 
+                                             selectedCategory === 'ocassion' ? 'Occasions' :
+                                             selectedCategory === 'farewell' ? 'Farewell' :
+                                             selectedCategory === 'achievement' ? 'Achievement' :
+                                             selectedCategory === 'workanniversary' ? 'Anniversary' : selectedCategory}
+                                        </span>
+                                        <span className="hidden sm:inline">{selectedCategory}</span>
                                     </span>
                                 )}
 
                                 {/* Price Range */}
                                 {(minPrice > 0 || maxPrice < 1000) && (
-                                    <span className="px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center">
-                                        <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-2 text-green-800 hover:text-green-900">-</button> {/* Replaced HerHorLine with simple - */}
-                                        PKR {minPrice} - PKR {maxPrice}
+                                    <span className="px-2 sm:px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-1 sm:mr-2 text-green-800 hover:text-green-900">-</button>
+                                        <span className="sm:hidden">₨{minPrice}-{maxPrice}</span>
+                                        <span className="hidden sm:inline">PKR {minPrice} - PKR {maxPrice}</span>
                                     </span>
                                 )}
 
                                 {/* Selected Hobbies & Interests */}
                                 {selectedFilters.map((filter) => (
-                                    <span key={filter} className="px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center">
-                                        <button onClick={() => removeFilter(filter)} className="mr-2 text-gray-500 hover:text-black">X</button> {/* Replaced HerCross with simple X */}
+                                    <span key={filter} className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => removeFilter(filter)} className="mr-1 sm:mr-2 text-gray-500 hover:text-black">X</button>
                                         {filter}
                                     </span>
                                 ))}
@@ -138,15 +161,16 @@ const Forcompanies = () => {
 
                             {/* Clear All Button */}
                             {(selectedFilters.length > 0 || selectedCategory || minPrice > 0 || maxPrice < 1000) && (
-                                <button onClick={clearAllFilters} className="flex items-center gap-2 border border-[#DB4444] px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full ml-4">
-                                    X Clear All {/* Replaced HerCross with simple X */}
+                                <button onClick={clearAllFilters} className="flex items-center gap-1 sm:gap-2 border border-[#DB4444] px-2 sm:px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full text-xs sm:text-sm">
+                                    <span className="sm:hidden">Clear</span>
+                                    <span className="hidden sm:inline">X Clear All</span>
                                 </button>
                             )}
                         </div>
                     </div>
 
                     {/* products */}
-                    <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
+                    <div className={`justify-items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-${columns} gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300`}>
                         {giftsForCompanyProducts.map((product) => (
                             <Product
                                 key={product.id}

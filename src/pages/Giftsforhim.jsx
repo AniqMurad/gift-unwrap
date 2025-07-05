@@ -74,34 +74,52 @@ const Giftsforhim = () => {
         <div>
             <Navbar showSearchInput={false} bgColor="#DEFBFF" />
             <SearchPageNavbar title="Gifts For Him" titleHome="Home Page" backgroundColor='#DEFBFF' />
-            <div className='bg-[#DEFBFF] justify-center gap-8 flex text-[14px] font-semibold text-[#1F1F1F] uppercase py-6'>
-                <p className={`cursor-pointer ${selectedCategory === 'pop' ? 'underline' : ''}`} onClick={() => handleCategorySelect('pop')}>Gifts For Father</p>
-                <p className={`cursor-pointer ${selectedCategory === 'brother' ? 'underline' : ''}`} onClick={() => handleCategorySelect('brother')}>Gifts For Brother</p>
-                <p className={`cursor-pointer ${selectedCategory === 'boyfriend' ? 'underline' : ''}`} onClick={() => handleCategorySelect('boyfriend')}>Gifts For BoyFriend</p>
-                <p className={`cursor-pointer ${selectedCategory === 'son' ? 'underline' : ''}`} onClick={() => handleCategorySelect('son')}>Gifts For Son</p>
-                <p className={`cursor-pointer ${selectedCategory === 'husband' ? 'underline' : ''}`} onClick={() => handleCategorySelect('husband')}>Gifts For Husband</p>
-                <p className={`cursor-pointer ${selectedCategory === 'friend' ? 'underline' : ''}`} onClick={() => handleCategorySelect('friend')}>Gifts For Friend</p>
+            <div className='bg-[#DEFBFF] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2'>
+                <p className={`cursor-pointer ${selectedCategory === 'pop' ? 'underline' : ''}`} onClick={() => handleCategorySelect('pop')}>
+                    <span className="hidden sm:inline">Gifts For Father</span>
+                    <span className="sm:hidden">Father</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'brother' ? 'underline' : ''}`} onClick={() => handleCategorySelect('brother')}>
+                    <span className="hidden sm:inline">Gifts For Brother</span>
+                    <span className="sm:hidden">Brother</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'boyfriend' ? 'underline' : ''}`} onClick={() => handleCategorySelect('boyfriend')}>
+                    <span className="hidden sm:inline">Gifts For BoyFriend</span>
+                    <span className="sm:hidden">Boyfriend</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'son' ? 'underline' : ''}`} onClick={() => handleCategorySelect('son')}>
+                    <span className="hidden sm:inline">Gifts For Son</span>
+                    <span className="sm:hidden">Son</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'husband' ? 'underline' : ''}`} onClick={() => handleCategorySelect('husband')}>
+                    <span className="hidden sm:inline">Gifts For Husband</span>
+                    <span className="sm:hidden">Husband</span>
+                </p>
+                <p className={`cursor-pointer ${selectedCategory === 'friend' ? 'underline' : ''}`} onClick={() => handleCategorySelect('friend')}>
+                    <span className="hidden sm:inline">Gifts For Friend</span>
+                    <span className="sm:hidden">Friend</span>
+                </p>
             </div>
 
-            <div className="px-16 py-10 flex justify-center"> {/* Changed from justify-between to justify-center */}
+            <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-center"> {/* Changed from justify-between to justify-center */}
                 {/* Removed the sidebar div entirely */}
                 <div className="w-full transition-all duration-300"> {/* Now always full width */}
                     {/* filters */}
                     <div className="flex flex-col flex-wrap gap-3">
-                        <div className="flex items-center justify-between space-x-6">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0 sm:space-x-6">
                             {/* Layout Switch Buttons */}
                             <div className="flex items-center space-x-4">
                                 {/* Removed the FilterIcon button */}
                                 <div className="flex space-x-2">
-                                    <div className={`border ${columns === 3 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                    <div className={`border ${columns === 3 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer hidden sm:block`}
                                         onClick={() => handleColumnChange(3)}>
                                         <ThreeBars fillColor={columns === 3 ? "white" : "#A0A0A0"} />
                                     </div>
-                                    <div className={`border ${columns === 4 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                    <div className={`border ${columns === 4 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer hidden sm:block`}
                                         onClick={() => handleColumnChange(4)}>
                                         <FourBars fillColor={columns === 4 ? "white" : "#A0A0A0"} />
                                     </div>
-                                    <div className={`border ${columns === 5 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer`}
+                                    <div className={`border ${columns === 5 ? 'bg-black' : 'border-[#E9E9E9]'} p-1 rounded cursor-pointer hidden sm:block`}
                                         onClick={() => handleColumnChange(5)}>
                                         <FiveBars fillColor={columns === 5 ? "white" : "#A0A0A0"} />
                                     </div>
@@ -109,31 +127,31 @@ const Giftsforhim = () => {
                             </div>
                         </div>
 
-                        <div className="flex gap-3 items-center mt-2">
-                            <span className="text-[#696C70] font-medium">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
+                        <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
+                            <span className="text-[#696C70] font-medium text-xs sm:text-sm">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
 
                             <HerLine />
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-1 sm:gap-2">
                                 {/* Selected Category */}
                                 {selectedCategory && (
-                                    <span className="px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center">
-                                        <button onClick={() => setSelectedCategory("")} className="mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
+                                    <span className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => setSelectedCategory("")} className="mr-1 sm:mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
                                         {selectedCategory}
                                     </span>
                                 )}
 
                                 {/* Price Range */}
                                 {(minPrice > 0 || maxPrice < 1000) && (
-                                    <span className="px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center">
-                                        <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-2 text-green-800 hover:text-green-900"><HerHorLine /></button>
+                                    <span className="px-2 sm:px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-1 sm:mr-2 text-green-800 hover:text-green-900"><HerHorLine /></button>
                                         PKR {minPrice} - PKR {maxPrice}
                                     </span>
                                 )}
 
                                 {/* Selected Hobbies & Interests */}
                                 {selectedFilters.map((filter) => (
-                                    <span key={filter} className="px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center">
-                                        <button onClick={() => removeFilter(filter)} className="mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
+                                    <span key={filter} className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
+                                        <button onClick={() => removeFilter(filter)} className="mr-1 sm:mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
                                         {filter}
                                     </span>
                                 ))}
@@ -141,8 +159,10 @@ const Giftsforhim = () => {
 
                             {/* Clear All Button */}
                             {(selectedFilters.length > 0 || selectedCategory || minPrice > 0 || maxPrice < 1000) && (
-                                <button onClick={clearAllFilters} className="flex items-center gap-2 border border-[#DB4444] px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full ml-4">
-                                    <HerCross strokeColor="#DB4444" /> Clear All
+                                <button onClick={clearAllFilters} className="flex items-center gap-1 sm:gap-2 border border-[#DB4444] px-2 sm:px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full ml-2 sm:ml-4 text-xs sm:text-sm">
+                                    <HerCross strokeColor="#DB4444" /> 
+                                    <span className="hidden sm:inline">Clear All</span>
+                                    <span className="sm:hidden">Clear</span>
                                 </button>
                             )}
 
@@ -150,7 +170,7 @@ const Giftsforhim = () => {
                     </div>
 
                     {/* products */}
-                    <div className={`justify-items-center grid grid-cols-${columns} gap-6 mt-10 transition-all duration-300`}>
+                    <div className={`justify-items-center grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-${columns} gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300`}>
                         {giftsForHimProducts.map((product) => (
                             <Product
                                 key={product.id}
