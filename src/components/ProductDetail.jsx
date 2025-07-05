@@ -31,7 +31,7 @@ const ProductDetail = () => {
             } else {
                 // If not in state, fetch the specific product from the API
                 try {
-                    const response = await axios.get(`http://localhost:5000/api/products/${category}/${productId}`);
+                    const response = await axios.get(`https://giftunwrap-puce.vercel.app/api/products/${category}/${productId}`);
                     setProduct(response.data);
                     setSelectedImage(response.data.image || (response.data.images && response.data.images[0]) || '');
                     currentProduct = response.data;
@@ -46,7 +46,7 @@ const ProductDetail = () => {
             // Fetch related products from the same category
             if (currentProduct) {
                 try {
-                    const response = await axios.get('http://localhost:5000/api/products');
+                    const response = await axios.get('https://giftunwrap-puce.vercel.app/api/products');
                     const categoryData = response.data.find(item => item.category === category);
                     if (categoryData && categoryData.products) {
                         const filteredRelated = categoryData.products.filter(

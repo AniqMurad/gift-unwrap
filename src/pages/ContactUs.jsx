@@ -22,7 +22,7 @@ const ContactUs = () => {
         setMessageSent(false);
 
         try {
-            const response = await fetch('http://localhost:5000/api/messages', {
+            const response = await fetch('https://giftunwrap-puce.vercel.app/api/messages', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

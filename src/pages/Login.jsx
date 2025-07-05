@@ -68,7 +68,7 @@ const handleLogin = async () => {
 
     setIsLoading(true);
     try {
-        const res = await axios.post('http://localhost:5000/api/auth/login', {
+        const res = await axios.post('https://giftunwrap-puce.vercel.app/api/auth/login', {
             email: formData.email,
             password: formData.password
         });

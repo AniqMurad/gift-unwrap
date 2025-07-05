@@ -102,7 +102,7 @@ const Checkout = () => {
         console.log("Sending order data:", orderData); // Log data being sent
 
         try {
-            const response = await fetch('http://localhost:5000/api/orders/', { // Replace with your actual backend URL if different
+            const response = await fetch('https://giftunwrap-puce.vercel.app/api/orders/', { // Replace with your actual backend URL if different
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
