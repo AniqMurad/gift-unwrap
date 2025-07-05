@@ -24,7 +24,7 @@ const Giftsforhim = () => {
     const category = "giftsForHim";
 
     useEffect(() => {
-        axios.get('https://giftunwrap-puce.vercel.app/api/products')
+        axios.get('https://giftunwrapbackend.vercel.app/api/products')
             .then(res => {
                 const categoryData = res.data.find(item => item.category === category);
                 if (categoryData) {
