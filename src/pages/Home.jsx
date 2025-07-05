@@ -39,7 +39,7 @@ const Home = () => {
         <ProductPage title="Birthday Gifts" category="birthday" />
         <Review />
         <Services />
-        <InstaSpace />
+        {/* <InstaSpace /> */}
         <Blogs />
         <Partners />
         <Offer />

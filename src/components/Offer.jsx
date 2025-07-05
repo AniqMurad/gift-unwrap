@@ -45,7 +45,7 @@ const Offer = () => {
         </p>
       </div>
       <div className="w-full max-w-md lg:max-w-none">
-        <div className="flex flex-col sm:flex-row p-1 bg-white rounded-lg">
+        <div className="flex flex-col sm:flex-row p-1 bg-white rounded-lg justify-between">
           <input
             type="email"
             placeholder="Enter your e-mail"
