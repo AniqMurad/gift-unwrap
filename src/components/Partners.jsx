@@ -8,31 +8,25 @@ import i6 from "../assets/6.png";
 
 const Partners = () => {
   return (
-    <div className="flex justify-between px-16 py-6 mt-10">
-        <div>
-        <img src={i1}  alt="Shangxi" className="partner-logo w-[90%]"  />
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 px-4 sm:px-8 lg:px-16 py-6 mt-10">
+        <div className="flex justify-center items-center mb-3 sm:mb-0">
+        <img src={i1}  alt="Shangxi" className="partner-logo w-full max-w-[120px] h-auto object-contain"  />
         </div>
-        <div>
-        <img src={i2} alt="Shangxi" className="partner-logo w-[90%]"  />
+        <div className="flex justify-center items-center mb-3 sm:mb-0">
+        <img src={i2} alt="Shangxi" className="partner-logo w-full max-w-[120px] h-auto object-contain"  />
         </div>
-        <div>
-        <img src={i3} alt="Shangxi" className="partner-logo w-[90%]" />
+        <div className="flex justify-center items-center mb-3 sm:mb-0">
+        <img src={i3} alt="Shangxi" className="partner-logo w-full max-w-[120px] h-auto object-contain" />
         </div>
-        <div>
-        <img src={i4} alt="Shangxi" className="partner-logo w-[90%]"/>
+        <div className="flex justify-center items-center mb-3 sm:mb-0">
+        <img src={i4} alt="Shangxi" className="partner-logo w-full max-w-[120px] h-auto object-contain"/>
         </div>
-        <div>
-        <img src={i5} alt="Shangxi" className="partner-logo w-[90%]" />
+        <div className="flex justify-center items-center mb-3 sm:mb-0">
+        <img src={i5} alt="Shangxi" className="partner-logo w-full max-w-[120px] h-auto object-contain" />
         </div>
-        <div>
-        <img src={i6} alt="Shangxi" className="partner-logo w-[90%]" />
+        <div className="flex justify-center items-center mb-3 sm:mb-0">
+        <img src={i6} alt="Shangxi" className="partner-logo w-full max-w-[120px] h-auto object-contain" />
         </div>
-      {/* <img src={i1} alt="Shangxi" className="partner-logo"/>
-      <img src={i2} alt="Cheryl" className="partner-logo"/>
-      <img src={i3} alt="Vanfaba" className="partner-logo"/>
-      <img src={i4} alt="Carolin" className="partner-logo"/>
-      <img src={i5} alt="Panadox" className="partner-logo"/>
-      <img src={i6} alt="Penny W. Textiles" className="partner-logo"/> */}
     </div>
   );
 };

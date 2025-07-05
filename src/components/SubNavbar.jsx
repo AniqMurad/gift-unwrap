@@ -43,25 +43,26 @@ const SubNavbar = () => {
 
   return (
     <>
-      <div className="flex justify-between items-start bg-[#ffff] px-16 py-3 border-b-2 border-solid border-[#E9E9E9]">
-        <div className="flex gap-8">
+      <div className="flex justify-between items-start bg-[#ffff] px-4 sm:px-8 lg:px-16 py-3 border-b-2 border-solid border-[#E9E9E9]">
+        <div className="flex gap-4 sm:gap-8 flex-wrap">
           <button
-            className={`font-bold cursor-pointer text-sm dropdown-button ${activeDropdown === 'recipients' ? 'border-b-2 border-black' : ''}`}
+            className={`font-bold cursor-pointer text-xs sm:text-sm dropdown-button ${activeDropdown === 'recipients' ? 'border-b-2 border-black' : ''}`}
             onClick={() => handleButtonClick('recipients')}
           >
             RECIPIENTS
           </button>
           <button
-            className={`font-bold cursor-pointer text-sm dropdown-button ${activeDropdown === 'occasions' ? 'border-b-2 border-black' : ''}`}
+            className={`font-bold cursor-pointer text-xs sm:text-sm dropdown-button ${activeDropdown === 'occasions' ? 'border-b-2 border-black' : ''}`}
             onClick={() => handleButtonClick('occasions')}
           >
             OCCASIONS
           </button>
           <button
-            className={`font-bold cursor-pointer text-sm text-red-300 dropdown-button ${activeDropdown === 'birthday' ? 'border-b-2 border-black' : ''}`}
+            className={`font-bold cursor-pointer text-xs sm:text-sm text-red-300 dropdown-button ${activeDropdown === 'birthday' ? 'border-b-2 border-black' : ''}`}
             onClick={navigateToFlowers}
           >
-            Flower & Chocolate Bouquet
+            <span className="hidden sm:inline">Flower & Chocolate Bouquet</span>
+            <span className="sm:hidden">Flowers</span>
           </button>
         </div>
         {/* <div>
@@ -71,31 +72,35 @@ const SubNavbar = () => {
       </div>
 
       {activeDropdown === 'recipients' && (
-        <div className="w-[91%] p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center">
+        <div className="w-[95%] sm:w-[91%] p-[20px] sm:p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center">
 
-          <div className="grid grid-cols-4 gap-x-5 gap-y-8 w-[75%] text-sm cursor-pointer">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-3 sm:gap-x-5 gap-y-4 sm:gap-y-8 w-full sm:w-[75%] text-sm cursor-pointer">
           {hoverSubOptions?.recipients?.map((column, index) => (
             <div key={index}>
-              <h4 className="font-semibold text-[14px] text-black mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
-              {column.items.map((item, idx) => (
-                typeof item === 'string' ? (
-                  <p key={idx} className="text-[16px] text-[#696C70] mt-4">{item}</p>
-                ) : (
-                  <p 
-                    key={idx} 
-                    className="text-[16px] text-[#696C70] mt-4"
-                    onClick={() => handleTitleClick(item.url)}
-                  >
-                    {item.name || item}
-                  </p>
-                )
-              ))}
+              <h4 className="font-semibold text-[12px] sm:text-[14px] text-black mb-3 sm:mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
+              {/* Show only main categories on mobile, all items on larger screens */}
+              <div className="sm:block">
+                {column.items.map((item, idx) => (
+                  typeof item === 'string' ? (
+                    <p key={idx} className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block">{item}</p>
+                  ) : (
+                    <p 
+                      key={idx} 
+                      className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block"
+                      onClick={() => handleTitleClick(item.url)}
+                    >
+                      {item.name || item}
+                    </p>
+                  )
+                ))}
+              </div>
             </div>
           ))}
 
           </div>
 
-          <div className="w-[25%]">
+          {/* Hide recent products on mobile */}
+          <div className="w-[25%] hidden sm:block">
             <h4 className="font-semibold mb-4">RECENT PRODUCTS</h4>
             <Product product={featuredProduct} />
           </div>
@@ -104,32 +109,36 @@ const SubNavbar = () => {
       )}
 
       {activeDropdown === 'occasions' && (
-        <div className="w-[91%] p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center">
+        <div className="w-[95%] sm:w-[91%] p-[20px] sm:p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center">
 
-          <div className="grid grid-cols-4 gap-x-5 gap-y-8 w-[75%] text-sm cursor-pointer">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-3 sm:gap-x-5 gap-y-4 sm:gap-y-8 w-full sm:w-[75%] text-sm cursor-pointer">
             {hoverSubOptions?.occasions?.map((column, index) => (
               <div key={index}>
-                <h4 className="font-semibold text-[14px] text-black mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
-                {column.items.map((item, idx) => (
-                  typeof item === 'string' ? (
-                    <p key={idx} className="text-[16px] text-[#696C70] mt-4">
-                      {item}
-                    </p>
-                  ) : (
-                    <p
-                      key={idx}
-                      className="text-[16px] text-[#696C70] mt-4"
-                      onClick={() => handleTitleClick(item.url)}
-                    >
-                      {item.name}
-                    </p>
-                  )
-                ))}
+                <h4 className="font-semibold text-[12px] sm:text-[14px] text-black mb-3 sm:mb-6" onClick={() => handleTitleClick(column.url)}>{column.title}</h4>
+                {/* Show only main categories on mobile, all items on larger screens */}
+                <div className="sm:block">
+                  {column.items.map((item, idx) => (
+                    typeof item === 'string' ? (
+                      <p key={idx} className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block">
+                        {item}
+                      </p>
+                    ) : (
+                      <p
+                        key={idx}
+                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block"
+                        onClick={() => handleTitleClick(item.url)}
+                      >
+                        {item.name}
+                      </p>
+                    )
+                  ))}
+                </div>
               </div>
             ))}
           </div>
 
-          <div className="w-[25%]">
+          {/* Hide recent products on mobile */}
+          <div className="w-[25%] hidden sm:block">
             <h4 className="font-semibold mb-4">RECENT PRODUCTS</h4>
             <Product product={featuredProduct} />
           </div>

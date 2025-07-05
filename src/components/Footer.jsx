@@ -45,9 +45,9 @@ const Footer = () => {
     };
 
     return (
-        <div className="bg-gray-100 px-16 py-10 text-gray-700 text-sm">
-            <div className="flex justify-between">
-                <div className="w-[300px] flex flex-col gap-4">
+        <div className="bg-gray-100 px-4 sm:px-8 lg:px-16 py-10 text-gray-700 text-sm">
+            <div className="flex flex-col lg:flex-row lg:justify-between gap-8">
+                <div className="w-full lg:w-[300px] flex flex-col gap-4">
                     <div className="text-2xl font-bold mb-3">
                         <img src={Logo} alt="" className="w-[173px] h-[42px]"/>
                     </div>
@@ -56,7 +56,7 @@ const Footer = () => {
                     <p><strong>Address:</strong> Shop No. 226 PIB Colony near Jail Chowrangi, Karachi</p>
                 </div>
 
-                <div className="flex justify-between gap-10 w-[500px]">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-10 w-full lg:w-[500px]">
                     <div className="flex flex-col gap-4">
                         <h4 className="font-semibold mb-2">INFORMATION</h4>
                         <p className="cursor-pointer hover:text-black transition-colors" onClick={goToContact}>Contact us</p>
@@ -81,27 +81,27 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="w-[300px] flex flex-col gap-4">
+                <div className="w-full lg:w-[300px] flex flex-col gap-4">
                     <h4 className="font-semibold mb-2">NEWSLETTER</h4>
                     <p>Sign up for our newsletter and get 10% off your first purchase</p>
-                    <div className="flex mt-3">
+                    <div className="flex flex-col sm:flex-row mt-3">
                         <input
                             type="email"
                             placeholder="Enter your e-mail"
                             value={email}
                             onChange={handleEmailChange}
                             onKeyPress={handleKeyPress}
-                            className="px-4 py-2 w-64 border border-gray-300 rounded-l-md focus:outline-none bg-white"
+                            className="px-4 py-2 w-full sm:w-64 border border-gray-300 rounded-l-md sm:rounded-r-none rounded-r-md focus:outline-none bg-white"
                         />
                         <button 
                             onClick={handleNewsletterSubmit}
-                            className="bg-black text-white px-4 py-2 rounded-r-md flex items-center justify-center hover:bg-gray-800 transition-colors"
+                            className="bg-black text-white px-4 py-2 rounded-r-md sm:rounded-l-none rounded-l-md mt-2 sm:mt-0 flex items-center justify-center hover:bg-gray-800 transition-colors"
                         >
                             <RarrowIcon className="text-white w-5 h-5" />
                         </button>
                     </div>
 
-                    <div className="flex space-x-6 mt-4 text-gray-600">
+                    <div className="flex justify-center sm:justify-start space-x-6 mt-4 text-gray-600">
                         <FbIcon />
                         <InstaIcon />
                         <YtIcon />
@@ -111,12 +111,12 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className="flex justify-between items-center border-t mt-6 pt-4 text-gray-500 text-sm">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center border-t mt-6 pt-4 text-gray-500 text-sm gap-4">
                 <p>©2025 GiftUnwrap. All Rights Reserved.</p>
 
-                <div className="flex items-center space-x-2 w-[200px]">
-                    <span className="text-gray-600 w-[70px]">Payment:</span>
-                    <div className="flex w-[130px] justify-between">
+                <div className="flex items-center justify-center sm:justify-end space-x-2 w-full sm:w-[200px]">
+                    <span className="text-gray-600 w-auto sm:w-[70px]">Payment:</span>
+                    <div className="flex w-auto sm:w-[130px] justify-center sm:justify-between gap-2">
                         <div className="border border-gray-300 rounded-md p-1 content-center">
                             <VisaIcon />
                         </div>
