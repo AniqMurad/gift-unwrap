@@ -1,17 +1,17 @@
-import blog1 from '../assets/blog1.png';
-import blog2 from '../assets/blog2.png';
-import blog3 from '../assets/blog3.png';
-import blog4 from '../assets/b1.png';
-import blog5 from '../assets/b2.png';
-import blog6 from '../assets/b3.png';
-import blog7 from '../assets/b4.png';
+import blog1 from '../assets/mainblog1.jpg';
+import blog2 from '../assets/mainblog2.jpeg';
+import blog3 from '../assets/mainblog3.jpg';
+import blog4 from '../assets/mainblog4.jpg';
+import blog5 from '../assets/mainblog5.jpg';
+import blog6 from '../assets/mainblog6.jpg';
+import blog7 from '../assets/mainblog7.jpg';
 
 export const blogData = [
-    { id: 1, title: "The 2025 Q1 Corporate Gifting Trend Report is LIVE!", image: blog1, authorDate: "By Tony Nguyen — Oct 12, 2025", category: "CORPORATE GIFT" },
-    { id: 2, title: "Perfect Gifts for Scorpios: Bold, Mysterious, and Meaningful", image: blog2, authorDate: "By Tony Chaha — Oct 13, 2025", category: "Birthday Gift" },
-    { id: 3, title: "Why Self-Care Gifts Are the Best Gifts for the New Year", image: blog3, authorDate: "By Tony Mama — Oct 14, 2025", category: "Personal Grooming" },
-    { id: 4, title: "Great gifts for a fun children’s room", image: blog4, authorDate: "By Tony Mama — Oct 14, 2025", category: "BABY, CHILDREN" },
-    { id: 5, title: "How much to spend on a birthday gift", image: blog5, authorDate: "By Tony Mama — Oct 14, 2025", category: "Birthday" },
-    { id: 6, title: "Happy birthday quotes: 50 wonderful happy birthday wishes", image: blog6, authorDate: "By Tony Mama — Oct 14, 2025", category: "Birthday" },
-    { id: 7, title: "How to say I love you: our original tips", image: blog7, authorDate: "By Tony Mama — Oct 14, 2025", category: "Couple, Married" },
+    { id: 1, title: "The Art of Gifting: How to Choose the Perfect Present for Every Occasion", image: blog1, authorDate: "By Amira El Hadi — Apr 11, 2025", category: "General Gifting Guide" },
+    { id: 2, title: "Top 10 Thoughtful Gift Ideas That Never Go Out of Style", image: blog2, authorDate: "By Lina Bensalem — Aug 05, 2024", category: "For Him & Her" },
+    { id: 3, title: "Why Personalized Gifts Make the Biggest Impact", image: blog3, authorDate: "By Samiha Gharbi — Dec 17, 2024", category: "For Her / For Him / Anniversaries" },
+    { id: 4, title: "Corporate Gifting Done Right: Impress Clients and Teams Alike", image: blog4, authorDate: "By Youssef Kacem — Oct 05, 2024", category: "Corporate Gifts" },
+    { id: 5, title: "Seasonal Gifting Guide: What to Give and When to Give It", image: blog5, authorDate: "By Nesrine Mabrouk — May 30, 2025", category: "Festive / Seasonal" },
+    { id: 6, title: "Eco-Friendly Gifting: Sustainable Choices with a Personal Touch", image: blog6, authorDate: "By Tarek Bouzid — Oct 14, 2024", category: "Eco-conscious Gifts" },
+    { id: 7, title: "Unboxing Happiness: How Great Packaging Elevates the Gift Experience", image: blog7, authorDate: "By Ines Zribi — July 01, 2025, 2025", category: "Premium / Luxury Gifting" },
 ];
