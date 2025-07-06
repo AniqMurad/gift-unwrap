@@ -3,6 +3,7 @@ import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
+import Loader from "../components/Loader";
 // import ProductData from "../components/ProductData";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -11,6 +12,7 @@ import Navbar from "@/components/Navbar";
 const FlowerChocolate = () => {
 
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const location = useLocation();
     const [columns, setColumns] = useState(4); // Default to 4 columns
     const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
@@ -26,6 +28,7 @@ const FlowerChocolate = () => {
     const category = "FlowersChocolates";
 
     useEffect(() => {
+        setLoading(true);
         axios.get('https://giftunwrapbackend.vercel.app/api/products')
             .then(res => {
                 const categoryData = res.data.find(item => item.category === category);
@@ -33,7 +36,8 @@ const FlowerChocolate = () => {
                     setProducts(categoryData.products);
                 }
             })
-            .catch(err => console.error("Failed to load products:", err));
+            .catch(err => console.error("Failed to load products:", err))
+            .finally(() => setLoading(false));
     }, [category]);
 
     useEffect(() => {
@@ -74,6 +78,7 @@ const FlowerChocolate = () => {
 
     return (
         <div>
+            {loading && <Loader />}
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Flowers & Chocolates Bouquets" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2'>
@@ -185,24 +190,7 @@ const FlowerChocolate = () => {
                         </div>
                     )}
 
-                    {/* paging */}
-                    {/* <div className="flex justify-center mt-10">
-                        <div className="flex items-center space-x-1 border border-gray-400 rounded-md px-2 py-1">
-                            {currentPage > 1 && (
-                                <button onClick={goToPreviousPage} className="px-3 py-1 border-r border-gray-400">
-                                    <PageprevIcon />
-                                </button>
-                            )}
-
-                            <button className="px-3 py-1 bg-black text-white rounded">{currentPage}</button>
-
-                            {currentPage < totalPages && (
-                                <button onClick={goToNextPage} className="px-3 py-1 border-l border-gray-400">
-                                    <PagenextIcon />
-                                </button>
-                            )}
-                        </div>
-                    </div> */}
+                    
                 </div>
             </div>
 

@@ -3,12 +3,14 @@ import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
+import Loader from "../components/Loader";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Navbar from "@/components/Navbar";
 
 const Giftsforher = () => {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -191,24 +193,7 @@ const Giftsforher = () => {
                         </div>
                     )}
 
-                    {/* paging */}
-                    {/* <div className="flex justify-center mt-10">
-                        <div className="flex items-center space-x-1 border border-gray-400 rounded-md px-2 py-1">
-                            {currentPage > 1 && (
-                                <button onClick={goToPreviousPage} className="px-3 py-1 border-r border-gray-400">
-                                    <PageprevIcon />
-                                </button>
-                            )}
-
-                            <button className="px-3 py-1 bg-black text-white rounded">{currentPage}</button>
-
-                            {currentPage < totalPages && (
-                                <button onClick={goToNextPage} className="px-3 py-1 border-l border-gray-400">
-                                    <PagenextIcon />
-                                </button>
-                            )}
-                        </div>
-                    </div> */}
+                   
                 </div>
             </div>
 
