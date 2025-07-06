@@ -2,25 +2,33 @@ export const customerReviews = [
     {
         id: 1,
         rating: 5,
-        title: "Quality Of Clothing!",
-        review: "I absolutely love this shop! The products are high-quality and the customer service is excellent. I always leave with exactly what I need and a smile on my face.",
-        name: "Mark G.",
-        date: "August 13, 2023"
+        title: "Fast Delivery!",
+        review: "I received a beautiful gift from @gift_unwrap it’s amazing I really love it. I have place an urgent order but I am really obsessed with their fast service. Thank-you so much @gift_unwrap for making my day beautiful ❤️❤️",
+        name: "Sajila barcha",
+        date: "May 22, 2025"
     },
     {
         id: 2,
         rating: 4,
         title: "Fast Delivery!",
-        review: "The delivery was super fast, and the product was exactly as described. Will definitely shop again!",
-        name: "Sarah L.",
-        date: "September 2, 2023"
+        review: "Happy with the parcel🙊",
+        name: "Areeba Lakhani",
+        date: "June 07, 2025"
     },
     {
         id: 3,
+        rating: 4,
+        title: "Best Shopping Experience!",
+        review: "Thank u for lovely flowers",
+        name: "Farheed Gillani",
+        date: "June 23, 2025"
+    },
+    {
+        id: 4,
         rating: 5,
         title: "Best Shopping Experience!",
-        review: "Great experience overall! The website is user-friendly, and the checkout process is smooth.",
-        name: "David W.",
-        date: "October 10, 2023"
+        review: "Thank you so much! It really meant a lot. The urgent delivery was perfectly handled, and we absolutely loved the gift. You made our event feel truly special. We sincerely appreciate it!",
+        name: "Areeba Aqeel",
+        date: "July 04, 2025"
     }
 ];

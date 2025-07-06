@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import { useParams } from 'react-router-dom';
 import { blogData } from '../components/BlogData';
 import Navbar from '@/components/Navbar';
+import { Link } from 'react-router-dom';
 
 const BlogOpen = () => {
   const { id } = useParams();
@@ -136,19 +137,11 @@ const BlogOpen = () => {
                   ))}
                 </div>
               )}
-
-              {/* Placeholder for products if you still want them here, or remove */}
-              {/* <div className="mt-10 grid grid-cols-3 gap-4">
-                <Product />
-                <Product />
-                <Product />
-              </div> */}
-
             </div>
 
             {/* sharepost */}
-            <div className="flex justify-between items-center mb-4 mt-10">
-              {/* Tags */}
+            {/* <div className="flex justify-between items-center mb-4 mt-10">
+              
               <div className="flex items-center space-x-2">
                 <span className="text-[#1F1F1F] text-sm">Tag:</span>
                 <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">FEATURED</span>
@@ -156,7 +149,6 @@ const BlogOpen = () => {
                 <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">CAREER</span>
               </div>
 
-              {/* Social Share */}
               <div className="flex items-center space-x-3">
                 <span className="text-[#1F1F1F] text-sm">Share</span>
                 <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">
@@ -175,20 +167,32 @@ const BlogOpen = () => {
                   <YtIcon />
                 </span>
               </div>
-            </div>
+            </div> */}
 
             {/* next pre */}
+            {/* next prev logic */}
             <div className="items-center border-t border-b border-[#E9E9E9] flex justify-between text-sm mt-10 h-[90px]">
+              {/* Previous */}
               <div className="flex-1 text-left">
                 <span className="block text-xs text-[#A0A0A0]">PREVIOUS</span>
-                <p className="font-medium text-[#1F1F1F] mt-2">I Couldn't Help But Splurge On These Epic Fall Finds</p>
+                <Link to={`/blog/${blogData[(blogData.findIndex(b => b.id === parseInt(id)) - 1 + blogData.length) % blogData.length].id}`}>
+                  <p className="font-medium text-[#1F1F1F] mt-2 hover:underline">
+                    {blogData[(blogData.findIndex(b => b.id === parseInt(id)) - 1 + blogData.length) % blogData.length].title}
+                  </p>
+                </Link>
               </div>
-              <div className=''>
-                <BlogLine />
-              </div>
+
+              {/* Divider */}
+              <div><BlogLine /></div>
+
+              {/* Next */}
               <div className="flex-1 text-right">
                 <span className="block text-xs text-[#A0A0A0]">NEXT</span>
-                <p className="font-medium text-[#1F1F1F] mt-2">My Mani Photo Dump To Save To Your Nail Inspo Folder</p>
+                <Link to={`/blog/${blogData[(blogData.findIndex(b => b.id === parseInt(id)) + 1) % blogData.length].id}`}>
+                  <p className="font-medium text-[#1F1F1F] mt-2 hover:underline">
+                    {blogData[(blogData.findIndex(b => b.id === parseInt(id)) + 1) % blogData.length].title}
+                  </p>
+                </Link>
               </div>
             </div>
 
@@ -197,21 +201,27 @@ const BlogOpen = () => {
         </div>
 
         {/* news insight */}
-        <div className='mt-15'>
-          <h1 className='text-3xl font-bold text-center'>News insight</h1>
-          <div className='flex mt-10 justify-center gap-5 flex-wrap'>
-
-            {blogData.slice(0, 3).map((item) => (
-              <div key={item.id} className="bg-white items-center overflow-hidden mb-10 w-[400px]">
-                <img src={item.image} alt={item.title} className="w-[400px] h-[270px] rounded-[28px] object-cover" />
-                <div className="mt-4">
-                  <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">{item.category}</span>
-                  <h2 className="text-3xl font-semibold mt-2">{item.title}</h2>
-                  <p className="text-[#696C70] text-sm mt-4">{item.authorDate}</p>
-                </div>
-              </div>
-            ))}
-
+        <div className="mt-20">
+          <h1 className="text-3xl font-bold text-center">News Insight</h1>
+          <div className="flex mt-10 justify-center gap-5 flex-wrap">
+            {blogData
+              .filter(item => item.id !== parseInt(id)) // Exclude current blog
+              .sort(() => Math.random() - 0.5)           // Shuffle remaining blogs
+              .slice(0, 3)                                // Pick 3 blogs
+              .map(item => (
+                <Link to={`/blog/${item.id}`} key={item.id} className="bg-white overflow-hidden mb-10 w-[400px] hover:scale-105 transition-transform duration-300">
+                  <img
+                    src={item.image}
+                    alt={item.altText || item.title}
+                    className="w-[400px] h-[270px] rounded-[28px] object-cover"
+                  />
+                  <div className="mt-4 px-2">
+                    <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">{item.category}</span>
+                    <h2 className="text-2xl font-semibold mt-2">{item.title}</h2>
+                    <p className="text-[#696C70] text-sm mt-4">{item.authorDate}</p>
+                  </div>
+                </Link>
+              ))}
           </div>
         </div>
 
