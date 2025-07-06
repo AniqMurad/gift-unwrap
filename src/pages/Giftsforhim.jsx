@@ -4,11 +4,13 @@ import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
+import Loader from "../components/Loader";
 import { useLocation } from 'react-router-dom';
 import Navbar from "@/components/Navbar";
 
 const Giftsforhim = () => {
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const location = useLocation();
     const [columns, setColumns] = useState(4);
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -24,6 +26,7 @@ const Giftsforhim = () => {
     const category = "giftsForHim";
 
     useEffect(() => {
+        setLoading(true);
         axios.get('https://giftunwrapbackend.vercel.app/api/products')
             .then(res => {
                 const categoryData = res.data.find(item => item.category === category);
@@ -31,7 +34,8 @@ const Giftsforhim = () => {
                     setProducts(categoryData.products);
                 }
             })
-            .catch(err => console.error("Failed to load products:", err));
+            .catch(err => console.error("Failed to load products:", err))
+            .finally(() => setLoading(false));
     }, [category]);
 
     useEffect(() => {
@@ -72,6 +76,7 @@ const Giftsforhim = () => {
 
     return (
         <div>
+            {loading && <Loader />}
             <Navbar showSearchInput={false} bgColor="#DEFBFF" />
             <SearchPageNavbar title="Gifts For Him" titleHome="Home Page" backgroundColor='#DEFBFF' />
             <div className='bg-[#DEFBFF] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2'>
