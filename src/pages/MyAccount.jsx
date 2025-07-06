@@ -123,71 +123,94 @@ const MyAccount = () => {
                 <NotificationBar type={notification.type} message={notification.message} />
             )}
 
-            <div className="flex px-16 py-20 justify-between">
+            <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 gap-6 lg:gap-8">
                 {/* Sidebar */}
-                <div className="w-[28%] bg-[#F7F7F7] shadow-lg rounded-[20px] px-[32px] py-[40px]">
+                <div className="w-full lg:w-[28%] bg-[#F7F7F7] shadow-lg rounded-[20px] px-4 sm:px-6 lg:px-[32px] py-6 sm:py-8 lg:py-[40px]">
                     <div className="flex flex-col items-center text-center">
-                        <img src={avatar} className="w-[46%] h-[46%] bg-gray-300 rounded-full" alt="User Avatar" />
-                        <h3 className="text-[20px] font-semibold mt-3">{userData.firstName} {userData.lastName}</h3>
-                        <p className="text-[20px]">{userData.email}</p>
+                        <img src={avatar} className="w-16 h-16 sm:w-20 sm:h-20 lg:w-[46%] lg:h-[46%] bg-gray-300 rounded-full" alt="User Avatar" />
+                        <h3 className="text-lg sm:text-xl lg:text-[20px] font-semibold mt-3">{userData.firstName} {userData.lastName}</h3>
+                        <p className="text-sm sm:text-base lg:text-[20px] text-gray-600 break-all">{userData.email}</p>
                     </div>
 
-                    <div className="mt-8">
+                    <div className="mt-6 sm:mt-8">
                         <div
-                            className={`flex gap-5 rounded-[16px] items-center px-[20px] py-[16px] mb-1 cursor-pointer ${activeTab === 'account' ? 'bg-[#FFFFFF]' : ''}`}
+                            className={`flex gap-3 sm:gap-4 lg:gap-5 rounded-[16px] items-center px-3 sm:px-4 lg:px-[20px] py-3 sm:py-4 lg:py-[16px] mb-1 cursor-pointer ${activeTab === 'account' ? 'bg-[#FFFFFF]' : ''}`}
                             onClick={() => setActiveTab('account')}
                         >
                             <MyUserIcon />
-                            <h6 className='text-[20px] font-semibold'>Account Details</h6>
+                            <h6 className='text-sm sm:text-base lg:text-[20px] font-semibold'>Account Details</h6>
                         </div>
 
                         <div
-                            className={`flex gap-5 rounded-[16px] items-center px-[20px] py-[16px] mb-1 cursor-pointer ${activeTab === 'orders' ? 'bg-[#FFFFFF]' : ''}`}
+                            className={`flex gap-3 sm:gap-4 lg:gap-5 rounded-[16px] items-center px-3 sm:px-4 lg:px-[20px] py-3 sm:py-4 lg:py-[16px] mb-1 cursor-pointer ${activeTab === 'orders' ? 'bg-[#FFFFFF]' : ''}`}
                             onClick={() => setActiveTab('orders')}
                         >
                             <MyOrderIcon />
-                            <h6 className='text-[20px] font-semibold'>Your Orders</h6>
+                            <h6 className='text-sm sm:text-base lg:text-[20px] font-semibold'>Your Orders</h6>
                         </div>
 
                         <div
-                            className='flex gap-5 rounded-[16px] items-center px-[20px] py-[16px] mb-1 cursor-pointer'
+                            className='flex gap-3 sm:gap-4 lg:gap-5 rounded-[16px] items-center px-3 sm:px-4 lg:px-[20px] py-3 sm:py-4 lg:py-[16px] mb-1 cursor-pointer'
                             onClick={handleLogout}
                         >
                             <MyLogoutIcon />
-                            <h6 className='text-[20px] font-semibold'>Logout</h6>
+                            <h6 className='text-sm sm:text-base lg:text-[20px] font-semibold'>Logout</h6>
                         </div>
                     </div>
                 </div>
 
                 {/* Right Content Area */}
-                <div className='w-[55%]'>
+                <div className='w-full lg:w-[55%]'>
                     {activeTab === 'account' && (
                         <div>
-                            <h2 className="text-[24px] font-semibold mb-4">Information</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="First Name" value={userData.firstName} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
-                                <input type="text" placeholder="Last Name" value={userData.lastName} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
-                                <input type="email" placeholder="Email" value={userData.email} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
-                                <input type="text" placeholder="Phone Number" value={userData.phone} readOnly className="border p-3 rounded-md bg-gray-100 cursor-not-allowed" />
-
+                            <h2 className="text-xl sm:text-2xl lg:text-[24px] font-semibold mb-4">Information</h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                                <input 
+                                    type="text" 
+                                    placeholder="First Name" 
+                                    value={userData.firstName} 
+                                    readOnly 
+                                    className="border p-2 sm:p-3 rounded-md bg-gray-100 cursor-not-allowed text-sm sm:text-base" 
+                                />
+                                <input 
+                                    type="text" 
+                                    placeholder="Last Name" 
+                                    value={userData.lastName} 
+                                    readOnly 
+                                    className="border p-2 sm:p-3 rounded-md bg-gray-100 cursor-not-allowed text-sm sm:text-base" 
+                                />
+                                <input 
+                                    type="email" 
+                                    placeholder="Email" 
+                                    value={userData.email} 
+                                    readOnly 
+                                    className="border p-2 sm:p-3 rounded-md bg-gray-100 cursor-not-allowed text-sm sm:text-base sm:col-span-2" 
+                                />
+                                <input 
+                                    type="text" 
+                                    placeholder="Phone Number" 
+                                    value={userData.phone} 
+                                    readOnly 
+                                    className="border p-2 sm:p-3 rounded-md bg-gray-100 cursor-not-allowed text-sm sm:text-base sm:col-span-2" 
+                                />
                             </div>
 
-                            <h2 className="text-[24px] font-semibold mt-8 mb-4">Change Password</h2>
-                            <div className="grid gap-4"> {/* Added gap for better spacing */}
+                            <h2 className="text-xl sm:text-2xl lg:text-[24px] font-semibold mt-6 sm:mt-8 mb-4">Change Password</h2>
+                            <div className="grid gap-3 sm:gap-4">
                                 <PasswordField
-                                    label="Current Password" // Added a label prop for clarity
+                                    label="Current Password"
                                     value={currentPassword}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
                                     error={passwordChangeErrors.currentPassword}
                                 />
                                 <NewPasswordField
-                                    label="New Password" // Added a label prop for clarity
+                                    label="New Password"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     error={passwordChangeErrors.newPassword}
                                 />
                                 <ConfirmPasswordField
-                                    label="Confirm New Password" // Added a label prop for clarity
+                                    label="Confirm New Password"
                                     value={confirmNewPassword}
                                     onChange={(e) => setConfirmNewPassword(e.target.value)}
                                     error={passwordChangeErrors.confirmNewPassword}
@@ -195,7 +218,7 @@ const MyAccount = () => {
                             </div>
 
                             <button
-                                className="text-[14px] uppercase bg-black text-white py-[16px] px-[40px] rounded-[12px] mt-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="text-xs sm:text-sm lg:text-[14px] uppercase bg-black text-white py-3 sm:py-4 lg:py-[16px] px-6 sm:px-8 lg:px-[40px] rounded-[12px] mt-6 sm:mt-8 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                                 onClick={handleChangePassword}
                                 disabled={isLoading}
                             >

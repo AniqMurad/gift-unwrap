@@ -1,3 +1,4 @@
+
 import React from "react";
 import heroimg1 from "../assets/herosection1.png";
 import heroimg2 from "../assets/herosection2.png";
@@ -22,19 +23,26 @@ const HeroSection = () => {
       heading: "Celebrate Women's Day",
       description:
         "Express appreciation, gratitude, and support for the women in your lives.",
+      route: "/giftforher"
     },
     {
       image: heroimg2,
       heading: "Tiny Gifts for Tiny Joys",
       description: "Discover adorable and thoughtful baby gifts made to celebrate precious moment.",
+      route: "/Giftforbabies"
     },
     {
       image: heroimg3,
       heading: "Make their Birthday Bright",
       description:
         "Surprise your friends and loved ones with heartfelt birthday gifts.",
+      route: "/Giftforbirthday"
     },
   ];
+
+  const handleShopNowClick = (route) => {
+    navigate(route);
+  };
 
   return (
     <div className="flex flex-col md:flex-row py-6 px-4 md:px-16 gap-6">
@@ -58,7 +66,10 @@ const HeroSection = () => {
                       <p className="mt-2 md:mt-4 text-sm md:text-lg text-black">
                         {slide.description}
                       </p>
-                      <button className="mt-3 md:mt-5 px-4 md:px-6 py-2 shadow-lg text-sm text-white bg-black font-semibold rounded-md">
+                      <button 
+                        className="mt-3 md:mt-5 px-4 md:px-6 py-2 shadow-lg text-sm text-white bg-black font-semibold rounded-md hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+                        onClick={() => handleShopNowClick(slide.route)}
+                      >
                         SHOP NOW
                       </button>
                     </div>
