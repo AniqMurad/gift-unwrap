@@ -12,7 +12,7 @@ const ShoppingCart = () => {
     const subtotal = getTotalCartAmount();
     const freeShippingThreshold = 4000;
     const amountNeededForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
-    const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 15;
+    const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 250;
     const totalOrderAmount = subtotal + shippingCost;
 
     const handleQuantityChange = (item, newQuantity) => {
