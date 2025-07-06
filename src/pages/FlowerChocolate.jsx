@@ -4,7 +4,6 @@ import Footer from '../components/Footer'
 import { ArrowDown, FilterIcon, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
 import Loader from "../components/Loader";
-// import ProductData from "../components/ProductData";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Navbar from "@/components/Navbar";
@@ -14,8 +13,8 @@ const FlowerChocolate = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
-    const [columns, setColumns] = useState(4); // Default to 4 columns
-    const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
+    const [columns, setColumns] = useState(4);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const giftsForEveryoneProducts = products.filter(product =>
         selectedCategory === '' || product.keyGift === selectedCategory
     );
@@ -82,16 +81,16 @@ const FlowerChocolate = () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Flowers & Chocolates Bouquets" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2'>
-                <p className={`cursor-pointer ${selectedCategory === 'flowers' ? 'underline' : ''}`} onClick={() => handleCategorySelect('flowers')}>
-                    <span className="hidden sm:inline">Flowers Bouquets</span>
-                    <span className="sm:hidden">Flowers</span>
+                <p className={`cursor-pointer ${selectedCategory === 'cake' ? 'underline' : ''}`} onClick={() => handleCategorySelect('cake')}>
+                    <span className="hidden sm:inline">Cake</span>
+                    <span className="sm:hidden">Cake</span>
                 </p>
-                <p className={`cursor-pointer ${selectedCategory === 'chocolates' ? 'underline' : ''}`} onClick={() => handleCategorySelect('chocolates')}>
-                    <span className="hidden sm:inline">Chocolates Bouquets</span>
-                    <span className="sm:hidden">Chocolates</span>
+                <p className={`cursor-pointer ${selectedCategory === 'bouquets' ? 'underline' : ''}`} onClick={() => handleCategorySelect('bouquets')}>
+                    <span className="hidden sm:inline">Bouquets</span>
+                    <span className="sm:hidden">Bouquets</span>
                 </p>
-                <p className={`cursor-pointer ${selectedCategory === 'flowerschocolates' ? 'underline' : ''}`} onClick={() => handleCategorySelect('flowerschocolates')}>
-                    <span className="hidden sm:inline">Flowers & Chocolates Bouquets</span>
+                <p className={`cursor-pointer ${selectedCategory === 'cakebouquets' ? 'underline' : ''}`} onClick={() => handleCategorySelect('cakebouquets')}>
+                    <span className="hidden sm:inline">Cake & Bouquets</span>
                     <span className="sm:hidden">Both</span>
                 </p>
             </div>
