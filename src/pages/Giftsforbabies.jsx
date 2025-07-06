@@ -3,6 +3,7 @@ import SearchPageNavbar from '../components/SearchPageNavbar';
 import Footer from '../components/Footer';
 import { ArrowDown, FiveBars, FourBars, HerCross, HerHorLine, HerLine, PagenextIcon, PageprevIcon, SquareIcon, ThreeBars } from "../components/icons";
 import Product from "../components/Product";
+import Loader from "../components/Loader";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import Navbar from "@/components/Navbar";
@@ -10,6 +11,7 @@ import Navbar from "@/components/Navbar";
 const Giftsforbabies = () => {
 
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const location = useLocation();
     const [columns, setColumns] = useState(4); // Default to 4 columns
     const [selectedCategory, setSelectedCategory] = useState(''); // Tracks selected gift category
@@ -25,6 +27,7 @@ const Giftsforbabies = () => {
     const category = "giftsForBabies";
 
     useEffect(() => {
+        setLoading(true);
         axios.get('https://giftunwrapbackend.vercel.app/api/products')
             .then(res => {
                 const categoryData = res.data.find(item => item.category === category);
@@ -32,7 +35,8 @@ const Giftsforbabies = () => {
                     setProducts(categoryData.products);
                 }
             })
-            .catch(err => console.error("Failed to load products:", err));
+            .catch(err => console.error("Failed to load products:", err))
+            .finally(() => setLoading(false));
     }, [category]);
 
     useEffect(() => {
@@ -74,6 +78,7 @@ const Giftsforbabies = () => {
 
     return (
         <div>
+            {loading && <Loader />}
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Gifts For Babies" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2'>

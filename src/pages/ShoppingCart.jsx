@@ -10,7 +10,7 @@ const ShoppingCart = () => {
     const navigate = useNavigate();
 
     const subtotal = getTotalCartAmount();
-    const freeShippingThreshold = 130;
+    const freeShippingThreshold = 4000;
     const amountNeededForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
     const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 15;
     const totalOrderAmount = subtotal + shippingCost;
