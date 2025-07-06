@@ -26,6 +26,7 @@ const Giftsforher = () => {
     const category = "giftsForHer";
 
     useEffect(() => {
+        setLoading(true);
         axios.get('https://giftunwrapbackend.vercel.app/api/products')
             .then(res => {
                 const categoryData = res.data.find(item => item.category === category);
@@ -33,7 +34,8 @@ const Giftsforher = () => {
                     setProducts(categoryData.products);
                 }
             })
-            .catch(err => console.error("Failed to load products:", err));
+            .catch(err => console.error("Failed to load products:", err))
+            .finally(() => setLoading(false));
     }, [category]);
 
     useEffect(() => {
@@ -74,6 +76,7 @@ const Giftsforher = () => {
 
     return (
         <div>
+            {loading && <Loader />}
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Gifts For Her" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2'>
