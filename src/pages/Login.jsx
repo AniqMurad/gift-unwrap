@@ -97,10 +97,20 @@ const handleLogin = async () => {
         console.log("Logged in user name:", user.name);
         console.log("Logged in user phone number:", user.phoneNumber);
         
+        // Show success notification
+        setNotification({
+            show: true,
+            type: 'success',
+            message: 'You have successfully logged in!'
+        });
+        
         // Dispatch custom event to notify Navbar
         window.dispatchEvent(new CustomEvent('authChanged'));
 
-        navigate('/');
+        // Navigate after a short delay to show success message
+        setTimeout(() => {
+            navigate('/');
+        }, 1500);
 
     } catch (err) {
         const msg = err.response?.data?.message || 'Invalid email or password. Please try again.';

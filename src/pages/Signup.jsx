@@ -11,6 +11,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '@/components/Navbar'
+import Loader from '@/components/Loader'
+import NotificationBar from '@/components/NotificationBar'
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -25,7 +27,12 @@ const Signup = () => {
     });
 
     const [errors, setErrors] = useState({});
-    const [generalError, setGeneralError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [notification, setNotification] = useState({
+        show: false,
+        type: 'success',
+        message: ''
+    });
 
     // Effect to handle pre-filled email from navigation state
     useEffect(() => {
@@ -37,6 +44,16 @@ const Signup = () => {
         }
     }, [location.state]);
 
+    // Effect to handle notification auto-hide
+    useEffect(() => {
+        if (notification.show) {
+            const timer = setTimeout(() => {
+                setNotification(prev => ({ ...prev, show: false }));
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification.show]);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -47,6 +64,7 @@ const Signup = () => {
             ...prev,
             [name]: ''
         }));
+        setNotification(prev => ({ ...prev, show: false }));
     };
 
     const handleTermsChange = () => {
@@ -58,11 +76,12 @@ const Signup = () => {
             ...prev,
             agreeToTerms: ''
         }));
+        setNotification(prev => ({ ...prev, show: false }));
     };
 
     const handleRegister = async () => {
         const newErrors = {};
-        setGeneralError('');
+        setNotification(prev => ({ ...prev, show: false }));
 
         if (!formData.name.trim()) {
             newErrors.name = 'Name is required';
@@ -95,7 +114,7 @@ const Signup = () => {
             return;
         }
 
-        // 🔗 API call
+        setIsLoading(true);
         try {
             const res = await axios.post('https://giftunwrapbackend.vercel.app/api/auth/register', {
                 email: formData.email,
@@ -105,15 +124,26 @@ const Signup = () => {
                 phoneNumber: formData.phoneNumber
             });
 
-            /*alert('Registration successful. Please log in.');
-                        navigate('/login'); */
-            setGeneralError('Registration successful. Please log in.'); // Using generalError for success message, or you can implement a dedicated success notification.
+            // Show success notification
+            setNotification({
+                show: true,
+                type: 'success',
+                message: 'You have successfully registered! Redirecting to login page...'
+            });
+
+            // Navigate to login after showing success message
             setTimeout(() => {
                 navigate('/login');
-            }, 1000);
+            }, 2000);
         } catch (err) {
             const msg = err.response?.data?.message || 'Something went wrong';
-            setGeneralError(msg);
+            setNotification({
+                show: true,
+                type: 'error',
+                message: msg
+            });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -122,7 +152,11 @@ const Signup = () => {
     };
 
     return (
-        <div>
+        <>
+            {isLoading && <Loader />}
+            {notification.show && (
+                <NotificationBar type={notification.type} message={notification.message} />
+            )}
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Create An Account" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
@@ -130,38 +164,38 @@ const Signup = () => {
 
                 <div className="w-full lg:w-[580px]">
                     <h2 className="text-2xl sm:text-3xl lg:text-[30px] font-semibold mb-4 sm:mb-6">Register</h2>
-                    {generalError && (
-                        <p className={`mb-4 text-sm sm:text-base ${generalError.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>
-                            {generalError}
-                        </p>
-                    )}
                     <Namefield
                         value={formData.name}
                         onChange={handleInputChange}
                         error={errors.name}
+                        disabled={isLoading}
                     />
                     <UsernameField
                         value={formData.email}
                         onChange={handleInputChange}
                         error={errors.email}
+                        disabled={isLoading}
                     />
                     <PhoneNumberField
                         value={formData.phoneNumber}
                         onChange={handleInputChange}
                         error={errors.phoneNumber}
+                        disabled={isLoading}
                     />
                     <PasswordField
                         value={formData.password}
                         onChange={handleInputChange}
                         error={errors.password}
+                        disabled={isLoading}
                     />
                     <ConfirmPasswordField
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         error={errors.confirmPassword}
+                        disabled={isLoading}
                     />
                     <div className="flex items-start mt-4 mb-4">
-                        <div className="flex items-start cursor-pointer" onClick={handleTermsChange}>
+                        <div className={`flex items-start ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={!isLoading ? handleTermsChange : undefined}>
                             <RememberIcon checked={formData.agreeToTerms} />
                             <span className="text-[#A0A0A0] ml-2 text-xs sm:text-sm lg:text-base leading-tight">
                                 I agree to the <span className="text-[#1F1F1F]">Terms of Use</span>
@@ -169,8 +203,12 @@ const Signup = () => {
                         </div>
                     </div>
                     {errors.agreeToTerms && <p className="text-red-600 mb-2 text-sm sm:text-base">{errors.agreeToTerms}</p>}
-                    <button className="bg-black text-xs sm:text-sm text-white px-6 sm:px-8 lg:px-[40px] py-3 sm:py-4 lg:py-[16px] rounded-lg lg:rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200" onClick={handleRegister}>
-                        REGISTER
+                    <button 
+                        className="bg-black text-xs sm:text-sm text-white px-6 sm:px-8 lg:px-[40px] py-3 sm:py-4 lg:py-[16px] rounded-lg lg:rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50" 
+                        onClick={handleRegister}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'REGISTERING...' : 'REGISTER'}
                     </button>
                 </div>
 
@@ -181,7 +219,11 @@ const Signup = () => {
                     <p className="text-[#696C70] text-sm sm:text-base mb-4">
                         Welcome back. Sign in to access your personalized experience, saved preferences, and more. We're thrilled to have you with us again!
                     </p>
-                    <button className="bg-black text-xs sm:text-sm text-white px-6 sm:px-8 lg:px-[40px] py-3 sm:py-4 lg:py-[16px] rounded-lg lg:rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200" onClick={handleLogin}>
+                    <button 
+                        className="bg-black text-xs sm:text-sm text-white px-6 sm:px-8 lg:px-[40px] py-3 sm:py-4 lg:py-[16px] rounded-lg lg:rounded-[12px] mt-4 w-full uppercase cursor-pointer hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50" 
+                        onClick={handleLogin}
+                        disabled={isLoading}
+                    >
                         LOGIN
                     </button>
                 </div>
@@ -189,7 +231,7 @@ const Signup = () => {
             </div>
 
             <Footer />
-        </div>
+        </>
     )
 }
 
