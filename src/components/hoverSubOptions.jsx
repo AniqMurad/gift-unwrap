@@ -65,10 +65,10 @@ const hoverSubOptions = {
         {
             title: "BIRTHDAY",
             items: [
-                { name: "For Him", url: "/Giftforbirthday?category=his birthday" },
-                { name: "For Her", url: "/Giftforbirthday?category=her birthday" },
-                { name: "For Employee", url: "/Giftforbirthday?category=employee birthday" },
-                { name: "For Babies", url: "/Giftforbirthday?category=baby birthday" }
+                { name: "For Him", url: "/Giftforhim" },
+                { name: "For Her", url: "/Giftforher" },
+                { name: "For Employee", url: "/Giftforcompanies" },
+                { name: "For Babies", url: "/Giftforbabies" }
             ],
             url: "/Giftforbirthday"
         },
