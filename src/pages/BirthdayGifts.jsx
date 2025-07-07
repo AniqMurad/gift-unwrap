@@ -13,62 +13,30 @@ const BirthdayGifts = () => {
     const [loading, setLoading] = useState(true);
     const location = useLocation();
     const [columns, setColumns] = useState(4);
-    const [selectedCategory, setSelectedCategory] = useState(''); // This will hold 'his birthday', 'her birthday', etc.
-
-    // Filter products based on selectedCategory and keyGift
-    const giftsForBirthdayProducts = products.filter(product => {
-        if (selectedCategory === 'his birthday' && product.keyGift === 'giftsForHim') {
-            return true;
-        }
-        if (selectedCategory === 'her birthday' && product.keyGift === 'giftsForHer') {
-            return true;
-        }
-        // For other birthday categories, rely on the keyGift
-        return selectedCategory === '' || product.keyGift === selectedCategory;
-    });
-
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const giftsForBirthdayProducts = products.filter(product =>
+        selectedCategory === '' || product.keyGift === selectedCategory
+    );
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(1000);
     const [selectedFilters, setSelectedFilters] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = 5;
 
+    const category = "birthday";
+
     useEffect(() => {
         setLoading(true);
-        let apiCategory = "birthday"; // Default category
-
-        if (selectedCategory === 'his birthday') {
-            apiCategory = "giftsForHim";
-        } else if (selectedCategory === 'her birthday') {
-            apiCategory = "giftsForHer";
-        } else {
-            apiCategory = "birthday"; // Keep birthday for employee and baby
-        }
-
         axios.get('https://giftunwrapbackend.vercel.app/api/products')
             .then(res => {
-                const categoryData = res.data.find(item => item.category === apiCategory);
+                const categoryData = res.data.find(item => item.category === category);
                 if (categoryData) {
-                    // When 'his birthday' or 'her birthday' is selected, filter products based on keyGift
-                    if (selectedCategory === 'his birthday') {
-                        setProducts(categoryData.products.filter(product => product.keyGift === 'giftsForHim'));
-                    } else if (selectedCategory === 'her birthday') {
-                        setProducts(categoryData.products.filter(product => product.keyGift === 'giftsForHer'));
-                    } else if (selectedCategory === 'employee birthday') {
-                        setProducts(categoryData.products.filter(product => product.keyGift === 'employee birthday'));
-                    } else if (selectedCategory === 'baby birthday') {
-                        setProducts(categoryData.products.filter(product => product.keyGift === 'baby birthday'));
-                    }
-                    else {
-                        setProducts(categoryData.products); // For the initial load or no specific sub-category selected
-                    }
-                } else {
-                    setProducts([]); // No data for the selected category
+                    setProducts(categoryData.products);
                 }
             })
             .catch(err => console.error("Failed to load products:", err))
             .finally(() => setLoading(false));
-    }, [selectedCategory]); // Re-fetch products when selectedCategory changes
+    }, [category]);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -155,7 +123,7 @@ const BirthdayGifts = () => {
                         </div>
 
                         <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
-                            <span className="text-[#696C70] font-medium text-xs sm:text-sm">{selectedFilters.length > 0 || selectedCategory ? `${giftsForBirthdayProducts.length} Products Found:` : ""}</span>
+                            <span className="text-[#696C70] font-medium text-xs sm:text-sm">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
 
                             <HerLine />
                             <div className="flex flex-wrap gap-1 sm:gap-2">
@@ -164,10 +132,10 @@ const BirthdayGifts = () => {
                                     <span className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
                                         <button onClick={() => setSelectedCategory("")} className="mr-1 sm:mr-2 text-gray-500 hover:text-black">X</button>
                                         <span className="sm:hidden">
-                                            {selectedCategory === 'his birthday' ? 'His Birthday' :
-                                                selectedCategory === 'her birthday' ? 'Her Birthday' :
-                                                    selectedCategory === 'employee birthday' ? 'Employee' :
-                                                        selectedCategory === 'baby birthday' ? 'Baby' : selectedCategory}
+                                            {selectedCategory === 'his birthday' ? 'His Birthday' : 
+                                             selectedCategory === 'her birthday' ? 'Her Birthday' :
+                                             selectedCategory === 'employee birthday' ? 'Employee' :
+                                             selectedCategory === 'baby birthday' ? 'Baby' : selectedCategory}
                                         </span>
                                         <span className="hidden sm:inline">{selectedCategory}</span>
                                     </span>
