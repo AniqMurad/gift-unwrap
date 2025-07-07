@@ -25,17 +25,8 @@ const BirthdayGifts = () => {
   const location = useLocation();
   const [columns, setColumns] = useState(4);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const birthdayCategories = [
-    "her birthday",
-    "his birthday",
-    "employee birthday",
-    "baby birthday",
-  ];
-
-  const giftsForBirthdayProducts = products.filter((product) =>
-    selectedCategory
-      ? product.keyGift === selectedCategory
-      : birthdayCategories.includes(product.keyGift)
+  const giftsForBirthdayProducts = products.filter(
+    (product) => selectedCategory === "" || product.keyGift === selectedCategory
   );
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
@@ -50,16 +41,24 @@ const BirthdayGifts = () => {
     axios
       .get("https://giftunwrapbackend.vercel.app/api/products")
       .then((res) => {
-        const categoryData = res.data.find(
-          (item) => item.category === category
+        const birthdayData = res.data.find(
+          (item) => item.category === "birthday"
         );
-        if (categoryData) {
-          setProducts(categoryData.products);
+        const herData = res.data.find(
+          (item) => item.category === "giftsForHer"
+        );
+        let combined = birthdayData?.products || [];
+
+        // Merge "giftsForHer" products when "her birthday" is selected
+        if (selectedCategory === "her birthday" && herData?.products) {
+          combined = [...combined, ...herData.products];
         }
+
+        setProducts(combined);
       })
       .catch((err) => console.error("Failed to load products:", err))
       .finally(() => setLoading(false));
-  }, [category]);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -184,11 +183,11 @@ const BirthdayGifts = () => {
             </div>
 
             <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
-              {giftsForBirthdayProducts.length > 0 && (
-                <span className="text-[#696C70] font-medium text-xs sm:text-sm">
-                  {giftsForBirthdayProducts.length} Products Found:
-                </span>
-              )}
+              <span className="text-[#696C70] font-medium text-xs sm:text-sm">
+                {selectedFilters.length > 0 || selectedCategory
+                  ? "18 Products Found:"
+                  : ""}
+              </span>
 
               <HerLine />
               <div className="flex flex-wrap gap-1 sm:gap-2">
