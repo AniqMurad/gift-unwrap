@@ -80,7 +80,7 @@ const BirthdayGifts = () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Birthday Gifts" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-xs sm:text-sm lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2 sm:px-4'>
-                <p className={`cursor-pointer ${selectedCategory === 'his birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('his birthday')}>
+                <p className={`cursor-pointer ${selectedCategory === 'his birthday' ? 'underline' : ''}`} onClick={() => handleCategorySelect('/Giftforhim')}>
                     <span className="sm:hidden">His Birthday</span>
                     <span className="hidden sm:inline">His Birthday</span>
                 </p>
