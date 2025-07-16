@@ -10,10 +10,31 @@ const OrderHistory = () => {
     const [activeFilter, setActiveFilter] = useState('All');
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
-    // Use orderItem.productId as the key for tracking review inputs/ratings
-    const [reviewInputs, setReviewInputs] = useState({}); // { orderItemNumericProductId: reviewText }
-    const [reviewRatings, setReviewRatings] = useState({}); // { orderItemNumericProductId: rating }
-    const [reviewSubmitting, setReviewSubmitting] = useState({}); // { orderItemNumericProductId: boolean }
+    const [reviewInputs, setReviewInputs] = useState({});
+    const [reviewRatings, setReviewRatings] = useState({});
+    const [reviewSubmitting, setReviewSubmitting] = useState({});
+    const [notification, setNotification] = useState({
+        show: false,
+        type: 'success',
+        message: ''
+    });
+
+    useEffect(() => {
+        if (notification.show) {
+            const timer = setTimeout(() => {
+                setNotification(prev => ({ ...prev, show: false }));
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification.show]);
+
+    const showNotification = (type, message) => {
+        setNotification({
+            show: true,
+            type,
+            message
+        });
+    };
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -82,6 +103,17 @@ const OrderHistory = () => {
         const reviewText = reviewInputs[orderItemNumericProductId];
         const rating = reviewRatings[orderItemNumericProductId];
         const userId = localStorage.getItem('userId'); // Ensure this is a valid MongoDB ObjectId string
+        const userString = localStorage.getItem('user');
+        console.log("User String:", userString);
+        let username = '';
+        if (userString) {
+            try {
+                const userObj = JSON.parse(userString);
+                username = userObj.name || '';
+            } catch (e) {
+                username = '';
+            }
+        }
 
         if (!reviewText || reviewText.trim() === "") {
             showNotification('error', 'Please provide a comment for your review.');
@@ -104,8 +136,8 @@ const OrderHistory = () => {
                 comment: reviewText.trim()
             });
 
-            alert('Review submitted successfully!');
-            // Clear the review input and rating for the submitted product
+            showNotification('success', 'Review submitted successfully!');
+
             setReviewInputs((prev) => {
                 const newState = { ...prev };
                 delete newState[orderItemNumericProductId];
@@ -130,7 +162,7 @@ const OrderHistory = () => {
             {notification.show && (
                 <NotificationBar type={notification.type} message={notification.message} />
             )}
-            
+
             <div className="flex gap-3 mb-6">
                 {filters.map((filter) => (
                     <button
