@@ -4,8 +4,8 @@ import SearchPageNavbar from '../components/SearchPageNavbar';
 import Footer from '../components/Footer';
 import { useCart } from '../context/CartContext';
 import Navbar from './Navbar';
-import axios from 'axios'; // Import axios for API calls
-import Product from '../components/Product'; // Assuming your Product component is in components/Product.js
+import axios from 'axios';
+import Product from '../components/Product';
 
 const ProductDetail = () => {
     const [selectedImage, setSelectedImage] = useState('');
@@ -15,21 +15,19 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [activeTab, setActiveTab] = useState('description');
-    const [relatedProducts, setRelatedProducts] = useState([]); // New state for related products
+    const [relatedProducts, setRelatedProducts] = useState([]);
     const { addToCart } = useCart();
 
     useEffect(() => {
         const fetchProductAndRelated = async () => {
             let currentProduct = null;
 
-            // First, try to get product from navigation state (for immediate display)
             const productFromState = location.state?.productData;
             if (productFromState && productFromState.id.toString() === productId && productFromState.category === category) {
                 setProduct(productFromState);
                 setSelectedImage(productFromState.image || (productFromState.images && productFromState.images[0]) || '');
                 currentProduct = productFromState;
             } else {
-                // If not in state, fetch the specific product from the API
                 try {
                     const response = await axios.get(`https://giftunwrapbackend.vercel.app/api/products/${category}/${productId}`);
                     setProduct(response.data);
@@ -40,20 +38,18 @@ const ProductDetail = () => {
                     setProduct(null);
                 }
             }
-            setQuantity(1); // Reset quantity when product changes
-            window.scrollTo(0, 0); // Scroll to top
+            setQuantity(1);
+            window.scrollTo(0, 0);
 
-            // Fetch related products from the same category
             if (currentProduct) {
                 try {
                     const response = await axios.get('https://giftunwrapbackend.vercel.app/api/products');
                     const categoryData = response.data.find(item => item.category === category);
                     if (categoryData && categoryData.products) {
                         const filteredRelated = categoryData.products.filter(
-                            (p) => p.id !== currentProduct.id // Exclude the current product
+                            (p) => p.id !== currentProduct.id
                         );
 
-                        // Shuffle and pick up to 4 random related products
                         const shuffled = filteredRelated.sort(() => 0.5 - Math.random());
                         setRelatedProducts(shuffled.slice(0, 4));
                     }
@@ -99,21 +95,23 @@ const ProductDetail = () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title={product.name} titleHome="Home" backgroundColor='#FBF4E8' />
 
-            <div className="container mx-auto px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12">
+            <div className="container mx-auto px-4 sm:px-8 lg:px-16 py-4 sm:py-6 lg:py-12">
                 {/* Product Detail Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 xl:gap-16">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-10 xl:gap-16">
                     {/* Left: Product Images */}
-                    <div className="space-y-4 sm:space-y-6 lg:space-y-8">
-                        <div className="bg-gray-50 p-4 sm:p-6 lg:p-8 rounded-lg flex items-center justify-center aspect-square">
+                    <div className="space-y-2 sm:space-y-4 lg:space-y-8">
+                        {/* Main Image with reduced height on mobile */}
+                        <div className="bg-gray-50 p-2 sm:p-4 lg:p-8 rounded-lg flex items-center justify-center">
                             <img
                                 src={selectedImage || product.image || (product.images && product.images[0]) || 'https://via.placeholder.com/600'}
                                 alt={product.name}
-                                className="w-full h-full object-contain max-h-[300px] sm:max-h-[400px] lg:max-h-[500px] xl:max-h-[600px]"
+                                className="w-full h-full object-contain max-h-[200px] sm:max-h-[300px] lg:max-h-[500px] xl:max-h-[600px]"
                             />
                         </div>
 
+                        {/* Thumbnail Images - Hidden on mobile to save space */}
                         {product.images && product.images.length > 1 && (
-                            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
+                            <div className="hidden sm:grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
                                 {product.images.map((imgSrc, index) => (
                                     <div
                                         key={index}
@@ -133,20 +131,19 @@ const ProductDetail = () => {
                     </div>
 
                     {/* Right: Product Info */}
-                    <div className="space-y-4 sm:space-y-5 lg:space-y-6">
-                        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#1F1F1F]">{product.name}</h1>
+                    <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+                        <h1 className="text-lg sm:text-xl lg:text-3xl font-bold text-[#1F1F1F]">{product.name}</h1>
 
                         <div className="flex items-center gap-4">
                             <span className="text-lg sm:text-xl lg:text-2xl font-semibold text-red-500">Rs {product.price ? product.price.toFixed(2) : 'N/A'}</span>
-                            {/* Add original price and discount if applicable */}
                         </div>
 
-                        <div className="text-[#696C70] border-b border-gray-200 pb-4 sm:pb-5 lg:pb-6 text-sm sm:text-base">
-                            {/* Use product.shortDescription from API */}
+                        <div className="text-[#696C70] border-b border-gray-200 pb-3 sm:pb-4 lg:pb-6 text-sm sm:text-base">
                             <p>{product.shortDescription || "No short description available."}</p>
                         </div>
 
-                        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6 pt-4">
+                        {/* Quantity and Buttons Section - Compact on mobile */}
+                        <div className="flex flex-col gap-3 sm:gap-4 lg:gap-6 pt-2 sm:pt-4">
                             <div className="flex items-center justify-center sm:justify-start border border-gray-300 rounded-md w-fit mx-auto sm:mx-0">
                                 <button
                                     className="px-3 sm:px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-l-md text-lg sm:text-base"
@@ -166,7 +163,6 @@ const ProductDetail = () => {
                             </div>
 
                             <div className="flex flex-col gap-3 w-full">
-                                {/* --- 5. Attach handlers to buttons --- */}
                                 <button
                                     onClick={handleAddToCart}
                                     className="w-full px-6 sm:px-8 lg:px-12 py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
@@ -189,7 +185,7 @@ const ProductDetail = () => {
                                     <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2.05-2.05A1 1 0 015.71 14h7.29zM13 16l-2-2m2 2l2-2m-2 2v-2m0 0h4.586a1 1 0 00.707-.293l2.828-2.828a1 1 0 000-1.414l-2.828-2.828A1 1 0 0017.586 6H13" />
                                 </svg>
-                                <span>Free shipping over Rs 130</span> {/* Updated threshold */}
+                                <span>Free shipping on orders over Rs 4000</span>
                             </div>
                             <div className="flex items-center gap-3 text-xs sm:text-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -225,7 +221,6 @@ const ProductDetail = () => {
                             <div className="py-4 sm:py-6 lg:py-8 text-gray-700 leading-relaxed text-sm sm:text-base">
                                 {activeTab === 'description' && (
                                     <div>
-                                        {/* Use product.longDescription from API */}
                                         <p>
                                             {product.longDescription || "Detailed description not available."}
                                         </p>
@@ -240,7 +235,6 @@ const ProductDetail = () => {
                                                     <p className="font-semibold text-sm sm:text-base">{review.author}</p>
                                                     <p className="text-xs sm:text-sm text-gray-500">{new Date(review.date).toLocaleDateString()}</p>
                                                     <p className="mt-1 text-sm sm:text-base">{review.comment}</p>
-                                                    {/* Add star rating if available */}
                                                 </div>
                                             ))
                                         ) : (
@@ -254,7 +248,7 @@ const ProductDetail = () => {
                                         <div>
                                             <h4 className="font-semibold mb-2 text-sm sm:text-base">Shipping Information:</h4>
                                             <ul className="list-disc list-inside space-y-1 text-sm sm:text-base">
-                                                <li>Free standard shipping on orders over Rs 130.</li>
+                                                <li>Free shipping on orders over Rs 4000.</li>
                                                 <li>Express shipping available for an additional fee.</li>
                                                 <li>Most orders ship within 1-2 business days.</li>
                                             </ul>

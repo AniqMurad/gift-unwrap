@@ -91,7 +91,9 @@ const Trending = () => {
                                     <img src={item.image} alt={item.title} className='w-full h-full object-cover' />
                                 </div>
                                 <div className='flex justify-center mt-3 text-center'>
-                                    <p className='font-semibold text-base group-hover:text-black transition-colors duration-200'>{item.title} <span className='text-[#A0A0A0] text-sm font-normal'>({item.count})</span></p>
+                                    <p className='font-semibold text-base group-hover:text-black transition-colors duration-200'>{item.title} 
+                                        {/* <span className='text-[#A0A0A0] text-sm font-normal'>({item.count})</span> */}
+                                    </p>
                                 </div>
                             </div>
                         ))}

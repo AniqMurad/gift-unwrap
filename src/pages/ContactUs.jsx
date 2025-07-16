@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import Navbar from '@/components/Navbar'
+import NotificationBar from '../components/NotificationBar'
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
@@ -11,15 +12,43 @@ const ContactUs = () => {
     });
     const [loading, setLoading] = useState(false);
     const [messageSent, setMessageSent] = useState(false);
+    const [notification, setNotification] = useState({
+        show: false,
+        type: 'success',
+        message: ''
+    });
+
+    // Auto-hide notification after 3 seconds
+    useEffect(() => {
+        if (notification.show) {
+            const timer = setTimeout(() => {
+                setNotification(prev => ({ ...prev, show: false }));
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification.show]);
+
+    const showNotification = (type, message) => {
+        setNotification({
+            show: true,
+            type,
+            message
+        });
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        // Hide notification when user starts typing
+        if (notification.show) {
+            setNotification(prev => ({ ...prev, show: false }));
+        }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setMessageSent(false);
+        setNotification(prev => ({ ...prev, show: false })); // Hide any existing notifications
 
         try {
             const response = await fetch('https://giftunwrapbackend.vercel.app/api/messages', {
@@ -33,12 +62,15 @@ const ContactUs = () => {
             if (response.ok) {
                 setFormData({ name: '', email: '', content: '' });
                 setMessageSent(true);
+                showNotification('success', 'Your message has been sent successfully!');
             } else {
-                alert('Failed to send message. Please try again.');
+                const errorData = await response.json();
+                const errorMessage = errorData.message || 'Failed to send message. Please try again.';
+                showNotification('error', errorMessage);
             }
         } catch (error) {
             console.error('Error sending message:', error);
-            alert('Something went wrong. Try again later.');
+            showNotification('error', 'Something went wrong. Please try again later.');
         } finally {
             setLoading(false);
         }
@@ -46,6 +78,9 @@ const ContactUs = () => {
 
     return (
         <div>
+            {notification.show && (
+                <NotificationBar type={notification.type} message={notification.message} />
+            )}
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Contact Us" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
@@ -69,6 +104,7 @@ const ContactUs = () => {
                                     placeholder="Your Name*"
                                     className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:ring focus:ring-gray-200 outline-none"
                                     required
+                                    disabled={loading}
                                 />
                                 <input
                                     type="email"
@@ -78,6 +114,7 @@ const ContactUs = () => {
                                     placeholder="Your Email*"
                                     className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:ring focus:ring-gray-200 outline-none"
                                     required
+                                    disabled={loading}
                                 />
                             </div>
 
@@ -88,11 +125,12 @@ const ContactUs = () => {
                                 placeholder="Your Message*"
                                 className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 mt-3 sm:mt-4 h-24 sm:h-28 text-sm sm:text-base focus:ring focus:ring-gray-200 outline-none"
                                 required
+                                disabled={loading}
                             ></textarea>
 
                             <button
                                 type="submit"
-                                className="mt-3 sm:mt-4 px-4 sm:px-6 py-2 sm:py-3 bg-black text-white text-sm sm:text-base rounded-lg hover:bg-gray-800 transition w-full sm:w-auto"
+                                className="mt-3 sm:mt-4 px-4 sm:px-6 py-2 sm:py-3 bg-black text-white text-sm sm:text-base rounded-lg hover:bg-gray-800 transition w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled={loading}
                             >
                                 {loading ? 'Sending...' : 'SEND MESSAGE'}
@@ -139,7 +177,6 @@ const ContactUs = () => {
                     ></iframe>
                 </div>
             </div>
-
 
             <Footer />
         </div>

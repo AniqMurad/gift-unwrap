@@ -36,10 +36,9 @@ const Home = () => {
         <Trending />
         <ProductPage title="Gifts for Him" category="giftsForHim" />
         <Categories />
-        <ProductPage title="Birthday Gifts" category="birthday" />
+        <ProductPage title="Gifts for Her" category="giftsForHer" />
         <Review />
         <Services />
-        {/* <InstaSpace /> */}
         <Blogs />
         <Partners />
         <Offer />
