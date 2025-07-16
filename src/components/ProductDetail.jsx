@@ -6,6 +6,7 @@ import { useCart } from '../context/CartContext';
 import Navbar from './Navbar';
 import axios from 'axios';
 import Product from '../components/Product';
+import NotificationBar from '../components/NotificationBar';
 
 const ProductDetail = () => {
     const [selectedImage, setSelectedImage] = useState('');
@@ -17,6 +18,29 @@ const ProductDetail = () => {
     const [activeTab, setActiveTab] = useState('description');
     const [relatedProducts, setRelatedProducts] = useState([]);
     const { addToCart } = useCart();
+    const [notification, setNotification] = useState({
+        show: false,
+        type: 'success',
+        message: ''
+    });
+
+    // Auto-hide notification after 3 seconds
+    useEffect(() => {
+        if (notification.show) {
+            const timer = setTimeout(() => {
+                setNotification(prev => ({ ...prev, show: false }));
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification.show]);
+
+    const showNotification = (type, message) => {
+        setNotification({
+            show: true,
+            type,
+            message
+        });
+    };
 
     useEffect(() => {
         const fetchProductAndRelated = async () => {
@@ -79,7 +103,7 @@ const ProductDetail = () => {
     const handleAddToCart = () => {
         if (product) {
             addToCart({ ...product, quantity });
-            alert(`${product.name} (Qty: ${quantity}) added to cart!`);
+            showNotification('success', `${product.name} (Qty: ${quantity}) added to cart!`);
         }
     };
 
@@ -92,6 +116,9 @@ const ProductDetail = () => {
 
     return (
         <div>
+            {notification.show && (
+                <NotificationBar type={notification.type} message={notification.message} />
+            )}
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title={product.name} titleHome="Home" backgroundColor='#FBF4E8' />
 
