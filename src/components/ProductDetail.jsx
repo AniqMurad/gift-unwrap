@@ -238,21 +238,9 @@ const ProductDetail = () => {
                                             product.reviews.map((review, index) => (
                                                 <div key={index} className="border-b last:border-b-0 py-3 sm:py-4">
                                                     <p className="font-semibold text-sm sm:text-base">{review.author}</p>
-                                                    <p className="text-xs sm:text-sm text-gray-500">{new Date(review.date).toLocaleDateString()}</p>
-                                                    <div className="flex items-center mt-1">
-                                                        {[1, 2, 3, 4, 5].map((star) => (
-                                                            <svg
-                                                                key={star}
-                                                                className={`w-4 h-4 sm:w-5 sm:h-5 ${star <= review.rating ? 'text-yellow-400' : 'text-gray-300'
-                                                                    }`}
-                                                                fill="currentColor"
-                                                                viewBox="0 0 20 20"
-                                                            >
-                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.284 3.945a1 1 0 00.95.69h4.148c.969 0 1.371 1.24.588 1.81l-3.36 2.44a1 1 0 00-.364 1.118l1.284 3.945c.3.921-.755 1.688-1.54 1.118l-3.36-2.44a1 1 0 00-1.175 0l-3.36 2.44c-.784.57-1.838-.197-1.54-1.118l1.284-3.945a1 1 0 00-.364-1.118L2.025 9.372c-.783-.57-.38-1.81.588-1.81h4.149a1 1 0 00.95-.69l1.284-3.945z" />
-                                                            </svg>
-                                                        ))}
-                                                    </div>
-                                                    <p className="mt-2 text-sm sm:text-base text-gray-700">{review.comment}</p>
+                                                    <p className="text-xs sm:text-sm text-gray-500"><strong>Rating:</strong> {review.rating} ⭐</p>
+                                                    <p className="mt-1 text-sm sm:text-base"><strong>Comment:</strong> {review.comment}</p>
+                                                    {review.rating} ⭐
                                                 </div>
                                             ))
                                         ) : (
@@ -260,7 +248,6 @@ const ProductDetail = () => {
                                         )}
                                     </div>
                                 )}
-
 
                                 {activeTab === 'shipping' && (
                                     <div className="space-y-3 sm:space-y-4">
