@@ -159,8 +159,8 @@ const handleLogin = async () => {
                     />
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mt-4 mb-4">
                         <div className={`flex items-center ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`} onClick={!isLoading ? () => {/* Handle remember me toggle */ } : undefined}>
-                            <RememberIcon />
-                            <span className="text-[#1F1F1F] ml-2 text-sm sm:text-base">Remember me</span>
+                            {/* <RememberIcon />
+                            <span className="text-[#1F1F1F] ml-2 text-sm sm:text-base">Remember me</span> */}
                         </div>
                         <a className={`text-sm sm:text-base underline font-semibold ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`} onClick={!isLoading ? handleForgotPass : undefined}>
                             Forgot Your Password?
