@@ -233,8 +233,17 @@ const ProductDetail = () => {
                                             product.reviews.map((review, index) => (
                                                 <div key={index} className="border-b last:border-b-0 py-3 sm:py-4">
                                                     <p className="font-semibold text-sm sm:text-base">{review.author}</p>
-                                                    <p className="text-xs sm:text-sm text-gray-500">{new Date(review.date).toLocaleDateString()}</p>
-                                                    <p className="mt-1 text-sm sm:text-base">{review.comment}</p>
+                                                    {review.createdAt && (
+                                                        <span className="text-xs text-gray-500 block mb-1">
+                                                            {new Date(review.createdAt).toLocaleDateString(undefined, {
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric'
+                                                            })}
+                                                        </span>
+                                                    )}
+                                                    <p className="text-xs sm:text-sm text-gray-500"><strong>Rating:</strong> {review.rating} ⭐</p>
+                                                    <p className="mt-1 text-sm sm:text-base"><strong>Comment:</strong> {review.comment}</p>
                                                 </div>
                                             ))
                                         ) : (
