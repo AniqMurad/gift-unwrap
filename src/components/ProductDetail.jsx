@@ -32,6 +32,7 @@ const ProductDetail = () => {
                 // If not in state, fetch the specific product from the API
                 try {
                     const response = await axios.get(`https://giftunwrapbackend.vercel.app/api/products/${category}/${productId}`);
+                    console.log(`Fetched product ${category}/${productId}:`, response.data);
                     setProduct(response.data);
                     setSelectedImage(response.data.image || (response.data.images && response.data.images[0]) || '');
                     currentProduct = response.data;
@@ -40,10 +41,9 @@ const ProductDetail = () => {
                     setProduct(null);
                 }
             }
-            setQuantity(1); // Reset quantity when product changes
-            window.scrollTo(0, 0); // Scroll to top
+            setQuantity(1);
+            window.scrollTo(0, 0);
 
-            // Fetch related products from the same category
             if (currentProduct) {
                 try {
                     const response = await axios.get('https://giftunwrapbackend.vercel.app/api/products');
@@ -94,6 +94,8 @@ const ProductDetail = () => {
         }
     };
 
+
+    console.log(product.reviews);
     return (
         <div>
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
@@ -233,29 +235,47 @@ const ProductDetail = () => {
                                 )}
 
                                 {activeTab === 'reviews' && (
-                                    <div>
+                                    <div className="space-y-6">
                                         {product.reviews && product.reviews.length > 0 ? (
                                             product.reviews.map((review, index) => (
-                                                <div key={index} className="border-b last:border-b-0 py-3 sm:py-4">
-                                                    <p className="font-semibold text-sm sm:text-base">{review.author}</p>
-                                                    {review.createdAt && (
-                                                        <span className="text-xs text-gray-500 block mb-1">
-                                                            {new Date(review.createdAt).toLocaleDateString(undefined, {
-                                                                year: 'numeric',
-                                                                month: 'short',
-                                                                day: 'numeric'
-                                                            })}
-                                                        </span>
-                                                    )}
-                                                    <p className="text-xs sm:text-sm text-gray-500"><strong>Rating:</strong> {review.rating} ⭐</p>
-                                                    <p className="mt-1 text-sm sm:text-base"><strong>Comment:</strong> {review.comment}</p>
+                                                <div key={index} className="border-b pb-4 last:border-none">
+                                                    <div className="flex items-center justify-between">
+                                                        <div>
+                                                            <p className="font-semibold text-sm sm:text-base"><strong>Username:</strong> {review.username}</p>
+                                                            {review.createdAt && (
+                                                                <span className="text-xs text-gray-500 block mb-1">
+                                                                    {new Date(review.createdAt).toLocaleDateString(undefined, {
+                                                                        year: 'numeric',
+                                                                        month: 'short',
+                                                                        day: 'numeric'
+                                                                    })}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex items-center"><strong>Rating:</strong>
+                                                            {[...Array(5)].map((_, i) => (
+                                                                <svg
+                                                                    key={i}
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill={i < review.rating ? 'currentColor' : 'none'}
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke="currentColor"
+                                                                    className={`h-5 w-5 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                                                >
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.62 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z" />
+                                                                </svg>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <p className="mt-2 text-sm sm:text-base text-gray-700"><strong>Comment:</strong> {review.comment}</p>
                                                 </div>
                                             ))
                                         ) : (
-                                            <p>No reviews yet for this product.</p>
+                                            <p className="text-sm text-gray-500">No reviews yet for this product.</p>
                                         )}
                                     </div>
                                 )}
+
 
                                 {activeTab === 'shipping' && (
                                     <div className="space-y-3 sm:space-y-4">
@@ -296,7 +316,7 @@ const ProductDetail = () => {
             </div>
 
             <Footer />
-        </div>
+        </div >
     );
 };
 

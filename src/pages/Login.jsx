@@ -1,14 +1,15 @@
+// Login.jsx
 import Footer from "../components/Footer";
 import { LoginLine } from "../components/icons";
 import SearchPageNavbar from "../components/SearchPageNavbar";
-import React, { useState, useEffect } from "react"; // Import useEffect
+import React, { useState, useEffect } from "react";
 import UsernameField from "@/components/UsernameField";
 import PasswordField from "@/components/PasswordField";
 import RememberIcon from "@/components/RememberIcon";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
-import NotificationBar from "../components/NotificationBar"; // --- 1. Import NotificationBar ---
+import NotificationBar from "../components/NotificationBar";
 import Navbar from "@/components/Navbar";
 
 const Login = () => {
@@ -20,9 +21,9 @@ const Login = () => {
 
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [notification, setNotification] = useState({ // --- 2. Add Notification State ---
+    const [notification, setNotification] = useState({
         show: false,
-        type: 'success', // Default, will be 'error' for login failures
+        type: 'success',
         message: ''
     });
 
@@ -30,7 +31,7 @@ const Login = () => {
         if (notification.show) {
             const timer = setTimeout(() => {
                 setNotification(prev => ({ ...prev, show: false }));
-            }, 3000); // Hide after 3 seconds
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [notification.show]);
@@ -45,84 +46,85 @@ const Login = () => {
             ...prev,
             [name]: ''
         }));
-        setNotification(prev => ({ ...prev, show: false })); // Hide notification on input change
+        setNotification(prev => ({ ...prev, show: false }));
     };
 
-const handleLogin = async () => {
-    const newErrors = {};
-    setNotification(prev => ({ ...prev, show: false })); // Hide previous notification
+    const handleLogin = async () => {
+        const newErrors = {};
+        setNotification(prev => ({ ...prev, show: false }));
 
-    if (!formData.email.trim()) {
-        newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = 'Email address is invalid';
-    }
-    if (!formData.password.trim()) {
-        newErrors.password = 'Password is required';
-    }
+        if (!formData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Email address is invalid';
+        }
+        if (!formData.password.trim()) {
+            newErrors.password = 'Password is required';
+        }
 
-    if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return;
-    }
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
 
-    setIsLoading(true);
-    try {
-        const res = await axios.post('https://giftunwrapbackend.vercel.app/api/auth/login', {
-            email: formData.email,
-            password: formData.password
-        });
+        setIsLoading(true);
+        try {
+            const res = await axios.post('https://giftunwrapbackend.vercel.app/api/auth/login', {
+                email: formData.email,
+                password: formData.password
+            });
 
-        const { token, user } = res.data;
-        
-        // Split the name into firstName and lastName
-        const nameParts = user.name.trim().split(' ');
-        const firstName = nameParts[0] || '';
-        const lastName = nameParts.slice(1).join(' ') || '';
-        
-        // Create enhanced user object with additional fields
-        const enhancedUser = {
-            ...user,
-            firstName: firstName,
-            lastName: lastName,
-            phone: user.phoneNumber, // Map phoneNumber to phone
-            country: 'United States' // Default country
-        };
-        
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(enhancedUser));
-        localStorage.setItem('userId', user._id);
+            const { token, user } = res.data;
 
-        console.log("Login successful. User ID stored:", user._id);
-        console.log("Logged in user name:", user.name);
-        console.log("Logged in user phone number:", user.phoneNumber);
-        
-        // Show success notification
-        setNotification({
-            show: true,
-            type: 'success',
-            message: 'You have successfully logged in!'
-        });
-        
-        // Dispatch custom event to notify Navbar
-        window.dispatchEvent(new CustomEvent('authChanged'));
+            // Split the name into firstName and lastName
+            const nameParts = user.name.trim().split(' ');
+            const firstName = nameParts[0] || '';
+            const lastName = nameParts.slice(1).join(' ') || '';
 
-        // Navigate after a short delay to show success message
-        setTimeout(() => {
-            navigate('/');
-        }, 1500);
+            // Create enhanced user object with additional fields
+            const enhancedUser = {
+                ...user,
+                firstName: firstName,
+                lastName: lastName,
+                phone: user.phoneNumber, // Map phoneNumber to phone
+                country: 'United States' // Default country
+            };
 
-    } catch (err) {
-        const msg = err.response?.data?.message || 'Invalid email or password. Please try again.';
-        setNotification({
-            show: true,
-            type: 'error',
-            message: msg
-        });
-    } finally {
-        setIsLoading(false);
-    }
-};
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(enhancedUser));
+            localStorage.setItem('userId', user._id);
+            localStorage.setItem('username', user.name);
+
+            console.log("Login successful. User ID stored:", user._id);
+            console.log("Logged in user name:", user.name);
+            console.log("Logged in user phone number:", user.phoneNumber);
+
+            // Show success notification
+            setNotification({
+                show: true,
+                type: 'success',
+                message: 'You have successfully logged in!'
+            });
+
+            // Dispatch custom event to notify Navbar
+            window.dispatchEvent(new CustomEvent('authChanged'));
+
+            // Navigate after a short delay to show success message
+            setTimeout(() => {
+                navigate('/');
+            }, 1500);
+
+        } catch (err) {
+            const msg = err.response?.data?.message || 'Invalid email or password. Please try again.';
+            setNotification({
+                show: true,
+                type: 'error',
+                message: msg
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleSignup = () => {
         navigate("/signup");

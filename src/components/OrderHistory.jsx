@@ -1,6 +1,6 @@
 // OrderHistory.jsx
 import React, { useState, useEffect } from 'react';
-import { MyorderLine, MyorderRightArrow } from './icons';
+import { MyorderLine, MyorderRightArrow } from './icons'; // Assuming these are relevant
 import axios from 'axios';
 
 const filters = ['All', 'In Progress', 'Delivered', 'Cancelled'];
@@ -9,15 +9,15 @@ const OrderHistory = () => {
     const [activeFilter, setActiveFilter] = useState('All');
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
-    // Use orderItem.productId as the key for tracking review inputs/ratings
-    const [reviewInputs, setReviewInputs] = useState({}); // { orderItemNumericProductId: reviewText }
-    const [reviewRatings, setReviewRatings] = useState({}); // { orderItemNumericProductId: rating }
-    const [reviewSubmitting, setReviewSubmitting] = useState({}); // { orderItemNumericProductId: boolean }
+    const [reviewInputs, setReviewInputs] = useState({});
+    const [reviewRatings, setReviewRatings] = useState({});
+    const [reviewSubmitting, setReviewSubmitting] = useState({});
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const loggedInUserId = localStorage.getItem('userId');
+
                 if (!loggedInUserId) {
                     console.error('No user is logged in. Please log in to view orders.');
                     setOrders([]);
@@ -60,7 +60,6 @@ const OrderHistory = () => {
         setFilteredOrders(currentFilteredOrders);
     }, [activeFilter, orders]);
 
-    // We use orderItem.productId (the numeric one) as the key for state management
     const handleReviewChange = (orderItemNumericProductId, value) => {
         setReviewInputs((prev) => ({
             ...prev,
@@ -78,7 +77,18 @@ const OrderHistory = () => {
     const handleSubmitReview = async (orderItemNumericProductId) => {
         const reviewText = reviewInputs[orderItemNumericProductId];
         const rating = reviewRatings[orderItemNumericProductId];
-        const userId = localStorage.getItem('userId'); // Ensure this is a valid MongoDB ObjectId string
+        const userId = localStorage.getItem('userId');
+        const userString = localStorage.getItem('user');
+        console.log("User String:", userString);
+        let username = '';
+        if (userString) {
+            try {
+                const userObj = JSON.parse(userString);
+                username = userObj.name || '';
+            } catch (e) {
+                username = '';
+            }
+        }
 
         if (!reviewText || reviewText.trim() === "") {
             alert("Please provide a comment for your review.");
@@ -95,7 +105,6 @@ const OrderHistory = () => {
 
         setReviewSubmitting((prev) => ({ ...prev, [orderItemNumericProductId]: true }));
         try {
-            // The productId in the URL is now the NUMERIC 'id' of the product from orderItem
             await axios.post(`https://giftunwrapbackend.vercel.app/api/products/${orderItemNumericProductId}/reviews`, {
                 userId,
                 rating,
@@ -103,7 +112,6 @@ const OrderHistory = () => {
             });
 
             alert('Review submitted successfully!');
-            // Clear the review input and rating for the submitted product
             setReviewInputs((prev) => {
                 const newState = { ...prev };
                 delete newState[orderItemNumericProductId];
@@ -114,8 +122,6 @@ const OrderHistory = () => {
                 delete newState[orderItemNumericProductId];
                 return newState;
             });
-            // You might want to re-fetch orders here to show the review instantly on the UI, if you display them
-            // Or handle state update to push the new review into the `orders` state
         } catch (error) {
             console.error('Error submitting review:', error);
             if (error.response && error.response.data && error.response.data.message) {
@@ -135,8 +141,8 @@ const OrderHistory = () => {
                     <button
                         key={filter}
                         className={`px-4 py-1 border rounded-full text-sm ${activeFilter === filter
-                                ? 'border-black text-black font-bold bg-[#F7F7F7]'
-                                : 'border-none text-black bg-[#F7F7F7]'
+                            ? 'border-black text-black font-bold bg-[#F7F7F7]'
+                            : 'border-none text-black bg-[#F7F7F7]'
                             }`}
                         onClick={() => setActiveFilter(filter)}
                     >
@@ -150,7 +156,6 @@ const OrderHistory = () => {
                     filteredOrders.map((order) => (
                         order.orderItems.map((orderItem) => (
                             <div
-                                // Key can still use orderItem._id if it's unique, or create a compound key
                                 key={`${order._id}-${orderItem.productId}`}
                                 className="border border-[#E9E9E9] py-[11px] px-[16px] rounded-[8px] shadow-sm hover:shadow-md transition"
                             >
@@ -192,8 +197,8 @@ const OrderHistory = () => {
                                             {[1, 2, 3, 4, 5].map((star) => (
                                                 <span
                                                     key={star}
-                                                    className={`cursor-pointer text-2xl ${star <= (reviewRatings[orderItem.productId] || 0) ? 'text-yellow-500' : 'text-gray-300'}`} // Use orderItem.productId
-                                                    onClick={() => handleRatingChange(orderItem.productId, star)} // Use orderItem.productId
+                                                    className={`cursor-pointer text-2xl ${star <= (reviewRatings[orderItem.productId] || 0) ? 'text-yellow-500' : 'text-gray-300'}`}
+                                                    onClick={() => handleRatingChange(orderItem.productId, star)}
                                                 >
                                                     &#9733;
                                                 </span>
@@ -202,13 +207,13 @@ const OrderHistory = () => {
                                         <textarea
                                             className="border rounded-md p-2 w-full min-h-[60px] resize-y focus:outline-none focus:border-black"
                                             placeholder="Write your review here..."
-                                            value={reviewInputs[orderItem.productId] || ""} // Use orderItem.productId
-                                            onChange={e => handleReviewChange(orderItem.productId, e.target.value)} // Use orderItem.productId
+                                            value={reviewInputs[orderItem.productId] || ""}
+                                            onChange={e => handleReviewChange(orderItem.productId, e.target.value)}
                                             disabled={reviewSubmitting[orderItem.productId]}
                                         />
                                         <button
                                             className="mt-2 bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 transition-colors"
-                                            onClick={() => handleSubmitReview(orderItem.productId)} // Use orderItem.productId
+                                            onClick={() => handleSubmitReview(orderItem.productId)}
                                             disabled={
                                                 reviewSubmitting[orderItem.productId] ||
                                                 !(reviewInputs[orderItem.productId] && reviewInputs[orderItem.productId].trim()) ||
