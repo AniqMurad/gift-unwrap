@@ -204,13 +204,13 @@ const OrderHistory = () => {
                                             <div>
                                                 <p className='text-[16px]'>Order ID: {order._id}</p>
                                                 <p className="text-[16px]">{orderItem?.name}</p>
-                                                <p className="text-[24px] font-bold">${orderItem?.priceAtTimeOfOrder.toFixed(2)}</p>
+                                                <p className="text-[24px] font-bold">Rs {orderItem?.priceAtTimeOfOrder.toFixed(2)}</p>
                                             </div>
                                             <div>
-                                                <p><strong>Subtotal:</strong> ${order.subtotal}</p>
-                                                <p><strong>Shipping:</strong> ${order.shippingCost}</p>
-                                                <p><strong>Discount:</strong> ${order.discountAmount}</p>
-                                                <p><strong>Total:</strong> <span className="fw-bold">${order.totalAmount}</span></p>
+                                                <p><strong>Subtotal:</strong> Rs {order.subtotal}</p>
+                                                <p><strong>Shipping:</strong> Rs {order.shippingCost}</p>
+                                                <p><strong>Discount:</strong> Rs {order.discountAmount}</p>
+                                                <p><strong>Total:</strong> <span className="fw-bold">Rs {order.totalAmount}</span></p>
                                             </div>
                                         </div>
                                     </div>
