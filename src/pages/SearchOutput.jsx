@@ -4,6 +4,7 @@ import Product from '../components/Product';
 import Footer from '../components/Footer';
 import { Buttons } from '../components/Buttons';
 import Navbar from '@/components/Navbar';
+import Loader from '@/components/Loader';
 import { useSearchParams } from "react-router-dom";
 
 const SearchOutput = () => {
@@ -28,6 +29,7 @@ const SearchOutput = () => {
     
         // Refetching only if allProducts is empty (first load)
         if (allProducts.length === 0) {
+            setLoading(true); // Show loader
             fetch('https://giftunwrapbackend.vercel.app/api/products/')
                 .then(res => {
                     if (!res.ok) throw new Error('Failed to fetch products');
@@ -37,11 +39,11 @@ const SearchOutput = () => {
                     const allProductsFlat = data.flatMap(category => category.products);
                     setAllProducts(allProductsFlat);
                     setFilteredProducts(filterByQuery(allProductsFlat, query));
-                    setLoading(false);
+                    setLoading(false); // Hide loader on success
                 })
                 .catch(err => {
                     setError(err.message);
-                    setLoading(false);
+                    setLoading(false); // Hide loader on error
                 });
         } else {
             // If products already fetched, just filter
@@ -69,17 +71,18 @@ const SearchOutput = () => {
     console.log('Filtered Products:', filteredProducts);
 
     if (loading) {
-        return (
-            <div className="text-center py-10 sm:py-16 lg:py-20">
-                <p className="text-sm sm:text-base">Loading products...</p>
-            </div>
-        );
+        return <Loader />;
     }
 
     if (error) {
         return (
-            <div className="text-center py-10 sm:py-16 lg:py-20 text-red-600">
-                <p className="text-sm sm:text-base">Error: {error}</p>
+            <div>
+                <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+                <SearchPageNavbar title="Search Result" titleHome="Home Page" backgroundColor='#FBF4E8' />
+                <div className="text-center py-10 sm:py-16 lg:py-20 text-red-600">
+                    <p className="text-sm sm:text-base">Error: {error}</p>
+                </div>
+                <Footer />
             </div>
         );
     }
