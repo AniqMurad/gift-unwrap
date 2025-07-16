@@ -4,6 +4,7 @@ import Product from '../components/Product';
 import Footer from '../components/Footer';
 import { Buttons } from '../components/Buttons';
 import Navbar from '@/components/Navbar';
+import Loader from '@/components/Loader';
 import { useSearchParams } from "react-router-dom";
 
 const SearchOutput = () => {
@@ -28,6 +29,7 @@ const SearchOutput = () => {
     
         // Refetching only if allProducts is empty (first load)
         if (allProducts.length === 0) {
+            setLoading(true); // Show loader
             fetch('https://giftunwrapbackend.vercel.app/api/products/')
                 .then(res => {
                     if (!res.ok) throw new Error('Failed to fetch products');
@@ -37,11 +39,11 @@ const SearchOutput = () => {
                     const allProductsFlat = data.flatMap(category => category.products);
                     setAllProducts(allProductsFlat);
                     setFilteredProducts(filterByQuery(allProductsFlat, query));
-                    setLoading(false);
+                    setLoading(false); // Hide loader on success
                 })
                 .catch(err => {
                     setError(err.message);
-                    setLoading(false);
+                    setLoading(false); // Hide loader on error
                 });
         } else {
             // If products already fetched, just filter
@@ -69,17 +71,18 @@ const SearchOutput = () => {
     console.log('Filtered Products:', filteredProducts);
 
     if (loading) {
-        return (
-            <div className="text-center py-20">
-                <p>Loading products...</p>
-            </div>
-        );
+        return <Loader />;
     }
 
     if (error) {
         return (
-            <div className="text-center py-20 text-red-600">
-                <p>Error: {error}</p>
+            <div>
+                <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+                <SearchPageNavbar title="Search Result" titleHome="Home Page" backgroundColor='#FBF4E8' />
+                <div className="text-center py-10 sm:py-16 lg:py-20 text-red-600">
+                    <p className="text-sm sm:text-base">Error: {error}</p>
+                </div>
+                <Footer />
             </div>
         );
     }
@@ -89,16 +92,18 @@ const SearchOutput = () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Search Result" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-            <div className='text-center py-8'>
-                <h2 className='text-2xl font-semibold text-gray-900'>
+            {/* Search Results Header */}
+            <div className='text-center py-4 sm:py-6 lg:py-8 px-4'>
+                <h2 className='text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 mb-4'>
                     {searchQuery.trim()
                         ? `Found ${filteredProducts.length} result${filteredProducts.length !== 1 ? 's' : ''} for "${searchQuery.trim()}"`
                         : `Showing all products (${filteredProducts.length})`}
                 </h2>
 
-                <div className='flex items-center justify-center gap-0 text-sm text-gray-600 mt-4'>
+                {/* Responsive Search Input */}
+                <div className='flex items-center justify-center gap-0 text-sm text-gray-600'>
                     <input
-                        className='rounded-l-md text-[#A0A0A0] w-[400px] border border-[#E9E9E9] py-2 px-4 outline-none focus:border-gray-400'
+                        className='rounded-l-md text-[#A0A0A0] w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[500px] border border-[#E9E9E9] py-2 px-3 sm:px-4 text-sm sm:text-base outline-none focus:border-gray-400'
                         placeholder='What are you looking for today?'
                         value={searchQuery}
                         onChange={handleInputChange}
@@ -109,45 +114,41 @@ const SearchOutput = () => {
                 </div>
             </div>
 
-            <div className='px-16 py-4 mb-10'>
+            {/* Products Grid Container */}
+            <div className='px-4 sm:px-8 lg:px-16 py-4 mb-6 sm:mb-8 lg:mb-10'>
                 {filteredProducts.length > 0 ? (
                     <>
-                        <h2 className='font-bold'>Product Search: {searchQuery.trim() || 'All Products'}</h2>
-                        <div className="grid grid-cols-4 gap-6 mt-6">
+                        {/* Section Title */}
+                        <h2 className='font-bold text-sm sm:text-base lg:text-lg mb-4 sm:mb-6'>
+                            Product Search: {searchQuery.trim() || 'All Products'}
+                        </h2>
+                        
+                        {/* Responsive Products Grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
                             {filteredProducts.map((product, index) => (
-                                <Product key={`${product.id}-${index}`} product={product} />
+                                <Product 
+                                    key={`${product.id}-${index}`} 
+                                    product={product}
+                                    columns="responsive" // Pass responsive prop to Product component
+                                />
                             ))}
                         </div>
 
-                        {/* === DEBUG FALLBACK: simple product info below, remove later === */}
-                        {/* <div className="mt-10 border-t pt-6">
-              <h3 className="text-lg font-semibold mb-4">Debug: Raw Product Info</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {filteredProducts.map((product, index) => (
-                  <div key={`debug-${product.id}-${index}`} className="border p-4 rounded shadow">
-                    <h4 className="font-bold">{product.name}</h4>
-                    <p>Price: ${product.price}</p>
-                    <p>{product.shortDescription || 'No description'}</p>
-                    {product.images && product.images.length > 0 ? (
-                      <img
-                        src={product.images[0]}
-                        alt={product.name}
-                        className="w-24 h-24 object-cover mt-2"
-                      />
-                    ) : (
-                      <p className="text-sm italic text-gray-500">No image available</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div> */}
-
-                        <div className="flex justify-center mt-6 mb-6">
+                        {/* Pagination/Load More Buttons */}
+                        <div className="flex justify-center mt-6 sm:mt-8 lg:mt-10 mb-4 sm:mb-6">
                             <Buttons />
                         </div>
                     </>
                 ) : (
-                    <p className='text-center text-gray-600 mt-10'>No results found for "{searchQuery.trim()}". Please try a different search.</p>
+                    /* No Results Message */
+                    <div className='text-center text-gray-600 mt-6 sm:mt-8 lg:mt-10 px-4'>
+                        <p className='text-sm sm:text-base lg:text-lg'>
+                            No results found for "{searchQuery.trim()}".
+                        </p>
+                        <p className='text-xs sm:text-sm lg:text-base mt-2 text-gray-500'>
+                            Please try a different search term.
+                        </p>
+                    </div>
                 )}
             </div>
 

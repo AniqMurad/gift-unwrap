@@ -39,7 +39,6 @@ const Home = () => {
         <ProductPage title="Gifts for Her" category="giftsForHer" />
         <Review />
         <Services />
-        {/* <InstaSpace /> */}
         <Blogs />
         <Partners />
         <Offer />

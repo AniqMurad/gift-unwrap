@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import heroimg1 from "../assets/herosection1.png";
 import heroimg2 from "../assets/herosection2.png";
 import heroimg3 from "../assets/herosection3.png";
@@ -16,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const carouselRef = useRef(null);
 
   const slides = [
     {
@@ -40,6 +40,25 @@ const HeroSection = () => {
     },
   ];
 
+  // Auto-play functionality
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const autoPlay = setInterval(() => {
+      // Get the next button element from the carousel
+      const nextButton = carousel.querySelector('[data-carousel="next"]') || 
+                        carousel.querySelector('.absolute.right-1');
+      
+      if (nextButton) {
+        nextButton.click();
+      }
+    }, 4000); // Change slide every 4 seconds
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(autoPlay);
+  }, []);
+
   const handleShopNowClick = (route) => {
     navigate(route);
   };
@@ -47,8 +66,13 @@ const HeroSection = () => {
   return (
     <div className="flex flex-col md:flex-row py-6 px-4 md:px-16 gap-6">
       {/* Left Carousel */}
-      <div className="w-full md:w-[65%] rounded-[24px] overflow-hidden">
-        <Carousel>
+      <div className="w-full md:w-[65%] rounded-[24px] overflow-hidden" ref={carouselRef}>
+        <Carousel 
+          opts={{
+            align: "start",
+            loop: true, // Enable infinite loop
+          }}
+        >
           <CarouselContent>
             {slides.map((slide, index) => (
               <CarouselItem key={index}>
@@ -78,8 +102,14 @@ const HeroSection = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute left-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0" />
-          <CarouselNext className="absolute right-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0" />
+          <CarouselPrevious 
+            className="absolute left-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0" 
+            data-carousel="prev"
+          />
+          <CarouselNext 
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0" 
+            data-carousel="next"
+          />
         </Carousel>
       </div>
 
@@ -96,7 +126,7 @@ const HeroSection = () => {
             </p>
             <p className="text-lg md:text-2xl font-semibold mt-2">Gifts For Him</p>
             <p className="text-sm md:text-md mt-2 text-[#696C70]">
-                Starting at <span className="text-[#DB4444] font-medium">PKR 500</span>
+                Starting at <span className="text-[#DB4444] font-medium">PKR 4000</span>
             </p>
             </div>
             <div className="mt-4 flex justify-center">
@@ -115,7 +145,7 @@ const HeroSection = () => {
             </p>
             <p className="text-lg md:text-2xl font-semibold mt-2">Gifts For Her</p>
             <p className="text-sm md:text-md mt-2 text-[#696C70]">
-                Starting at <span className="text-[#DB4444] font-medium">PKR 500</span>
+                Starting at <span className="text-[#DB4444] font-medium">PKR 3500</span>
             </p>
             </div>
             <div className="mt-4 flex justify-center">

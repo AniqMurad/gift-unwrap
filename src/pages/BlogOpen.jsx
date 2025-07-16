@@ -139,36 +139,6 @@ const BlogOpen = () => {
               )}
             </div>
 
-            {/* sharepost */}
-            {/* <div className="flex justify-between items-center mb-4 mt-10">
-              
-              <div className="flex items-center space-x-2">
-                <span className="text-[#1F1F1F] text-sm">Tag:</span>
-                <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">FEATURED</span>
-                <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">INTERVIEW</span>
-                <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">CAREER</span>
-              </div>
-
-              <div className="flex items-center space-x-3">
-                <span className="text-[#1F1F1F] text-sm">Share</span>
-                <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">
-                  <FbIcon />
-                </span>
-                <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">
-                  <LinkedinIcon />
-                </span>
-                <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">
-                  <TwtIcon />
-                </span>
-                <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">
-                  <PintIcon />
-                </span>
-                <span className="px-3 py-1 bg-[#F7F7F7] text-[#1F1F1F] text-xs rounded-full">
-                  <YtIcon />
-                </span>
-              </div>
-            </div> */}
-
             {/* next pre */}
             {/* next prev logic */}
             <div className="items-center border-t border-b border-[#E9E9E9] flex justify-between text-sm mt-10 h-[90px]">
@@ -203,17 +173,17 @@ const BlogOpen = () => {
         {/* news insight */}
         <div className="mt-20">
           <h1 className="text-3xl font-bold text-center">News Insight</h1>
-          <div className="flex mt-10 justify-center gap-5 flex-wrap">
+          <div className="flex flex-col lg:flex-row mt-10 justify-center gap-5 items-center">
             {blogData
               .filter(item => item.id !== parseInt(id)) // Exclude current blog
               .sort(() => Math.random() - 0.5)           // Shuffle remaining blogs
               .slice(0, 3)                                // Pick 3 blogs
               .map(item => (
-                <Link to={`/blog/${item.id}`} key={item.id} className="bg-white overflow-hidden mb-10 w-[400px] hover:scale-105 transition-transform duration-300">
+                <Link to={`/blog/${item.id}`} key={item.id} className="bg-white overflow-hidden mb-6 lg:mb-10 w-full max-w-[400px] lg:w-[400px] hover:scale-105 transition-transform duration-300">
                   <img
                     src={item.image}
                     alt={item.altText || item.title}
-                    className="w-[400px] h-[270px] rounded-[28px] object-cover"
+                    className="w-full h-[270px] rounded-[28px] object-cover"
                   />
                   <div className="mt-4 px-2">
                     <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">{item.category}</span>

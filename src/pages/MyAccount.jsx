@@ -10,7 +10,7 @@ import NewPasswordField from '@/components/NewPasswordField';
 import PasswordField from '@/components/PasswordField';
 import SearchPageNavbar from '@/components/SearchPageNavbar';
 import React, { useState, useEffect } from 'react';
-import avatar from "../assets/Avatar.png";
+import avatar from "../assets/avatar2.jpg"; // Updated avatar path
 import Navbar from '@/components/Navbar';
 import OrderHistory from '@/components/OrderHistory';
 import { useLocation, useNavigate } from 'react-router-dom';

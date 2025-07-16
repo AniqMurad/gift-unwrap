@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { MyorderLine, MyorderRightArrow } from './icons'; // Assuming these are relevant
 import axios from 'axios';
+import NotificationBar from './NotificationBar';
 
 const filters = ['All', 'In Progress', 'Delivered', 'Cancelled'];
 
@@ -9,9 +10,10 @@ const OrderHistory = () => {
     const [activeFilter, setActiveFilter] = useState('All');
     const [orders, setOrders] = useState([]);
     const [filteredOrders, setFilteredOrders] = useState([]);
-    const [reviewInputs, setReviewInputs] = useState({});
-    const [reviewRatings, setReviewRatings] = useState({});
-    const [reviewSubmitting, setReviewSubmitting] = useState({});
+    // Use orderItem.productId as the key for tracking review inputs/ratings
+    const [reviewInputs, setReviewInputs] = useState({}); // { orderItemNumericProductId: reviewText }
+    const [reviewRatings, setReviewRatings] = useState({}); // { orderItemNumericProductId: rating }
+    const [reviewSubmitting, setReviewSubmitting] = useState({}); // { orderItemNumericProductId: boolean }
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -20,6 +22,7 @@ const OrderHistory = () => {
 
                 if (!loggedInUserId) {
                     console.error('No user is logged in. Please log in to view orders.');
+                    showNotification('error', 'No user is logged in. Please log in to view orders.');
                     setOrders([]);
                     return;
                 }
@@ -34,6 +37,7 @@ const OrderHistory = () => {
                 setOrders(sortedOrders);
             } catch (error) {
                 console.error('Error fetching orders:', error);
+                showNotification('error', 'Failed to load orders. Please try again.');
             }
         };
 
@@ -77,29 +81,18 @@ const OrderHistory = () => {
     const handleSubmitReview = async (orderItemNumericProductId) => {
         const reviewText = reviewInputs[orderItemNumericProductId];
         const rating = reviewRatings[orderItemNumericProductId];
-        const userId = localStorage.getItem('userId');
-        const userString = localStorage.getItem('user');
-        console.log("User String:", userString);
-        let username = '';
-        if (userString) {
-            try {
-                const userObj = JSON.parse(userString);
-                username = userObj.name || '';
-            } catch (e) {
-                username = '';
-            }
-        }
+        const userId = localStorage.getItem('userId'); // Ensure this is a valid MongoDB ObjectId string
 
         if (!reviewText || reviewText.trim() === "") {
-            alert("Please provide a comment for your review.");
+            showNotification('error', 'Please provide a comment for your review.');
             return;
         }
         if (!rating || rating === 0) {
-            alert("Please provide a rating for your review.");
+            showNotification('error', 'Please provide a rating for your review.');
             return;
         }
         if (!userId) {
-            alert("No user is logged in. Cannot submit review.");
+            showNotification('error', 'No user is logged in. Cannot submit review.');
             return;
         }
 
@@ -112,6 +105,7 @@ const OrderHistory = () => {
             });
 
             alert('Review submitted successfully!');
+            // Clear the review input and rating for the submitted product
             setReviewInputs((prev) => {
                 const newState = { ...prev };
                 delete newState[orderItemNumericProductId];
@@ -124,11 +118,8 @@ const OrderHistory = () => {
             });
         } catch (error) {
             console.error('Error submitting review:', error);
-            if (error.response && error.response.data && error.response.data.message) {
-                alert(`Failed to submit review: ${error.response.data.message}`);
-            } else {
-                alert('Failed to submit review. Please try again.');
-            }
+            const errorMessage = error.response?.data?.message || 'Failed to submit review. Please try again.';
+            showNotification('error', errorMessage);
         } finally {
             setReviewSubmitting((prev) => ({ ...prev, [orderItemNumericProductId]: false }));
         }
@@ -136,6 +127,10 @@ const OrderHistory = () => {
 
     return (
         <div className="max-w-3xl mx-auto p-6">
+            {notification.show && (
+                <NotificationBar type={notification.type} message={notification.message} />
+            )}
+            
             <div className="flex gap-3 mb-6">
                 {filters.map((filter) => (
                     <button
@@ -213,7 +208,7 @@ const OrderHistory = () => {
                                         />
                                         <button
                                             className="mt-2 bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 transition-colors"
-                                            onClick={() => handleSubmitReview(orderItem.productId)}
+                                            onClick={() => handleSubmitReview(orderItem.productId)} // Use orderItem.productId
                                             disabled={
                                                 reviewSubmitting[orderItem.productId] ||
                                                 !(reviewInputs[orderItem.productId] && reviewInputs[orderItem.productId].trim()) ||

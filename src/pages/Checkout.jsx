@@ -7,6 +7,8 @@ import { useCart } from '../context/CartContext'; // --- 3. Import useCart ---
 import { useNavigate } from 'react-router-dom'; // --- 4. Import useNavigate ---
 import SearchPageNavbar from '@/components/SearchPageNavbar';
 import OrderSummary from '@/components/OrderSummary'; // Import the new component
+import NotificationBar from '@/components/NotificationBar';
+import Loader from '@/components/Loader';
 
 const Checkout = () => {
     const { cartItems, getTotalCartAmount, clearCart } = useCart();
@@ -20,6 +22,29 @@ const Checkout = () => {
     const [saveCardDetails, setSaveCardDetails] = useState(false);
     const [showDiscountApplied, setShowDiscountApplied] = useState(false); // Example state for discount message
     const [isLoading, setIsLoading] = useState(false); // <--- 1. Add isLoading state
+    const [notification, setNotification] = useState({
+        show: false,
+        type: 'success',
+        message: ''
+    });
+
+    // Auto-hide notification after 3 seconds
+    useEffect(() => {
+        if (notification.show) {
+            const timer = setTimeout(() => {
+                setNotification(prev => ({ ...prev, show: false }));
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [notification.show]);
+
+    const showNotification = (type, message) => {
+        setNotification({
+            show: true,
+            type,
+            message
+        });
+    };
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -37,6 +62,10 @@ const Checkout = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        // Hide notification when user starts typing
+        if (notification.show) {
+            setNotification(prev => ({ ...prev, show: false }));
+        }
     };
 
     const handleLoginRedirect = () => {
@@ -52,11 +81,12 @@ const Checkout = () => {
     const handleSubmitOrder = async (e) => {
         e.preventDefault();
         setIsLoading(true); // <--- 2. Set isLoading to true
+        setNotification(prev => ({ ...prev, show: false })); // Hide any existing notifications
 
         const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'street', 'city', 'postalCode', 'country', 'state'];
         for (let field of requiredFields) {
             if (!formData[field]) {
-                alert("Please fill in all required shipping information.");
+                showNotification('error', 'Please fill in all required shipping information.');
                 setIsLoading(false);
                 return;
             }
@@ -64,13 +94,13 @@ const Checkout = () => {
 
         if (paymentMethod === 'creditCard') {
             if (!cardName || !cardNumber || !expiry || !cvv) {
-                alert("Please fill in all credit card details.");
+                showNotification('error', 'Please fill in all credit card details.');
                 setIsLoading(false); // <--- 3. Reset isLoading on validation failure
                 return;
             }
         }
         if (cartItems.length === 0) {
-            alert("Your cart is empty. Please add items before placing an order.");
+            showNotification('error', 'Your cart is empty. Please add items before placing an order.');
             setIsLoading(false); // <--- 3. Reset isLoading on validation failure
             return;
         }
@@ -143,26 +173,30 @@ const Checkout = () => {
                     phone: formData.phone // Optionally pass phone if you want to display it
                 };
 
-                // alert(`Order placed successfully! Order ID: ${data._id}. Total: Rs ${data.totalAmount.toFixed(2)}`);
-                clearCart();
-                navigate('/order-confirmation', {
-                    state: {
-                        orderId: data._id,
-                        orderSummary: orderSummaryData,
-                        customerName: formData.firstName,
-                        shippingInfo: shippingDetails // Add shipping info here
-                    }
-                });
+                showNotification('success', `Order placed successfully! Order ID: ${data._id}. Redirecting...`);
+                
+                // Clear cart and navigate after a short delay to show success message
+                setTimeout(() => {
+                    clearCart();
+                    navigate('/order-confirmation', {
+                        state: {
+                            orderId: data._id,
+                            orderSummary: orderSummaryData,
+                            customerName: formData.firstName,
+                            shippingInfo: shippingDetails // Add shipping info here
+                        }
+                    });
+                }, 2000);
                 // No need to set isLoading to false here if navigating away immediately
             } else {
                 console.error('Failed to place order:', data.message);
-                alert(`Failed to place order: ${data.message || 'Server error'}`);
+                showNotification('error', `Failed to place order: ${data.message || 'Server error'}`);
                 setIsLoading(false); // <--- 3. Reset isLoading on API error
             }
 
         } catch (error) {
             console.error('Error submitting order:', error);
-            alert('An error occurred while submitting your order. Please try again.');
+            showNotification('error', 'An error occurred while submitting your order. Please try again.');
             setIsLoading(false); // <--- 3. Reset isLoading on exception
         }
         // --- End API Call ---
@@ -181,6 +215,10 @@ const Checkout = () => {
 
     return (
         <div>
+            {isLoading && <Loader />}
+            {notification.show && (
+                <NotificationBar type={notification.type} message={notification.message} />
+            )}
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Checkout" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
@@ -196,18 +234,99 @@ const Checkout = () => {
                             <h2 className="text-xl sm:text-2xl lg:text-[30px] font-semibold">Shipping Information</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 {/* --- Your existing form fields with value, name, and onChange --- */}
-                                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
-                                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
-                                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email Address *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" required />
-                                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" required />
+                                <input 
+                                    type="text" 
+                                    name="firstName" 
+                                    value={formData.firstName} 
+                                    onChange={handleChange} 
+                                    placeholder="First Name *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
+                                <input 
+                                    type="text" 
+                                    name="lastName" 
+                                    value={formData.lastName} 
+                                    onChange={handleChange} 
+                                    placeholder="Last Name *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
+                                <input 
+                                    type="email" 
+                                    name="email" 
+                                    value={formData.email} 
+                                    onChange={handleChange} 
+                                    placeholder="Email Address *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
+                                <input 
+                                    type="tel" 
+                                    name="phone" 
+                                    value={formData.phone} 
+                                    onChange={handleChange} 
+                                    placeholder="Phone Number *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
 
-                                <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Country/Region *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" required />
+                                <input 
+                                    type="text" 
+                                    name="country" 
+                                    value={formData.country} 
+                                    onChange={handleChange} 
+                                    placeholder="Country/Region *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
 
-                                <input type="text" name="street" value={formData.street} onChange={handleChange} placeholder="Street Address *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" required />
-                                <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="Town / City *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
+                                <input 
+                                    type="text" 
+                                    name="street" 
+                                    value={formData.street} 
+                                    onChange={handleChange} 
+                                    placeholder="Street Address *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
+                                <input 
+                                    type="text" 
+                                    name="city" 
+                                    value={formData.city} 
+                                    onChange={handleChange} 
+                                    placeholder="Town / City *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
 
-                                <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder="State *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
-                                <input type="text" name="postalCode" value={formData.postalCode} onChange={handleChange} placeholder="Postal Code *" className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" required />
+                                <input 
+                                    type="text" 
+                                    name="state" 
+                                    value={formData.state} 
+                                    onChange={handleChange} 
+                                    placeholder="State *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
+                                <input 
+                                    type="text" 
+                                    name="postalCode" 
+                                    value={formData.postalCode} 
+                                    onChange={handleChange} 
+                                    placeholder="Postal Code *" 
+                                    className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
+                                    required 
+                                    disabled={isLoading}
+                                />
 
                                 <textarea
                                     name="additionalInfo"
@@ -216,6 +335,7 @@ const Checkout = () => {
                                     value={formData.additionalInfo}
                                     onChange={handleChange}
                                     className="w-full border border-[#E9E9E9] rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 bg-transparent focus:outline-none resize-none sm:col-span-2 text-sm sm:text-base"
+                                    disabled={isLoading}
                                 />
                             </div>
                         </div>
@@ -244,9 +364,18 @@ const Checkout = () => {
                             </div>
 
                             {/* Cash on Delivery Option */}
-                            <div className={`rounded-lg p-4 sm:p-5 cursor-pointer ${paymentMethod === 'cod' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`} onClick={() => setPaymentMethod('cod')}>
+                            <div className={`rounded-lg p-4 sm:p-5 cursor-pointer ${paymentMethod === 'cod' ? 'bg-[#F0F5FF] border border-blue-500' : 'bg-[#F7F7F7] border border-transparent'}`} onClick={() => !isLoading && setPaymentMethod('cod')}>
                                 <div className='flex items-center gap-2'>
-                                    <input type="radio" id="cod" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="form-radio h-4 w-4 text-blue-600" />
+                                    <input 
+                                        type="radio" 
+                                        id="cod" 
+                                        name="paymentMethod" 
+                                        value="cod" 
+                                        checked={paymentMethod === 'cod'} 
+                                        onChange={() => setPaymentMethod('cod')} 
+                                        className="form-radio h-4 w-4 text-blue-600" 
+                                        disabled={isLoading}
+                                    />
                                     <label htmlFor="cod" className="font-medium text-sm sm:text-base">Cash on Delivery</label>
                                     <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full ml-2">Available</span>
                                 </div>
@@ -259,7 +388,7 @@ const Checkout = () => {
                         {/* Submit Button - Ensure it's inside the form */}
                         <button
                             type="submit"
-                            className='w-full bg-black text-white text-sm sm:text-base font-semibold mt-6 lg:mt-8 px-6 sm:px-10 py-3 sm:py-4 rounded-lg uppercase hover:bg-gray-800 transition-colors disabled:opacity-50'
+                            className='w-full bg-black text-white text-sm sm:text-base font-semibold mt-6 lg:mt-8 px-6 sm:px-10 py-3 sm:py-4 rounded-lg uppercase hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
                             disabled={cartItems.length === 0 || isLoading} // <--- 5. Disable button when loading or cart is empty
                         >
                             {isLoading ? 'Processing...' : 'Place Order'} {/* <--- 4. Show loader text */}
