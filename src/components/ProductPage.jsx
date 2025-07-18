@@ -53,7 +53,7 @@ const ProductPage = ({ title, category }) => {
             <div className='flex flex-col lg:flex-row justify-between gap-4'>
                 <h2 className="text-3xl font-bold">{title}</h2>
                 {/* Filter: Hidden below lg */}
-                <div className='hidden lg:flex flex-wrap gap-[8px] bg-[#F7F7F7] rounded-[16px] py-[4px] px-[8px]'>
+                <div className='hidden text-[#696C70] lg:flex flex-wrap gap-[8px] bg-[#F7F7F7] rounded-[16px] py-[4px] px-[8px]'>
                     {subcategories.map((sub) => (
                         <button
                             key={sub}

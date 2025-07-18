@@ -72,7 +72,7 @@ const Trending = () => {
     return (
         <div className='bg-[#FCFCFC]'>
             <div className='m-4 p-4 px-4 sm:px-8 md:px-12 lg:px-16'>
-                <div className='text-4xl flex justify-center mb-8'>Trending Right Now</div>
+                <div className='text-4xl font-semibold flex justify-center mb-8'>Trending Right Now</div>
                 <div
                     className='relative overflow-hidden my-5 mx-auto cursor-grab active:cursor-grabbing'
                 >
