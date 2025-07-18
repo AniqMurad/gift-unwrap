@@ -30,7 +30,7 @@ const WishList = () => {
                         </div>
                     </div>
 
-                    <div className="flex space-x-4">
+                    {/* <div className="flex space-x-4">
                         <div className="flex justify-between items-center border border-[#E9E9E9] rounded-md px-4 py-2 space-x-2 w-[160px]">
                             <p className="text-gray-700">Type</p>
                             <ArrowDown />
@@ -40,7 +40,7 @@ const WishList = () => {
                             <p className="text-gray-700">Best Selling</p>
                             <ArrowDown />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className=''>

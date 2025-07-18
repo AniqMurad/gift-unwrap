@@ -79,7 +79,7 @@ const FlowerChocolate = () => {
         <div>
             {loading && <Loader />}
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
-            <SearchPageNavbar title="Flowers & Chocolates Bouquets" titleHome="Home Page" backgroundColor='#FBF4E8' />
+            <SearchPageNavbar title="Flowers & Chocolates Bouquet" titleHome="Home Page" backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2'>
                 <p className={`cursor-pointer ${selectedCategory === 'cake' ? 'underline' : ''}`} onClick={() => handleCategorySelect('cake')}>
                     <span className="hidden sm:inline">Cake</span>

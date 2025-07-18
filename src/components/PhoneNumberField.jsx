@@ -8,7 +8,7 @@ const PhoneNumberField = ({ value, onChange, error }) => {
                 name="phoneNumber"
                 value={value}
                 onChange={onChange}
-                placeholder="Phone Number *"
+                placeholder="Phone Number"
                 className={`w-full p-4 border rounded-lg ${error ? 'border-red-500' : 'border-gray-300'}`}
             />
             {error && (

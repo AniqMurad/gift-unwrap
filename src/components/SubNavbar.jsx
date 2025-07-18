@@ -102,7 +102,7 @@ const SubNavbar = () => {
             }`}
             onClick={navigateToFlowers}
           >
-            <span className="hidden sm:inline">Flower & Chocolate Bouquet</span>
+            <span className="hidden sm:inline">Flowers & Chocolates Bouquet</span>
             <span className="sm:hidden">FLOWERS $ CHOCOLATES</span>
           </button>
         </div>

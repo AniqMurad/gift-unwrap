@@ -10,8 +10,6 @@ const FAQs = () => {
         "Payment Methods",
         "Delivery",
         "Exchanges & Returns",
-        "Registration",
-        "Look After Your Garments",
         "Contacts",
     ];
 
@@ -19,32 +17,24 @@ const FAQs = () => {
 
     const questionsByCategory = {
         "How To Buy": [
-            { question: "NEW! Plus sizes for Woman", answer: "We have introduced a new range of plus sizes in our women's collection." },
-            { question: "Where is my order?", answer: "You can track your order status from your account section." }
+            { question: "How can I place an order?", answer: "You can place an order through our Instagram, Facebook, or directly on our website. Once your order is placed, our team will contact you to confirm and ask about any customization or special notes." },
+            { question: "Can I customize a gift after placing the order?", answer: "Yes, absolutely! After your order is confirmed, we’ll reach out to you. During that time, you can request any customization or updates needed." }
         ],
         "Payment Methods": [
-            { question: "How can I pay for my purchases?", answer: "You can pay using credit/debit cards, PayPal, and other digital wallets." },
-            { question: "I have a promotional or discount code. How do I use it?", answer: "Enter your promo code at checkout to apply the discount." }
+            { question: "What payment options do you offer?", answer: "Currently, we offer Cash on Delivery as the default payment method for your convenience." },
+            { question: "Can I pay online or with a card?", answer: "If you contact us directly, we can arrange an online bank transfer. However, card payments are not available at the moment." }
         ],
         "Delivery": [
-            { question: "What are the delivery types?", answer: "We offer standard, express, and same-day delivery options." },
-            { question: "How does COVID-19 affect my online orders?", answer: "Delivery times may be longer due to safety measures." }
+            { question: "When will I receive my order?", answer: "Most deliveries are completed within 24 hours of order placement. We always aim for quick and safe delivery." },
+            { question: "Can I schedule delivery for a specific date?", answer: "Yes! Just mention your preferred delivery date in the order notes or let us know when we contact you, and we’ll do our best to accommodate it." }
         ],
         "Exchanges & Returns": [
-            { question: "How can I exchange or return an item?", answer: "You can return items within 30 days with the original receipt." },
-            { question: "The items received are incorrect or defective. What should I do?", answer: "Contact our support team for assistance with defective or incorrect items." }
-        ],
-        "Registration": [
-            { question: "Can I cancel or change my order?", answer: "Orders can only be modified within the first 2 hours of placement." },
-            { question: "I cannot find my size or color. What should I do?", answer: "Use our 'Notify Me' feature to get alerts when stock is available." }
-        ],
-        "Look After Your Garments": [
-            { question: "Can I save an item I like?", answer: "Yes, add it to your wishlist for later purchase." },
-            { question: "Are the items in my shopping basket reserved automatically?", answer: "No, items are only reserved after checkout is completed." }
+            { question: "What if I am not happy with what I received?", answer: "We take full responsibility. If the product does not meet your expectations, we’ll arrange an exchange promptly." },
+            { question: "How do I request an exchange?", answer: " Just contact us via call or message with your order details and the reason. We’ll guide you through the simple exchange process." }
         ],
         "Contacts": [
-            { question: "In which countries can I shop online?", answer: "Our online store ships to over 50 countries worldwide." },
-            { question: "I have not received all the items in my order. What should I do?", answer: "Check your order status or contact our support team." }
+            { question: "How can I reach your team?", answer: "You can call us at +92 326 8927354, or message us on Instagram or Facebook anytime." },
+            { question: "What are your customer support hours?", answer: "We are usually available 24 hours, seven days a week. Feel free to reach out anytime during those hours." }
         ]
     };
 

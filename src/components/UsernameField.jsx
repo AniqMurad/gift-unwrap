@@ -8,7 +8,7 @@ const UsernameField = ({ value, onChange, error }) => {
                 name="email"
                 value={value}
                 onChange={onChange}
-                placeholder="Username or email address *"
+                placeholder="Username or email address"
                 className={`w-full p-4 border rounded-lg ${error ? 'border-red-500' : 'border-gray-300'}`}
             />
             {error && (

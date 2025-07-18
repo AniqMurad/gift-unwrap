@@ -180,7 +180,7 @@ const ProductDetail = () => {
                                     onClick={handleDecreaseQuantity}
                                     aria-label="Decrease quantity"
                                 >
-                                    -
+                                    –
                                 </button>
                                 <span className="px-3 sm:px-4 py-2 text-center w-12 sm:w-14">{quantity}</span>
                                 <button

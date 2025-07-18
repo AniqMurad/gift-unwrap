@@ -12,7 +12,7 @@ const PasswordField = ({ value, onChange, error }) => {
                     name="password"
                     value={value}
                     onChange={onChange}
-                    placeholder="Password *"
+                    placeholder="Password"
                     className={`w-full p-4 border rounded-lg ${error ? 'border-red-500' : 'border-gray-300'}`}
                 />
                 <div 

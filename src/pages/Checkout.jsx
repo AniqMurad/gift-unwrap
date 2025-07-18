@@ -239,7 +239,7 @@ const Checkout = () => {
                                     name="firstName" 
                                     value={formData.firstName} 
                                     onChange={handleChange} 
-                                    placeholder="First Name *" 
+                                    placeholder="First Name" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
@@ -249,7 +249,7 @@ const Checkout = () => {
                                     name="lastName" 
                                     value={formData.lastName} 
                                     onChange={handleChange} 
-                                    placeholder="Last Name *" 
+                                    placeholder="Last Name" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
@@ -259,7 +259,7 @@ const Checkout = () => {
                                     name="email" 
                                     value={formData.email} 
                                     onChange={handleChange} 
-                                    placeholder="Email Address *" 
+                                    placeholder="Email Address" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
@@ -269,7 +269,7 @@ const Checkout = () => {
                                     name="phone" 
                                     value={formData.phone} 
                                     onChange={handleChange} 
-                                    placeholder="Phone Number *" 
+                                    placeholder="Phone Number" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
@@ -280,7 +280,7 @@ const Checkout = () => {
                                     name="country" 
                                     value={formData.country} 
                                     onChange={handleChange} 
-                                    placeholder="Country/Region *" 
+                                    placeholder="Country/Region" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
@@ -291,7 +291,7 @@ const Checkout = () => {
                                     name="street" 
                                     value={formData.street} 
                                     onChange={handleChange} 
-                                    placeholder="Street Address *" 
+                                    placeholder="Street Address" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full sm:col-span-2 text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
@@ -301,7 +301,7 @@ const Checkout = () => {
                                     name="city" 
                                     value={formData.city} 
                                     onChange={handleChange} 
-                                    placeholder="Town / City *" 
+                                    placeholder="Town / City" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
@@ -312,7 +312,7 @@ const Checkout = () => {
                                     name="state" 
                                     value={formData.state} 
                                     onChange={handleChange} 
-                                    placeholder="State *" 
+                                    placeholder="State" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
@@ -322,7 +322,7 @@ const Checkout = () => {
                                     name="postalCode" 
                                     value={formData.postalCode} 
                                     onChange={handleChange} 
-                                    placeholder="Postal Code *" 
+                                    placeholder="Postal Code" 
                                     className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg w-full text-sm sm:text-base" 
                                     required 
                                     disabled={isLoading}
