@@ -41,23 +41,22 @@ const HeroSection = () => {
   ];
 
   // Auto-play functionality
-  useEffect(() => {
+  /* useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
     const autoPlay = setInterval(() => {
-      // Get the next button element from the carousel
+      
       const nextButton = carousel.querySelector('[data-carousel="next"]') || 
                         carousel.querySelector('.absolute.right-1');
       
       if (nextButton) {
         nextButton.click();
       }
-    }, 4000); // Change slide every 4 seconds
+    }, 4000); 
 
-    // Cleanup interval on component unmount
     return () => clearInterval(autoPlay);
-  }, []);
+  }, []); */
 
   const handleShopNowClick = (route) => {
     navigate(route);
