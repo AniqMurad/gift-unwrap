@@ -41,7 +41,7 @@ const HeroSection = () => {
   ];
 
   // Auto-play functionality
-  /* useEffect(() => {
+  useEffect(() => {
     const carousel = carouselRef.current;
     if (!carousel) return;
 
@@ -56,7 +56,7 @@ const HeroSection = () => {
     }, 4000); 
 
     return () => clearInterval(autoPlay);
-  }, []); */
+  }, []);
 
   const handleShopNowClick = (route) => {
     navigate(route);
