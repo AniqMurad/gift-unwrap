@@ -125,9 +125,9 @@ const FlowerChocolate = () => {
                         <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
                             <span className="text-[#696C70] font-medium text-xs sm:text-sm">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
 
-                            <HerLine />
+                            
                             <div className="flex flex-wrap gap-1 sm:gap-2">
-                                {/* Selected Category */}
+                                
                                 {selectedCategory && (
                                     <span className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
                                         <button onClick={() => setSelectedCategory("")} className="mr-1 sm:mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
@@ -136,7 +136,6 @@ const FlowerChocolate = () => {
                                     </span>
                                 )}
 
-                                {/* Price Range */}
                                 {(minPrice > 0 || maxPrice < 1000) && (
                                     <span className="px-2 sm:px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center text-xs sm:text-sm">
                                         <button onClick={() => { setMinPrice(0); setMaxPrice(1000); }} className="mr-1 sm:mr-2 text-green-800 hover:text-green-900"><HerHorLine /></button>
@@ -144,7 +143,6 @@ const FlowerChocolate = () => {
                                     </span>
                                 )}
 
-                                {/* Selected Hobbies & Interests */}
                                 {selectedFilters.map((filter) => (
                                     <span key={filter} className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
                                         <button onClick={() => removeFilter(filter)} className="mr-1 sm:mr-2 text-gray-500 hover:text-black"><HerCross strokeColor="#1F1F1F" /></button>
@@ -153,7 +151,6 @@ const FlowerChocolate = () => {
                                 ))}
                             </div>
 
-                            {/* Clear All Button */}
                             {(selectedFilters.length > 0 || selectedCategory || minPrice > 0 || maxPrice < 1000) && (
                                 <button onClick={clearAllFilters} className="flex items-center gap-1 sm:gap-2 border border-[#DB4444] px-2 sm:px-3 py-1 text-[#DB4444] bg-[#F9F1F0] rounded-full ml-2 sm:ml-4 text-xs sm:text-sm">
                                     <HerCross strokeColor="#DB4444" /> 

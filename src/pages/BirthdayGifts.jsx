@@ -206,7 +206,7 @@ const BirthdayGifts = () => {
                   : ""}
               </span>
 
-              <HerLine />
+              
               <div className="flex flex-wrap gap-1 sm:gap-2">
                 {/* Selected Category */}
                 {selectedCategory && (

@@ -67,16 +67,16 @@ const Offer = () => {
       {notification.show && (
         <NotificationBar type={notification.type} message={notification.message} />
       )}
-      <div className="w-full bg-[#D2EF9A] p-4 sm:p-6 lg:p-10 text-center flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-32 mt-10">
+      <div className="w-full bg-[#D2EF9A] p-4 sm:p-6 lg:p-10 text-center flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-32">
         <div className="max-w-md lg:max-w-none">
-          <h2 className="text-xl sm:text-2xl lg:text-[32px] font-bold tracking-wide">
+          <h2 className="text-xl sm:text-2xl lg:text-[36px] font-bold tracking-wide">
             Sign Up And Get 10% Off
           </h2>
-          <p className="text-xs sm:text-sm text-gray-700 font-normal tracking-wide mt-2">
+          <p className="text-[16px] sm:text-[16px] text-gray-700 font-normal tracking-wide mt-2">
             Sign up for early sale access, new in, promotions and more
           </p>
         </div>
-        <div className="w-full max-w-md lg:max-w-none">
+        <div className=" max-w-md lg:max-w-none">
           <div className="flex flex-col sm:flex-row p-1 bg-white rounded-lg justify-between">
             <input
               type="email"

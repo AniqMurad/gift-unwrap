@@ -134,7 +134,7 @@ const Giftsforher = () => {
                         <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
                             <span className="text-[#696C70] font-medium text-xs sm:text-sm">{selectedFilters.length > 0 || selectedCategory ? "18 Products Found:" : ""}</span>
 
-                            <HerLine />
+                            
                             <div className="flex flex-wrap gap-1 sm:gap-2">
                                 {/* Selected Category */}
                                 {selectedCategory && (
