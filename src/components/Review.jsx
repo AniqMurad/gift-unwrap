@@ -14,12 +14,12 @@ const Review = () => {
   };
 
   return (
-    <div className="bg-[#F9F1F0] flex flex-col lg:flex-row items-center justify-between px-6 py-10 gap-6">
+    <div className="bg-[#F9F1F0] flex flex-col lg:flex-row items-center justify-between px-6 gap-6">
 
       {/* Review Text Section */}
-      <div className="w-full lg:w-[60%]">
-        <div className="max-w-[630px] flex flex-col justify-between mx-auto">
-          <p className="text-[20px] sm:text-[24px] lg:text-[30px] mb-5 leading-relaxed">
+      <div className="w-full py-10 lg:w-[60%]">
+        <div className="max-w-[630px] flex flex-col justify-between mx-auto gap-1">
+          <p className="text-[20px] sm:text-[20px] lg:text-[20px] mb-5 leading-relaxed">
             "{randomReview.review}"
           </p>
           <div className="flex items-center gap-4">
@@ -38,7 +38,7 @@ const Review = () => {
 
       {/* Image Section */}
       <div className="w-full lg:w-[40%] flex justify-center">
-        <img src={flowers} alt="Flowers" className="max-w-[300px] w-full h-auto object-contain" />
+        <img src={flowers} alt="Flowers" className=" w-full h-full object-contain" />
       </div>
     </div>
   );

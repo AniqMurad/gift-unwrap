@@ -60,12 +60,18 @@ const SubNavbar = () => {
   };
 
   const handleClickOutside = (event) => {
+    const target = event.target;
+
+    // Ignore programmatic or carousel-triggered clicks
     if (
-      !event.target.closest(".dropdown-button") &&
-      !event.target.closest(".dropdown-content")
+      target.closest('[data-ignore-dropdown-close="true"]') ||
+      target.closest(".dropdown-button") ||
+      target.closest(".dropdown-content")
     ) {
-      setActiveDropdown(null);
+      return;
     }
+
+    setActiveDropdown(null);
   };
 
   const handleTitleClick = (url) => {
@@ -81,25 +87,22 @@ const SubNavbar = () => {
       <div className="flex justify-between items-start bg-[#ffff] px-4 sm:px-8 lg:px-16 py-3 border-b-2 border-solid border-[#E9E9E9]">
         <div className="flex gap-4 sm:gap-8 flex-wrap">
           <button
-            className={`font-bold cursor-pointer text-xs sm:text-sm dropdown-button ${
-              activeDropdown === "recipients" ? "border-b-2 border-black" : ""
-            }`}
+            className={`font-bold cursor-pointer text-xs sm:text-sm dropdown-button ${activeDropdown === "recipients" ? "border-b-2 border-black" : ""
+              }`}
             onClick={() => handleButtonClick("recipients")}
           >
             RECIPIENTS
           </button>
           <button
-            className={`font-bold cursor-pointer text-xs sm:text-sm dropdown-button ${
-              activeDropdown === "occasions" ? "border-b-2 border-black" : ""
-            }`}
+            className={`font-bold cursor-pointer text-xs sm:text-sm dropdown-button ${activeDropdown === "occasions" ? "border-b-2 border-black" : ""
+              }`}
             onClick={() => handleButtonClick("occasions")}
           >
             OCCASIONS
           </button>
           <button
-            className={`font-bold cursor-pointer text-xs sm:text-sm text-red-300 dropdown-button ${
-              activeDropdown === "birthday" ? "border-b-2 border-black" : ""
-            }`}
+            className={`font-bold cursor-pointer text-xs sm:text-sm text-red-300 dropdown-button ${activeDropdown === "birthday" ? "border-b-2 border-black" : ""
+              }`}
             onClick={navigateToFlowers}
           >
             <span className="hidden sm:inline">Flowers & Chocolates Bouquet</span>

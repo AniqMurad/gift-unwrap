@@ -22,7 +22,7 @@ const Trending = () => {
         { image: eidimage, title: "Religious Events", count: 12, url: "/Giftforreligions" },
     ];
 
-    const itemsToDuplicate = 5;
+    const itemsToDuplicate = 7;
     const trendingItems = [...originalItems, ...originalItems.slice(0, itemsToDuplicate)];
 
     const handleItemClick = (url) => {
@@ -87,7 +87,7 @@ const Trending = () => {
                                 className='flex flex-col items-center flex-shrink-0 cursor-pointer group min-w-[140px] sm:min-w-[160px] md:min-w-[180px]'
                                 onClick={() => handleItemClick(item.url)}
                             >
-                                <div className='rounded-full overflow-hidden w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] md:w-[180px] md:h-[180px] shadow-md group-hover:shadow-lg transition-shadow duration-200'>
+                                <div className='rounded-full overflow-hidden w-[250px] h-[250px] sm:w-[140px] sm:h-[140px] md:w-[180px] md:h-[180px] shadow-md group-hover:shadow-lg transition-shadow duration-200'>
                                     <img src={item.image} alt={item.title} className='w-full h-full object-cover' />
                                 </div>
                                 <div className='flex justify-center mt-3 text-center'>

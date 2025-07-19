@@ -46,14 +46,15 @@ const HeroSection = () => {
     if (!carousel) return;
 
     const autoPlay = setInterval(() => {
-      
-      const nextButton = carousel.querySelector('[data-carousel="next"]') || 
-                        carousel.querySelector('.absolute.right-1');
-      
+
+      const nextButton = carousel.querySelector('[data-carousel="next"]') ||
+        carousel.querySelector('.absolute.right-1');
+
       if (nextButton) {
+        nextButton.setAttribute("data-ignore-dropdown-close", "true");
         nextButton.click();
       }
-    }, 4000); 
+    }, 4000);
 
     return () => clearInterval(autoPlay);
   }, []);
@@ -66,7 +67,7 @@ const HeroSection = () => {
     <div className="flex flex-col md:flex-row py-6 px-4 md:px-16 gap-6">
       {/* Left Carousel */}
       <div className="w-full md:w-[65%] rounded-[24px] overflow-hidden" ref={carouselRef}>
-        <Carousel 
+        <Carousel
           opts={{
             align: "start",
             loop: true, // Enable infinite loop
@@ -89,7 +90,7 @@ const HeroSection = () => {
                       <p className="mt-2 md:mt-4 text-sm md:text-lg text-black">
                         {slide.description}
                       </p>
-                      <button 
+                      <button
                         className="mt-3 md:mt-5 px-4 md:px-6 py-2 shadow-lg text-sm text-white bg-black font-semibold rounded-md hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
                         onClick={() => handleShopNowClick(slide.route)}
                       >
@@ -101,12 +102,12 @@ const HeroSection = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious 
-            className="absolute left-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0" 
+          <CarouselPrevious
+            className="absolute left-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0"
             data-carousel="prev"
           />
-          <CarouselNext 
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0" 
+          <CarouselNext
+            className="absolute right-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0"
             data-carousel="next"
           />
         </Carousel>
@@ -116,40 +117,40 @@ const HeroSection = () => {
       <div className="w-full md:w-[35%] flex flex-row md:flex-col gap-4">
         {/* Gifts For Him */}
         <div
-            className="w-1/2 md:w-full bg-[#DEFBFF] cursor-pointer flex flex-row justify-between py-5 px-4 rounded-[24px] shadow-md md:flex-1"
-            onClick={() => navigate('/giftforhim')}
+          className="w-1/2 md:w-full bg-[#DEFBFF] cursor-pointer flex flex-row justify-between items-center py-5 px-8 rounded-[24px] shadow-md md:flex-1"
+          onClick={() => navigate('/giftforhim')}
         >
-            <div>
+          <div className="">
             <p className="bg-[#DB4444] text-white text-[10px] md:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max">
-                SAVE 10%
+              SAVE 10%
             </p>
             <p className="text-lg md:text-2xl font-semibold mt-2">Gifts For Him</p>
             <p className="text-sm md:text-md mt-2 text-[#696C70]">
-                Starting at <span className="text-[#DB4444] font-medium">PKR 4000</span>
+              Starting at <span className="text-[#DB4444] font-medium">PKR 4000</span>
             </p>
-            </div>
-            <div className="mt-4 flex justify-center">
+          </div>
+          <div className="">
             <img src={img2} className="w-[90px] h-[90px] md:w-[120px] md:h-[120px] rounded-full object-cover" />
-            </div>
+          </div>
         </div>
 
         {/* Gifts For Her */}
         <div
-            className="w-1/2 md:w-full bg-[#F9F1F0] cursor-pointer flex flex-row justify-between py-5 px-4 rounded-[24px] shadow-md md:flex-1"
-            onClick={() => navigate('/giftforher')}
+          className="w-1/2 md:w-full bg-[#F9F1F0] cursor-pointer flex flex-row justify-between items-center py-5 px-8 rounded-[24px] shadow-md md:flex-1"
+          onClick={() => navigate('/giftforher')}
         >
-            <div>
+          <div className="">
             <p className="bg-[#DB4444] text-white text-[10px] md:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max">
-                SAVE 10%
+              SAVE 10%
             </p>
             <p className="text-lg md:text-2xl font-semibold mt-2">Gifts For Her</p>
             <p className="text-sm md:text-md mt-2 text-[#696C70]">
-                Starting at <span className="text-[#DB4444] font-medium">PKR 3500</span>
+              Starting at <span className="text-[#DB4444] font-medium">PKR 3500</span>
             </p>
-            </div>
-            <div className="mt-4 flex justify-center">
+          </div>
+          <div className="">
             <img src={img3} className="w-[90px] h-[90px] md:w-[120px] md:h-[120px] rounded-full object-cover" />
-            </div>
+          </div>
         </div>
       </div>
     </div>
