@@ -23,20 +23,21 @@ const HeroSection = () => {
       heading: "Celebrate Women's Day",
       description:
         "Express appreciation, gratitude, and support for the women in your lives.",
-      route: "/giftforher"
+      route: "/giftforher",
     },
     {
       image: heroimg2,
       heading: "Tiny Gifts for Tiny Joys",
-      description: "Discover adorable and thoughtful baby gifts made to celebrate precious moment.",
-      route: "/Giftforbabies"
+      description:
+        "Discover adorable and thoughtful baby gifts made to celebrate precious moment.",
+      route: "/Giftforbabies",
     },
     {
       image: heroimg3,
       heading: "Make their Birthday Bright",
       description:
         "Surprise your friends and loved ones with heartfelt birthday gifts.",
-      route: "/Giftforbirthday"
+      route: "/Giftforbirthday",
     },
   ];
 
@@ -46,9 +47,9 @@ const HeroSection = () => {
     if (!carousel) return;
 
     const autoPlay = setInterval(() => {
-
-      const nextButton = carousel.querySelector('[data-carousel="next"]') ||
-        carousel.querySelector('.absolute.right-1');
+      const nextButton =
+        carousel.querySelector('[data-carousel="next"]') ||
+        carousel.querySelector(".absolute.right-1");
 
       if (nextButton) {
         nextButton.setAttribute("data-ignore-dropdown-close", "true");
@@ -66,7 +67,10 @@ const HeroSection = () => {
   return (
     <div className="flex flex-col md:flex-row py-6 px-4 md:px-16 gap-6">
       {/* Left Carousel */}
-      <div className="w-full md:w-[65%] rounded-[24px] overflow-hidden" ref={carouselRef}>
+      <div
+        className="w-full md:w-[65%] rounded-[24px] overflow-hidden"
+        ref={carouselRef}
+      >
         <Carousel
           opts={{
             align: "start",
@@ -114,42 +118,56 @@ const HeroSection = () => {
       </div>
 
       {/* Right Cards */}
-      <div className="w-full md:w-[35%] flex flex-row md:flex-col gap-4">
+      <div className="w-full xl:w-[35%] flex flex-row xl:flex-col gap-4">
         {/* Gifts For Him */}
         <div
-          className="w-1/2 md:w-full bg-[#DEFBFF] cursor-pointer flex flex-row justify-between items-center py-5 px-8 rounded-[24px] shadow-md md:flex-1"
-          onClick={() => navigate('/giftforhim')}
+          className="w-1/2 xl:w-full bg-[#DEFBFF] cursor-pointer flex flex-col sm:flex-row justify-between items-center py-5 px-4 rounded-[24px] shadow-md"
+          onClick={() => navigate("/giftforhim")}
         >
-          <div className="">
-            <p className="bg-[#DB4444] text-white text-[10px] md:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max">
+          <div className="text-center sm:text-left">
+            <p className="bg-[#DB4444] text-white text-[10px] sm:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max mx-auto sm:mx-0">
               SAVE 10%
             </p>
-            <p className="text-lg md:text-2xl font-semibold mt-2">Gifts For Him</p>
-            <p className="text-sm md:text-md mt-2 text-[#696C70]">
-              Starting at <span className="text-[#DB4444] font-medium">PKR 4000</span>
+            <p className="text-sm sm:text-2xl font-semibold mt-2">
+              Gifts For Him
+            </p>
+            <p className="text-xs sm:text-md mt-2 text-[#696C70]">
+              Starting at{" "}
+              <span className="text-[#DB4444] font-medium">PKR 4000</span>
             </p>
           </div>
-          <div className="">
-            <img src={img2} className="w-[90px] h-[90px] md:w-[120px] md:h-[120px] rounded-full object-cover" />
+          <div className="mt-4 sm:mt-0">
+            <img
+              src={img2}
+              className="w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] rounded-full object-cover"
+              alt="Gift for Him"
+            />
           </div>
         </div>
 
         {/* Gifts For Her */}
         <div
-          className="w-1/2 md:w-full bg-[#F9F1F0] cursor-pointer flex flex-row justify-between items-center py-5 px-8 rounded-[24px] shadow-md md:flex-1"
-          onClick={() => navigate('/giftforher')}
+          className="w-1/2 xl:w-full bg-[#F9F1F0] cursor-pointer flex flex-col sm:flex-row justify-between items-center py-5 px-4 rounded-[24px] shadow-md"
+          onClick={() => navigate("/giftforher")}
         >
-          <div className="">
-            <p className="bg-[#DB4444] text-white text-[10px] md:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max">
+          <div className="text-center sm:text-left">
+            <p className="bg-[#DB4444] text-white text-[10px] sm:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max mx-auto sm:mx-0">
               SAVE 10%
             </p>
-            <p className="text-lg md:text-2xl font-semibold mt-2">Gifts For Her</p>
-            <p className="text-sm md:text-md mt-2 text-[#696C70]">
-              Starting at <span className="text-[#DB4444] font-medium">PKR 3500</span>
+            <p className="text-sm sm:text-2xl font-semibold mt-2">
+              Gifts For Her
+            </p>
+            <p className="text-xs sm:text-md mt-2 text-[#696C70]">
+              Starting at{" "}
+              <span className="text-[#DB4444] font-medium">PKR 3500</span>
             </p>
           </div>
-          <div className="">
-            <img src={img3} className="w-[90px] h-[90px] md:w-[120px] md:h-[120px] rounded-full object-cover" />
+          <div className="mt-4 sm:mt-0">
+            <img
+              src={img3}
+              className="w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] rounded-full object-cover"
+              alt="Gift for Her"
+            />
           </div>
         </div>
       </div>
