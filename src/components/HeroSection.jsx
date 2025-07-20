@@ -118,10 +118,10 @@ const HeroSection = () => {
       </div>
 
       {/* Right Cards */}
-      <div className="w-full xl:w-[35%] flex flex-row xl:flex-col gap-4">
+      <div className="w-full xl:w-[35%] md:w-[35%] flex md:flex-col xl:flex-col gap-4">
         {/* Gifts For Him */}
         <div
-          className="w-1/2 xl:w-full bg-[#DEFBFF] cursor-pointer flex flex-col sm:flex-row justify-between items-center py-5 px-4 rounded-[24px] shadow-md"
+          className="w-1/2 xl:w-full md:w-full bg-[#DEFBFF] cursor-pointer flex flex-col sm:flex-row justify-between items-center py-5 px-4 rounded-[24px] shadow-md md:flex-1"
           onClick={() => navigate("/giftforhim")}
         >
           <div className="text-center sm:text-left">
@@ -147,7 +147,7 @@ const HeroSection = () => {
 
         {/* Gifts For Her */}
         <div
-          className="w-1/2 xl:w-full bg-[#F9F1F0] cursor-pointer flex flex-col sm:flex-row justify-between items-center py-5 px-4 rounded-[24px] shadow-md"
+          className="w-1/2 xl:w-full md:w-full bg-[#F9F1F0] cursor-pointer flex flex-col sm:flex-row justify-between items-center py-5 px-4 rounded-[24px] shadow-md md:flex-1"
           onClick={() => navigate("/giftforher")}
         >
           <div className="text-center sm:text-left">
