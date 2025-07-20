@@ -108,7 +108,7 @@ const Footer = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-10 w-full lg:w-[500px]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-0 w-full lg:w-[500px]">
             <div className="flex flex-col gap-4">
               <h4 className="font-semibold mb-2">INFORMATION</h4>
               <p

@@ -137,7 +137,7 @@ const Product = ({ product, columns }) => {
             {product.name}
           </p>
           <div className="flex items-center gap-2 text-xs sm:text-sm mt-1">
-            <span className="font-semibold text-black">Rs {product.price}</span>
+            <span className="font-semibold text-black">PKR {product.price}</span>
           </div>
         </div>
       </div>

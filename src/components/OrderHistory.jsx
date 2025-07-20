@@ -207,10 +207,10 @@ const OrderHistory = () => {
                                                 <p className="text-[24px] font-bold">Rs {orderItem?.priceAtTimeOfOrder.toFixed(2)}</p>
                                             </div>
                                             <div>
-                                                <p><strong>Subtotal:</strong> Rs {order.subtotal}</p>
-                                                <p><strong>Shipping:</strong> Rs {order.shippingCost}</p>
-                                                <p><strong>Discount:</strong> Rs {order.discountAmount}</p>
-                                                <p><strong>Total:</strong> <span className="fw-bold">Rs {order.totalAmount}</span></p>
+                                                <p><strong>Subtotal:</strong> PKR {order.subtotal}</p>
+                                                <p><strong>Shipping:</strong> PKR {order.shippingCost}</p>
+                                                <p><strong>Discount:</strong> PKR {order.discountAmount}</p>
+                                                <p><strong>Total:</strong> <span className="fw-bold">PKR {order.totalAmount}</span></p>
                                             </div>
                                         </div>
                                     </div>

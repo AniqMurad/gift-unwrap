@@ -53,7 +53,7 @@ const OrderSummary = ({
                   </p>
                 </div>
                 <p className="font-semibold text-[15px]">
-                  Rs {(item.price * item.quantity).toFixed(2)}
+                  PKR {(item.price * item.quantity).toFixed(2)}
                 </p>
               </div>
             ))}
@@ -67,25 +67,27 @@ const OrderSummary = ({
         <div className="space-y-3 border-t pt-6">
           <div className="flex justify-between text-[16px]">
             <p>Subtotal</p>
-            <p className="font-medium">Rs {subtotal?.toFixed(2) || "0.00"}</p>
+            <p className="font-medium">
+              PKR {subtotal ? Math.floor(subtotal) : "0"}
+            </p>
           </div>
           <div className="flex justify-between text-[16px]">
             <p>Shipping</p>
             <p className="font-medium">
               {shippingCost === 0
                 ? "Free"
-                : `Rs ${shippingCost?.toFixed(2) || "0.00"}`}
+                : `PKR ${shippingCost ? Math.floor(shippingCost) : "0"}`}
             </p>
           </div>
           {discountAmount > 0 && (
             <div className="flex justify-between text-[16px] text-green-600">
               <p>Discounts</p>
-              <p className="font-medium">- Rs {discountAmount.toFixed(2)}</p>
+              <p className="font-medium">- PKR {Math.floor(discountAmount)}</p>
             </div>
           )}
           <div className="flex justify-between text-[20px] font-bold pt-3 border-t mt-3">
             <p>Total</p>
-            <p>Rs {totalOrderAmount?.toFixed(2) || "0.00"}</p>
+            <p>PKR {totalOrderAmount ? Math.floor(totalOrderAmount) : "0"}</p>
           </div>
         </div>
       </div>

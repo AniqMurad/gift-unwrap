@@ -165,7 +165,7 @@ const ProductDetail = () => {
                         <h1 className="text-lg sm:text-xl lg:text-3xl font-bold text-[#1F1F1F]">{product.name}</h1>
 
                         <div className="flex items-center gap-4">
-                            <span className="text-lg sm:text-xl lg:text-2xl font-semibold text-red-500">Rs {product.price ? product.price.toFixed(2) : 'N/A'}</span>
+                            <span className="text-lg sm:text-xl lg:text-2xl font-semibold text-red-500">PKR {product.price ? Math.floor(product.price) : 'N/A'}</span>
                         </div>
 
                         <div className="text-[#696C70] border-b border-gray-200 pb-3 sm:pb-4 lg:pb-6 text-sm sm:text-base">
@@ -215,7 +215,7 @@ const ProductDetail = () => {
                                     <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2.05-2.05A1 1 0 015.71 14h7.29zM13 16l-2-2m2 2l2-2m-2 2v-2m0 0h4.586a1 1 0 00.707-.293l2.828-2.828a1 1 0 000-1.414l-2.828-2.828A1 1 0 0017.586 6H13" />
                                 </svg>
-                                <span>Free shipping on orders over Rs 4000</span>
+                                <span>Free shipping on orders over PKR 4000</span>
                             </div>
                             <div className="flex items-center gap-3 text-xs sm:text-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -305,7 +305,7 @@ const ProductDetail = () => {
                                         <div>
                                             <h4 className="font-semibold mb-2 text-sm sm:text-base">Shipping Information:</h4>
                                             <ul className="list-disc list-inside space-y-1 text-sm sm:text-base">
-                                                <li>Free shipping on orders over Rs 4000.</li>
+                                                <li>Free shipping on orders over PKR 4000.</li>
                                                 <li>Express shipping available for an additional fee.</li>
                                                 <li>Most orders ship within 1-2 business days.</li>
                                             </ul>
