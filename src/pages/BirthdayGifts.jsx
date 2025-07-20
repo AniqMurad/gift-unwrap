@@ -24,6 +24,7 @@ const BirthdayGifts = () => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const [columns, setColumns] = useState(4);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [selectedCategory, setSelectedCategory] = useState("");
   const categoryMap = {
     "his birthday": "giftsForHim",
@@ -76,6 +77,18 @@ const BirthdayGifts = () => {
       setSelectedCategory(categoryParam);
     }
   }, [location.search]);
+
+  // Track screen width and auto-adjust layout
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (columns === 5 && screenWidth < 1280) setColumns(4);
+    if (columns === 4 && screenWidth < 1024) setColumns(3);
+  }, [screenWidth, columns]);
 
   const handleColumnChange = (col) => {
     setColumns(col);
@@ -164,51 +177,58 @@ const BirthdayGifts = () => {
       <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
         <div className="w-full transition-all duration-300">
           {/* filters */}
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
-              {/* Layout Switch Buttons - Hidden on mobile */}
-              <div className="hidden sm:flex items-center space-x-4">
+          <div className="flex flex-col flex-wrap gap-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0 sm:space-x-6">
+              {/* Layout Switch Buttons */}
+              <div className="flex items-center space-x-4">
                 <div className="flex space-x-2">
                   <div
                     className={`border ${
                       columns === 3 ? "bg-black" : "border-[#E9E9E9]"
-                    } p-1 rounded cursor-pointer`}
+                    } p-1 rounded cursor-pointer hidden sm:block`}
                     onClick={() => handleColumnChange(3)}
                   >
                     <ThreeBars
                       fillColor={columns === 3 ? "white" : "#A0A0A0"}
                     />
                   </div>
-                  <div
-                    className={`border ${
-                      columns === 4 ? "bg-black" : "border-[#E9E9E9]"
-                    } p-1 rounded cursor-pointer`}
-                    onClick={() => handleColumnChange(4)}
-                  >
-                    <FourBars fillColor={columns === 4 ? "white" : "#A0A0A0"} />
-                  </div>
-                  <div
-                    className={`border ${
-                      columns === 5 ? "bg-black" : "border-[#E9E9E9]"
-                    } p-1 rounded cursor-pointer`}
-                    onClick={() => handleColumnChange(5)}
-                  >
-                    <FiveBars fillColor={columns === 5 ? "white" : "#A0A0A0"} />
-                  </div>
+                  {screenWidth >= 1024 && (
+                    <div
+                      className={`border ${
+                        columns === 4 ? "bg-black" : "border-[#E9E9E9]"
+                      } p-1 rounded cursor-pointer hidden sm:block`}
+                      onClick={() => handleColumnChange(4)}
+                    >
+                      <FourBars
+                        fillColor={columns === 4 ? "white" : "#A0A0A0"}
+                      />
+                    </div>
+                  )}
+                  {screenWidth >= 1280 && (
+                    <div
+                      className={`border ${
+                        columns === 5 ? "bg-black" : "border-[#E9E9E9]"
+                      } p-1 rounded cursor-pointer hidden sm:block`}
+                      onClick={() => handleColumnChange(5)}
+                    >
+                      <FiveBars
+                        fillColor={columns === 5 ? "white" : "#A0A0A0"}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
-              <span className="text-[#696C70] font-medium text-xs sm:text-sm">
+              {/* <span className="text-[#696C70] font-medium text-xs sm:text-sm">
                 {selectedFilters.length > 0 || selectedCategory
                   ? "18 Products Found:"
                   : ""}
               </span>
 
-              
               <div className="flex flex-wrap gap-1 sm:gap-2">
-                {/* Selected Category */}
+                
                 {selectedCategory && (
                   <span className="px-2 sm:px-3 py-1 bg-[#F9F1F0] text-black rounded-full flex items-center text-xs sm:text-sm">
                     <button
@@ -232,7 +252,6 @@ const BirthdayGifts = () => {
                   </span>
                 )}
 
-                {/* Price Range */}
                 {(minPrice > 0 || maxPrice < 1000) && (
                   <span className="px-2 sm:px-3 py-1 bg-[#D2EF9A] text-[#1F1F1F] rounded-full flex items-center text-xs sm:text-sm">
                     <button
@@ -253,7 +272,6 @@ const BirthdayGifts = () => {
                   </span>
                 )}
 
-                {/* Selected Hobbies & Interests */}
                 {selectedFilters.map((filter) => (
                   <span
                     key={filter}
@@ -268,7 +286,7 @@ const BirthdayGifts = () => {
                     {filter}
                   </span>
                 ))}
-              </div>
+              </div> */}
 
               {/* Clear All Button */}
               {(selectedFilters.length > 0 ||
@@ -289,7 +307,12 @@ const BirthdayGifts = () => {
           {/* products */}
           {giftsForBirthdayProducts.length > 0 ? (
             <div
-              className={`justify-items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-${columns} gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300`}
+              className={`justify-items-center grid gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300
+                grid-cols-2 sm:grid-cols-3
+                ${columns === 3 ? "lg:grid-cols-3" : ""}
+                ${columns === 4 ? "lg:grid-cols-4" : ""}
+                ${columns === 5 ? "lg:grid-cols-5" : ""}
+                `}
             >
               {giftsForBirthdayProducts.map((product) => (
                 <Product
