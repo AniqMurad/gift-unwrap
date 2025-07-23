@@ -1,132 +1,151 @@
-import React, { useRef, useEffect, useState } from 'react';
-import eidimage from '../assets/Eid.png';
-import birthdayimage from '../assets/birthday.png';
-import companyimage from '../assets/company.webp';
-import weddingGiftImg from '../assets/weddingGiftsImg.jpg';
-import box2 from '../assets/box2.jpg';
-import giftForhimImg from '../assets/giftForhimImg.webp';
-import giftForKids from '../assets/giftforkids.jfif';
-import { useNavigate } from 'react-router-dom';
+import React, { useRef, useEffect, useState } from "react";
+import eidimage from "../assets/Eid.png";
+import birthdayimage from "../assets/birthday.png";
+import companyimage from "../assets/company.webp";
+import weddingGiftImg from "../assets/weddingGiftsImg.jpg";
+import box2 from "../assets/box2.jpg";
+import giftForhimImg from "../assets/giftForhimImg.webp";
+import giftForKids from "../assets/giftforkids.jfif";
+import { useNavigate } from "react-router-dom";
 
 const Trending = () => {
-    const sliderRef = useRef(null);
-    const scrollContainerRef = useRef(null);
-    const isDraggingRef = useRef(false);
-    const [isHovered, setIsHovered] = useState(false);
-    const navigate = useNavigate();
+  const sliderRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const navigate = useNavigate();
 
-    const originalItems = [
-        { image: companyimage, title: "Business", count: 12, url: "/Giftforcompanies" },
-        { image: birthdayimage, title: "Birthday", count: 12, url: "/Giftforbirthday" },
-        { image: giftForKids, title: "Kids", count: 12, url: "/Giftforbabies" },
-        { image: box2, title: "For Her", count: 12, url: "/Giftforher" },
-        { image: giftForhimImg, title: "For Him", count: 12, url: "/Giftforhim" },
-        { image: weddingGiftImg, title: "Wedding", count: 12, url: "/Giftforwedding" },
-        { image: eidimage, title: "Religious Events", count: 12, url: "/Giftforreligions" },
-    ];
+  const originalItems = [
+    { image: companyimage, title: "Business", url: "/Giftforcompanies" },
+    { image: birthdayimage, title: "Birthday", url: "/Giftforbirthday" },
+    { image: giftForKids, title: "Kids", url: "/Giftforbabies" },
+    { image: box2, title: "For Her", url: "/Giftforher" },
+    { image: giftForhimImg, title: "For Him", url: "/Giftforhim" },
+    { image: weddingGiftImg, title: "Wedding", url: "/Giftforwedding" },
+    { image: eidimage, title: "Religious Events", url: "/Giftforreligions" },
+  ];
 
-    const itemsToDuplicate = 7;
-    const trendingItems = [...originalItems, ...originalItems.slice(0, itemsToDuplicate)];
+  // Clone head and tail for seamless looping
+  const trendingItems = [
+    ...originalItems.slice(-3), // tail clone
+    ...originalItems,
+    ...originalItems.slice(0, 3), // head clone
+  ];
 
-    const handleItemClick = (url) => {
-        if (url) navigate(url);
-        else console.warn("Navigation URL is missing for this item.");
+  const itemWidth = 200 + 24; // 200 width + 24 gap
+  const startIndex = 3; // Index to center on original items
+  const autoScrollSpeed = 0.5;
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // Position to start of real items
+    container.scrollLeft = startIndex * itemWidth;
+
+    let animationId;
+
+    const animate = () => {
+      if (container) {
+        container.scrollLeft += autoScrollSpeed;
+
+        const visibleWidth = container.offsetWidth;
+        const totalScrollWidth = container.scrollWidth;
+
+        // Reset if we're about to hit the cloned tail
+        if (
+          container.scrollLeft >=
+          totalScrollWidth - visibleWidth - itemWidth * 3
+        ) {
+          container.scrollLeft = startIndex * itemWidth;
+        }
+      }
+
+      animationId = requestAnimationFrame(animate);
     };
 
-    const handleTouchStart = () => {
-        isDraggingRef.current = true;
-    };
+    animate();
 
-    const handleTouchEnd = () => {
-        isDraggingRef.current = false;
-    };
+    return () => cancelAnimationFrame(animationId);
+  }, []);
 
-    useEffect(() => {
-        const slider = sliderRef.current;
-        if (!slider) return;
+  const handleItemClick = (url) => {
+    if (url) navigate(url);
+  };
 
-        let animationId;
-        let position = 0;
-        const itemWidth = 200;
-        const gap = 24;
-        const totalItemWidth = itemWidth + gap;
-        const resetPosition = originalItems.length * totalItemWidth;
+  // Handle seamless loop when user scrolls manually
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
 
-        const animate = () => {
-            if (!isDraggingRef.current && !isHovered) {
-                position += 0.5;
+    const visibleWidth = container.offsetWidth;
+    const totalScrollWidth = container.scrollWidth;
 
-                if (position >= resetPosition) {
-                    slider.style.transition = 'none';
-                    slider.style.transform = `translateX(0px)`;
-                    position = 0;
-                    void slider.offsetWidth;
-                    slider.style.transition = 'transform 0.3s ease-out';
-                } else {
-                    slider.style.transform = `translateX(-${position}px)`;
-                }
-            }
-            animationId = requestAnimationFrame(animate);
-        };
+    if (
+      container.scrollLeft >=
+      totalScrollWidth - visibleWidth - itemWidth * 3
+    ) {
+      container.scrollLeft = startIndex * itemWidth;
+    } else if (container.scrollLeft <= 0) {
+      container.scrollLeft = totalScrollWidth - visibleWidth - itemWidth * 6;
+    }
+  };
 
-        animate();
-        return () => cancelAnimationFrame(animationId);
-    }, [originalItems.length, isHovered]);
-
-    return (
-        <div className="bg-[#FCFCFC]">
-            <div className="m-4 p-4 px-4 sm:px-8 md:px-12 lg:px-16">
-                <div className="text-4xl font-semibold flex justify-center mb-8">Trending Right Now</div>
-                <div
-                    className="relative my-5 mx-auto cursor-grab active:cursor-grabbing"
-                    ref={scrollContainerRef}
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    style={{
-                        overflowX: 'auto',
-                        overflowY: 'hidden',
-                        WebkitOverflowScrolling: 'touch',
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
-                    }}
-                >
-                    {/* Hide scrollbar for WebKit browsers */}
-                    <style>
-                        {`
+  return (
+    <div className="bg-[#FCFCFC]">
+      <div className="m-4 p-4 px-4 sm:px-8 md:px-12 lg:px-16">
+        <div className="text-4xl font-semibold flex justify-center mb-8">
+          Trending Right Now
+        </div>
+        <div
+          className="relative my-5 mx-auto cursor-grab active:cursor-grabbing"
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          style={{
+            overflowX: "auto",
+            overflowY: "hidden",
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
+        >
+          {/* Hide scrollbar for WebKit */}
+          <style>
+            {`
                         div::-webkit-scrollbar {
                             display: none;
                         }
                         `}
-                    </style>
+          </style>
 
-                    <div
-                        ref={sliderRef}
-                        className="flex gap-4 sm:gap-5 md:gap-6"
-                        style={{ width: 'fit-content' }}
-                    >
-                        {trendingItems.map((item, index) => (
-                            <div
-                                key={index}
-                                className="flex flex-col items-center flex-shrink-0 cursor-pointer group min-w-[140px] sm:min-w-[160px] md:min-w-[180px]"
-                                onClick={() => handleItemClick(item.url)}
-                            >
-                                <div className="rounded-full overflow-hidden w-[180px] h-[180px] sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] shadow-md group-hover:shadow-lg transition-shadow duration-200">
-                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                                </div>
-                                <div className="flex justify-center mt-3 text-center">
-                                    <p className="font-semibold text-base group-hover:text-black transition-colors duration-200">
-                                        {item.title}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+          <div
+            ref={sliderRef}
+            className="flex gap-6"
+            style={{ width: "fit-content" }}
+          >
+            {trendingItems.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center flex-shrink-0 cursor-pointer group min-w-[200px]"
+                onClick={() => handleItemClick(item.url)}
+              >
+                <div className="rounded-full overflow-hidden w-[200px] h-[200px] sm:w-[200px] sm:h-[200px] md:w-[220px] md:h-[220px] shadow-md group-hover:shadow-lg transition-shadow duration-200">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-            </div>
+                <div className="flex justify-center mt-3 text-center">
+                  <p className="font-semibold text-base group-hover:text-black transition-colors duration-200">
+                    {item.title}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Trending;
