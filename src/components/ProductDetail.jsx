@@ -141,7 +141,7 @@ const ProductDetail = () => {
 
                         {/* Thumbnail Images - Hidden on mobile to save space */}
                         {product.images && product.images.length > 1 && (
-                            <div className="hidden sm:grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
+                            <div className="grid grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
                                 {product.images.map((imgSrc, index) => (
                                     <div
                                         key={index}
