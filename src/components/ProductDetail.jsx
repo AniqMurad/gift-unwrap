@@ -23,6 +23,7 @@ const ProductDetail = () => {
         type: 'success',
         message: ''
     });
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
     // Auto-hide notification after 3 seconds
     useEffect(() => {
@@ -130,22 +131,75 @@ const ProductDetail = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-10 xl:gap-16">
                     {/* Left: Product Images */}
                     <div className="space-y-2 sm:space-y-4 lg:space-y-8">
-                        {/* Main Image with reduced height on mobile */}
-                        <div className="bg-gray-50 p-2 sm:p-4 lg:p-8 rounded-lg flex items-center justify-center">
+                        {/* Main Image with carousel controls on mobile */}
+                        <div className="bg-gray-50 p-2 sm:p-4 lg:p-8 rounded-lg flex items-center justify-center relative">
+                            {/* Mobile carousel arrows */}
+                            {product.images && product.images.length > 1 && (
+                                <>
+                                    <button
+                                        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 text-gray-500 bg-white bg-opacity-70 rounded-full sm:hidden"
+                                        style={{ left: 0 }}
+                                        onClick={() => {
+                                            const currentIdx = product.images.indexOf(selectedImage || product.images[0]);
+                                            const prevIdx = (currentIdx - 1 + product.images.length) % product.images.length;
+                                            setSelectedImage(product.images[prevIdx]);
+                                        }}
+                                        aria-label="Previous image"
+                                        disabled={product.images.length < 2}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                                    </button>
+                                    <button
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 text-gray-500 bg-white bg-opacity-70 rounded-full sm:hidden"
+                                        style={{ right: 0 }}
+                                        onClick={() => {
+                                            const currentIdx = product.images.indexOf(selectedImage || product.images[0]);
+                                            const nextIdx = (currentIdx + 1) % product.images.length;
+                                            setSelectedImage(product.images[nextIdx]);
+                                        }}
+                                        aria-label="Next image"
+                                        disabled={product.images.length < 2}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                                    </button>
+                                </>
+                            )}
                             <img
                                 src={selectedImage || product.image || (product.images && product.images[0]) || 'https://via.placeholder.com/600'}
                                 alt={product.name}
-                                className="w-full h-full object-contain max-h-[200px] sm:max-h-[300px] lg:max-h-[500px] xl:max-h-[600px]"
+                                className="w-full h-full object-contain max-h-[200px] sm:max-h-[300px] lg:max-h-[500px] xl:max-h-[600px] cursor-pointer"
+                                onClick={() => setIsFullscreen(true)}
                             />
+                            {/* Fullscreen Modal */}
+                            {isFullscreen && (
+                                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90" onClick={() => setIsFullscreen(false)}>
+                                    <img
+                                        src={selectedImage || product.image || (product.images && product.images[0]) || 'https://via.placeholder.com/600'}
+                                        alt={product.name}
+                                        className="max-h-[90vh] max-w-[95vw] object-contain rounded shadow-lg"
+                                        onClick={e => e.stopPropagation()}
+                                    />
+                                    <button
+                                        className="absolute top-4 right-4 text-white bg-black bg-opacity-60 rounded-full p-2 hover:bg-opacity-80 focus:outline-none"
+                                        onClick={() => setIsFullscreen(false)}
+                                        aria-label="Close fullscreen"
+                                        style={{ zIndex: 60 }}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
-                        {/* Thumbnail Images - Hidden on mobile to save space */}
+                        {/* Thumbnails for sm+ screens only */}
                         {product.images && product.images.length > 1 && (
-                            <div className="grid grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
+                            <div className="hidden sm:grid grid-cols-4 gap-3 lg:gap-4">
                                 {product.images.map((imgSrc, index) => (
                                     <div
                                         key={index}
-                                        className={`border p-1 sm:p-2 rounded cursor-pointer aspect-square ${selectedImage === imgSrc ? 'border-black' : 'border-gray-200 hover:border-gray-400'}`}
+                                        className={`border p-2 rounded cursor-pointer aspect-square ${selectedImage === imgSrc ? 'border-black' : 'border-gray-200 hover:border-gray-400'}`}
                                         onMouseEnter={() => setSelectedImage(imgSrc)}
                                         onClick={() => setSelectedImage(imgSrc)}
                                     >
@@ -192,7 +246,7 @@ const ProductDetail = () => {
                                 </button>
                             </div>
 
-                            <div className="flex flex-col gap-3 w-full">
+                            <div className="flex flex-row sm:flex-col gap-3 w-full">
                                 <button
                                     onClick={handleAddToCart}
                                     className="w-full px-6 sm:px-8 lg:px-12 py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
