@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext"; // Add this import
+import { Heart, ShoppingCart, User } from "lucide-react";
 
 const Navbar = ({
   showSearchInput = true,
@@ -168,15 +169,15 @@ const Navbar = ({
         <img
           src={Logo}
           alt="GiftUnwrap Logo"
-          className="w-[200px] md:w-[173px] h-[42px]"
+          className="w-[200px] md:w-[200px] h-[50px]"
         />
       </div>
 
       {/* Search - hidden on small screens */}
       {showSearchInput && (
-        <div className="hidden lg:flex text-sm">
+        <div className="hidden lg:flex text-sm h-[45px]">
           <input
-            className="rounded-tl-md rounded-bl-md text-[#A0A0A0] w-64 md:w-96 border border-[#E9E9E9] py-2 px-4 focus:outline-none focus:border-black"
+            className="rounded-tl-md rounded-bl-md text-[#A0A0A0] w-64 md:w-[550px] border border-[#E9E9E9] py-2 px-4 focus:outline-none focus:border-black"
             placeholder="What are you looking for today?"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -192,20 +193,20 @@ const Navbar = ({
       )}
 
       {/* Desktop Icons */}
-      <div className="hidden md:flex gap-5 items-center">
+      <div className="hidden md:flex gap-4 items-center">
         {/* User Dropdown */}
         <div className="cursor-pointer">
           <DropdownMenu onOpenChange={(open) => !open || setIsCartOpen(false)}>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline border-0">
+              <div variant="outline border-0">
                 {isLoggedIn && userNameInitial ? (
                   <span className="flex items-center justify-center h-7 w-7 bg-black text-white rounded-full text-sm font-semibold">
                     {userNameInitial}
                   </span>
                 ) : (
-                  <UsersIcon />
+                  <User size={26} strokeWidth={2} />
                 )}
-              </Button>
+              </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-white p-2 shadow-lg border border-grey-200">
               {isLoggedIn ? (
@@ -262,14 +263,14 @@ const Navbar = ({
         <div className="cursor-pointer relative">
           <DropdownMenu onOpenChange={(open) => !open || setIsCartOpen(false)}>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline border-0" className="relative">
-                <HeartIcon />
+              <div variant="outline border-0" className="relative">
+                <Heart size={26} strokeWidth={2}/>
                 {wishlist.length > 0 && (
-                  <span className="absolute top-[10px] right-[10px] transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                  <span className="absolute top-[2px] right-[2px] transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                     {wishlist.length}
                   </span>
                 )}
-              </Button>
+              </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-96 bg-white p-4 border rounded-2xl shadow-2xl z-30">
               <div className="flex justify-between items-center mb-3 border-b-2 pb-2">
@@ -329,14 +330,14 @@ const Navbar = ({
         </div>
         {/* Cart Dropdown */}
         <div className="cursor-pointer relative" ref={cartRef}>
-          <Button variant="outline border-0" onClick={handleCartClick}>
-            <CartIcon aria-label="Cart Icon" />
+          <div variant="outline border-0" onClick={handleCartClick}>
+            <ShoppingCart size={26} strokeWidth={2}/>
             {getTotalCartItems() > 0 && (
-              <span className="absolute top-[10px] right-[10px] transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+              <span className="absolute top-[2px] right-[2px] transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                 {getTotalCartItems()}
               </span>
             )}
-          </Button>
+          </div>
           {isCartOpen && (
             <div className="absolute right-0 top-full mt-2 w-96 bg-white p-4 border rounded-2xl shadow-2xl z-30">
               <div className="flex justify-between items-center mb-3 border-b-2 pb-2">

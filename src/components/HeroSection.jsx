@@ -91,10 +91,10 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row py-6 px-4 md:px-16 gap-6">
+    <div className="flex flex-col md:flex-row pt-14 pb-6 px-4 md:px-16 gap-8">
       {/* Left Carousel */}
       <div
-        className="w-full md:w-[65%] rounded-[24px] overflow-hidden relative"
+        className="w-full md:w-[70%] rounded-[24px] overflow-hidden relative"
         ref={carouselRef}
       >
         <Carousel
@@ -162,7 +162,7 @@ const HeroSection = () => {
       </div>
 
       {/* Right Cards */}
-      <div className="w-full xl:w-[35%] md:w-[35%] flex md:flex-col xl:flex-col gap-4">
+      <div className="w-full xl:w-[30%] md:w-[30%] flex md:flex-col xl:flex-col gap-8">
         {/* Gifts For Him */}
         <div
           className="w-1/2 xl:w-full md:w-full bg-[#DEFBFF] cursor-pointer flex flex-col sm:flex-row justify-between items-center py-5 px-4 rounded-[24px] shadow-md md:flex-1"
@@ -175,7 +175,7 @@ const HeroSection = () => {
             <p className="text-sm sm:text-2xl font-semibold mt-2">
               Gifts For Him
             </p>
-            <p className="text-xs sm:text-md mt-2 text-[#696C70]">
+            <p className="text-xs sm:text-lg mt-2 text-[#696C70]">
               Starting at{" "}
               <span className="text-[#DB4444] font-medium">PKR 4000</span>
             </p>
@@ -201,7 +201,7 @@ const HeroSection = () => {
             <p className="text-sm sm:text-2xl font-semibold mt-2">
               Gifts For Her
             </p>
-            <p className="text-xs sm:text-md mt-2 text-[#696C70]">
+            <p className="text-xs sm:text-lg mt-2 text-[#696C70]">
               Starting at{" "}
               <span className="text-[#DB4444] font-medium">PKR 3500</span>
             </p>
