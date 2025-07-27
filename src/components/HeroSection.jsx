@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import heroimg1 from "../assets/herosection1.png";
 import heroimg2 from "../assets/herosection2.png";
 import heroimg3 from "../assets/herosection3.png";
@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 const HeroSection = () => {
   const navigate = useNavigate();
   const carouselRef = useRef(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
@@ -54,21 +55,46 @@ const HeroSection = () => {
       if (nextButton) {
         nextButton.setAttribute("data-ignore-dropdown-close", "true");
         nextButton.click();
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
       }
     }, 4000);
 
     return () => clearInterval(autoPlay);
-  }, []);
+  }, [slides.length]);
 
   const handleShopNowClick = (route) => {
     navigate(route);
+  };
+
+  const goToSlide = (index) => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    // Calculate how many clicks needed to reach the target slide
+    const currentIndex = currentSlide;
+    let clicksNeeded = index - currentIndex;
+    
+    if (clicksNeeded < 0) {
+      clicksNeeded = slides.length + clicksNeeded;
+    }
+
+    // Click next button the required number of times
+    const nextButton = carousel.querySelector('[data-carousel="next"]');
+    if (nextButton) {
+      for (let i = 0; i < clicksNeeded; i++) {
+        setTimeout(() => {
+          nextButton.click();
+        }, i * 100); // Small delay between clicks
+      }
+      setCurrentSlide(index);
+    }
   };
 
   return (
     <div className="flex flex-col md:flex-row py-6 px-4 md:px-16 gap-6">
       {/* Left Carousel */}
       <div
-        className="w-full md:w-[65%] rounded-[24px] overflow-hidden"
+        className="w-full md:w-[65%] rounded-[24px] overflow-hidden relative"
         ref={carouselRef}
       >
         <Carousel
@@ -88,7 +114,7 @@ const HeroSection = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-[rgba(249,241,240,0.9)] via-[rgba(250,247,241,0.3)] to-transparent rounded-[24px] flex items-center px-4 md:px-10">
                     <div className="text-white max-w-md ml-2 md:ml-6">
-                      <h2 className="text-2xl md:text-5xl tracking-wide font-bold text-black leading-tight md:leading-[50px]">
+                      <h2 className="text-xl md:text-5xl tracking-wide font-bold text-black leading-tight md:leading-[50px]">
                         {slide.heading}
                       </h2>
                       <p className="mt-2 md:mt-4 text-sm md:text-lg text-black">
@@ -106,15 +132,33 @@ const HeroSection = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
+          
+          {/* Arrow buttons - hidden on mobile, visible on desktop */}
           <CarouselPrevious
-            className="absolute left-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0"
+            className="hidden md:flex absolute left-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0"
             data-carousel="prev"
           />
           <CarouselNext
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0"
+            className="hidden md:flex absolute right-1 top-1/2 transform -translate-y-1/2 z-20 p-3 md:p-5 bg-white rounded-full shadow-lg border-0"
             data-carousel="next"
           />
         </Carousel>
+
+        {/* Dot indicators - visible on mobile, hidden on desktop */}
+        <div className="md:hidden absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                currentSlide === index
+                  ? "bg-white scale-110"
+                  : "bg-white/50 hover:bg-white/70"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Right Cards */}

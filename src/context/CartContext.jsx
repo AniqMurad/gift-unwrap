@@ -21,16 +21,18 @@ export const CartProvider = ({ children }) => {
       const existingItem = prevItems.find(
         (item) => item.id === productToAdd.id && item.category === productToAdd.category
       );
+      
       if (existingItem) {
-        // If item exists, increase quantity
+        // If item exists, add the new quantity to existing quantity
         return prevItems.map((item) =>
           item.id === productToAdd.id && item.category === productToAdd.category
-            ? { ...item, quantity: (item.quantity || 1) + 1 }
+            ? { ...item, quantity: (item.quantity || 1) + (productToAdd.quantity || 1) }
             : item
         );
       }
-      // If item doesn't exist, add it with quantity 1
-      return [...prevItems, { ...productToAdd, quantity: 1 }];
+      
+      // If item doesn't exist, add it with the specified quantity
+      return [...prevItems, { ...productToAdd, quantity: productToAdd.quantity || 1 }];
     });
   };
 
@@ -59,7 +61,7 @@ export const CartProvider = ({ children }) => {
   const clearCart = () => {
     setCartItems([]);
   };
-  
+ 
   const getTotalCartAmount = () => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
@@ -68,9 +70,16 @@ export const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
-
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalCartAmount, getTotalCartItems }}>
+    <CartContext.Provider value={{ 
+      cartItems, 
+      addToCart, 
+      removeFromCart, 
+      updateQuantity, 
+      clearCart, 
+      getTotalCartAmount, 
+      getTotalCartItems 
+    }}>
       {children}
     </CartContext.Provider>
   );
