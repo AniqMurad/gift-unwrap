@@ -13,7 +13,6 @@ const Trending = () => {
     const scrollContainerRef = useRef(null);
     const isDraggingRef = useRef(false);
     const [isHovered, setIsHovered] = useState(false);
-    const [itemWidth, setItemWidth] = useState(0);
 
     const originalItems = [
         { image: companyimage, title: "Business", url: "/Giftforcompanies" },
@@ -25,6 +24,7 @@ const Trending = () => {
         { image: eidimage, title: "Religious Events", url: "/Giftforreligions" },
     ];
 
+    const itemWidth = 200 + 24; // image + gap
     const startIndex = originalItems.length;
     const trendingItems = [...originalItems, ...originalItems, ...originalItems]; // triple loop
 
@@ -83,24 +83,12 @@ const Trending = () => {
         animate();
 
         return () => cancelAnimationFrame(animationId);
-    }, [isHovered, itemWidth]);
-
-    useEffect(() => {
-        const updateItemWidth = () => {
-            const firstItem = document.querySelector('.trending-item');
-            if (firstItem) {
-                setItemWidth(firstItem.offsetWidth);
-            }
-        };
-        updateItemWidth();
-        window.addEventListener('resize', updateItemWidth);
-        return () => window.removeEventListener('resize', updateItemWidth);
     }, []);
 
     return (
         <div className="bg-[#FCFCFC]">
             <div className="m-4 p-4 px-4 sm:px-8 md:px-12 lg:px-16">
-                <div className="text-3xl sm:text-4xl font-semibold flex justify-center mb-8">Trending Right Now</div>
+                <div className="text-4xl font-semibold flex justify-center mb-8">Trending Right Now</div>
 
                 <div
                     ref={scrollContainerRef}
@@ -118,14 +106,14 @@ const Trending = () => {
                 >
                     <style>{`div::-webkit-scrollbar { display: none; }`}</style>
 
-                    <div className="flex gap-2 sm:gap-6 w-fit">
+                    <div className="flex gap-6 w-fit">
                         {trendingItems.map((item, index) => (
                             <div
                                 key={index}
-                                className="trending-item flex flex-col items-center flex-shrink-0 cursor-pointer group min-w-[30vw] max-w-[30vw] sm:min-w-[180px] sm:max-w-[180px] md:min-w-[220px] md:max-w-[220px]"
+                                className="flex flex-col items-center flex-shrink-0 cursor-pointer group min-w-[180px]"
                                 onClick={() => handleItemClick(item.url)}
                             >
-                                <div className="rounded-full overflow-hidden w-[100px] h-[100px] sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] shadow-md group-hover:shadow-lg transition-shadow duration-200">
+                                <div className="rounded-full overflow-hidden w-[180px] h-[180px] sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] shadow-md group-hover:shadow-lg transition-shadow duration-200">
                                     <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex justify-center mt-3 text-center">
