@@ -32,6 +32,7 @@ const BirthdayGifts = () => {
     "employee birthday": "giftsForCompany",
     "baby birthday": "giftsForBabies",
     "special birthday": "FlowersChocolates",
+    "whoever birthday": "giftsForEveryone",
   };
 
   const giftsForBirthdayProducts = products.filter((product) =>
@@ -51,6 +52,7 @@ const BirthdayGifts = () => {
     "giftsForCompany",
     "giftsForBabies",
     "FlowersChocolates",
+    "giftsForEveryone",
   ];
 
   useEffect(() => {
@@ -171,6 +173,15 @@ const BirthdayGifts = () => {
         >
           <span className="sm:hidden">Special</span>
           <span className="hidden sm:inline">Special One’s Birthday</span>
+        </p>
+        <p
+          className={`cursor-pointer ${
+            selectedCategory === "whoever birthday" ? "underline" : ""
+          }`}
+          onClick={() => handleCategorySelect("whoever birthday")}
+        >
+          <span className="sm:hidden">Whoever</span>
+          <span className="hidden sm:inline">Happy Birthday, Whoever!</span>
         </p>
       </div>
 
