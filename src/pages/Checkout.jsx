@@ -441,7 +441,7 @@ const Checkout = () => {
 
             <button
               type="submit"
-              className="w-full bg-black text-white text-sm font-semibold mt-6 px-6 py-3 rounded-lg uppercase hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-black cursor-pointer text-white text-sm font-semibold mt-6 px-6 py-3 rounded-lg uppercase hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={cartItems.length === 0 || isLoading}
             >
               {isLoading ? "Processing..." : "Place Order"}
