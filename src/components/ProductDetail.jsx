@@ -130,7 +130,7 @@ const ProductDetail = () => {
                 {/* Product Detail Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-10 xl:gap-16">
                     {/* Left: Product Images */}
-                    <div className="space-y-2 sm:space-y-4 lg:space-y-8">
+                    <div className="space-y-0 sm:space-y-2 lg:space-y-6">
                         {/* Main Image with carousel controls on mobile */}
                         <div className="bg-gray-50 p-2 sm:p-4 lg:p-8 rounded-lg flex items-center justify-center relative">
                             {/* Mobile carousel arrows */}
@@ -226,8 +226,22 @@ const ProductDetail = () => {
                             <p>{product.shortDescription || "No short description available."}</p>
                         </div>
 
+                        {/* Customization Message - Desktop only */}
+                        <div className="hidden sm:block bg-blue-50 border border-blue-200 rounded-md p-3 sm:p-4">
+                            <div className="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div className="text-blue-700 text-sm sm:text-base">
+                                    <p className="font-medium mb-1">Need customization?</p>
+                                    <p>Feel free to contact us before or after placing your order — we're here to help! We'll also reach out shortly to confirm your preferences.</p>
+                                    <p>You can also call or WhatsApp us at <strong>+92 3130216931</strong></p>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Quantity and Buttons Section - Compact on mobile */}
-                        <div className="flex flex-col gap-3 sm:gap-4 lg:gap-6 pt-2 sm:pt-4">
+                        <div className="flex gap-3 sm:gap-4 lg:gap-6 pt-2 sm:pt-4">
                             <div className="flex items-center justify-center sm:justify-start border border-gray-300 rounded-md w-fit mx-auto sm:mx-0">
                                 <button
                                     className="px-3 sm:px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-l-md text-lg sm:text-base"
@@ -246,20 +260,34 @@ const ProductDetail = () => {
                                 </button>
                             </div>
 
-                            <div className="flex flex-row sm:flex-col gap-3 w-full">
+                            <div className="flex gap-3 w-full">
                                 <button
                                     onClick={handleAddToCart}
-                                    className="w-full px-6 sm:px-8 lg:px-12 py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
+                                    className="w-full px-0 sm:px-8 lg:px-12 py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
                                 >
                                     Add to Cart
                                 </button>
 
                                 <button
                                     onClick={handleBuyNow}
-                                    className="w-full px-6 sm:px-8 lg:px-12 py-3 sm:py-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition text-sm sm:text-base font-medium"
+                                    className="w-full px-0 sm:px-8 lg:px-12 py-3 sm:py-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition text-sm sm:text-base font-medium"
                                 >
                                     Buy Now
                                 </button>
+                            </div>
+                        </div>
+
+                        {/* Customization Message - Mobile only, after buttons */}
+                        <div className="block sm:hidden bg-blue-50 border border-blue-200 rounded-md p-3 mt-3">
+                            <div className="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div className="text-blue-700 text-sm">
+                                    <p className="font-medium mb-1">Need customization?</p>
+                                    <p>Feel free to contact us after placing your order — we're here to help! We'll also reach out shortly to confirm your preferences.</p>
+                                    <p>You can also call or WhatsApp us at 0300-1234567.</p>
+                                </div>
                             </div>
                         </div>
 

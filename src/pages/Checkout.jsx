@@ -374,6 +374,20 @@ const Checkout = () => {
                             totalOrderAmount={totalOrderAmount}
                             showDiscountApplied={showDiscountApplied}
                         />
+                        
+                        {/* Customization Message below Order Summary */}
+                        <div className="bg-blue-50 border border-blue-200 rounded-md p-3 sm:p-4 mt-4">
+                            <div className="flex items-start gap-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <div className="text-blue-700 text-sm sm:text-base">
+                                    <p className="font-medium mb-1">Need customization?</p>
+                                    <p>Feel free to contact us before or after placing your order — we're here to help! We'll also reach out shortly to confirm your preferences.</p>
+                                    <p>You can also call or WhatsApp us at <strong>+92 3130216931</strong></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
