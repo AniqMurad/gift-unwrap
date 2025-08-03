@@ -119,7 +119,7 @@ const ShoppingCart = () => {
                         onClick={() =>
                           handleQuantityChange(item, item.quantity - 1)
                         }
-                        className="px-1 text-sm hover:bg-gray-100 rounded disabled:opacity-50"
+                        className="px-1 text-sm hover:bg-gray-100 rounded cursor-pointer disabled:opacity-50"
                         disabled={item.quantity <= 1}
                       >
                         -
@@ -131,14 +131,14 @@ const ShoppingCart = () => {
                         onClick={() =>
                           handleQuantityChange(item, item.quantity + 1)
                         }
-                        className="px-1 text-sm hover:bg-gray-100 rounded"
+                        className="px-1 text-sm hover:bg-gray-100 rounded cursor-pointer"
                       >
                         +
                       </button>
                     </div>
                     <button
                       onClick={() => removeFromCart(item.id, item.category)}
-                      className="text-red-500 p-1 hover:bg-red-50 rounded-full flex-shrink-0"
+                      className="text-red-500 p-1 hover:bg-red-50 rounded-full cursor-pointer flex-shrink-0"
                       aria-label="Remove item"
                     >
                       <CloseIcon className="w-4 h-4" />
@@ -173,7 +173,7 @@ const ShoppingCart = () => {
                         onClick={() =>
                           handleQuantityChange(item, item.quantity - 1)
                         }
-                        className="px-2 text-lg hover:bg-gray-100 rounded disabled:opacity-50"
+                        className="px-2 text-lg hover:bg-gray-100 rounded cursor-pointer disabled:opacity-50"
                         disabled={item.quantity <= 1}
                       >
                         -
@@ -185,7 +185,7 @@ const ShoppingCart = () => {
                         onClick={() =>
                           handleQuantityChange(item, item.quantity + 1)
                         }
-                        className="px-2 text-lg hover:bg-gray-100 rounded"
+                        className="px-2 text-lg hover:bg-gray-100 cursor-pointer rounded"
                       >
                         +
                       </button>
@@ -232,13 +232,13 @@ const ShoppingCart = () => {
             <button
               onClick={handleCheckout}
               disabled={cartItems.length === 0}
-              className="mb-4 w-full bg-black text-white py-3 sm:py-3.5 px-6 rounded-lg text-sm font-medium uppercase hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mb-4 w-full bg-black text-white py-3 sm:py-3.5 px-6 rounded-lg text-sm cursor-pointer font-medium uppercase hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               PROCESS TO CHECKOUT
             </button>
             <button
               onClick={handleContinueShopping}
-              className="w-full text-center text-sm font-semibold text-gray-700 hover:text-black underline"
+              className="w-full text-center text-sm font-semibold text-gray-700 cursor-pointer hover:text-black underline"
             >
               OR CONTINUE SHOPPING
             </button>

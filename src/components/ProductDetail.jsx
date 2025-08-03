@@ -244,7 +244,7 @@ const ProductDetail = () => {
                         <div className="flex gap-3 sm:gap-4 lg:gap-6 pt-2 sm:pt-4">
                             <div className="flex items-center justify-center sm:justify-start border border-gray-300 rounded-md w-fit mx-auto sm:mx-0">
                                 <button
-                                    className="px-3 sm:px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-l-md text-lg sm:text-base"
+                                    className="px-3 sm:px-4 py-2 cursor-pointer text-gray-500 hover:bg-gray-100 rounded-l-md text-lg sm:text-base"
                                     onClick={handleDecreaseQuantity}
                                     aria-label="Decrease quantity"
                                 >
@@ -252,7 +252,7 @@ const ProductDetail = () => {
                                 </button>
                                 <span className="px-3 sm:px-4 py-2 text-center w-12 sm:w-14">{quantity}</span>
                                 <button
-                                    className="px-3 sm:px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-r-md text-lg sm:text-base"
+                                    className="px-3 sm:px-4 py-2 cursor-pointer text-gray-500 hover:bg-gray-100 rounded-r-md text-lg sm:text-base"
                                     onClick={handleIncreaseQuantity}
                                     aria-label="Increase quantity"
                                 >
@@ -263,14 +263,14 @@ const ProductDetail = () => {
                             <div className="flex gap-3 w-full">
                                 <button
                                     onClick={handleAddToCart}
-                                    className="w-full px-0 sm:px-8 lg:px-12 py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
+                                    className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
                                 >
                                     Add to Cart
                                 </button>
 
                                 <button
                                     onClick={handleBuyNow}
-                                    className="w-full px-0 sm:px-8 lg:px-12 py-3 sm:py-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition text-sm sm:text-base font-medium"
+                                    className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition text-sm sm:text-base font-medium"
                                 >
                                     Buy Now
                                 </button>
@@ -311,19 +311,19 @@ const ProductDetail = () => {
                         <div className="mt-16 sm:mt-20 lg:mt-32">
                             <div className="flex border-b border-gray-200 overflow-x-auto">
                                 <button
-                                    className={`py-2 sm:py-3 px-3 sm:px-6 font-medium whitespace-nowrap text-sm sm:text-base ${activeTab === 'description' ? 'border-b-2 border-black text-black' : 'text-gray-500 hover:text-black'}`}
+                                    className={`py-2 sm:py-3 px-3 sm:px-6 cursor-pointer font-medium whitespace-nowrap text-sm sm:text-base ${activeTab === 'description' ? 'border-b-2 border-black text-black' : 'text-gray-500 hover:text-black'}`}
                                     onClick={() => setActiveTab('description')}
                                 >
                                     Description
                                 </button>
                                 <button
-                                    className={`py-2 sm:py-3 px-3 sm:px-6 font-medium whitespace-nowrap text-sm sm:text-base ${activeTab === 'reviews' ? 'border-b-2 border-black text-black' : 'text-gray-500 hover:text-black'}`}
+                                    className={`py-2 sm:py-3 px-3 sm:px-6 cursor-pointer font-medium whitespace-nowrap text-sm sm:text-base ${activeTab === 'reviews' ? 'border-b-2 border-black text-black' : 'text-gray-500 hover:text-black'}`}
                                     onClick={() => setActiveTab('reviews')}
                                 >
                                     Reviews ({product.reviews ? product.reviews.length : 0})
                                 </button>
                                 <button
-                                    className={`py-2 sm:py-3 px-3 sm:px-6 font-medium whitespace-nowrap text-sm sm:text-base ${activeTab === 'shipping' ? 'border-b-2 border-black text-black' : 'text-gray-500 hover:text-black'}`}
+                                    className={`py-2 sm:py-3 px-3 sm:px-6 cursor-pointer font-medium whitespace-nowrap text-sm sm:text-base ${activeTab === 'shipping' ? 'border-b-2 border-black text-black' : 'text-gray-500 hover:text-black'}`}
                                     onClick={() => setActiveTab('shipping')}
                                 >
                                     Shipping & Returns
