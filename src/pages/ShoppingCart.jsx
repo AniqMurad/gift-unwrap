@@ -232,13 +232,13 @@ const ShoppingCart = () => {
             <button
               onClick={handleCheckout}
               disabled={cartItems.length === 0}
-              className="mb-4 w-full bg-black text-white py-3 sm:py-3.5 px-6 rounded-lg text-sm font-medium uppercase hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mb-4 w-full cursor-pointer bg-black text-white py-3 sm:py-3.5 px-6 rounded-lg text-sm font-medium uppercase hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               PROCESS TO CHECKOUT
             </button>
             <button
               onClick={handleContinueShopping}
-              className="w-full text-center text-sm font-semibold text-gray-700 hover:text-black underline"
+              className="w-full cursor-pointer text-center text-sm font-semibold text-gray-700 hover:text-black underline"
             >
               OR CONTINUE SHOPPING
             </button>
