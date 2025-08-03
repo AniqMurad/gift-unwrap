@@ -25,19 +25,9 @@ const Giftsforwedding = () => {
   const location = useLocation();
   const [columns, setColumns] = useState(4); // Default to 4 columns
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const categoryMap = {
-    "for him": "giftsForHim",
-    "for her": "giftsForHer",
-    "employee wedding": "giftsForCompany",
-    "baby shower": "giftsForBabies",
-    "special wedding": "FlowersChocolates",
-    "whoever wedding": "giftsForEveryone",
-  };
-  const giftsForWeddingProducts = products.filter((product) =>
-    selectedCategory === ""
-      ? true
-      : product.category === categoryMap[selectedCategory.toLowerCase()]
+  const [selectedCategory, setSelectedCategory] = useState(""); // Tracks selected gift category
+  const giftsForWeddingProducts = products.filter(
+    (product) => selectedCategory === "" || product.keyGift === selectedCategory
   );
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
@@ -45,16 +35,9 @@ const Giftsforwedding = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
 
-  const categories = [
-    "giftsForHer",
-    "giftsForHim",
-    "giftsForCompany",
-    "giftsForBabies",
-    "FlowersChocolates",
-    "giftsForEveryone",
-  ];
+  const category = "giftsForWedding";
 
-  /*   useEffect(() => {
+  useEffect(() => {
     setLoading(true);
     axios
       .get("https://giftunwrapbackend.vercel.app/api/products")
@@ -69,31 +52,6 @@ const Giftsforwedding = () => {
       .catch((err) => console.error("Failed to load products:", err))
       .finally(() => setLoading(false));
   }, [category]);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const categoryParam = queryParams.get("category");
-
-    if (categoryParam) {
-      setSelectedCategory(categoryParam);
-    }
-  }, [location.search]); */
-
-  useEffect(() => {
-    setLoading(true);
-    axios
-      .get("https://giftunwrapbackend.vercel.app/api/products")
-      .then((res) => {
-        const mergedProducts = res.data
-          .filter((item) => categories.includes(item.category))
-          .flatMap((item) =>
-            item.products.map((p) => ({ ...p, category: item.category }))
-          );
-        setProducts(mergedProducts);
-      })
-      .catch((err) => console.error("Failed to load products:", err))
-      .finally(() => setLoading(false));
-  }, []);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -155,57 +113,39 @@ const Giftsforwedding = () => {
       <div className="bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2">
         <p
           className={`cursor-pointer ${
-            selectedCategory === "for him" ? "underline" : ""
+            selectedCategory === "bride" ? "underline" : ""
           }`}
-          onClick={() => handleCategorySelect("for him")}
+          onClick={() => handleCategorySelect("bride")}
         >
-          <span className="sm:hidden">For Him</span>
-          <span className="hidden sm:inline">For Him</span>
+          <span className="hidden sm:inline">Gifts For Bride</span>
+          <span className="sm:hidden">Bride</span>
         </p>
         <p
           className={`cursor-pointer ${
-            selectedCategory === "for her" ? "underline" : ""
+            selectedCategory === "groom" ? "underline" : ""
           }`}
-          onClick={() => handleCategorySelect("for her")}
+          onClick={() => handleCategorySelect("groom")}
         >
-          <span className="sm:hidden">For Her</span>
-          <span className="hidden sm:inline">For Her</span>
+          <span className="hidden sm:inline">Gifts For Groom</span>
+          <span className="sm:hidden">Groom</span>
         </p>
         <p
           className={`cursor-pointer ${
-            selectedCategory === "employee wedding" ? "underline" : ""
+            selectedCategory === "bridalparty" ? "underline" : ""
           }`}
-          onClick={() => handleCategorySelect("employee wedding")}
+          onClick={() => handleCategorySelect("bridalparty")}
         >
-          <span className="sm:hidden">Employee</span>
-          <span className="hidden sm:inline">Employee Wedding</span>
+          <span className="hidden sm:inline">Bridal Party Gifts</span>
+          <span className="sm:hidden">Bridal Party</span>
         </p>
         <p
           className={`cursor-pointer ${
-            selectedCategory === "baby shower" ? "underline" : ""
+            selectedCategory === "weddinganniversary" ? "underline" : ""
           }`}
-          onClick={() => handleCategorySelect("baby shower")}
+          onClick={() => handleCategorySelect("weddinganniversary")}
         >
-          <span className="sm:hidden">Baby</span>
-          <span className="hidden sm:inline">Baby Shower</span>
-        </p>
-        <p
-          className={`cursor-pointer ${
-            selectedCategory === "special wedding" ? "underline" : ""
-          }`}
-          onClick={() => handleCategorySelect("special wedding")}
-        >
-          <span className="sm:hidden">Special</span>
-          <span className="hidden sm:inline">Special One’s Wedding</span>
-        </p>
-        <p
-          className={`cursor-pointer ${
-            selectedCategory === "whoever wedding" ? "underline" : ""
-          }`}
-          onClick={() => handleCategorySelect("whoever wedding")}
-        >
-          <span className="sm:hidden">Whoever</span>
-          <span className="hidden sm:inline">Happy Wedding, Whoever!</span>
+          <span className="hidden sm:inline">Wedding Anniversary Gifts</span>
+          <span className="sm:hidden">Anniversary</span>
         </p>
       </div>
 
