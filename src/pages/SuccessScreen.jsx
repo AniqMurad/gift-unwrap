@@ -70,7 +70,7 @@ const SuccessScreen = () => {
                     <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-4 sm:mt-6'>
                         <div className='flex gap-2 items-center text-sm sm:text-base'>
                             <NeedHelpIcon />
-                            <p>Need Help? <Link to="/contact" className='underline'>Contact Us</Link></p>
+                            <p>Need Help? <Link to="/contact-us" className='underline'>Contact Us</Link></p>
                         </div>
 
                         <Link to="/" className="bg-black text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg uppercase cursor-pointer no-underline text-sm sm:text-base w-full sm:w-auto text-center">
@@ -99,7 +99,7 @@ const SuccessScreen = () => {
                                 </svg>
                                 <div className="text-blue-700 text-sm sm:text-base">
                                     <p className="font-medium mb-1">Need customization?</p>
-                                    <p>Feel free to contact us before or after placing your order — we're here to help! We'll also reach out shortly to confirm your preferences.</p>
+                                    <p>Feel free to contact us before or after placing your order, we are here to help! We will also reach out shortly to confirm your preferences.</p>
                                     <p>You can also call or WhatsApp us at <strong>+92 3130216931</strong></p>
                                 </div>
                             </div>
