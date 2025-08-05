@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   FbIcon,
   InstaIcon,
+  WhatsappIcon,
   PintIcon,
   RarrowIcon,
   TwtIcon,
@@ -10,6 +11,7 @@ import {
   MastercardIcon,
   PaypalIcon,
 } from "./icons";
+// import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa'; // or use FA package if preferred
 import Logo from "../assets/logofooter.png";
 import { useNavigate } from "react-router-dom";
 import NotificationBar from "./NotificationBar";
@@ -100,7 +102,7 @@ const Footer = () => {
               <strong>Mail:</strong> giftunwrap@gmail.com
             </p>
             <p>
-              <strong>Phone:</strong> +92 326 8927354
+              <strong>Phone:</strong> +92 313 0216931
             </p>
             <p>
               <strong>Address:</strong> Shop No. 226 PIB Colony near Jail
@@ -206,6 +208,14 @@ const Footer = () => {
                 aria-label="Instagram"
               >
                 <InstaIcon />
+              </a>
+              <a
+                href="https://wa.me/923130216931"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+              >
+                <WhatsappIcon/>
               </a>
               {/* <YtIcon />
                 <TwtIcon />

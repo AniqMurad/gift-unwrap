@@ -163,7 +163,7 @@ const ContactUs = () => {
                 Shop No. 226 PIB Colony near Jail Chowrangi, Karachi, Pakistan
               </p>
               <p className="mt-2 text-sm sm:text-base">
-                Phone: +92 326 8927354
+                Phone: +92 313 0216931
               </p>
               <p className="text-sm sm:text-base">
                 Email: giftunwrap@gmail.com

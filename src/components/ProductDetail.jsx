@@ -353,9 +353,26 @@ const ProductDetail = () => {
                     we are here to help! We will also reach out shortly to
                     confirm your preferences.
                   </p>
-                  <p>
-                    You can also call or WhatsApp us at{" "}
-                    <strong>+92 3130216931</strong>
+                  <p className="mt-2">
+                    You can call or WhatsApp us at{" "}
+                    <strong>+92 313 0216931</strong>. Just tap below:
+                  </p>
+                  <p className="mt-1">
+                    <a
+                      href="tel:+923130216931"
+                      className="underline hover:text-blue-900 mr-4"
+                    >
+                      Call Now
+                    </a>
+                    |
+                    <a
+                      href="https://wa.me/923130216931"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-green-800 ml-4"
+                    >
+                      WhatsApp Now
+                    </a>
                   </p>
                 </div>
               </div>
@@ -424,9 +441,26 @@ const ProductDetail = () => {
                     we are here to help! We will also reach out shortly to
                     confirm your preferences.
                   </p>
-                  <p>
+                  <p className="mt-2">
                     You can also call or WhatsApp us at{" "}
-                    <strong>+92 3130216931</strong>
+                    <strong>+92 313 0216931</strong>. Just tap below:
+                  </p>
+                  <p className="mt-1">
+                    <a
+                      href="tel:+923130216931"
+                      className="underline hover:text-blue-900 mr-4"
+                    >
+                      Call Now
+                    </a>
+                    |
+                    <a
+                      href="https://wa.me/923130216931"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-green-800 ml-4"
+                    >
+                      WhatsApp Now
+                    </a>
                   </p>
                 </div>
               </div>
