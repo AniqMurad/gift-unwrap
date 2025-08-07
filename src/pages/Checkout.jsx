@@ -68,7 +68,8 @@ const Checkout = () => {
   };
 
   const subtotal = getTotalCartAmount();
-  const shippingCost = subtotal > 0 ? (subtotal >= 130 ? 0 : 15) : 0;
+  const freeShippingThreshold = 4000;
+  const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 250;
   const discountAmount = 0;
   const totalOrderAmount = subtotal + shippingCost - discountAmount;
 
