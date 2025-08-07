@@ -148,6 +148,15 @@ const Giftforreligions = () => {
           <span className="hidden sm:inline">Navroz Gifts</span>
           <span className="sm:hidden">Navroz</span>
         </p>
+        <p
+          className={`cursor-pointer ${
+            selectedCategory === "ramadan" ? "underline" : ""
+          }`}
+          onClick={() => handleCategorySelect("ramadan")}
+        >
+          <span className="hidden sm:inline">Ramadan Gifts</span>
+          <span className="sm:hidden">Ramadan</span>
+        </p>
       </div>
 
       <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
