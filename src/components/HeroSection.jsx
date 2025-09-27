@@ -114,14 +114,14 @@ const HeroSection = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-[rgba(249,241,240,0.9)] via-[rgba(250,247,241,0.3)] to-transparent rounded-[24px] flex items-center px-4 md:px-10">
                     <div className="text-white max-w-md ml-2 md:ml-6">
-                      <h2 className="text-xl md:text-5xl tracking-wide font-bold text-black leading-tight md:leading-[50px]">
+                      <h2 className="text-xl md:text-5xl tracking-wide font-bold text-black leading-tight md:leading-[50px] leading-[60px]">
                         {slide.heading}
                       </h2>
-                      <p className="mt-2 md:mt-4 text-sm md:text-lg text-black">
+                      <p className="mt-2 md:mt-4 text-sm md:text-lg text-black leading-[30px] w-[80%]">
                         {slide.description}
                       </p>
                       <button
-                        className="mt-3 md:mt-5 px-4 md:px-6 py-2 shadow-lg text-sm text-white bg-black font-semibold rounded-md hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+                        className="mt-3 md:mt-5 px-6 md:px-6 py-3 shadow-lg text-sm text-white bg-black font-semibold rounded-md hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
                         onClick={() => handleShopNowClick(slide.route)}
                       >
                         SHOP NOW
@@ -183,7 +183,7 @@ const HeroSection = () => {
           <div className="mt-4 sm:mt-0">
             <img
               src={img2}
-              className="w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] rounded-full object-cover"
+              className="w-[80px] h-[80px] sm:w-[135px] sm:h-[135px] rounded-full object-cover"
               alt="Gift for Him"
             />
           </div>
@@ -209,7 +209,7 @@ const HeroSection = () => {
           <div className="mt-4 sm:mt-0">
             <img
               src={img3}
-              className="w-[80px] h-[80px] sm:w-[120px] sm:h-[120px] rounded-full object-cover"
+              className="w-[80px] h-[80px] sm:w-[135px] sm:h-[135px] rounded-full object-cover"
               alt="Gift for Her"
             />
           </div>

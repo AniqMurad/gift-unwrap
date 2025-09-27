@@ -53,7 +53,7 @@ const Product = ({ product, columns }) => {
   const containerWidthClass =
     columns === 5
       ? "w-auto"
-      : "w-full max-w-[160px] sm:max-w-[200px] lg:max-w-[300px]";
+      : "w-full max-w-[160px] sm:max-w-[200px] lg:max-w-[320px]";
 
   const ImagePreviewModal = showImagePreview
     ? ReactDOM.createPortal(

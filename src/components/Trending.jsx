@@ -24,9 +24,9 @@ const Trending = () => {
         { image: eidimage, title: "Religious Events", url: "/Giftforreligions" },
     ];
 
-    const itemWidth = 200 + 24; // image + gap
+    const itemWidth = 200 + 24; 
     const startIndex = originalItems.length;
-    const trendingItems = [...originalItems, ...originalItems, ...originalItems]; // triple loop
+    const trendingItems = [...originalItems, ...originalItems, ...originalItems]; 
 
     const handleItemClick = (url) => {
         if (url) navigate(url);
