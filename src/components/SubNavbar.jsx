@@ -13,7 +13,6 @@ const SubNavbar = () => {
     const fetchFeaturedProduct = async () => {
       try {
         const response = await axios.get("https://giftunwrapbackend.vercel.app/api/products");
-        console.log("SubNavbar API response (raw):", response.data);
 
         if (response.data && response.data.length > 0) {
           const giftsForEveryoneCategory = response.data.find(
@@ -90,6 +89,7 @@ const SubNavbar = () => {
             className={`font-bold cursor-pointer text-xs sm:text-sm dropdown-button ${activeDropdown === "recipients" ? "border-b-2 border-black" : ""
               }`}
             onClick={() => handleButtonClick("recipients")}
+            onMouseEnter={() => handleButtonClick("recipients")}
           >
             RECIPIENTS
           </button>
@@ -97,6 +97,7 @@ const SubNavbar = () => {
             className={`font-bold cursor-pointer text-xs sm:text-sm dropdown-button ${activeDropdown === "occasions" ? "border-b-2 border-black" : ""
               }`}
             onClick={() => handleButtonClick("occasions")}
+            onMouseEnter={() => handleButtonClick("occasions")}
           >
             OCCASIONS
           </button>
@@ -112,7 +113,10 @@ const SubNavbar = () => {
       </div>
 
       {activeDropdown === "recipients" && (
-        <div className="w-[95%] sm:w-[91%] p-[20px] sm:p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center">
+        <div
+          className="w-[95%] sm:w-[91%] p-[20px] sm:p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center"
+          onMouseLeave={() => setActiveDropdown(null)}
+        >
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-3 sm:gap-x-5 gap-y-4 sm:gap-y-8 w-full sm:w-[75%] text-sm cursor-pointer">
             {hoverSubOptions?.recipients?.map((column, index) => (
               <div key={index}>
@@ -127,14 +131,14 @@ const SubNavbar = () => {
                     typeof item === "string" ? (
                       <p
                         key={idx}
-                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block"
+                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block hover:text-black hover:bg-[#f3f3f3] hover:rounded hover:pl-2 transition-colors duration-150"
                       >
                         {item}
                       </p>
                     ) : (
                       <p
                         key={idx}
-                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block"
+                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block hover:text-black hover:bg-[#f3f3f3] hover:rounded hover:pl-2 transition-colors duration-150 cursor-pointer"
                         onClick={() => handleTitleClick(item.url)}
                       >
                         {item.name || item}
@@ -158,7 +162,10 @@ const SubNavbar = () => {
       )}
 
       {activeDropdown === "occasions" && (
-        <div className="w-[95%] sm:w-[91%] p-[20px] sm:p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center">
+        <div
+          className="w-[95%] sm:w-[91%] p-[20px] sm:p-[36px_40px] absolute bg-white shadow-xl rounded-bl-[20px] rounded-br-[20px] z-50 mt-4 left-1/2 transform -translate-x-1/2 dropdown-content flex justify-center"
+          onMouseLeave={() => setActiveDropdown(null)}
+        >
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-3 sm:gap-x-5 gap-y-4 sm:gap-y-8 w-full sm:w-[75%] text-sm cursor-pointer">
             {hoverSubOptions?.occasions?.map((column, index) => (
               <div key={index}>
@@ -173,14 +180,14 @@ const SubNavbar = () => {
                     typeof item === "string" ? (
                       <p
                         key={idx}
-                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block"
+                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block hover:text-black hover:bg-[#f3f3f3] hover:rounded hover:pl-2 transition-colors duration-150"
                       >
                         {item}
                       </p>
                     ) : (
                       <p
                         key={idx}
-                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block"
+                        className="text-[14px] sm:text-[16px] text-[#696C70] mt-2 sm:mt-4 hidden sm:block hover:text-black hover:bg-[#f3f3f3] hover:rounded hover:pl-2 transition-colors duration-150 cursor-pointer"
                         onClick={() => handleTitleClick(item.url)}
                       >
                         {item.name}
