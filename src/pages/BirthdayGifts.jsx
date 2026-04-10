@@ -18,6 +18,7 @@ import Loader from "../components/Loader";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import PriceRangeSlider from "../components/PriceRangeSlider";
 
 const BirthdayGifts = () => {
   const [products, setProducts] = useState([]);
@@ -26,6 +27,8 @@ const BirthdayGifts = () => {
   const [columns, setColumns] = useState(4);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(50000);
   const categoryMap = {
     "his birthday": "giftsForHim",
     "her birthday": "giftsForHer",
@@ -35,13 +38,13 @@ const BirthdayGifts = () => {
     "whoever birthday": "giftsForEveryone",
   };
 
-  const giftsForBirthdayProducts = products.filter((product) =>
-    selectedCategory === ""
-      ? true
-      : product.category === categoryMap[selectedCategory.toLowerCase()]
-  );
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const giftsForBirthdayProducts = products.filter((product) => {
+    const categoryMatch =
+      selectedCategory === ""
+        ? true
+        : product.category === categoryMap[selectedCategory.toLowerCase()];
+    return categoryMatch && product.price >= minPrice && product.price <= maxPrice;
+  });
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
@@ -116,7 +119,7 @@ const BirthdayGifts = () => {
     setSelectedCategory("");
     setSelectedFilters([]);
     setMinPrice(0);
-    setMaxPrice(1000);
+    setMaxPrice(50000);
   };
 
   return (
@@ -229,6 +232,12 @@ const BirthdayGifts = () => {
                   )}
                 </div>
               </div>
+              <PriceRangeSlider
+                minVal={minPrice}
+                maxVal={maxPrice}
+                onMinChange={setMinPrice}
+                onMaxChange={setMaxPrice}
+              />
             </div>
 
             <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">

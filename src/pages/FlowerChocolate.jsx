@@ -19,6 +19,7 @@ import Loader from "../components/Loader";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import PriceRangeSlider from "../components/PriceRangeSlider";
 
 const FlowerChocolate = () => {
   const [products, setProducts] = useState([]);
@@ -27,11 +28,14 @@ const FlowerChocolate = () => {
   const [columns, setColumns] = useState(4);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const giftsForflowersProducts = products.filter(
-    (product) => selectedCategory === "" || product.keyGift === selectedCategory
-  );
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [maxPrice, setMaxPrice] = useState(50000);
+  const giftsForflowersProducts = products.filter(
+    (product) =>
+      (selectedCategory === "" || product.keyGift === selectedCategory) &&
+      product.price >= minPrice &&
+      product.price <= maxPrice
+  );
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
@@ -98,7 +102,7 @@ const FlowerChocolate = () => {
     setSelectedCategory("");
     setSelectedFilters([]);
     setMinPrice(0);
-    setMaxPrice(1000);
+    setMaxPrice(50000);
   };
 
   return (
@@ -183,6 +187,12 @@ const FlowerChocolate = () => {
                   )}
                 </div>
               </div>
+              <PriceRangeSlider
+                minVal={minPrice}
+                maxVal={maxPrice}
+                onMinChange={setMinPrice}
+                onMaxChange={setMaxPrice}
+              />
             </div>
 
             {/* Active filters UI */}

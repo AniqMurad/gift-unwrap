@@ -16,6 +16,7 @@ import Loader from "../components/Loader";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import PriceRangeSlider from "../components/PriceRangeSlider";
 
 const Forcompanies = () => {
   const [products, setProducts] = useState([]);
@@ -24,11 +25,14 @@ const Forcompanies = () => {
   const [columns, setColumns] = useState(4); // Default to 4 columns
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [selectedCategory, setSelectedCategory] = useState(""); // Tracks selected gift category
-  const giftsForCompanyProducts = products.filter(
-    (product) => selectedCategory === "" || product.keyGift === selectedCategory
-  );
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [maxPrice, setMaxPrice] = useState(50000);
+  const giftsForCompanyProducts = products.filter(
+    (product) =>
+      (selectedCategory === "" || product.keyGift === selectedCategory) &&
+      product.price >= minPrice &&
+      product.price <= maxPrice
+  );
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
@@ -96,7 +100,7 @@ const Forcompanies = () => {
     setSelectedCategory("");
     setSelectedFilters([]);
     setMinPrice(0);
-    setMaxPrice(1000);
+    setMaxPrice(50000);
   };
 
   return (
@@ -200,6 +204,12 @@ const Forcompanies = () => {
                   )}
                 </div>
               </div>
+              <PriceRangeSlider
+                minVal={minPrice}
+                maxVal={maxPrice}
+                onMinChange={setMinPrice}
+                onMaxChange={setMaxPrice}
+              />
             </div>
 
             <div className="flex flex-wrap gap-2 sm:gap-3 items-center mt-2">
