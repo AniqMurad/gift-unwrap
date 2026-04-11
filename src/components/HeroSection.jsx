@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import heroimg1 from "../assets/herosection1.png";
 import heroimg2 from "../assets/herosection2.png";
 import heroimg3 from "../assets/herosection3.png";
+import mothersDayPoster from "../assets/MothersDayPoster.jpeg";
 import img2 from "../assets/herosection2.1.png";
 import img3 from "../assets/herosection2.2.png";
 import {
@@ -16,9 +17,16 @@ import { useNavigate } from "react-router-dom";
 const HeroSection = () => {
   const navigate = useNavigate();
   const carouselRef = useRef(null);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(3); // Default to Mother's Day slide (index 3)
 
   const slides = [
+    {
+      image: mothersDayPoster,
+      heading: "Celebrate Mother's Day",
+      description:
+        "Show your love and appreciation with special gifts for the most important woman in your life.",
+      route: "/giftforher",
+    },
     {
       image: heroimg1,
       heading: "Celebrate Women's Day",
@@ -42,25 +50,13 @@ const HeroSection = () => {
     },
   ];
 
-  // Auto-play functionality
+  // Set initial slide to Mother's Day on component mount
   useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-
-    const autoPlay = setInterval(() => {
-      const nextButton =
-        carousel.querySelector('[data-carousel="next"]') ||
-        carousel.querySelector(".absolute.right-1");
-
-      if (nextButton) {
-        nextButton.setAttribute("data-ignore-dropdown-close", "true");
-        nextButton.click();
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-      }
-    }, 4000);
-
-    return () => clearInterval(autoPlay);
-  }, [slides.length]);
+    const timer = setTimeout(() => {
+      goToSlide(3); // Go to Mother's Day slide (index 3)
+    }, 100); // Small delay to ensure carousel is ready
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleShopNowClick = (route) => {
     navigate(route);
@@ -177,7 +173,7 @@ const HeroSection = () => {
             </p>
             <p className="text-xs sm:text-lg mt-2 text-[#696C70]">
               Starting at{" "}
-              <span className="text-[#DB4444] font-medium">PKR 4000</span>
+              <span className="text-[#DB4444] font-medium">PKR 2000</span>
             </p>
           </div>
           <div className="mt-4 sm:mt-0">
@@ -203,7 +199,7 @@ const HeroSection = () => {
             </p>
             <p className="text-xs sm:text-lg mt-2 text-[#696C70]">
               Starting at{" "}
-              <span className="text-[#DB4444] font-medium">PKR 3500</span>
+              <span className="text-[#DB4444] font-medium">PKR 2000</span>
             </p>
           </div>
           <div className="mt-4 sm:mt-0">
