@@ -4,11 +4,13 @@ import Footer from "../components/Footer";
 import { StarRating } from "../components/icons";
 import { customerReviews } from "../components/ReviewsData";
 import Navbar from "@/components/Navbar";
+import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const CustomerFeedback = () => {
   return (
     <div className="w-full h-auto">
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+      <DeliveryMarquee />
       <div className="mb-5">
         <SearchPageNavbar
           title="Customer Feedback"

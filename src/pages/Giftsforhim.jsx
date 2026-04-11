@@ -20,6 +20,7 @@ import Loader from "../components/Loader";
 import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import PriceRangeSlider from "../components/PriceRangeSlider";
+import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const Giftsforhim = () => {
   const [products, setProducts] = useState([]);
@@ -30,12 +31,19 @@ const Giftsforhim = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
-  const giftsForHimProducts = products.filter(
-    (product) =>
-      (selectedCategory === "" || product.keyGift === selectedCategory) &&
-      product.price >= minPrice &&
-      product.price <= maxPrice
-  );
+  const [sortOrder, setSortOrder] = useState("default");
+  const giftsForHimProducts = products
+    .filter(
+      (product) =>
+        (selectedCategory === "" || product.keyGift === selectedCategory) &&
+        product.price >= minPrice &&
+        product.price <= maxPrice
+    )
+    .sort((a, b) => {
+      if (sortOrder === "lowToHigh") return a.price - b.price;
+      if (sortOrder === "highToLow") return b.price - a.price;
+      return 0;
+    });
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 5;
@@ -104,12 +112,14 @@ const Giftsforhim = () => {
     setSelectedFilters([]);
     setMinPrice(0);
     setMaxPrice(50000);
+    setSortOrder("default");
   };
 
   return (
     <div>
       {loading && <Loader />}
       <Navbar showSearchInput={false} bgColor="#DEFBFF" />
+      <DeliveryMarquee bgColor="#DEFBFF" textColor="text-cyan-900" borderColor="border-cyan-200" />
       <SearchPageNavbar
         title="Gifts For Him"
         titleHome="Home Page"
@@ -184,6 +194,15 @@ const Giftsforhim = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0 sm:space-x-6">
               {/* Layout Switch Buttons */}
               <div className="flex items-center space-x-4">
+                <select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
+                  className="border border-[#E9E9E9] px-3 py-1.5 rounded text-sm bg-white cursor-pointer hidden sm:block"
+                >
+                  <option value="default">Sort by Price</option>
+                  <option value="lowToHigh">Low to High</option>
+                  <option value="highToLow">High to Low</option>
+                </select>
                 <div className="flex space-x-2">
                   <div
                     className={`border ${

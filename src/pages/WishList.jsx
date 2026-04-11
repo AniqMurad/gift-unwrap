@@ -6,6 +6,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { Buttons } from "../components/Buttons";
 import { ArrowDown, FiveBars, FourBars, ThreeBars } from "../components/icons";
 import Navbar from "@/components/Navbar";
+import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const WishList = () => {
   const { wishlist } = useWishlist();
@@ -30,6 +31,7 @@ const WishList = () => {
   return (
     <div className="w-full h-auto">
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+      <DeliveryMarquee />
       <SearchPageNavbar
         title="Wish List"
         titleHome="Home Page"

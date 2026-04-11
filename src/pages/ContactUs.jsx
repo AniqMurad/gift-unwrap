@@ -3,6 +3,7 @@ import SearchPageNavbar from "../components/SearchPageNavbar";
 import Footer from "../components/Footer";
 import Navbar from "@/components/Navbar";
 import NotificationBar from "../components/NotificationBar";
+import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -89,6 +90,7 @@ const ContactUs = () => {
         />
       )}
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+      <DeliveryMarquee />
       <SearchPageNavbar
         title="Contact Us"
         titleHome="Home Page"

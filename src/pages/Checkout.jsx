@@ -9,6 +9,7 @@ import SearchPageNavbar from "@/components/SearchPageNavbar";
 import OrderSummary from "@/components/OrderSummary";
 import NotificationBar from "@/components/NotificationBar";
 import Loader from "@/components/Loader";
+import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const Checkout = () => {
   const { cartItems, getTotalCartAmount, clearCart } = useCart();
@@ -68,8 +69,8 @@ const Checkout = () => {
   };
 
   const subtotal = getTotalCartAmount();
-  const freeShippingThreshold = 4000;
-  const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 250;
+  const freeShippingThreshold = 10000;
+  const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 350;
   const discountAmount = 0;
   const totalOrderAmount = subtotal + shippingCost - discountAmount;
 
@@ -220,6 +221,7 @@ const Checkout = () => {
         />
       )}
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+      <DeliveryMarquee />
       <SearchPageNavbar
         title="Checkout"
         titleHome="Home Page"

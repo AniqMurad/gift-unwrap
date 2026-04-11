@@ -6,6 +6,7 @@ import { Buttons } from "../components/Buttons";
 import Navbar from "@/components/Navbar";
 import Loader from "@/components/Loader";
 import { useSearchParams } from "react-router-dom";
+import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const SearchOutput = () => {
   const [searchParams] = useSearchParams();
@@ -81,6 +82,7 @@ const SearchOutput = () => {
     return (
       <div>
         <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+        <DeliveryMarquee />
         <SearchPageNavbar
           title="Search Result"
           titleHome="Home Page"
@@ -97,6 +99,7 @@ const SearchOutput = () => {
   return (
     <div className="w-full h-auto">
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+      <DeliveryMarquee />
       <SearchPageNavbar
         title="Search Result"
         titleHome="Home Page"

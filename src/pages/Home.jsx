@@ -13,6 +13,7 @@ import Partners from '../components/Partners';
 import Offer from '../components/Offer';
 import Footer from '../components/Footer';
 import InstaSpace from '../components/InstaSpace';
+import DeliveryMarquee from '../components/DeliveryMarquee';
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,7 @@ const Home = () => {
   return (
     <div className="w-full h-auto overflow-x-hidden">
       <Navbar bgColor="#ffff" borderBottom="2px" borderColor="#E9E9E9" />
+      <DeliveryMarquee />
       <SubNavbar />
       <main className="flex flex-col gap-6 md:gap-8 lg:gap-12">
         <HeroSection />

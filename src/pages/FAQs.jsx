@@ -3,6 +3,7 @@ import SearchPageNavbar from '../components/SearchPageNavbar'
 import Footer from '../components/Footer'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";
 import Navbar from "@/components/Navbar";
+import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const FAQs = () => {
     const categories = [
@@ -45,6 +46,7 @@ const FAQs = () => {
     return (
         <div>
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+            <DeliveryMarquee />
             <SearchPageNavbar title="FAQs" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
             <div className='px-4 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-14 flex flex-col lg:flex-row gap-6 lg:gap-8'>

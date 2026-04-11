@@ -31,6 +31,10 @@ import BirthdayGifts from "./pages/BirthdayGifts";
 import ScrollToTop from './components/ScrollToTop';
 import SuccessScreen from "./pages/SuccessScreen";
 import FlowerChocolate from './pages/FlowerChocolate'
+import ShippingPolicy from "./pages/ShippingPolicy";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import RefundReturnPolicy from "./pages/RefundReturnPolicy";
+import TermsConditions from "./pages/TermsConditions";
 
 function App() {
   return (
@@ -67,6 +71,10 @@ function App() {
             <Route path="/SearchOutput" element={<SearchOutput />} /> 
             <Route path="/order-confirmation" element={<SuccessScreen/>}></Route> 
             <Route path="/flower-chocolate" element={<FlowerChocolate/>}></Route>
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/refund-return-policy" element={<RefundReturnPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
           </Routes>
         </CartProvider>
       </WishlistProvider>

@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { CloseIcon } from "@/components/icons";
 import SearchPageNavbar from "@/components/SearchPageNavbar";
+import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const ShoppingCart = () => {
   const { cartItems, removeFromCart, updateQuantity, getTotalCartAmount } =
@@ -11,13 +12,13 @@ const ShoppingCart = () => {
   const navigate = useNavigate();
 
   const subtotal = getTotalCartAmount();
-  const freeShippingThreshold = 4000;
+  const freeShippingThreshold = 10000;
   const amountNeededForFreeShipping = Math.max(
     0,
     freeShippingThreshold - subtotal
   );
   const shippingCost =
-    subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 250;
+    subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 350;
   const totalOrderAmount = subtotal + shippingCost;
 
   const handleQuantityChange = (item, newQuantity) => {
@@ -39,6 +40,7 @@ const ShoppingCart = () => {
   return (
     <div>
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
+      <DeliveryMarquee />
       <SearchPageNavbar
         title="Shopping Cart"
         titleHome="Home Page"

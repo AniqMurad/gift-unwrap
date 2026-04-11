@@ -50,6 +50,10 @@ const Footer = () => {
   const goToForever = () => navigate("/giftforwedding");
   const goToHer = () => navigate("/giftforher");
   const goToHis = () => navigate("/giftforhim");
+  const goToShipping = () => navigate("/shipping-policy");
+  const goToPrivacy = () => navigate("/privacy-policy");
+  const goToRefund = () => navigate("/refund-return-policy");
+  const goToTerms = () => navigate("/terms-conditions");
 
   // Email validation function
   const isValidEmail = (email) => {
@@ -110,7 +114,7 @@ const Footer = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-0 w-full lg:w-[500px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4 w-full lg:w-[700px]">
             <div className="flex flex-col gap-4">
               <h4 className="font-semibold mb-2">INFORMATION</h4>
               <p
@@ -164,9 +168,36 @@ const Footer = () => {
             <div className="flex flex-col gap-4">
               <h4 className="font-semibold mb-2">CUSTOMER SERVICES</h4>
               <p>High Quality Product</p>
-              <p>Shipping</p>
               <p>Customer Service</p>
-              <p>Return & Refund</p>
+              <p>Customization on all products</p>
+            </div>
+
+            <div className="flex flex-col gap-4 ml-[20px]">
+              <h4 className="font-semibold mb-2">POLICIES</h4>
+              <p
+                className="cursor-pointer hover:text-black transition-colors"
+                onClick={goToShipping}
+              >
+                Shipping Policy
+              </p>
+              <p
+                className="cursor-pointer hover:text-black transition-colors"
+                onClick={goToPrivacy}
+              >
+                Privacy Policy
+              </p>
+              <p
+                className="cursor-pointer hover:text-black transition-colors"
+                onClick={goToRefund}
+              >
+                Refund & Return
+              </p>
+              <p
+                className="cursor-pointer hover:text-black transition-colors"
+                onClick={goToTerms}
+              >
+                Terms & Conditions
+              </p>
             </div>
           </div>
 
