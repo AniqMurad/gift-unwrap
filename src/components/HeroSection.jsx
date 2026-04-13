@@ -25,7 +25,7 @@ const HeroSection = () => {
       heading: "Celebrate Mother's Day",
       description:
         "Show your love and appreciation with special gifts for the most important woman in your life.",
-      route: "/giftforher",
+      route: "/giftforher?category=mum",
     },
     {
       image: heroimg1,

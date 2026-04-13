@@ -18,7 +18,6 @@ import Product from "../components/Product";
 import Loader from "../components/Loader";
 // import ProductData from "../components/ProductData";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import PriceRangeSlider from "../components/PriceRangeSlider";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
@@ -26,19 +25,15 @@ import DeliveryMarquee from "@/components/DeliveryMarquee";
 const Giftsforeveryone = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const location = useLocation();
   const [columns, setColumns] = useState(4); // Default to 4 columns
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Tracks selected gift category
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
   const [sortOrder, setSortOrder] = useState("default");
   const giftsForEveryoneProducts = products
     .filter(
       (product) =>
-        (selectedCategory === "" || product.keyGift === selectedCategory) &&
-        product.price >= minPrice &&
-        product.price <= maxPrice
+        product.price >= minPrice && product.price <= maxPrice
     )
     .sort((a, b) => {
       if (sortOrder === "lowToHigh") return a.price - b.price;
@@ -66,15 +61,6 @@ const Giftsforeveryone = () => {
       .catch((err) => console.error("Failed to load products:", err))
       .finally(() => setLoading(false));
   }, [category]);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const categoryParam = queryParams.get("category");
-
-    if (categoryParam) {
-      setSelectedCategory(categoryParam);
-    }
-  }, [location.search]);
 
   // Track screen width and auto-adjust layout
   useEffect(() => {
@@ -104,12 +90,7 @@ const Giftsforeveryone = () => {
     setSelectedFilters((prev) => prev.filter((f) => f !== filter));
   };
 
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-  };
-
   const clearAllFilters = () => {
-    setSelectedCategory("");
     setSelectedFilters([]);
     setMinPrice(0);
     setMaxPrice(50000);
@@ -126,35 +107,6 @@ const Giftsforeveryone = () => {
         titleHome="Home Page"
         backgroundColor="#FBF4E8"
       />
-      <div className="bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2">
-        <p
-          className={`cursor-pointer ${
-            selectedCategory === "couple" ? "underline" : ""
-          }`}
-          onClick={() => handleCategorySelect("couple")}
-        >
-          <span className="hidden sm:inline">Gifts For Couples</span>
-          <span className="sm:hidden">Couples</span>
-        </p>
-        <p
-          className={`cursor-pointer ${
-            selectedCategory === "teacher" ? "underline" : ""
-          }`}
-          onClick={() => handleCategorySelect("teacher")}
-        >
-          <span className="hidden sm:inline">Gifts For Teachers</span>
-          <span className="sm:hidden">Teachers</span>
-        </p>
-        <p
-          className={`cursor-pointer ${
-            selectedCategory === "relative" ? "underline" : ""
-          }`}
-          onClick={() => handleCategorySelect("relative")}
-        >
-          <span className="hidden sm:inline">Gifts For Relatives</span>
-          <span className="sm:hidden">Relatives</span>
-        </p>
-      </div>
 
       <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
         {/* Left sidebar is removed from here */}
@@ -276,7 +228,6 @@ const Giftsforeveryone = () => {
 
               {/* Clear All Button */}
               {(selectedFilters.length > 0 ||
-                selectedCategory ||
                 minPrice > 0 ||
                 maxPrice < 1000) && (
                 <button

@@ -120,7 +120,7 @@ const FlowerChocolate = () => {
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <DeliveryMarquee />
       <SearchPageNavbar
-        title="Flowers & Chocolates Bouquet"
+        title="Sweets & Bouquets"
         titleHome="Home Page"
         backgroundColor="#FBF4E8"
       />
