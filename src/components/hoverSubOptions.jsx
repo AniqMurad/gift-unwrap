@@ -42,7 +42,7 @@ const hoverSubOptions = {
             ],
             url: "/Giftforcompanies"
         },
-        {
+        /* {
             title: "FOR EVERYONE",
             items: [
                 { name: "Couple", url: "/Giftforeveryone?category=couple" },
@@ -50,7 +50,7 @@ const hoverSubOptions = {
                 { name: "Relative", url: "/Giftforeveryone?category=relative" }
             ],
             url: "/Giftforeveryone"
-        }
+        } */
     ],
     occasions: [
         {
