@@ -1,5 +1,6 @@
 // Home.js
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Navbar from '../components/Navbar';
 import SubNavbar from '../components/SubNavbar';
 import HeroSection from '../components/HeroSection';
@@ -30,6 +31,10 @@ const Home = () => {
 
   return (
     <div className="w-full h-auto overflow-x-hidden">
+      <Helmet>
+        <title>Pakistan's Most Unique Gift Shop | Gift Unwrap</title>
+        <meta name="description" content="Discover Pakistan's most unique gift shop at Gift Unwrap Shop creative gifts surprise boxes & fast delivery for birthdays anniversaries & special moments." />
+      </Helmet>
       <Navbar bgColor="#ffff" borderBottom="2px" borderColor="#E9E9E9" />
       <DeliveryMarquee />
       <SubNavbar />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 import SearchPageNavbar from "../components/SearchPageNavbar";
 import Footer from "../components/Footer";
 import {
@@ -115,8 +116,49 @@ const Giftsforhim = () => {
     setSortOrder("default");
   };
 
+  // Get meta tags based on selected category
+  const getMetaTags = () => {
+    const metaData = {
+      "": {
+        title: "Premium Gifts for Him | Unique Ideas Gift Unwrap",
+        description: "Shop the best gifts for him at Gift Unwrap. Discover unique, stylish & thoughtful presents with fast delivery in Pakistan for every occasion."
+      },
+      "pop": {
+        title: "Gifts for Father | Unique Surprises by Gift Unwrap",
+        description: "Find the perfect gifts for fathers at Gift Unwrap. Shop unique, thoughtful & surprise gifts with fast delivery in Pakistan for every special occasion."
+      },
+      "brother": {
+        title: "Amazing Gifts for Brother | Gift Unwrap Pakistan",
+        description: "Shop amazing gifts for brother at Gift Unwrap Pakistan. Discover creative, fun & meaningful presents with fast delivery for birthdays & special occasions."
+      },
+      "boyfriend": {
+        title: "Best Gifts for Boyfriend | Romantic Ideas Gift Unwrap",
+        description: "Find perfect gifts for boyfriend at Gift Unwrap. Shop romantic, unique & thoughtful surprise gifts with fast delivery in Pakistan for every special moment."
+      },
+      "son": {
+        title: "Gifts for Son | Fun & Unique Surprises Gift Unwrap",
+        description: "Find the best gifts for son at Gift Unwrap. Shop fun, creative & meaningful presents with fast delivery in Pakistan for birthdays & special moments."
+      },
+      "husband": {
+        title: "Gifts for Husband | Romantic Ideas Gift Unwrap",
+        description: "Discover perfect gifts for husband at Gift Unwrap. Shop romantic, stylish & unique presents with fast delivery in Pakistan for every occasion."
+      },
+      "friend": {
+        title: "Gifts for Friend | Cool & Unique Ideas Gift Unwrap",
+        description: "Explore gifts for friend at Gift Unwrap. Find cool, fun & thoughtful presents with quick delivery in Pakistan for birthdays & special occasions."
+      }
+    };
+    return metaData[selectedCategory] || metaData[""];
+  };
+
+  const currentMeta = getMetaTags();
+
   return (
     <div>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta name="description" content={currentMeta.description} />
+      </Helmet>
       {loading && <Loader />}
       <Navbar showSearchInput={false} bgColor="#DEFBFF" />
       <DeliveryMarquee bgColor="#DEFBFF" textColor="text-cyan-900" borderColor="border-cyan-200" />

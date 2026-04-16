@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import SearchPageNavbar from "../components/SearchPageNavbar";
 import Footer from "../components/Footer";
 import {
@@ -117,6 +118,10 @@ const Giftsforbabies = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Gifts for New Born | Cute Baby Gifts Unwrap</title>
+        <meta name="description" content="Shop adorable gifts for new born at Gift Unwrap. Discover cute, soft & thoughtful baby presents with fast delivery in Pakistan." />
+      </Helmet>
       {loading && <Loader />}
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <DeliveryMarquee />

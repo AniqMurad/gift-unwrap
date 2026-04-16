@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import { WishlistProvider } from "./context/WishlistContext";
 import { CartProvider } from './context/CartContext';
 import Home from "./pages/Home";
@@ -38,11 +39,12 @@ import TermsConditions from "./pages/TermsConditions";
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <WishlistProvider>
-        <CartProvider>
-          <Routes>
+    <HelmetProvider>
+      <Router>
+        <ScrollToTop />
+        <WishlistProvider>
+          <CartProvider>
+            <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/wishlist" element={<WishList />} />
             <Route path="/blog" element={<Blog />} />
@@ -79,6 +81,7 @@ function App() {
         </CartProvider>
       </WishlistProvider>
     </Router>
+    </HelmetProvider>
   );
 }
 

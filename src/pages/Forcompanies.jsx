@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import SearchPageNavbar from "../components/SearchPageNavbar";
 import Footer from "../components/Footer";
 import {
@@ -112,8 +113,41 @@ const Forcompanies = () => {
     setSortOrder("default");
   };
 
+  // Get meta tags based on selected category
+  const getMetaTags = () => {
+    const metaData = {
+      "": {
+        title: "Corporate Gifts for Companies | Gift Unwrap Pakistan",
+        description: "Explore corporate gifts for companies at Gift Unwrap. Discover unique, professional & customized gift solutions with fast delivery in Pakistan."
+      },
+      "newhire": {
+        title: "Gifts for New Hire | Corporate Gifts Unwrap",
+        description: "Welcome employees with gifts for new hire from Gift Unwrap. Shop professional, thoughtful & unique corporate gifts with delivery in Pakistan."
+      },
+      "ocassion": {
+        title: "Corporate Gift Occasions | Unique Gifts Unwrap",
+        description: "Explore corporate gift occasions at Gift Unwrap. Find unique, professional & customized gifts with fast delivery in Pakistan for events."
+      },
+      "farewell": {
+        title: "Farewell Gifts | Memorable Gifts Gift Unwrap",
+        description: "Shop farewell gifts at Gift Unwrap. Find meaningful, memorable & unique presents with fast delivery in Pakistan for goodbyes & send-offs."
+      },
+      "achievement": {
+        title: "Achievement Gifts | Reward & Celebrate Unwrap",
+        description: "Celebrate success with achievement gifts from Gift Unwrap. Shop unique, premium & thoughtful presents with fast delivery in Pakistan."
+      }
+    };
+    return metaData[selectedCategory] || metaData[""];
+  };
+
+  const currentMeta = getMetaTags();
+
   return (
     <div>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta name="description" content={currentMeta.description} />
+      </Helmet>
       {loading && <Loader />}
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <DeliveryMarquee />

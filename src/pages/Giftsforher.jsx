@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import SearchPageNavbar from "../components/SearchPageNavbar";
 import Footer from "../components/Footer";
 import {
@@ -115,8 +116,49 @@ const Giftsforher = () => {
     setSortOrder("default");
   };
 
+  // Get meta tags based on selected category
+  const getMetaTags = () => {
+    const metaData = {
+      "": {
+        title: "Gifts for Her | Elegant & Unique Gifts Gift Unwrap",
+        description: "Shop the best gifts for her at Gift Unwrap. Discover elegant, unique & thoughtful presents with fast delivery in Pakistan for every special occasion."
+      },
+      "mum": {
+        title: "Gifts for Mother | Loving & Special Gifts Unwrap",
+        description: "Shop heartfelt gifts for mother at Gift Unwrap. Discover thoughtful, unique & loving presents with fast delivery in Pakistan for every moment."
+      },
+      "sister": {
+        title: "Gifts for Sister | Cute & Trendy Surprises Unwrap",
+        description: "Find the best gifts for sister at Gift Unwrap. Shop cute, stylish & meaningful presents with fast delivery in Pakistan for birthdays & more."
+      },
+      "girlfriend": {
+        title: "Gifts for Girlfriend | Romantic Surprises Unwrap",
+        description: "Discover romantic gifts for girlfriend at Gift Unwrap. Shop unique, cute & thoughtful presents with fast delivery in Pakistan for special moments."
+      },
+      "daughter": {
+        title: "Gifts for Daughter | Sweet & Lovely Gifts Unwrap",
+        description: "Explore gifts for daughter at Gift Unwrap. Shop sweet, fun & meaningful presents with fast delivery in Pakistan for birthdays & special days."
+      },
+      "wife": {
+        title: "Gifts for Wife | Romantic & Elegant Gifts Unwrap",
+        description: "Shop beautiful gifts for wife at Gift Unwrap. Discover romantic, elegant & unique presents with fast delivery in Pakistan for every occasion."
+      },
+      "friend": {
+        title: "Gifts for Friend | Cute & Fun Ideas Gift Unwrap",
+        description: "Find perfect gifts for friend at Gift Unwrap. Shop cute, fun & creative presents with fast delivery in Pakistan for birthdays & celebrations."
+      }
+    };
+    return metaData[selectedCategory] || metaData[""];
+  };
+
+  const currentMeta = getMetaTags();
+
   return (
     <div>
+      <Helmet>
+        <title>{currentMeta.title}</title>
+        <meta name="description" content={currentMeta.description} />
+      </Helmet>
       {loading && <Loader />}
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <DeliveryMarquee />
