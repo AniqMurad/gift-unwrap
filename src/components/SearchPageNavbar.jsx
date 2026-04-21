@@ -3,10 +3,17 @@ import React from 'react'
 import { UsersIcon, CartIcon, HeartIcon, SearchIcon, SearchLine, RightHalfIcon, } from './icons'
 import { useNavigate } from 'react-router-dom';
 
-const SearchPageNavbar = ({ title, title2, titleHome, backgroundColor }) => {
+const SearchPageNavbar = ({ title, title2, title2Route, titleHome, backgroundColor }) => {
     const navigate = useNavigate();
+    
     const handleLogoClick = () => {
         navigate('/');
+    };
+
+    const handleTitle2Click = () => {
+        if (title2Route) {
+            navigate(title2Route);
+        }
     };
 
     return (
@@ -19,7 +26,7 @@ const SearchPageNavbar = ({ title, title2, titleHome, backgroundColor }) => {
                     {titleHome && (
                         <>
                             <span 
-                                className="cursor-pointer hover:text-gray-800 transition-colors duration-200"
+                                className="cursor-pointer hover:text-gray-800 hover:underline transition-all duration-200 font-medium"
                                 onClick={handleLogoClick}
                             >
                                 {titleHome}
@@ -28,14 +35,23 @@ const SearchPageNavbar = ({ title, title2, titleHome, backgroundColor }) => {
                         </>
                     )}
 
-                    <span className='text-gray-400'>{title}</span>
-
                     {title2 && (
                         <>
+                            <span 
+                                className={`font-medium ${
+                                    title2Route 
+                                        ? 'cursor-pointer hover:text-gray-800 hover:underline transition-all duration-200 text-gray-600' 
+                                        : 'text-gray-500'
+                                }`}
+                                onClick={handleTitle2Click}
+                            >
+                                {title2}
+                            </span>
                             <RightHalfIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
-                            <span className='text-gray-400'>{title2}</span>
                         </>
                     )}
+
+                    <span className='text-gray-500 font-medium'>{title}</span>
                 </div>
             </div>
         </div>

@@ -36,6 +36,7 @@ import ShippingPolicy from "./pages/ShippingPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundReturnPolicy from "./pages/RefundReturnPolicy";
 import TermsConditions from "./pages/TermsConditions";
+import BuildGiftBox from "./pages/BuildGiftBox";
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/refund-return-policy" element={<RefundReturnPolicy />} />
             <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/build-gift-box" element={<BuildGiftBox />} />
           </Routes>
         </CartProvider>
       </WishlistProvider>

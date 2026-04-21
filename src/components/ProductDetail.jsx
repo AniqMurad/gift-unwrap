@@ -25,6 +25,37 @@ const ProductDetail = () => {
   });
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // Category mapping functions
+  const getCategoryDisplayName = (categorySlug) => {
+    const categoryMap = {
+      'giftsForHer': 'Gifts For Her',
+      'giftsForHim': 'Gifts For Him',
+      'giftsForBabies': 'Gifts For Babies',
+      'giftsForCompanies': 'Gifts For Companies',
+      'giftsForEveryone': 'Gifts For Everyone',
+      'giftsForWedding': 'Wedding Gifts',
+      'giftsForReligions': 'Religious Gifts',
+      'giftsForBirthday': 'Birthday Gifts',
+      'flowerChocolate': 'Sweets & Bouquets',
+    };
+    return categoryMap[categorySlug] || categorySlug;
+  };
+
+  const getCategoryRoute = (categorySlug) => {
+    const routeMap = {
+      'giftsForHer': '/giftforher',
+      'giftsForHim': '/giftforhim',
+      'giftsForBabies': '/Giftforbabies',
+      'giftsForCompanies': '/giftforcompanies',
+      'giftsForEveryone': '/giftforeveryone',
+      'giftsForWedding': '/giftforwedding',
+      'giftsForReligions': '/Giftforreligions',
+      'giftsForBirthday': '/Giftforbirthday',
+      'flowerChocolate': '/flower-chocolate',
+    };
+    return routeMap[categorySlug] || '/';
+  };
+
   // Auto-hide notification after 3 seconds
   useEffect(() => {
     if (notification.show) {
@@ -159,6 +190,8 @@ const ProductDetail = () => {
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <SearchPageNavbar
         title={product.name}
+        title2={getCategoryDisplayName(category)}
+        title2Route={getCategoryRoute(category)}
         titleHome="Home"
         backgroundColor="#FBF4E8"
       />
