@@ -3,7 +3,7 @@ import React from 'react'
 import { UsersIcon, CartIcon, HeartIcon, SearchIcon, SearchLine, RightHalfIcon, } from './icons'
 import { useNavigate } from 'react-router-dom';
 
-const SearchPageNavbar = ({ title, title2, title2Route, titleHome, backgroundColor }) => {
+const SearchPageNavbar = ({ title, title2, title2Route, titleHome, backgroundColor, compact }) => {
     const navigate = useNavigate();
     
     const handleLogoClick = () => {
@@ -20,7 +20,7 @@ const SearchPageNavbar = ({ title, title2, title2Route, titleHome, backgroundCol
         <div style={{ backgroundColor }}>
 
             {/* Search Result Section */}
-            <div className='text-center py-4 sm:py-6 lg:py-8'>
+            <div className={`text-center ${compact ? 'py-2 sm:py-3 lg:py-4' : 'py-4 sm:py-6 lg:py-8'}`}>
                 <h2 className='text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900'>{title}</h2>
                 <div className='flex items-center justify-center gap-2 text-xs sm:text-sm text-gray-600 mt-1 sm:mt-2'>
                     {titleHome && (
