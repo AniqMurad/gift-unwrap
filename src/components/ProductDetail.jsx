@@ -7,10 +7,11 @@ import Navbar from "./Navbar";
 import axios from "axios";
 import Product from "../components/Product";
 import NotificationBar from "../components/NotificationBar";
+import { findProductBySlug } from "../utils/slugify";
 
 const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState("");
-  const { productId, category } = useParams();
+  const { productSlug, category } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const [product, setProduct] = useState(null);
@@ -24,6 +25,37 @@ const ProductDetail = () => {
     message: "",
   });
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Category mapping functions
+  const getCategoryDisplayName = (categorySlug) => {
+    const categoryMap = {
+      'giftsForHer': 'Gifts For Her',
+      'giftsForHim': 'Gifts For Him',
+      'giftsForBabies': 'Gifts For Babies',
+      'giftsForCompanies': 'Gifts For Companies',
+      'giftsForEveryone': 'Gifts For Everyone',
+      'giftsForWedding': 'Wedding Gifts',
+      'giftsForReligions': 'Religious Gifts',
+      'giftsForBirthday': 'Birthday Gifts',
+      'flowerChocolate': 'Sweets & Bouquets',
+    };
+    return categoryMap[categorySlug] || categorySlug;
+  };
+
+  const getCategoryRoute = (categorySlug) => {
+    const routeMap = {
+      'giftsForHer': '/giftforher',
+      'giftsForHim': '/giftforhim',
+      'giftsForBabies': '/Giftforbabies',
+      'giftsForCompanies': '/giftforcompanies',
+      'giftsForEveryone': '/giftforeveryone',
+      'giftsForWedding': '/giftforwedding',
+      'giftsForReligions': '/Giftforreligions',
+      'giftsForBirthday': '/Giftforbirthday',
+      'flowerChocolate': '/flower-chocolate',
+    };
+    return routeMap[categorySlug] || '/';
+  };
 
   // Auto-hide notification after 3 seconds
   useEffect(() => {
@@ -48,11 +80,7 @@ const ProductDetail = () => {
       let currentProduct = null;
 
       const productFromState = location.state?.productData;
-      if (
-        productFromState &&
-        productFromState.id.toString() === productId &&
-        productFromState.category === category
-      ) {
+      if (productFromState && productFromState.category === category) {
         setProduct(productFromState);
         setSelectedImage(
           productFromState.image ||
@@ -63,22 +91,30 @@ const ProductDetail = () => {
       } else {
         try {
           const response = await axios.get(
-            `https://giftunwrapbackend.vercel.app/api/products/${category}/${productId}`
+            "https://giftunwrapbackend.vercel.app/api/products"
           );
-          console.log(
-            `Fetched product ${category}/${productId}:`,
-            response.data
+          const categoryData = response.data.find(
+            (item) => item.category === category
           );
-          setProduct(response.data);
-          setSelectedImage(
-            response.data.image ||
-              (response.data.images && response.data.images[0]) ||
-              ""
-          );
-          currentProduct = response.data;
+          
+          if (categoryData && categoryData.products) {
+            const foundProduct = findProductBySlug(categoryData.products, productSlug);
+            if (foundProduct) {
+              setProduct(foundProduct);
+              setSelectedImage(
+                foundProduct.image ||
+                  (foundProduct.images && foundProduct.images[0]) ||
+                  ""
+              );
+              currentProduct = foundProduct;
+            } else {
+              console.error(`Product with slug "${productSlug}" not found in category "${category}"`);
+              setProduct(null);
+            }
+          }
         } catch (err) {
           console.error(
-            `Failed to fetch product ${category}/${productId}:`,
+            `Failed to fetch product ${category}/${productSlug}:`,
             err
           );
           setProduct(null);
@@ -110,7 +146,7 @@ const ProductDetail = () => {
     };
 
     fetchProductAndRelated();
-  }, [productId, category, navigate, location.state]);
+  }, [productSlug, category, navigate, location.state]);
 
   if (!product) {
     return (
@@ -159,6 +195,8 @@ const ProductDetail = () => {
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <SearchPageNavbar
         title={product.name}
+        title2={getCategoryDisplayName(category)}
+        title2Route={getCategoryRoute(category)}
         titleHome="Home"
         backgroundColor="#FBF4E8"
       />
