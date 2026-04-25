@@ -10,6 +10,7 @@ import {
 } from "./icons";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
+import { generateSlug } from "../utils/slugify";
 
 const Product = ({ product, columns }) => {
   const { wishlist, toggleWishlist } = useWishlist();
@@ -21,6 +22,7 @@ const Product = ({ product, columns }) => {
 
   const category = product.category || "unknown";
   const id = product.id || "no-id";
+  const productSlug = generateSlug(product.name);
 
   const isInWishlist = wishlist.some(
     (item) => item.id === id && item.category === category
@@ -29,9 +31,9 @@ const Product = ({ product, columns }) => {
   const handleNavigateToDetail = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log("Navigating to:", `/product/${category}/${id}`);
-    if (id !== "no-id" && category !== "unknown") {
-      navigate(`/product/${category}/${id}`, {
+    console.log("Navigating to:", `/product/${category}/${productSlug}`);
+    if (productSlug && category !== "unknown") {
+      navigate(`/product/${category}/${productSlug}`, {
         state: { productData: product },
       });
     }
