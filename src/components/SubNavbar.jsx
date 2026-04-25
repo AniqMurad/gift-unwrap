@@ -113,12 +113,12 @@ const SubNavbar = () => {
             <span className="hidden sm:inline">SWEETS &  BOUQUETS</span>
             <span className="sm:hidden">SWEETS & BOUQUETS</span>
           </button>
-          <button
+          {/* <button
             className="font-bold cursor-pointer text-xs sm:text-sm dropdown-button"
             onClick={navigateToBuildGiftBox}
           >
             BUILD A GIFT BOX
-          </button>
+          </button> */}
         </div>
       </div>
 
