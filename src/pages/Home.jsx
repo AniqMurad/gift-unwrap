@@ -34,6 +34,7 @@ const Home = () => {
       <Helmet>
         <title>Pakistan's Most Unique Gift Shop | Gift Unwrap</title>
         <meta name="description" content="Discover Pakistan's most unique gift shop at Gift Unwrap Shop creative gifts surprise boxes & fast delivery for birthdays anniversaries & special moments." />
+        <meta name="google-site-verification" content="5o7I3OX6u4U14KxG6xp1Q1tY5drkY2Um7WFoJZ1NUmQ" />
       </Helmet>
       <Navbar bgColor="#ffff" borderBottom="2px" borderColor="#E9E9E9" />
       <DeliveryMarquee />
