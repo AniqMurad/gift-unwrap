@@ -1,5 +1,14 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import ReactGA from "react-ga4";
+
+function AnalyticsTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
+  }, [location]);
+  return null;
+}
 import { HelmetProvider } from 'react-helmet-async';
 import { WishlistProvider } from "./context/WishlistContext";
 import { CartProvider } from './context/CartContext';
@@ -42,6 +51,7 @@ function App() {
   return (
     <HelmetProvider>
       <Router>
+        <AnalyticsTracker />
         <ScrollToTop />
         <WishlistProvider>
           <CartProvider>

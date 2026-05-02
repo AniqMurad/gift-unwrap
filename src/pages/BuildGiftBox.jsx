@@ -44,48 +44,57 @@
         additionalInfo: "",
     });
 
-    // Static products for now
-    const staticProducts = [
-        { id: 1, name: "Coffee Mug", price: 12.00, category: "drinkware", image: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400" },
-        { id: 2, name: "Notebook", price: 8.00, category: "stationery", image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400" },
-        { id: 3, name: "Scented Candle", price: 15.00, category: "home", image: "https://images.unsplash.com/photo-1602874801006-57920aa491a8?w=400" },
-        { id: 4, name: "Chocolate Box", price: 20.00, category: "food", image: "https://images.unsplash.com/photo-1511381939415-e44015466834?w=400" },
-        { id: 5, name: "Water Bottle", price: 18.00, category: "drinkware", image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400" },
-        { id: 6, name: "Pen Set", price: 10.00, category: "stationery", image: "https://images.unsplash.com/photo-1585366119957-e9730b6d0f60?w=400" },
-        { id: 7, name: "Tea Set", price: 25.00, category: "drinkware", image: "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400" },
-        { id: 8, name: "Cookies", price: 12.00, category: "food", image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=400" },
-        { id: 9, name: "Planner", price: 14.00, category: "stationery", image: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=400" },
-        { id: 10, name: "Diffuser", price: 22.00, category: "home", image: "https://images.unsplash.com/photo-1588159343745-445ae0b16383?w=400" },
-    ];
+    // Dynamic data from APIs
+    const [products, setProducts] = useState([]);
+    const [boxOptions, setBoxOptions] = useState([]);
+    const [cardOptions, setCardOptions] = useState([]);
+    const [dataLoading, setDataLoading] = useState(true);
 
+    // API base URL - Change to http://localhost:5000/api for local testing
+    const API_BASE_URL = "http://localhost:5000/api";
+
+    // Fetch data from APIs on component mount
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setDataLoading(true);
+                const [itemsRes, boxesRes, cardsRes] = await Promise.all([
+                    fetch(`${API_BASE_URL}/gift-box-items`),
+                    fetch(`${API_BASE_URL}/boxes`),
+                    fetch(`${API_BASE_URL}/cards`)
+                ]);
+
+                const itemsData = await itemsRes.json();
+                const boxesData = await boxesRes.json();
+                const cardsData = await cardsRes.json();
+
+                setProducts(itemsData);
+                setBoxOptions(boxesData);
+                setCardOptions(cardsData);
+                setDataLoading(false);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                setDataLoading(false);
+                showNotification("error", "Failed to load gift box items. Please refresh the page.");
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Get unique categories from products
     const categories = [
         { value: "all", label: "All Categories" },
-        { value: "drinkware", label: "Drinkware" },
-        { value: "stationery", label: "Stationery" },
-        { value: "home", label: "Home Decor" },
-        { value: "food", label: "Food & Treats" },
-    ];
-
-    // Static box options
-    const boxOptions = [
-        { id: 1, name: "Small Box", size: "15cm x 15cm x 10cm", price: 5.00, capacity: "3-5 items", image: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=400", color: "#F5DEB3" },
-        { id: 2, name: "Medium Box", size: "20cm x 20cm x 15cm", price: 8.00, capacity: "6-8 items", image: "https://images.unsplash.com/photo-1607083206325-caf1edba7a0f?w=400", color: "#FFE4B5" },
-        { id: 3, name: "Large Box", size: "30cm x 25cm x 20cm", price: 12.00, capacity: "9-12 items", image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=400", color: "#FFDAB9" },
-        { id: 4, name: "Luxury Box", size: "35cm x 30cm x 25cm", price: 18.00, capacity: "12-15 items", image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400", color: "#FFD700" },
-    ];
-
-    // Static card options
-    const cardOptions = [
-        { id: 1, name: "Birthday Card", design: "Happy Birthday", image: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400", color: "#FFE5E5" },
-        { id: 2, name: "Thank You Card", design: "Thank You", image: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400", color: "#E5F5FF" },
-        { id: 3, name: "Congratulations Card", design: "Congratulations", image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400", color: "#FFF9E5" },
-        { id: 4, name: "Love Card", design: "With Love", image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400", color: "#FFE5F0" },
-        { id: 5, name: "Blank Card", design: "Custom Message", image: "https://images.unsplash.com/photo-1555881536-0c4d3f6ecfac?w=400", color: "#F5F5F5" },
+        ...Array.from(new Set(products.map(p => p.category)))
+            .map(cat => ({
+                value: cat,
+                label: cat.charAt(0).toUpperCase() + cat.slice(1)
+            }))
     ];
 
     const filteredProducts = selectedCategory === "all" 
-        ? staticProducts 
-        : staticProducts.filter(p => p.category === selectedCategory);
+        ? products 
+        : products.filter(p => p.category === selectedCategory);
 
     const steps = [
         { id: 1, name: "PICK GIFTS", label: "Pick Gifts" },
@@ -230,7 +239,7 @@
 
         try {
             const response = await fetch(
-                "https://giftunwrapbackend.vercel.app/api/orders/",
+                `${API_BASE_URL}/orders`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -750,7 +759,7 @@
 
     return (
         <div>
-        {isLoading && <Loader />}
+        {(isLoading || dataLoading) && <Loader />}
         {notification.show && (
             <NotificationBar type={notification.type} message={notification.message} />
         )}
