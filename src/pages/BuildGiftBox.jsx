@@ -50,8 +50,8 @@
     const [cardOptions, setCardOptions] = useState([]);
     const [dataLoading, setDataLoading] = useState(true);
 
-    // API base URL - Change to http://localhost:5000/api for local testing
-    const API_BASE_URL = "http://localhost:5000/api";
+    // API base URL - Production endpoint
+    const API_BASE_URL = "https://giftunwrapbackend.vercel.app/api";
 
     // Fetch data from APIs on component mount
     useEffect(() => {
