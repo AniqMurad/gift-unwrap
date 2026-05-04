@@ -26,6 +26,13 @@
     const [expiry, setExpiry] = useState("");
     const [cvv, setCvv] = useState("");
     const [saveCardDetails, setSaveCardDetails] = useState(false);
+    const [imagePreview, setImagePreview] = useState({
+        isOpen: false,
+        src: "",
+        alt: "",
+        itemType: null,
+        itemData: null,
+    });
     const [notification, setNotification] = useState({
         show: false,
         type: "success",
@@ -50,8 +57,7 @@
     const [cardOptions, setCardOptions] = useState([]);
     const [dataLoading, setDataLoading] = useState(true);
 
-    // API base URL - Change to http://localhost:5000/api for local testing
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = "https://giftunwrapbackend.vercel.app/api";
 
     // Fetch data from APIs on component mount
     useEffect(() => {
@@ -153,8 +159,60 @@
         }
     }, [notification.show]);
 
+    useEffect(() => {
+        if (!imagePreview.isOpen) return;
+
+        const handleEsc = (e) => {
+            if (e.key === "Escape") {
+                setImagePreview({
+                    isOpen: false,
+                    src: "",
+                    alt: "",
+                    itemType: null,
+                    itemData: null,
+                });
+            }
+        };
+
+        window.addEventListener("keydown", handleEsc);
+        return () => window.removeEventListener("keydown", handleEsc);
+    }, [imagePreview.isOpen]);
+
     const showNotification = (type, message) => {
         setNotification({ show: true, type, message });
+    };
+
+    const openImagePreview = (src, alt, itemType = null, itemData = null) => {
+        setImagePreview({
+            isOpen: true,
+            src,
+            alt: alt || "Preview image",
+            itemType,
+            itemData,
+        });
+    };
+
+    const closeImagePreview = () => {
+        setImagePreview({
+            isOpen: false,
+            src: "",
+            alt: "",
+            itemType: null,
+            itemData: null,
+        });
+    };
+
+    const handleSelectFromPreview = () => {
+        if (imagePreview.itemType === "box" && imagePreview.itemData) {
+            setSelectedBox(imagePreview.itemData);
+            closeImagePreview();
+            return;
+        }
+
+        if (imagePreview.itemType === "card" && imagePreview.itemData) {
+            setSelectedCard(imagePreview.itemData);
+            closeImagePreview();
+        }
     };
 
     const handleChange = (e) => {
@@ -355,7 +413,8 @@
                                 <img
                                     src={product.image}
                                     alt={product.name}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover cursor-zoom-in"
+                                    onClick={() => openImagePreview(product.image, product.name)}
                                 />
                             </div>
                             <div className="p-3 sm:p-4">
@@ -365,7 +424,7 @@
                                 <p className="text-gray-600 font-bold mb-3">${product.price.toFixed(2)}</p>
                                 <button
                                     onClick={() => addToBox(product)}
-                                    className="w-full bg-black text-white py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm sm:text-base"
+                                    className="w-full bg-black text-white cursor-pointer py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm sm:text-base"
                                 >
                                     Add to Box
                                 </button>
@@ -395,7 +454,11 @@
                                 <img
                                     src={box.image}
                                     alt={box.name}
-                                    className="w-full h-full object-cover opacity-80"
+                                    className="w-full h-full object-cover opacity-80 cursor-zoom-in"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        openImagePreview(box.image, box.name, "box", box);
+                                    }}
                                 />
                                 {selectedBox?.id === box.id && (
                                     <div className="absolute top-2 right-2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
@@ -442,7 +505,11 @@
                                 <img
                                     src={card.image}
                                     alt={card.name}
-                                    className="w-full h-full object-cover opacity-70"
+                                    className="w-full h-full object-cover opacity-70 cursor-zoom-in"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        openImagePreview(card.image, card.name, "card", card);
+                                    }}
                                 />
                                 {selectedCard?.id === card.id && (
                                     <div className="absolute top-2 right-2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
@@ -977,7 +1044,8 @@
                                     <img
                                         src={selectedBox.image}
                                         alt={selectedBox.name}
-                                        className="w-20 h-20 object-cover rounded"
+                                        className="w-20 h-20 object-cover rounded cursor-zoom-in"
+                                        onClick={() => openImagePreview(selectedBox.image, selectedBox.name)}
                                         style={{ backgroundColor: selectedBox.color }}
                                     />
                                     <div className="flex-1">
@@ -999,7 +1067,8 @@
                                     <img
                                         src={selectedCard.image}
                                         alt={selectedCard.name}
-                                        className="w-20 h-20 object-cover rounded"
+                                        className="w-20 h-20 object-cover rounded cursor-zoom-in"
+                                        onClick={() => openImagePreview(selectedCard.image, selectedCard.name)}
                                         style={{ backgroundColor: selectedCard.color }}
                                     />
                                     <div className="flex-1">
@@ -1028,7 +1097,8 @@
                                     <img
                                         src={item.image}
                                         alt={item.name}
-                                        className="w-20 h-20 object-cover rounded"
+                                        className="w-20 h-20 object-cover rounded cursor-zoom-in"
+                                        onClick={() => openImagePreview(item.image, item.name)}
                                     />
                                     <div className="flex-1">
                                         <h4 className="font-semibold text-sm mb-1">{item.name}</h4>
@@ -1068,6 +1138,41 @@
                     </div>
                 </div>
             </>
+        )}
+
+        {imagePreview.isOpen && (
+            <div
+                className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
+                onClick={closeImagePreview}
+            >
+                <div
+                    className="flex flex-col items-center gap-4 w-full"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button
+                        type="button"
+                        onClick={closeImagePreview}
+                        className="absolute top-5 right-5 text-white text-3xl leading-none hover:opacity-80"
+                        aria-label="Close image preview"
+                    >
+                        ×
+                    </button>
+                    <img
+                        src={imagePreview.src}
+                        alt={imagePreview.alt}
+                        className="max-w-full max-h-[80vh] object-contain"
+                    />
+                    {(imagePreview.itemType === "box" || imagePreview.itemType === "card") && (
+                        <button
+                            type="button"
+                            onClick={handleSelectFromPreview}
+                            className="bg-white text-black px-8 py-2 rounded-md font-semibold hover:bg-gray-200 transition-colors"
+                        >
+                            Select
+                        </button>
+                    )}
+                </div>
+            </div>
         )}
 
         <Footer />
