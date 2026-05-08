@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import SearchPageNavbar from "../components/SearchPageNavbar";
 import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
@@ -55,6 +56,25 @@ const ProductDetail = () => {
       'flowerChocolate': '/flower-chocolate',
     };
     return routeMap[categorySlug] || '/';
+  };
+
+  // Generate meta tags with fallback to auto-generated values
+  const generateMetaTitle = (product, category) => {
+    if (product.metaTitle) {
+      return product.metaTitle;
+    }
+    const categoryName = getCategoryDisplayName(category);
+    return `${product.name} | ${categoryName} | Gift Unwrap Pakistan`;
+  };
+
+  const generateMetaDescription = (product, category) => {
+    if (product.metaDescription) {
+      return product.metaDescription;
+    }
+    const categoryName = getCategoryDisplayName(category);
+    const price = `PKR ${Math.floor(product.price)}`;
+    const shortDesc = product.shortDescription ? `${product.shortDescription} ` : '';
+    return `Shop ${product.name} at ${price}. ${shortDesc}Perfect ${categoryName.toLowerCase()} with fast delivery across Pakistan.`;
   };
 
   // Auto-hide notification after 3 seconds
@@ -186,6 +206,14 @@ const ProductDetail = () => {
   console.log(product.reviews);
   return (
     <div>
+      <Helmet>
+        <title>{generateMetaTitle(product, category)}</title>
+        <meta name="description" content={generateMetaDescription(product, category)} />
+        <meta property="og:title" content={generateMetaTitle(product, category)} />
+        <meta property="og:description" content={generateMetaDescription(product, category)} />
+        <meta property="og:image" content={product.images?.[0] || product.image || ''} />
+        <meta property="og:type" content="product" />
+      </Helmet>
       {notification.show && (
         <NotificationBar
           type={notification.type}
