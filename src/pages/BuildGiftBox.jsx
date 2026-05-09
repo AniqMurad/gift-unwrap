@@ -57,8 +57,8 @@
     const [cardOptions, setCardOptions] = useState([]);
     const [dataLoading, setDataLoading] = useState(true);
 
-    // const API_BASE_URL = "https://giftunwrapbackend.vercel.app/api";
-    const API_BASE_URL = "http://localhost:5000/api";
+    const API_BASE_URL = "https://giftunwrapbackend.vercel.app/api";
+    // const API_BASE_URL = "http://localhost:5000/api";
 
     // Fetch data from APIs on component mount
     useEffect(() => {
