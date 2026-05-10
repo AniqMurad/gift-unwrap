@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Product from './Product';
 
 const ProductPage = ({ title, category }) => {
+    const navigate = useNavigate();
     const [selectedSubcategory, setSelectedSubcategory] = useState("All");
     const [products, setProducts] = useState([]);
     const [randomFour, setRandomFour] = useState([]);
@@ -45,11 +47,31 @@ const ProductPage = ({ title, category }) => {
         )
     ];
 
-    const filteredProducts = selectedSubcategory === "All"
+    const allFilteredProducts = selectedSubcategory === "All"
         ? randomFour
         : products.filter(item =>
             item.keyGift?.toLowerCase().trim() === selectedSubcategory.toLowerCase().trim()
         );
+
+    // Limit to 4 products
+    const filteredProducts = allFilteredProducts.slice(0, 4);
+    const hasMoreProducts = allFilteredProducts.length > 4;
+
+    // Get the route for the category
+    const getCategoryRoute = () => {
+        if (category === 'giftsForHim') return '/giftforhim';
+        if (category === 'giftsForHer') return '/giftforher';
+        return '/';
+    };
+
+    const handleSeeMore = () => {
+        const route = getCategoryRoute();
+        if (selectedSubcategory !== "All") {
+            navigate(`${route}?category=${selectedSubcategory.toLowerCase()}`);
+        } else {
+            navigate(route);
+        }
+    };
 
     // Skeleton component matching your product card layout
     const ProductSkeleton = () => (
@@ -156,6 +178,18 @@ const ProductPage = ({ title, category }) => {
                     </div>
                 )}
             </div>
+            
+            {/* See More Button */}
+            {!loading && hasMoreProducts && (
+                <div className="flex justify-center mt-6 sm:mt-8">
+                    <button
+                        onClick={handleSeeMore}
+                        className="bg-black text-white font-semibold px-6 sm:px-8 py-3 rounded-full hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
+                    >
+                        See More
+                    </button>
+                </div>
+            )}
         </div>
     );
 };

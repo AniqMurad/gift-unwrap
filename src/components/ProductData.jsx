@@ -152,7 +152,7 @@ const products = {
     ],
     giftsForHim: [
         {
-            id: 1, name: "Classic Wallet", price: 50, originalPrice: 70, discount: 28, keyGift: "pop", subcategory: "Accessories", images: [box1, box2, box3, box4], ShortDescription: "A stylish and soft t-shirt perfect for everyday casual wear.", LongDescription:
+            id: 1, name: "Classic Wallet", price: 50, originalPrice: 70, discount: 28, keyGift: "father", subcategory: "Accessories", images: [box1, box2, box3, box4], ShortDescription: "A stylish and soft t-shirt perfect for everyday casual wear.", LongDescription:
                 `This premium gift is crafted with attention to detail and made from high-quality materials. 
                     Perfect for any occasion, it comes in elegant packaging ready to gift. 
                     The Birthday Mug is designed to last and bring joy for years to come.

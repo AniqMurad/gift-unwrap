@@ -123,7 +123,7 @@ const Giftsforhim = () => {
         title: "Premium Gifts for Him | Unique Ideas Gift Unwrap",
         description: "Shop the best gifts for him at Gift Unwrap. Discover unique, stylish & thoughtful presents with fast delivery in Pakistan for every occasion."
       },
-      "pop": {
+      "father": {
         title: "Gifts for Father | Unique Surprises by Gift Unwrap",
         description: "Find the perfect gifts for fathers at Gift Unwrap. Shop unique, thoughtful & surprise gifts with fast delivery in Pakistan for every special occasion."
       },
@@ -170,9 +170,9 @@ const Giftsforhim = () => {
       <div className="bg-[#DEFBFF] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2">
         <p
           className={`cursor-pointer ${
-            selectedCategory === "pop" ? "underline" : ""
+            selectedCategory === "father" ? "underline" : ""
           }`}
-          onClick={() => handleCategorySelect("pop")}
+          onClick={() => handleCategorySelect("father")}
         >
           <span className="hidden sm:inline">Gifts For Father</span>
           <span className="sm:hidden">Father</span>

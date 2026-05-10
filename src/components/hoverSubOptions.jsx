@@ -4,7 +4,7 @@ const hoverSubOptions = {
         {
             title: "FOR HIM",
             items: [
-                { name: "Father", url: "/Giftforhim?category=pop" },
+                { name: "Father", url: "/Giftforhim?category=father" },
                 { name: "Brother", url: "/Giftforhim?category=brother" },
                 { name: "BoyFriend", url: "/Giftforhim?category=boyfriend" },
                 { name: "Son", url: "/Giftforhim?category=son" },
