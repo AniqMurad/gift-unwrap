@@ -7,6 +7,7 @@
     import OrderSummary from "@/components/OrderSummary";
     import NotificationBar from "@/components/NotificationBar";
     import Loader from "@/components/Loader";
+    import ProductDetailModal from "@/components/ProductDetailModal";
     import { useNavigate } from "react-router-dom";
 
     const BuildGiftBox = () => {
@@ -26,13 +27,12 @@
     const [expiry, setExpiry] = useState("");
     const [cvv, setCvv] = useState("");
     const [saveCardDetails, setSaveCardDetails] = useState(false);
-    const [imagePreview, setImagePreview] = useState({
+    const [productModal, setProductModal] = useState({
         isOpen: false,
-        src: "",
-        alt: "",
+        item: null,
         itemType: null,
-        itemData: null,
     });
+    const [modalQuantity, setModalQuantity] = useState(1);
     const [notification, setNotification] = useState({
         show: false,
         type: "success",
@@ -110,18 +110,24 @@
         { id: 4, name: "SHIPPING", label: "Shipping" }
     ];
 
-    const addToBox = (product) => {
+    const addToBox = (product, quantity = 1) => {
         setGiftBoxItems((prevItems) => {
             const existingItem = prevItems.find(item => item.id === product.id);
             if (existingItem) {
                 return prevItems.map(item =>
                     item.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
+                        ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
             }
-            return [...prevItems, { ...product, quantity: 1 }];
+            return [...prevItems, { ...product, quantity: quantity }];
         });
+        
+        // Auto-open drawer to show the impact
+        setIsDrawerOpen(true);
+        
+        // Show success notification
+        showNotification("success", `${product.name} added to your gift box!`);
     };
 
     const removeFromBox = (productId) => {
@@ -161,58 +167,67 @@
     }, [notification.show]);
 
     useEffect(() => {
-        if (!imagePreview.isOpen) return;
+        if (!productModal.isOpen) return;
 
         const handleEsc = (e) => {
             if (e.key === "Escape") {
-                setImagePreview({
+                setProductModal({
                     isOpen: false,
-                    src: "",
-                    alt: "",
+                    item: null,
                     itemType: null,
-                    itemData: null,
                 });
             }
         };
 
         window.addEventListener("keydown", handleEsc);
         return () => window.removeEventListener("keydown", handleEsc);
-    }, [imagePreview.isOpen]);
+    }, [productModal.isOpen]);
 
     const showNotification = (type, message) => {
         setNotification({ show: true, type, message });
     };
 
-    const openImagePreview = (src, alt, itemType = null, itemData = null) => {
-        setImagePreview({
+    const openProductModal = (item, itemType) => {
+        setProductModal({
             isOpen: true,
-            src,
-            alt: alt || "Preview image",
-            itemType,
-            itemData,
+            item: item,
+            itemType: itemType,
         });
+        setModalQuantity(1);
     };
 
-    const closeImagePreview = () => {
-        setImagePreview({
+    const closeProductModal = () => {
+        setProductModal({
             isOpen: false,
-            src: "",
-            alt: "",
+            item: null,
             itemType: null,
-            itemData: null,
         });
+        setModalQuantity(1);
     };
 
-    const handleSelectFromPreview = () => {
-        if (imagePreview.itemType === "box" && imagePreview.itemData) {
-            setSelectedBox(imagePreview.itemData);
-            closeImagePreview();
+    const handleSelectFromModal = () => {
+        if (productModal.itemType === "box" && productModal.item) {
+            setSelectedBox(productModal.item);
+            closeProductModal();
+            showNotification("success", `${productModal.item.name} selected as your gift box!`);
+            // Auto-open drawer to show the impact
+            setIsDrawerOpen(true);
             return;
         }
 
-        if (imagePreview.itemType === "card" && imagePreview.itemData) {
-            setSelectedCard(imagePreview.itemData);
-            closeImagePreview();
+        if (productModal.itemType === "card" && productModal.item) {
+            setSelectedCard(productModal.item);
+            closeProductModal();
+            showNotification("success", `${productModal.item.name} selected as your gift card!`);
+            // Auto-open drawer to show the impact
+            setIsDrawerOpen(true);
+        }
+    };
+
+    const handleAddItemFromModal = () => {
+        if (productModal.item && modalQuantity > 0) {
+            addToBox(productModal.item, modalQuantity);
+            closeProductModal();
         }
     };
 
@@ -414,15 +429,15 @@
                                 <img
                                     src={product.image}
                                     alt={product.name}
-                                    className="w-full h-full object-cover cursor-zoom-in"
-                                    onClick={() => openImagePreview(product.image, product.name)}
+                                    className="w-full h-full object-cover cursor-pointer"
+                                    onClick={() => openProductModal(product, "giftItem")}
                                 />
                             </div>
                             <div className="p-3 sm:p-4">
                                 <h3 className="font-semibold text-sm sm:text-base mb-1 truncate">
                                     {product.name}
                                 </h3>
-                                <p className="text-gray-600 font-bold mb-3">${product.price.toFixed(2)}</p>
+                                <p className="text-gray-600 font-bold mb-3">PKR {product.price.toFixed(2)}</p>
                                 <button
                                     onClick={() => addToBox(product)}
                                     className="w-full bg-black text-white cursor-pointer py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm sm:text-base"
@@ -455,10 +470,10 @@
                                 <img
                                     src={box.image}
                                     alt={box.name}
-                                    className="w-full h-full object-cover opacity-80 cursor-zoom-in"
+                                    className="w-full h-full object-cover opacity-80 cursor-pointer"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        openImagePreview(box.image, box.name, "box", box);
+                                        openProductModal(box, "box");
                                     }}
                                 />
                                 {selectedBox?.id === box.id && (
@@ -471,7 +486,7 @@
                                 <h3 className="font-bold text-lg mb-2">{box.name}</h3>
                                 <p className="text-xs text-gray-600 mb-1">Size: {box.size}</p>
                                 <p className="text-xs text-gray-600 mb-2">Capacity: {box.capacity}</p>
-                                <p className="text-lg font-bold text-black">${box.price.toFixed(2)}</p>
+                                <p className="text-lg font-bold text-black">PKR {box.price.toFixed(2)}</p>
                             </div>
                         </div>
                     ))}
@@ -480,7 +495,7 @@
                 {selectedBox && (
                     <div className="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg">
                         <p className="text-green-800 font-semibold">
-                            ✓ Selected: {selectedBox.name} - ${selectedBox.price.toFixed(2)}
+                            ✓ Selected: {selectedBox.name} - PKR {selectedBox.price.toFixed(2)}
                         </p>
                     </div>
                 )}
@@ -506,10 +521,10 @@
                                 <img
                                     src={card.image}
                                     alt={card.name}
-                                    className="w-full h-full object-cover opacity-70 cursor-zoom-in"
+                                    className="w-full h-full object-cover opacity-70 cursor-pointer"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        openImagePreview(card.image, card.name, "card", card);
+                                        openProductModal(card, "card");
                                     }}
                                 />
                                 {selectedCard?.id === card.id && (
@@ -1003,17 +1018,17 @@
                         <div className="bg-gray-50 p-4 rounded-lg mb-6">
                             <div className="flex justify-between items-center mb-3">
                                 <span className="font-semibold">Total Price:</span>
-                                <span className="text-xl font-bold">${getTotalBoxPrice().toFixed(2)}</span>
+                                <span className="text-xl font-bold">PKR {getTotalBoxPrice().toFixed(2)}</span>
                             </div>
                             <div className="text-xs text-gray-600 space-y-1 mb-3 pb-3 border-b">
                                 <div className="flex justify-between">
                                     <span>Gift items:</span>
-                                    <span>${giftBoxItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}</span>
+                                    <span>PKR {giftBoxItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2)}</span>
                                 </div>
                                 {selectedBox && (
                                     <div className="flex justify-between">
                                         <span>Box ({selectedBox.name}):</span>
-                                        <span>${selectedBox.price.toFixed(2)}</span>
+                                        <span>PKR {selectedBox.price.toFixed(2)}</span>
                                     </div>
                                 )}
                                 {selectedCard && (
@@ -1045,8 +1060,8 @@
                                     <img
                                         src={selectedBox.image}
                                         alt={selectedBox.name}
-                                        className="w-20 h-20 object-cover rounded cursor-zoom-in"
-                                        onClick={() => openImagePreview(selectedBox.image, selectedBox.name)}
+                                        className="w-20 h-20 object-cover rounded cursor-pointer"
+                                        onClick={() => openProductModal(selectedBox, "box")}
                                         style={{ backgroundColor: selectedBox.color }}
                                     />
                                     <div className="flex-1">
@@ -1054,7 +1069,7 @@
                                             <div>
                                                 <h4 className="font-semibold text-sm mb-1">{selectedBox.name}</h4>
                                                 <p className="text-xs text-gray-600 mb-1">{selectedBox.size}</p>
-                                                <p className="text-gray-600 text-sm font-bold">${selectedBox.price.toFixed(2)}</p>
+                                                <p className="text-gray-600 text-sm font-bold">PKR {selectedBox.price.toFixed(2)}</p>
                                             </div>
                                             <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">Box</span>
                                         </div>
@@ -1068,8 +1083,8 @@
                                     <img
                                         src={selectedCard.image}
                                         alt={selectedCard.name}
-                                        className="w-20 h-20 object-cover rounded cursor-zoom-in"
-                                        onClick={() => openImagePreview(selectedCard.image, selectedCard.name)}
+                                        className="w-20 h-20 object-cover rounded cursor-pointer"
+                                        onClick={() => openProductModal(selectedCard, "card")}
                                         style={{ backgroundColor: selectedCard.color }}
                                     />
                                     <div className="flex-1">
@@ -1103,7 +1118,7 @@
                                     />
                                     <div className="flex-1">
                                         <h4 className="font-semibold text-sm mb-1">{item.name}</h4>
-                                        <p className="text-gray-600 text-sm mb-2">${item.price.toFixed(2)}</p>
+                                        <p className="text-gray-600 text-sm mb-2">PKR {item.price.toFixed(2)}</p>
                                         <div className="flex items-center gap-2">
                                             <select
                                                 value={item.quantity}
@@ -1141,40 +1156,17 @@
             </>
         )}
 
-        {imagePreview.isOpen && (
-            <div
-                className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
-                onClick={closeImagePreview}
-            >
-                <div
-                    className="flex flex-col items-center gap-4 w-full"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <button
-                        type="button"
-                        onClick={closeImagePreview}
-                        className="absolute top-5 right-5 text-white text-3xl leading-none hover:opacity-80"
-                        aria-label="Close image preview"
-                    >
-                        ×
-                    </button>
-                    <img
-                        src={imagePreview.src}
-                        alt={imagePreview.alt}
-                        className="max-w-full max-h-[80vh] object-contain"
-                    />
-                    {(imagePreview.itemType === "box" || imagePreview.itemType === "card") && (
-                        <button
-                            type="button"
-                            onClick={handleSelectFromPreview}
-                            className="bg-white text-black px-8 py-2 rounded-md font-semibold hover:bg-gray-200 transition-colors"
-                        >
-                            Select
-                        </button>
-                    )}
-                </div>
-            </div>
-        )}
+        {/* Product Detail Modal */}
+        <ProductDetailModal
+            isOpen={productModal.isOpen}
+            onClose={closeProductModal}
+            item={productModal.item}
+            itemType={productModal.itemType}
+            onSelect={handleSelectFromModal}
+            onAddItem={handleAddItemFromModal}
+            quantity={modalQuantity}
+            setQuantity={setModalQuantity}
+        />
 
         <Footer />
         </div>

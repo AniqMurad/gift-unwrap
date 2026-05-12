@@ -165,9 +165,9 @@ const HeroSection = () => {
           onClick={() => navigate("/giftforhim")}
         >
           <div className="text-center sm:text-left">
-            <p className="bg-[#DB4444] text-white text-[10px] sm:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max mx-auto sm:mx-0">
+            {/* <p className="bg-[#DB4444] text-white text-[10px] sm:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max mx-auto sm:mx-0">
               SAVE 10%
-            </p>
+            </p> */}
             <p className="text-sm sm:text-2xl font-semibold mt-2">
               Gifts For Him
             </p>
@@ -191,9 +191,9 @@ const HeroSection = () => {
           onClick={() => navigate("/giftforher")}
         >
           <div className="text-center sm:text-left">
-            <p className="bg-[#DB4444] text-white text-[10px] sm:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max mx-auto sm:mx-0">
+            {/* <p className="bg-[#DB4444] text-white text-[10px] sm:text-xs font-semibold px-2 py-1 rounded-md uppercase w-max mx-auto sm:mx-0">
               SAVE 10%
-            </p>
+            </p> */}
             <p className="text-sm sm:text-2xl font-semibold mt-2">
               Gifts For Her
             </p>

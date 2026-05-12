@@ -11,18 +11,21 @@ import {
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 import { generateSlug } from "../utils/slugify";
+import RequestQuoteModal from "./RequestQuoteModal";
 
 const Product = ({ product, columns }) => {
   const { wishlist, toggleWishlist } = useWishlist();
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const [showImagePreview, setShowImagePreview] = useState(false);
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
 
   if (!product) return null;
 
   const category = product.category || "unknown";
   const id = product.id || "no-id";
   const productSlug = generateSlug(product.name);
+  const isCorporateGift = category === "giftsForCompany";
 
   const isInWishlist = wishlist.some(
     (item) => item.id === id && item.category === category
@@ -42,8 +45,12 @@ const Product = ({ product, columns }) => {
   const handleAddToCart = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    addToCart(product);
-    window.scrollTo(0, 0);
+    if (isCorporateGift) {
+      setShowQuoteModal(true);
+    } else {
+      addToCart(product);
+      window.scrollTo(0, 0);
+    }
   };
 
   const handleWishlistClick = (e) => {
@@ -107,13 +114,23 @@ const Product = ({ product, columns }) => {
                 <DetailEyeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
               </button>
 
-              <button
-                onClick={handleAddToCart}
-                className="p-2 sm:p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer"
-                aria-label="Add to Cart"
-              >
-                <CartIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
-              </button>
+              {isCorporateGift ? (
+                <button
+                  onClick={handleAddToCart}
+                  className="px-4 py-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer text-black font-semibold text-sm"
+                  aria-label="Request Quote"
+                >
+                  Request Quote
+                </button>
+              ) : (
+                <button
+                  onClick={handleAddToCart}
+                  className="p-2 sm:p-3 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors cursor-pointer"
+                  aria-label="Add to Cart"
+                >
+                  <CartIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -141,6 +158,12 @@ const Product = ({ product, columns }) => {
           <div className="flex items-center gap-2 text-xs sm:text-sm mt-1">
             <span className="font-semibold text-black">PKR {product.price}</span>
           </div>
+      
+      <RequestQuoteModal
+        isOpen={showQuoteModal}
+        onClose={() => setShowQuoteModal(false)}
+        product={product}
+      />
         </div>
       </div>
 
