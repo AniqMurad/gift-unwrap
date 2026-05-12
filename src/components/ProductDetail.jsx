@@ -9,6 +9,7 @@ import axios from "axios";
 import Product from "../components/Product";
 import NotificationBar from "../components/NotificationBar";
 import { findProductBySlug } from "../utils/slugify";
+import RequestQuoteModal from "./RequestQuoteModal";
 
 const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState("");
@@ -26,6 +27,9 @@ const ProductDetail = () => {
     message: "",
   });
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
+  
+  const isCorporateGift = category === "giftsForCompany";
 
   // Category mapping functions
   const getCategoryDisplayName = (categorySlug) => {
@@ -33,6 +37,7 @@ const ProductDetail = () => {
       'giftsForHer': 'Gifts For Her',
       'giftsForHim': 'Gifts For Him',
       'giftsForBabies': 'Gifts For Babies',
+      'giftsForCompany': 'Gifts For Companies',
       'giftsForCompanies': 'Gifts For Companies',
       'giftsForEveryone': 'Gifts For Everyone',
       'giftsForWedding': 'Wedding Gifts',
@@ -48,6 +53,7 @@ const ProductDetail = () => {
       'giftsForHer': '/giftforher',
       'giftsForHim': '/giftforhim',
       'giftsForBabies': '/Giftforbabies',
+      'giftsForCompany': '/giftforcompanies',
       'giftsForCompanies': '/giftforcompanies',
       'giftsForEveryone': '/giftforeveryone',
       'giftsForWedding': '/giftforwedding',
@@ -188,18 +194,26 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (product) {
-      addToCart({ ...product, quantity });
-      showNotification(
-        "success",
-        `${product.name} (Qty: ${quantity}) added to cart!`
-      );
+      if (isCorporateGift) {
+        setShowQuoteModal(true);
+      } else {
+        addToCart({ ...product, quantity });
+        showNotification(
+          "success",
+          `${product.name} (Qty: ${quantity}) added to cart!`
+        );
+      }
     }
   };
 
   const handleBuyNow = () => {
     if (product) {
-      addToCart({ ...product, quantity });
-      navigate("/ShoppingCart");
+      if (isCorporateGift) {
+        setShowQuoteModal(true);
+      } else {
+        addToCart({ ...product, quantity });
+        navigate("/ShoppingCart");
+      }
     }
   };
 
@@ -445,43 +459,59 @@ const ProductDetail = () => {
             </div>
 
             {/* Quantity and Buttons Section - Compact on mobile */}
-            <div className="flex gap-3 sm:gap-4 lg:gap-6 pt-2 sm:pt-4">
-              <div className="flex items-center justify-center sm:justify-start border border-gray-300 rounded-md w-fit mx-auto sm:mx-0">
-                <button
-                  className="px-3 sm:px-4 py-2 cursor-pointer text-gray-500 hover:bg-gray-100 rounded-l-md text-lg sm:text-base"
-                  onClick={handleDecreaseQuantity}
-                  aria-label="Decrease quantity"
-                >
-                  –
-                </button>
-                <span className="px-3 sm:px-4 py-2 text-center w-12 sm:w-14">
-                  {quantity}
-                </span>
-                <button
-                  className="px-3 sm:px-4 py-2 cursor-pointer text-gray-500 hover:bg-gray-100 rounded-r-md text-lg sm:text-base"
-                  onClick={handleIncreaseQuantity}
-                  aria-label="Increase quantity"
-                >
-                  +
-                </button>
-              </div>
-
-              <div className="flex gap-3 w-full">
+            {isCorporateGift ? (
+              // Corporate Gift - Only Request Quote button
+              <div className="pt-2 sm:pt-4">
                 <button
                   onClick={handleAddToCart}
                   className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
                 >
-                  Add to Cart
+                  Request Quote
                 </button>
-
-                <button
-                  onClick={handleBuyNow}
-                  className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition text-sm sm:text-base font-medium"
-                >
-                  Buy Now
-                </button>
+                <p className="text-sm text-gray-600 mt-3 text-center">
+                  Get a custom quote for bulk orders and corporate gifting
+                </p>
               </div>
-            </div>
+            ) : (
+              // Regular Product - Quantity selector and cart buttons
+              <div className="flex gap-3 sm:gap-4 lg:gap-6 pt-2 sm:pt-4">
+                <div className="flex items-center justify-center sm:justify-start border border-gray-300 rounded-md w-fit mx-auto sm:mx-0">
+                  <button
+                    className="px-3 sm:px-4 py-2 cursor-pointer text-gray-500 hover:bg-gray-100 rounded-l-md text-lg sm:text-base"
+                    onClick={handleDecreaseQuantity}
+                    aria-label="Decrease quantity"
+                  >
+                    –
+                  </button>
+                  <span className="px-3 sm:px-4 py-2 text-center w-12 sm:w-14">
+                    {quantity}
+                  </span>
+                  <button
+                    className="px-3 sm:px-4 py-2 cursor-pointer text-gray-500 hover:bg-gray-100 rounded-r-md text-lg sm:text-base"
+                    onClick={handleIncreaseQuantity}
+                    aria-label="Increase quantity"
+                  >
+                    +
+                  </button>
+                </div>
+
+                <div className="flex gap-3 w-full">
+                  <button
+                    onClick={handleAddToCart}
+                    className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
+                  >
+                    Add to Cart
+                  </button>
+
+                  <button
+                    onClick={handleBuyNow}
+                    className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition text-sm sm:text-base font-medium"
+                  >
+                    Buy Now
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Customization Message - Mobile only, after buttons */}
             <div className="block sm:hidden bg-blue-50 border border-blue-200 rounded-md p-3 mt-3">
@@ -744,6 +774,12 @@ const ProductDetail = () => {
       </div>
 
       <Footer />
+      
+      <RequestQuoteModal
+        isOpen={showQuoteModal}
+        onClose={() => setShowQuoteModal(false)}
+        product={product}
+      />
     </div>
   );
 };
