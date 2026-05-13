@@ -35,6 +35,7 @@ const Home = () => {
         <title>Pakistan's Most Unique Gift Shop | Gift Unwrap</title>
         <meta name="description" content="Discover Pakistan's most unique gift shop at Gift Unwrap Shop creative gifts surprise boxes & fast delivery for birthdays anniversaries & special moments." />
         <meta name="google-site-verification" content="IRKZW1tFIrwJARVCWhBIFZv2A_6bx8GHScL9UMH4dVA" />
+        <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
       </Helmet>
       <Navbar bgColor="#ffff" borderBottom="2px" borderColor="#E9E9E9" />
       <DeliveryMarquee />

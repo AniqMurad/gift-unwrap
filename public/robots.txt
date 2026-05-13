@@ -1,0 +1,14 @@
+# Gift Unwrap - Robots.txt
+# https://www.giftunwrap.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow admin and account pages
+Disallow: /myAccount
+Disallow: /ShoppingCart
+Disallow: /Checkout
+Disallow: /forgetPassword
+
+# Sitemap location
+Sitemap: https://www.giftunwrap.com/sitemap.xml
