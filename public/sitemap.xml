@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!--  Gift Unwrap Sitemap  -->
+
+<!-- Home Page -->
+<url>
+  <loc>https://www.giftunwrap.com/</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>1.00</priority>
+  <changefreq>daily</changefreq>
+</url>
+
+<!-- Main Category Pages -->
+<url>
+  <loc>https://www.giftunwrap.com/giftforher</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/giftforhim</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/Giftforbabies</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/giftforcompanies</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/giftforeveryone</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/giftforwedding</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/Giftforreligions</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/Giftforbirthday</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/flower-chocolate</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.90</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/build-gift-box</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.85</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<!-- Important Pages -->
+<url>
+  <loc>https://www.giftunwrap.com/blog</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.80</priority>
+  <changefreq>weekly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/contact-us</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+  <changefreq>monthly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/customer-feedback</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+  <changefreq>monthly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/faqs</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.70</priority>
+  <changefreq>monthly</changefreq>
+</url>
+
+<!-- User Pages -->
+<url>
+  <loc>https://www.giftunwrap.com/login</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.60</priority>
+  <changefreq>monthly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/signup</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.60</priority>
+  <changefreq>monthly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/wishlist</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.60</priority>
+  <changefreq>monthly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/OrderTracking</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.65</priority>
+  <changefreq>monthly</changefreq>
+</url>
+
+<!-- Policy Pages -->
+<url>
+  <loc>https://www.giftunwrap.com/shipping-policy</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.50</priority>
+  <changefreq>yearly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/privacy-policy</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.50</priority>
+  <changefreq>yearly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/refund-return-policy</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.50</priority>
+  <changefreq>yearly</changefreq>
+</url>
+
+<url>
+  <loc>https://www.giftunwrap.com/terms-conditions</loc>
+  <lastmod>2026-05-13T00:00:00+00:00</lastmod>
+  <priority>0.50</priority>
+  <changefreq>yearly</changefreq>
+</url>
+
+</urlset>
