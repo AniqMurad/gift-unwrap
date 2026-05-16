@@ -1,11 +1,15 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import ReactGA from "react-ga4";
+import ReactPixel from "react-facebook-pixel";
 
 function AnalyticsTracker() {
   const location = useLocation();
   useEffect(() => {
+    // Google Analytics
     ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
+    // Facebook Pixel
+    ReactPixel.pageView();
   }, [location]);
   return null;
 }
