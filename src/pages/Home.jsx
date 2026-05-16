@@ -51,7 +51,7 @@ const Home = () => {
               "addressCountry": "PK"
             },
             "priceRange": "PKR 2000 - PKR 15000",
-            "telephone": "+92 313 0216931",
+            "telephone": "+92 326 8927354",
             "email": "giftunwrap@gmail.com",
             "openingHours": "Mo-Su 00:00-23:59",
             "sameAs": [

@@ -857,7 +857,7 @@
         
         {/* Step Indicator */}
         <div className="bg-[#FBF4E8] px-4 sm:px-8 lg:px-16 py-2 flex justify-center">
-            <div className="bg-white rounded-full px-6 sm:px-12 py-1 mb-2 border-2 border-black border-black-600 shadow-lg inline-flex items-center gap-4 sm:gap-6 flex-wrap justify-center max-w-full">
+            <div className="bg-white rounded-full px-2 sm:px-4 py-2 mb-2 border-2 border-black border-black-600 shadow-lg inline-flex items-center gap-4 sm:gap-6 flex-wrap justify-center max-w-full">
             {/* Step Counter */}
             <div className="flex items-center gap-3">
                 <span className="font-semibold text-sm sm:text-base whitespace-nowrap">

@@ -460,18 +460,18 @@ const ProductDetail = () => {
                   </p>
                   <p className="mt-2">
                     You can call or WhatsApp us at{" "}
-                    <strong>+92 313 0216931</strong>. Just tap below:
+                    <strong>+92 326 8927354</strong>. Just tap below:
                   </p>
                   <p className="mt-1">
                     <a
-                      href="tel:+923130216931"
+                      href="tel:+923268927354"
                       className="underline hover:text-blue-900 mr-4"
                     >
                       Call Now
                     </a>
                     |
                     <a
-                      href="https://wa.me/923130216931"
+                      href="https://wa.me/923268927354"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="underline hover:text-green-800 ml-4"
@@ -564,18 +564,18 @@ const ProductDetail = () => {
                   </p>
                   <p className="mt-2">
                     You can also call or WhatsApp us at{" "}
-                    <strong>+92 313 0216931</strong>. Just tap below:
+                    <strong>+92 326 8927354</strong>. Just tap below:
                   </p>
                   <p className="mt-1">
                     <a
-                      href="tel:+923130216931"
+                      href="tel:+923268927354"
                       className="underline hover:text-blue-900 mr-4"
                     >
                       Call Now
                     </a>
                     |
                     <a
-                      href="https://wa.me/923130216931"
+                      href="https://wa.me/923268927354"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="underline hover:text-green-800 ml-4"
