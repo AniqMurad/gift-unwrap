@@ -36,6 +36,94 @@ const Home = () => {
         <meta name="description" content="Discover Pakistan's most unique gift shop at Gift Unwrap Shop creative gifts surprise boxes & fast delivery for birthdays anniversaries & special moments." />
         <meta name="google-site-verification" content="IRKZW1tFIrwJARVCWhBIFZv2A_6bx8GHScL9UMH4dVA" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "OnlineStore",
+            "@id": "https://www.giftunwrap.com/#store",
+            "name": "Gift Unwrap",
+            "url": "https://www.giftunwrap.com/",
+            "logo": "https://www.giftunwrap.com/logo.png",
+            "image": "https://www.giftunwrap.com/hero-banner.jpg",
+            "description": "Premium gift store in Pakistan offering thoughtful gifts for birthdays, weddings, Mother's Day, Women's Day, corporate events, and religious occasions. 24/7 customer support, 14-day returns, nationwide shipping.",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "PK"
+            },
+            "priceRange": "PKR 2000 - PKR 15000",
+            "telephone": "+92 313 0216931",
+            "email": "giftunwrap@gmail.com",
+            "openingHours": "Mo-Su 00:00-23:59",
+            "sameAs": [
+              "https://www.facebook.com/giftunwrap",
+              "https://www.instagram.com/giftunwrap"
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer service",
+              "availableLanguage": "English",
+              "contactOption": "TollFree"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "bestRating": "5",
+              "worstRating": "1",
+              "ratingCount": "87",
+              "reviewCount": "87"
+            },
+            "makesOffer": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Gifts for Him",
+                  "url": "https://www.giftunwrap.com/giftforhim"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Gifts for Her",
+                  "url": "https://www.giftunwrap.com/giftforher"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Baby Gifts",
+                  "url": "https://www.giftunwrap.com/Giftforbabies"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Birthday Gifts",
+                  "url": "https://www.giftunwrap.com/Giftforbirthday"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Wedding Gifts",
+                  "url": "https://www.giftunwrap.com/giftforwedding"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Corporate Gifts",
+                  "url": "https://www.giftunwrap.com/giftforcompanies"
+                }
+              }
+            ]
+          })}
+        </script>
       </Helmet>
       <Navbar bgColor="#ffff" borderBottom="2px" borderColor="#E9E9E9" />
       <DeliveryMarquee />
