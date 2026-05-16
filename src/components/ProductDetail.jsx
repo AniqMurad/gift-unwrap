@@ -227,6 +227,31 @@ const ProductDetail = () => {
         <meta property="og:description" content={generateMetaDescription(product, category)} />
         <meta property="og:image" content={product.images?.[0] || product.image || ''} />
         <meta property="og:type" content="product" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": product.name || "Gift Product",
+            "image": product.images || [product.image] || [],
+            "description": product.shortDescription || product.description || "Beautiful gift for any occasion",
+            "sku": product.id || product.productId || `GIFT-${Date.now()}`,
+            "brand": {
+              "@type": "Brand",
+              "name": "Gift Unwrap"
+            },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "PKR",
+              "price": product.price || "2000",
+              "availability": "https://schema.org/InStock",
+              "url": window.location.href,
+              "seller": {
+                "@type": "Organization",
+                "name": "Gift Unwrap"
+              }
+            }
+          })}
+        </script>
       </Helmet>
       {notification.show && (
         <NotificationBar
