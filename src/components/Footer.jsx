@@ -106,7 +106,7 @@ const Footer = () => {
               <strong>Mail:</strong> giftunwrap@gmail.com
             </p>
             <p>
-              <strong>Phone:</strong> +92 313 0216931
+              <strong>Phone:</strong> +92 326 8927354
             </p>
             <p>
               <strong>Address:</strong> Shop No. 226 PIB Colony near Jail
@@ -241,7 +241,7 @@ const Footer = () => {
                 <InstaIcon />
               </a>
               <a
-                href="https://wa.me/923130216931"
+                href="https://wa.me/923268927354"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -256,7 +256,7 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center border-t mt-6 pt-4 text-gray-500 text-sm gap-4">
-          <p>©2025 GiftUnwrap. All Rights Reserved.</p>
+          <p>©2026 GiftUnwrap. All Rights Reserved.</p>
 
           <div className="flex items-center justify-center sm:justify-end space-x-2 w-full sm:w-[200px]">
             <span className="text-gray-600 w-auto sm:w-[70px]">Payment:</span>
