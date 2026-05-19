@@ -21,6 +21,12 @@
     const [cardMessage, setCardMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    
+    // Filter states
+    const [selectedProductTypes, setSelectedProductTypes] = useState([]);
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(10000);
+    const [showOnSale, setShowOnSale] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState("cod");
     const [cardName, setCardName] = useState("");
     const [cardNumber, setCardNumber] = useState("");
@@ -99,9 +105,70 @@
             }))
     ];
 
-    const filteredProducts = selectedCategory === "all" 
-        ? products 
-        : products.filter(p => p.category === selectedCategory);
+    // Dynamically generate product types from API data
+    const productTypes = Array.from(new Set(products.map(p => p.category)))
+        .map(category => ({
+            name: category.charAt(0).toUpperCase() + category.slice(1),
+            value: category,
+            count: products.filter(p => p.category === category).length
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+    // Calculate actual price range from products
+    const actualMinPrice = products.length > 0 ? Math.min(...products.map(p => p.price)) : 0;
+    const actualMaxPrice = products.length > 0 ? Math.max(...products.map(p => p.price)) : 10000;
+
+    // Set initial price range when products are loaded
+    useEffect(() => {
+        if (products.length > 0 && minPrice === 0 && maxPrice === 10000) {
+            setMinPrice(Math.floor(actualMinPrice));
+            setMaxPrice(Math.ceil(actualMaxPrice));
+        }
+    }, [products]);
+
+    const toggleProductType = (typeName) => {
+        setSelectedProductTypes(prev => 
+            prev.includes(typeName) 
+                ? prev.filter(t => t !== typeName)
+                : [...prev, typeName]
+        );
+    };
+
+    const clearAllFilters = () => {
+        setSelectedProductTypes([]);
+        setSelectedCategory("all");
+        setMinPrice(Math.floor(actualMinPrice));
+        setMaxPrice(Math.ceil(actualMaxPrice));
+        setShowOnSale(false);
+    };
+
+    // Apply all filters
+    const filteredProducts = products.filter(product => {
+        // Category filter
+        if (selectedCategory !== "all" && product.category !== selectedCategory) {
+            return false;
+        }
+
+        // Product type filter
+        if (selectedProductTypes.length > 0) {
+            const matchesType = selectedProductTypes.some(type => 
+                type.toLowerCase() === product.category.toLowerCase()
+            );
+            if (!matchesType) return false;
+        }
+
+        // Price range filter
+        if (product.price < minPrice || product.price > maxPrice) {
+            return false;
+        }
+
+        // On sale filter
+        if (showOnSale && !product.onSale) {
+            return false;
+        }
+
+        return true;
+    });
 
     const steps = [
         { id: 1, name: "PICK GIFTS", label: "Pick Gifts" },
@@ -402,51 +469,253 @@
         case 1:
             return (
             <div className="py-6">
-                {/* Category Filter */}
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl sm:text-2xl font-semibold">Pick Gifts</h2>
-                    <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="border border-gray-300 px-4 py-2 rounded-lg text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-black"
-                    >
-                        {categories.map((cat) => (
-                            <option key={cat.value} value={cat.value}>
-                                {cat.label}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Products Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                    {filteredProducts.map((product) => (
-                        <div
-                            key={product.id}
-                            className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-                        >
-                            <div className="relative aspect-square">
-                                <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="w-full h-full object-cover cursor-pointer"
-                                    onClick={() => openProductModal(product, "giftItem")}
-                                />
-                            </div>
-                            <div className="p-3 sm:p-4">
-                                <h3 className="font-semibold text-sm sm:text-base mb-1 truncate">
-                                    {product.name}
-                                </h3>
-                                <p className="text-gray-600 font-bold mb-3">PKR {product.price.toFixed(2)}</p>
-                                <button
-                                    onClick={() => addToBox(product)}
-                                    className="w-full bg-black text-white cursor-pointer py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm sm:text-base"
-                                >
-                                    Add to Box
-                                </button>
+                {/* Two Column Layout: Filters + Products */}
+                <div className="flex flex-col lg:flex-row gap-6">
+                    {/* Left Sidebar - Filters */}
+                    <div className="w-full lg:w-64 flex-shrink-0">
+                        {/* Product Type Filter */}
+                        <div className="mb-6">
+                            <h3 className="font-bold text-lg mb-4">Products Type</h3>
+                            <div className="space-y-2">
+                                {productTypes.map((type) => (
+                                    <label key={type.name} className="flex items-center cursor-pointer group">
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedProductTypes.includes(type.name)}
+                                            onChange={() => toggleProductType(type.name)}
+                                            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
+                                        />
+                                        <span className="ml-2 text-sm text-gray-700 group-hover:text-black">
+                                            {type.name}
+                                        </span>
+                                        <span className="ml-auto text-xs text-gray-500">({type.count})</span>
+                                    </label>
+                                ))}
                             </div>
                         </div>
-                    ))}
+
+                        {/* Price Range Filter */}
+                        <div className="mb-6 pb-6 border-b border-gray-200">
+                            <h3 className="font-bold text-lg mb-4">Price Range</h3>
+                            <div className="space-y-4">
+                                {/* Min Price */}
+                                <div>
+                                    <label className="text-sm text-gray-600 mb-1 block">Min price</label>
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="range"
+                                            min={Math.floor(actualMinPrice)}
+                                            max={Math.ceil(actualMaxPrice)}
+                                            value={minPrice}
+                                            onChange={(e) => setMinPrice(Number(e.target.value))}
+                                            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-black"
+                                        />
+                                        <span className="text-sm font-medium w-16 text-right">
+                                            {minPrice} <span className="text-gray-500">PKR</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                {/* Max Price */}
+                                <div>
+                                    <label className="text-sm text-gray-600 mb-1 block">Max price</label>
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="range"
+                                            min={Math.floor(actualMinPrice)}
+                                            max={Math.ceil(actualMaxPrice)}
+                                            value={maxPrice}
+                                            onChange={(e) => setMaxPrice(Number(e.target.value))}
+                                            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-black"
+                                        />
+                                        <span className="text-sm font-medium w-16 text-right">
+                                            {maxPrice} <span className="text-gray-500">PKR</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {/* Right Side - Products */}
+                    <div className="flex-1">
+                        {/* Top Bar */}
+                        <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+                            <div className="flex items-center gap-4">
+                                {/* View Toggle Icons */}
+                                {/* <div className="flex gap-2">
+                                    <button className="p-2 border border-gray-300 rounded hover:bg-gray-100">
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <rect x="3" y="3" width="6" height="6"/>
+                                            <rect x="11" y="3" width="6" height="6"/>
+                                            <rect x="3" y="11" width="6" height="6"/>
+                                            <rect x="11" y="11" width="6" height="6"/>
+                                        </svg>
+                                    </button>
+                                    <button className="p-2 border border-gray-300 rounded hover:bg-gray-100">
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <rect x="3" y="3" width="14" height="2"/>
+                                            <rect x="3" y="7" width="14" height="2"/>
+                                            <rect x="3" y="11" width="14" height="2"/>
+                                            <rect x="3" y="15" width="14" height="2"/>
+                                        </svg>
+                                    </button>
+                                    <button className="p-2 border border-gray-300 rounded hover:bg-gray-100">
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <rect x="3" y="3" width="4" height="4"/>
+                                            <rect x="9" y="3" width="4" height="4"/>
+                                            <rect x="15" y="3" width="4" height="4"/>
+                                            <rect x="3" y="9" width="4" height="4"/>
+                                            <rect x="9" y="9" width="4" height="4"/>
+                                            <rect x="15" y="9" width="4" height="4"/>
+                                        </svg>
+                                    </button>
+                                </div> */}
+                                
+                                {/* Show only on sale checkbox (mobile) */}
+                                {/* <label className="flex items-center cursor-pointer text-sm lg:hidden">
+                                    <input
+                                        type="checkbox"
+                                        checked={showOnSale}
+                                        onChange={(e) => setShowOnSale(e.target.checked)}
+                                        className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
+                                    />
+                                    <span className="ml-2">Show only products on sale</span>
+                                </label> */}
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                {/* Sort By */}
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-gray-600">Sort by</span>
+                                    <select
+                                        className="border border-gray-300 px-3 py-1.5 rounded text-sm focus:outline-none focus:ring-2 focus:ring-black"
+                                    >
+                                        <option>Best Selling</option>
+                                        <option>Price: Low to High</option>
+                                        <option>Price: High to Low</option>
+                                        <option>Newest</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Active Filters */}
+                        <div className="mb-4 flex flex-wrap items-center gap-2">
+                            <span className="text-sm font-medium">{filteredProducts.length} Products Found</span>
+                            {selectedCategory !== "all" && (
+                                <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-sm rounded-full">
+                                    {categories.find(c => c.value === selectedCategory)?.label}
+                                    <button onClick={() => setSelectedCategory("all")} className="ml-1 hover:text-red-600">×</button>
+                                </span>
+                            )}
+                            {selectedProductTypes.map(type => (
+                                <span key={type} className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-sm rounded-full">
+                                    {type}
+                                    <button onClick={() => toggleProductType(type)} className="ml-1 hover:text-red-600">×</button>
+                                </span>
+                            ))}
+                            {(minPrice > Math.floor(actualMinPrice) || maxPrice < Math.ceil(actualMaxPrice)) && (
+                                <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-sm rounded-full">
+                                    PKR{minPrice} - PKR{maxPrice}
+                                    <button onClick={() => { setMinPrice(Math.floor(actualMinPrice)); setMaxPrice(Math.ceil(actualMaxPrice)); }} className="ml-1 hover:text-red-600">×</button>
+                                </span>
+                            )}
+                            {showOnSale && (
+                                <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-100 text-sm rounded-full">
+                                    On Sale
+                                    <button onClick={() => setShowOnSale(false)} className="ml-1 hover:text-red-600">×</button>
+                                </span>
+                            )}
+                            {(selectedProductTypes.length > 0 || selectedCategory !== "all" || minPrice > Math.floor(actualMinPrice) || maxPrice < Math.ceil(actualMaxPrice) || showOnSale) && (
+                                <button 
+                                    onClick={clearAllFilters}
+                                    className="text-sm text-red-600 hover:text-red-800 font-medium underline"
+                                >
+                                    CLEAR ALL
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Products Grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                            {filteredProducts.map((product) => (
+                                <div
+                                    key={product.id}
+                                    className="bg-[#FBF4E8] border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow relative"
+                                >
+                                    {product.isNew && (
+                                        <span className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full z-10">
+                                            NEW
+                                        </span>
+                                    )}
+                                    {product.onSale && (
+                                        <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full z-10">
+                                            SALE
+                                        </span>
+                                    )}
+                                    <div className="relative aspect-square">
+                                        <img
+                                            src={product.image}
+                                            alt={product.name}
+                                            className="w-full h-full object-contain cursor-pointer"
+                                            onClick={() => openProductModal(product, "giftItem")}
+                                        />
+                                        {/* Wishlist Icon */}
+                                        {/* <button className="absolute top-2 right-2 bg-white rounded-full p-2 hover:bg-gray-100 z-10">
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                        </button> */}
+                                    </div>
+                                    <div className="p-3 sm:p-4">
+                                        <h3 className="font-semibold text-sm sm:text-base mb-1 truncate">
+                                            {product.name}
+                                        </h3>
+                                        <div className="flex items-center gap-2 mb-3">
+                                            {product.onSale && product.originalPrice ? (
+                                                <>
+                                                    <p className="text-gray-600 font-bold">PKR {product.price.toFixed(2)}</p>
+                                                    <p className="text-gray-400 line-through text-sm">PKR {product.originalPrice.toFixed(2)}</p>
+                                                    <span className="text-green-600 text-xs font-semibold">
+                                                        -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                <p className="text-gray-600 font-bold">PKR {product.price.toFixed(2)}</p>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => openProductModal(product, "giftItem")}
+                                                className="flex-1 bg-white text-black border border-black cursor-pointer py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-xs sm:text-sm"
+                                            >
+                                                QUICK VIEW
+                                            </button>
+                                            <button
+                                                onClick={() => addToBox(product)}
+                                                className="flex-1 bg-black text-white cursor-pointer py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-xs sm:text-sm"
+                                            >
+                                                ADD TO CART
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {filteredProducts.length === 0 && (
+                            <div className="text-center py-12">
+                                <p className="text-gray-500 text-lg">No products found matching your filters.</p>
+                                <button 
+                                    onClick={clearAllFilters}
+                                    className="mt-4 px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+                                >
+                                    Clear All Filters
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
             );
