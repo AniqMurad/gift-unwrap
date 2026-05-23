@@ -27,6 +27,7 @@
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(10000);
     const [showOnSale, setShowOnSale] = useState(false);
+    const [gridColumns, setGridColumns] = useState(3); // 2, 3, or 4 columns
     const [paymentMethod, setPaymentMethod] = useState("cod");
     const [cardName, setCardName] = useState("");
     const [cardNumber, setCardNumber] = useState("");
@@ -543,8 +544,17 @@
                         <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
                             <div className="flex items-center gap-4">
                                 {/* View Toggle Icons */}
-                                {/* <div className="flex gap-2">
-                                    <button className="p-2 border border-gray-300 rounded hover:bg-gray-100">
+                                <div className="flex gap-2">
+                                    {/* 2 Columns View */}
+                                    <button 
+                                        onClick={() => setGridColumns(2)}
+                                        className={`p-2 border rounded transition-colors ${
+                                            gridColumns === 2 
+                                                ? 'border-black bg-black text-white' 
+                                                : 'border-gray-300 hover:bg-gray-100'
+                                        }`}
+                                        title="2 columns"
+                                    >
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                             <rect x="3" y="3" width="6" height="6"/>
                                             <rect x="11" y="3" width="6" height="6"/>
@@ -552,25 +562,54 @@
                                             <rect x="11" y="11" width="6" height="6"/>
                                         </svg>
                                     </button>
-                                    <button className="p-2 border border-gray-300 rounded hover:bg-gray-100">
+                                    {/* 3 Columns View */}
+                                    <button 
+                                        onClick={() => setGridColumns(3)}
+                                        className={`p-2 border rounded transition-colors ${
+                                            gridColumns === 3 
+                                                ? 'border-black bg-black text-white' 
+                                                : 'border-gray-300 hover:bg-gray-100'
+                                        }`}
+                                        title="3 columns"
+                                    >
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <rect x="3" y="3" width="14" height="2"/>
-                                            <rect x="3" y="7" width="14" height="2"/>
-                                            <rect x="3" y="11" width="14" height="2"/>
-                                            <rect x="3" y="15" width="14" height="2"/>
+                                            <rect x="2" y="3" width="4" height="4"/>
+                                            <rect x="8" y="3" width="4" height="4"/>
+                                            <rect x="14" y="3" width="4" height="4"/>
+                                            <rect x="2" y="9" width="4" height="4"/>
+                                            <rect x="8" y="9" width="4" height="4"/>
+                                            <rect x="14" y="9" width="4" height="4"/>
+                                            <rect x="2" y="15" width="4" height="4"/>
+                                            <rect x="8" y="15" width="4" height="4"/>
+                                            <rect x="14" y="15" width="4" height="4"/>
                                         </svg>
                                     </button>
-                                    <button className="p-2 border border-gray-300 rounded hover:bg-gray-100">
+                                    {/* 4 Columns View */}
+                                    <button 
+                                        onClick={() => setGridColumns(4)}
+                                        className={`p-2 border rounded transition-colors ${
+                                            gridColumns === 4 
+                                                ? 'border-black bg-black text-white' 
+                                                : 'border-gray-300 hover:bg-gray-100'
+                                        }`}
+                                        title="4 columns"
+                                    >
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <rect x="3" y="3" width="4" height="4"/>
-                                            <rect x="9" y="3" width="4" height="4"/>
-                                            <rect x="15" y="3" width="4" height="4"/>
-                                            <rect x="3" y="9" width="4" height="4"/>
-                                            <rect x="9" y="9" width="4" height="4"/>
-                                            <rect x="15" y="9" width="4" height="4"/>
+                                            <rect x="2" y="3" width="3" height="3"/>
+                                            <rect x="7" y="3" width="3" height="3"/>
+                                            <rect x="12" y="3" width="3" height="3"/>
+                                            <rect x="17" y="3" width="1" height="3"/>
+                                            <rect x="2" y="8" width="3" height="3"/>
+                                            <rect x="7" y="8" width="3" height="3"/>
+                                            <rect x="12" y="8" width="3" height="3"/>
+                                            <rect x="17" y="8" width="1" height="3"/>
+                                            <rect x="2" y="13" width="3" height="3"/>
+                                            <rect x="7" y="13" width="3" height="3"/>
+                                            <rect x="12" y="13" width="3" height="3"/>
+                                            <rect x="17" y="13" width="1" height="3"/>
                                         </svg>
                                     </button>
-                                </div> */}
+                                </div>
                                 
                                 {/* Show only on sale checkbox (mobile) */}
                                 {/* <label className="flex items-center cursor-pointer text-sm lg:hidden">
@@ -638,7 +677,13 @@
                         </div>
 
                         {/* Products Grid */}
-                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                        <div className={`grid gap-3 sm:gap-4 ${
+                            gridColumns === 2 
+                                ? 'grid-cols-2' 
+                                : gridColumns === 3 
+                                ? 'grid-cols-2 lg:grid-cols-3' 
+                                : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
+                        }`}>
                             {filteredProducts.map((product) => (
                                 <div
                                     key={product.id}
