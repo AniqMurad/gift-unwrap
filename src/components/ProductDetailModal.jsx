@@ -9,9 +9,22 @@ const ProductDetailModal = ({
   onSelect,
   onAddItem,
   quantity = 1,
-  setQuantity
+  setQuantity,
+  selectedColor,
+  onColorChange,
 }) => {
-  const [selectedImage, setSelectedImage] = useState(item?.image || item?.images?.[0] || "");
+  const defaultImage = item?.image || item?.images?.[0] || "";
+  const colorVariantImage = selectedColor && item?.colorVariants?.find(v => v.color === selectedColor)?.image;
+  const [selectedImage, setSelectedImage] = useState(colorVariantImage || defaultImage);
+
+  // Sync selectedImage when selectedColor changes externally
+  React.useEffect(() => {
+    if (colorVariantImage) {
+      setSelectedImage(colorVariantImage);
+    } else if (defaultImage) {
+      setSelectedImage(defaultImage);
+    }
+  }, [selectedColor, item]);
 
   if (!isOpen || !item) return null;
 
@@ -162,6 +175,47 @@ const ProductDetailModal = ({
                   </div>
                 )}
               </div>
+
+              {/* Color Variants */}
+              {itemType === "giftItem" && item.colorVariants?.length > 0 && (
+                <div className="border-b pb-4">
+                  <p className="font-semibold text-gray-700 mb-2 text-sm">
+                    Color: <span className="font-normal text-gray-500">{selectedColor || "Default"}</span>
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                    {/* Default swatch */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onColorChange) onColorChange(null);
+                        setSelectedImage(item.image);
+                      }}
+                      className={`w-9 h-9 rounded-full border-2 overflow-hidden ${
+                        !selectedColor ? "border-black ring-2 ring-black ring-offset-1" : "border-gray-300 hover:border-gray-500"
+                      }`}
+                      title="Default"
+                    >
+                      <img src={item.image} alt="default" className="w-full h-full object-cover" />
+                    </button>
+                    {item.colorVariants.map((v) => (
+                      <button
+                        key={v.color}
+                        type="button"
+                        onClick={() => {
+                          if (onColorChange) onColorChange(v.color);
+                          setSelectedImage(v.image);
+                        }}
+                        className={`w-9 h-9 rounded-full border-2 overflow-hidden ${
+                          selectedColor === v.color ? "border-black ring-2 ring-black ring-offset-1" : "border-gray-300 hover:border-gray-500"
+                        }`}
+                        title={v.color}
+                      >
+                        <img src={v.image} alt={v.color} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Quantity Selector (only for gift items) */}
               {itemType === "giftItem" && setQuantity && (
