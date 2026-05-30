@@ -40,6 +40,10 @@
         itemType: null,
     });
     const [modalQuantity, setModalQuantity] = useState(1);
+    // selectedColors: { [productId]: colorLabel | null } — tracks chosen color per card
+    const [selectedColors, setSelectedColors] = useState({});
+    // color chosen inside the quick-view modal
+    const [modalSelectedColor, setModalSelectedColor] = useState(null);
     const [notification, setNotification] = useState({
         show: false,
         type: "success",
@@ -178,37 +182,49 @@
         { id: 4, name: "SHIPPING", label: "Shipping" }
     ];
 
-    const addToBox = (product, quantity = 1) => {
+    // Get the image to display on a card based on selected color
+    const getDisplayImage = (product) => {
+        const color = selectedColors[product.id];
+        if (color && product.colorVariants?.length > 0) {
+            const variant = product.colorVariants.find(v => v.color === color);
+            if (variant) return variant.image;
+        }
+        return product.image;
+    };
+
+    const addToBox = (product, quantity = 1, chosenColor = null) => {
+        const colorVariant = chosenColor && product.colorVariants?.find(v => v.color === chosenColor);
+        const displayImage = colorVariant ? colorVariant.image : product.image;
+        // Each (product + color) combo is a separate cart entry
+        const cartKey = chosenColor ? `${product.id}_${chosenColor}` : String(product.id);
+
         setGiftBoxItems((prevItems) => {
-            const existingItem = prevItems.find(item => item.id === product.id);
+            const existingItem = prevItems.find(item => item.cartKey === cartKey);
             if (existingItem) {
                 return prevItems.map(item =>
-                    item.id === product.id
+                    item.cartKey === cartKey
                         ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
             }
-            return [...prevItems, { ...product, quantity: quantity }];
+            return [...prevItems, { ...product, cartKey, selectedColor: chosenColor, image: displayImage, quantity }];
         });
         
-        // Auto-open drawer to show the impact
         setIsDrawerOpen(true);
-        
-        // Show success notification
-        showNotification("success", `${product.name} added to your gift box!`);
+        showNotification("success", `${product.name}${chosenColor ? ` (${chosenColor})` : ''} added to your gift box!`);
     };
 
-    const removeFromBox = (productId) => {
-        setGiftBoxItems((prevItems) => prevItems.filter(item => item.id !== productId));
+    const removeFromBox = (cartKey) => {
+        setGiftBoxItems((prevItems) => prevItems.filter(item => item.cartKey !== cartKey));
     };
 
-    const updateBoxQuantity = (productId, newQuantity) => {
+    const updateBoxQuantity = (cartKey, newQuantity) => {
         if (newQuantity <= 0) {
-            removeFromBox(productId);
+            removeFromBox(cartKey);
         } else {
             setGiftBoxItems((prevItems) =>
                 prevItems.map(item =>
-                    item.id === productId ? { ...item, quantity: newQuantity } : item
+                    item.cartKey === cartKey ? { ...item, quantity: newQuantity } : item
                 )
             );
         }
@@ -262,6 +278,8 @@
             itemType: itemType,
         });
         setModalQuantity(1);
+        // Pre-select color already chosen on the card (if any)
+        setModalSelectedColor(itemType === 'giftItem' ? (selectedColors[item.id] || null) : null);
     };
 
     const closeProductModal = () => {
@@ -271,6 +289,7 @@
             itemType: null,
         });
         setModalQuantity(1);
+        setModalSelectedColor(null);
     };
 
     const handleSelectFromModal = () => {
@@ -294,7 +313,11 @@
 
     const handleAddItemFromModal = () => {
         if (productModal.item && modalQuantity > 0) {
-            addToBox(productModal.item, modalQuantity);
+            addToBox(productModal.item, modalQuantity, modalSelectedColor);
+            // Sync the card-level color selection with what was chosen in the modal
+            if (modalSelectedColor !== undefined) {
+                setSelectedColors(prev => ({ ...prev, [productModal.item.id]: modalSelectedColor }));
+            }
             closeProductModal();
         }
     };
@@ -376,6 +399,7 @@
                 price: item.price,
                 image: item.image,
                 category: item.category,
+                selectedColor: item.selectedColor || null,
             })),
         };
 
@@ -401,6 +425,7 @@
                             price: item.price,
                             image: item.image,
                             category: item.category,
+                            selectedColor: item.selectedColor || null,
                         })),
                         ...(selectedBox ? [{ id: 'box', name: selectedBox.name, quantity: 1, price: selectedBox.price, image: selectedBox.image }] : []),
                         ...(selectedCard ? [{ id: 'card', name: selectedCard.name, quantity: 1, price: 0, image: selectedCard.image }] : []),
@@ -701,23 +726,17 @@
                                     )}
                                     <div className="relative aspect-square">
                                         <img
-                                            src={product.image}
+                                            src={getDisplayImage(product)}
                                             alt={product.name}
                                             className="w-full h-full object-contain cursor-pointer"
                                             onClick={() => openProductModal(product, "giftItem")}
                                         />
-                                        {/* Wishlist Icon */}
-                                        {/* <button className="absolute top-2 right-2 bg-white rounded-full p-2 hover:bg-gray-100 z-10">
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                            </svg>
-                                        </button> */}
                                     </div>
                                     <div className="p-3 sm:p-4">
                                         <h3 className="font-semibold text-sm sm:text-base mb-1 truncate">
                                             {product.name}
                                         </h3>
-                                        <div className="flex items-center gap-2 mb-3">
+                                        <div className="flex items-center gap-2 mb-2">
                                             {product.onSale && product.originalPrice ? (
                                                 <>
                                                     <p className="text-gray-600 font-bold">PKR {product.price.toFixed(2)}</p>
@@ -730,6 +749,37 @@
                                                 <p className="text-gray-600 font-bold">PKR {product.price.toFixed(2)}</p>
                                             )}
                                         </div>
+
+                                        {/* Color swatches */}
+                                        {product.colorVariants?.length > 0 && (
+                                            <div className="flex gap-1.5 flex-wrap mb-2">
+                                                {/* Default swatch */}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setSelectedColors(prev => ({ ...prev, [product.id]: null }))}
+                                                    title="Default"
+                                                    className={`w-6 h-6 rounded-full border-2 overflow-hidden flex-shrink-0 ${
+                                                        !selectedColors[product.id] ? 'border-black ring-1 ring-black ring-offset-1' : 'border-gray-300'
+                                                    }`}
+                                                >
+                                                    <img src={product.image} alt="default" className="w-full h-full object-cover" />
+                                                </button>
+                                                {product.colorVariants.map(v => (
+                                                    <button
+                                                        key={v.color}
+                                                        type="button"
+                                                        onClick={() => setSelectedColors(prev => ({ ...prev, [product.id]: v.color }))}
+                                                        title={v.color}
+                                                        className={`w-6 h-6 rounded-full border-2 overflow-hidden flex-shrink-0 ${
+                                                            selectedColors[product.id] === v.color ? 'border-black ring-1 ring-black ring-offset-1' : 'border-gray-300'
+                                                        }`}
+                                                    >
+                                                        <img src={v.image} alt={v.color} className="w-full h-full object-cover" />
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => openProductModal(product, "giftItem")}
@@ -738,7 +788,7 @@
                                                 QUICK VIEW
                                             </button>
                                             <button
-                                                onClick={() => addToBox(product)}
+                                                onClick={() => addToBox(product, 1, selectedColors[product.id] || null)}
                                                 className="flex-1 bg-black text-white cursor-pointer py-2 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-xs sm:text-sm"
                                             >
                                                 ADD TO CART
@@ -1423,7 +1473,7 @@
                                 <h4 className="font-semibold text-xs text-gray-600 mt-4">Gift Items:</h4>
                             )}
                             {giftBoxItems.map((item) => (
-                                <div key={item.id} className="flex gap-3 border-b pb-4">
+                                <div key={item.cartKey} className="flex gap-3 border-b pb-4">
                                     <img
                                         src={item.image}
                                         alt={item.name}
@@ -1431,12 +1481,17 @@
                                         onClick={() => openImagePreview(item.image, item.name)}
                                     />
                                     <div className="flex-1">
-                                        <h4 className="font-semibold text-sm mb-1">{item.name}</h4>
+                                        <h4 className="font-semibold text-sm mb-0.5">{item.name}</h4>
+                                        {item.selectedColor && (
+                                            <p className="text-xs text-gray-500 mb-0.5">
+                                                Color: <span className="font-medium text-gray-700">{item.selectedColor}</span>
+                                            </p>
+                                        )}
                                         <p className="text-gray-600 text-sm mb-2">PKR {item.price.toFixed(2)}</p>
                                         <div className="flex items-center gap-2">
                                             <select
                                                 value={item.quantity}
-                                                onChange={(e) => updateBoxQuantity(item.id, parseInt(e.target.value))}
+                                                onChange={(e) => updateBoxQuantity(item.cartKey, parseInt(e.target.value))}
                                                 className="border rounded px-2 py-1 text-sm"
                                             >
                                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
@@ -1444,7 +1499,7 @@
                                                 ))}
                                             </select>
                                             <button
-                                                onClick={() => removeFromBox(item.id)}
+                                                onClick={() => removeFromBox(item.cartKey)}
                                                 className="text-red-600 hover:text-red-800 text-sm"
                                             >
                                                 🗑️
@@ -1480,6 +1535,8 @@
             onAddItem={handleAddItemFromModal}
             quantity={modalQuantity}
             setQuantity={setModalQuantity}
+            selectedColor={modalSelectedColor}
+            onColorChange={setModalSelectedColor}
         />
 
         <Footer />
