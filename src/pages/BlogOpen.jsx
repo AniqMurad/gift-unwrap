@@ -66,6 +66,38 @@ const BlogOpen = () => {
   // Split content into paragraphs
   const contentParagraphs = blog.content ? blog.content.split('\n').filter(p => p.trim()) : [];
 
+  // Parse [text](url) markdown links within a paragraph string
+  const parseParagraphLinks = (text) => {
+    const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      parts.push(
+        <a
+          key={match.index}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline hover:text-blue-800"
+        >
+          {match[1]}
+        </a>
+      );
+      lastIndex = match.index + match[0].length;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
   return (
     <div>
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
@@ -116,7 +148,7 @@ const BlogOpen = () => {
                 <div className="mt-8">
                   {contentParagraphs.map((para, index) => (
                     <p key={index} className="mt-6 text-[#1F1F1F] text-[18px] leading-relaxed">
-                      {para}
+                      {parseParagraphLinks(para)}
                     </p>
                   ))}
                 </div>
