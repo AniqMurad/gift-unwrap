@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import SearchPageNavbar from '../components/SearchPageNavbar';
 import { BlogLine, InvertedComas } from '../components/icons';
 import avatar from '../assets/Avatar.png';
@@ -63,11 +64,155 @@ const BlogOpen = () => {
   const prevBlog = allBlogs[(currentIndex - 1 + allBlogs.length) % allBlogs.length];
   const nextBlog = allBlogs[(currentIndex + 1) % allBlogs.length];
 
-  // Split content into paragraphs
-  const contentParagraphs = blog.content ? blog.content.split('\n').filter(p => p.trim()) : [];
+  // Generate meta tags with fallback to auto-generated values
+  const generateMetaTitle = (blogPost) => {
+    if (blogPost.metaTitle) {
+      return blogPost.metaTitle;
+    }
+    return `${blogPost.title} | Gift Unwrap Blog`;
+  };
+
+  const generateMetaDescription = (blogPost) => {
+    if (blogPost.metaDescription) {
+      return blogPost.metaDescription;
+    }
+    return blogPost.subHeading || '';
+  };
+
+  // Parse [text](url) markdown links within a paragraph string
+  const parseParagraphLinks = (text) => {
+    const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
+    const parts = [];
+    let lastIndex = 0;
+    let match;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      parts.push(
+        <a
+          key={match.index}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline hover:text-blue-800"
+        >
+          {match[1]}
+        </a>
+      );
+      lastIndex = match.index + match[0].length;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
+  // Parse blog content into headings, lists and paragraphs.
+  // Supported per-line syntax: "## " (heading), "### " (sub-heading),
+  // "- "/"* " (bullet item), "1. " (numbered item) — everything else is a paragraph.
+  const renderBlogContent = (content) => {
+    if (!content) return null;
+
+    const blocks = [];
+    let currentList = null;
+
+    const flushList = () => {
+      if (currentList) {
+        blocks.push(currentList);
+        currentList = null;
+      }
+    };
+
+    content.split('\n').forEach((rawLine) => {
+      const line = rawLine.trim();
+      if (!line) {
+        flushList();
+        return;
+      }
+
+      const h2Match = line.match(/^##\s+(.+)/);
+      const h3Match = line.match(/^###\s+(.+)/);
+      const bulletMatch = line.match(/^[-*]\s+(.+)/);
+      const numberMatch = line.match(/^\d+\.\s+(.+)/);
+
+      if (h2Match) {
+        flushList();
+        blocks.push({ type: 'h2', text: h2Match[1] });
+      } else if (h3Match) {
+        flushList();
+        blocks.push({ type: 'h3', text: h3Match[1] });
+      } else if (bulletMatch) {
+        if (!currentList || currentList.type !== 'ul') {
+          flushList();
+          currentList = { type: 'ul', items: [] };
+        }
+        currentList.items.push(bulletMatch[1]);
+      } else if (numberMatch) {
+        if (!currentList || currentList.type !== 'ol') {
+          flushList();
+          currentList = { type: 'ol', items: [] };
+        }
+        currentList.items.push(numberMatch[1]);
+      } else {
+        flushList();
+        blocks.push({ type: 'paragraph', text: line });
+      }
+    });
+    flushList();
+
+    return blocks.map((block, index) => {
+      if (block.type === 'h2') {
+        return (
+          <h2 key={index} className="text-[26px] font-bold text-[#1F1F1F] mt-10 mb-2">
+            {parseParagraphLinks(block.text)}
+          </h2>
+        );
+      }
+      if (block.type === 'h3') {
+        return (
+          <h3 key={index} className="text-[21px] font-semibold text-[#1F1F1F] mt-8 mb-2">
+            {parseParagraphLinks(block.text)}
+          </h3>
+        );
+      }
+      if (block.type === 'ul') {
+        return (
+          <ul key={index} className="list-disc pl-6 mt-3 space-y-2 text-[#1F1F1F] text-[18px] leading-relaxed">
+            {block.items.map((item, i) => (
+              <li key={i}>{parseParagraphLinks(item)}</li>
+            ))}
+          </ul>
+        );
+      }
+      if (block.type === 'ol') {
+        return (
+          <ol key={index} className="list-decimal pl-6 mt-3 space-y-2 text-[#1F1F1F] text-[18px] leading-relaxed">
+            {block.items.map((item, i) => (
+              <li key={i}>{parseParagraphLinks(item)}</li>
+            ))}
+          </ol>
+        );
+      }
+      return (
+        <p key={index} className="mt-4 text-[#1F1F1F] text-[18px] leading-relaxed">
+          {parseParagraphLinks(block.text)}
+        </p>
+      );
+    });
+  };
 
   return (
     <div>
+      <Helmet>
+        <title>{generateMetaTitle(blog)}</title>
+        <meta name="description" content={generateMetaDescription(blog)} />
+        <meta property="og:title" content={generateMetaTitle(blog)} />
+        <meta property="og:description" content={generateMetaDescription(blog)} />
+      </Helmet>
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
@@ -111,14 +256,10 @@ const BlogOpen = () => {
             {/* Dynamic Blog Content Sections */}
             <div className='mt-10'>
 
-              {/* Blog content paragraphs */}
-              {contentParagraphs.length > 0 && (
+              {/* Blog content */}
+              {blog.content && (
                 <div className="mt-8">
-                  {contentParagraphs.map((para, index) => (
-                    <p key={index} className="mt-6 text-[#1F1F1F] text-[18px] leading-relaxed">
-                      {para}
-                    </p>
-                  ))}
+                  {renderBlogContent(blog.content)}
                 </div>
               )}
 
@@ -170,7 +311,7 @@ const BlogOpen = () => {
         </div>
 
         {/* news insight */}
-        <div className="mt-20">
+        {/* <div className="mt-20">
           <h1 className="text-3xl font-bold text-center">News Insight</h1>
           <div className="flex flex-col lg:flex-row mt-10 justify-center gap-5 items-center">
             {allBlogs
@@ -192,7 +333,7 @@ const BlogOpen = () => {
                 </Link>
               ))}
           </div>
-        </div>
+        </div> */}
 
       </div>
 
