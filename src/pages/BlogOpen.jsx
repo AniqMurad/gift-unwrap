@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import SearchPageNavbar from '../components/SearchPageNavbar';
 import { BlogLine, InvertedComas } from '../components/icons';
@@ -8,12 +8,14 @@ import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { Link } from 'react-router-dom';
 import { fetchBlogById, fetchBlogs } from '../config/api';
+import TableOfContents from '../components/TableOfContents';
 
 const BlogOpen = () => {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const loadBlogData = async () => {
@@ -79,28 +81,32 @@ const BlogOpen = () => {
     return blogPost.subHeading || '';
   };
 
-  // Parse [text](url) markdown links within a paragraph string
+  // Parse [text](url) markdown links and **bold** text within a paragraph string
   const parseParagraphLinks = (text) => {
-    const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g;
+    const inlineRegex = /\[([^\]]+)\]\((https?:\/\/[^)]+)\)|\*\*([^*]+)\*\*/g;
     const parts = [];
     let lastIndex = 0;
     let match;
 
-    while ((match = linkRegex.exec(text)) !== null) {
+    while ((match = inlineRegex.exec(text)) !== null) {
       if (match.index > lastIndex) {
         parts.push(text.substring(lastIndex, match.index));
       }
-      parts.push(
-        <a
-          key={match.index}
-          href={match[2]}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline hover:text-blue-800"
-        >
-          {match[1]}
-        </a>
-      );
+      if (match[3] !== undefined) {
+        parts.push(<strong key={match.index}>{match[3]}</strong>);
+      } else {
+        parts.push(
+          <a
+            key={match.index}
+            href={match[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline hover:text-blue-800"
+          >
+            {match[1]}
+          </a>
+        );
+      }
       lastIndex = match.index + match[0].length;
     }
 
@@ -130,7 +136,6 @@ const BlogOpen = () => {
     content.split('\n').forEach((rawLine) => {
       const line = rawLine.trim();
       if (!line) {
-        flushList();
         return;
       }
 
@@ -167,21 +172,21 @@ const BlogOpen = () => {
     return blocks.map((block, index) => {
       if (block.type === 'h2') {
         return (
-          <h2 key={index} className="text-[26px] font-bold text-[#1F1F1F] mt-10 mb-2">
+          <h2 key={index} className="text-[20px] font-bold text-[#1F1F1F] mt-6 mb-2">
             {parseParagraphLinks(block.text)}
           </h2>
         );
       }
       if (block.type === 'h3') {
         return (
-          <h3 key={index} className="text-[21px] font-semibold text-[#1F1F1F] mt-8 mb-2">
+          <h3 key={index} className="text-[17px] font-semibold text-[#1F1F1F] mt-5 mb-2">
             {parseParagraphLinks(block.text)}
           </h3>
         );
       }
       if (block.type === 'ul') {
         return (
-          <ul key={index} className="list-disc pl-6 mt-3 space-y-2 text-[#1F1F1F] text-[18px] leading-relaxed">
+          <ul key={index} className="list-disc pl-6 mt-2 space-y-1 text-[#1F1F1F] text-[15px] leading-snug">
             {block.items.map((item, i) => (
               <li key={i}>{parseParagraphLinks(item)}</li>
             ))}
@@ -190,7 +195,7 @@ const BlogOpen = () => {
       }
       if (block.type === 'ol') {
         return (
-          <ol key={index} className="list-decimal pl-6 mt-3 space-y-2 text-[#1F1F1F] text-[18px] leading-relaxed">
+          <ol key={index} className="list-decimal pl-6 mt-2 space-y-1 text-[#1F1F1F] text-[15px] leading-snug">
             {block.items.map((item, i) => (
               <li key={i}>{parseParagraphLinks(item)}</li>
             ))}
@@ -198,7 +203,7 @@ const BlogOpen = () => {
         );
       }
       return (
-        <p key={index} className="mt-4 text-[#1F1F1F] text-[18px] leading-relaxed">
+        <p key={index} className="mt-3 text-[#1F1F1F] text-[15px] leading-snug">
           {parseParagraphLinks(block.text)}
         </p>
       );
@@ -216,24 +221,23 @@ const BlogOpen = () => {
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-      <div className='px-16 py-4 mt-10 mb-10'>
-        {/* Adjusted to full width as sidebar is removed */}
-        <div className='flex justify-center'> {/* Use justify-center to center the content */}
+      <div className='px-6 md:px-10 lg:px-12 py-4 mt-2 mb-10'>
+        <div className='flex justify-center gap-10 lg:gap-14 max-w-[1100px] mx-auto'>
 
-          {/* content - Now takes full available width */}
-          <div className='w-[1100px]'> {/* Adjust width as needed */}
+          {/* content - comfortable reading width, leaves room for the TOC sidebar */}
+          <div className='w-full max-w-[760px]'>
 
             {/* heading */}
-            <div className="mt-10">
+            <div className="mt-2">
               <div>
                 <span className="bg-[#D2EF9A] text-black px-3 py-1 rounded-full text-[14px] font-semibold uppercase">
                   {blog.category}
                 </span>
-                <h1 className="text-[36px] font-bold mt-2">
+                <h1 className="text-[26px] font-bold mt-2 leading-snug">
                   {blog.title}
                 </h1>
                 {blog.subHeading && (
-                  <h2 className="text-[24px] text-gray-700 mt-2">
+                  <h2 className="text-[17px] text-gray-700 mt-2 leading-snug">
                     {blog.subHeading}
                   </h2>
                 )}
@@ -249,7 +253,7 @@ const BlogOpen = () => {
               <img
                 src={blog.mainImage}
                 alt={blog.title}
-                className="w-full rounded-lg h-[640px] object-cover"
+                className="w-full rounded-lg h-[320px] object-cover"
               />
             </div>
 
@@ -258,7 +262,7 @@ const BlogOpen = () => {
 
               {/* Blog content */}
               {blog.content && (
-                <div className="mt-8">
+                <div className="mt-8" ref={contentRef}>
                   {renderBlogContent(blog.content)}
                 </div>
               )}
@@ -307,6 +311,8 @@ const BlogOpen = () => {
             )}
 
           </div>
+
+          <TableOfContents containerRef={contentRef} watch={blog.content} />
 
         </div>
 
