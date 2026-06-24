@@ -15,3 +15,9 @@ export const findProductBySlug = (products, slug) => {
   if (!products || !Array.isArray(products)) return null;
   return products.find((product) => generateSlug(product.name) === slug);
 };
+
+// Utility to find a blog post by slug
+export const findBlogBySlug = (blogs, slug) => {
+  if (!blogs || !Array.isArray(blogs)) return null;
+  return blogs.find((blog) => generateSlug(blog.title) === slug);
+};

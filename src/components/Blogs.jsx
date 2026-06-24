@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetchBlogs } from '../config/api';
+import { generateSlug } from '../utils/slugify';
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
@@ -37,7 +38,7 @@ const Blogs = () => {
             <h1 className='flex justify-center font-bold text-3xl'>Blogs</h1>
             <div className='flex flex-col sm:flex-row sm:justify-between gap-5 mt-8'>
                 {blogs.map((blog) => (
-                    <Link key={blog.id} to={`/blog/${blog.id}`} className='w-full sm:w-[410px]'>
+                    <Link key={blog.id} to={`/blog/${generateSlug(blog.title)}`} className='w-full sm:w-[410px]'>
                         <div className='cursor-pointer'>
                             <img src={blog.mainImage} className="w-full h-[275px] object-cover rounded-[20px]" alt={blog.title} />
                             <div className="mt-6">

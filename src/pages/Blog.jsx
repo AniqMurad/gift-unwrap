@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { fetchBlogs } from "../config/api";
+import { generateSlug } from "../utils/slugify";
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -60,7 +61,7 @@ const Blog = () => {
             </div>
           ) : (
             blogs.map((blog) => (
-              <Link key={blog.id} to={`/blog/${blog.id}`} className="block mb-10">
+              <Link key={blog.id} to={`/blog/${generateSlug(blog.title)}`} className="block mb-10">
                 <div className="cursor-pointer">
                   <div className="flex flex-col lg:flex-row bg-white overflow-hidden gap-5">
                     {/* Fixed image container */}

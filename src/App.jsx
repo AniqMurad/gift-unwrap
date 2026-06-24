@@ -65,7 +65,7 @@ function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/customer-feedback" element={<CustomerFeedback />} />
             <Route path="/contact-us" element={<ContactUs />} />
-            <Route path="/blog/:id" element={<BlogOpen />} />
+            <Route path="/blog/:slug" element={<BlogOpen />} />
             <Route path="/error" element={<Error />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path="/faqs" element={<FAQs />} />

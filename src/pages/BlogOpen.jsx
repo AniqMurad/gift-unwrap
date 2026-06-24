@@ -7,11 +7,12 @@ import Footer from '../components/Footer';
 import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { Link } from 'react-router-dom';
-import { fetchBlogById, fetchBlogs } from '../config/api';
+import { fetchBlogs } from '../config/api';
 import TableOfContents from '../components/TableOfContents';
+import { generateSlug, findBlogBySlug } from '../utils/slugify';
 
 const BlogOpen = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,12 +22,9 @@ const BlogOpen = () => {
     const loadBlogData = async () => {
       try {
         setLoading(true);
-        const [blogResponse, blogsResponse] = await Promise.all([
-          fetchBlogById(id),
-          fetchBlogs()
-        ]);
-        setBlog(blogResponse.data);
+        const blogsResponse = await fetchBlogs();
         setAllBlogs(blogsResponse.data);
+        setBlog(findBlogBySlug(blogsResponse.data, slug));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching blog:', error);
@@ -35,7 +33,7 @@ const BlogOpen = () => {
     };
 
     loadBlogData();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (
@@ -288,7 +286,7 @@ const BlogOpen = () => {
                 {/* Previous */}
                 <div className="flex-1 text-left">
                   <span className="block text-xs text-[#A0A0A0]">PREVIOUS</span>
-                  <Link to={`/blog/${prevBlog.id}`}>
+                  <Link to={`/blog/${generateSlug(prevBlog.title)}`}>
                     <p className="font-medium text-[#1F1F1F] mt-2 hover:underline line-clamp-1">
                       {prevBlog.title}
                     </p>
@@ -301,7 +299,7 @@ const BlogOpen = () => {
                 {/* Next */}
                 <div className="flex-1 text-right">
                   <span className="block text-xs text-[#A0A0A0]">NEXT</span>
-                  <Link to={`/blog/${nextBlog.id}`}>
+                  <Link to={`/blog/${generateSlug(nextBlog.title)}`}>
                     <p className="font-medium text-[#1F1F1F] mt-2 hover:underline line-clamp-1">
                       {nextBlog.title}
                     </p>

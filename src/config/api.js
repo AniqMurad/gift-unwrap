@@ -9,6 +9,5 @@ const api = axios.create({
 
 // Blog APIs
 export const fetchBlogs = () => api.get('/blogs/admin/all');
-export const fetchBlogById = (blogId) => api.get(`/blogs/${blogId}`);
 
 export default api;
