@@ -84,7 +84,7 @@ const TableOfContents = ({ containerRef, watch, title = 'Table of Contents' }) =
   if (headings.length === 0) return null;
 
   return (
-    <aside className="hidden lg:block w-[260px] shrink-0">
+    <aside className="hidden lg:block w-[360px] shrink-0">
       <div className="sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto pr-1">
         <p className="text-[13px] font-semibold uppercase tracking-wide text-[#A0A0A0] mb-3">
           {title}
