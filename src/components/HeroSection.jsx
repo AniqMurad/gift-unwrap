@@ -107,6 +107,9 @@ const HeroSection = () => {
                     src={slide.image}
                     className="rounded-[24px] shadow-md w-full h-full object-cover"
                     alt={`slide-${index}`}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    decoding={index === 0 ? "sync" : "async"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-[rgba(249,241,240,0.9)] via-[rgba(250,247,241,0.3)] to-transparent rounded-[24px] flex items-center px-4 md:px-10">
                     <div className="text-white max-w-md ml-2 md:ml-6">
@@ -181,6 +184,8 @@ const HeroSection = () => {
               src={img2}
               className="w-[80px] h-[80px] sm:w-[135px] sm:h-[135px] rounded-full object-cover"
               alt="Gift for Him"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>
@@ -207,6 +212,8 @@ const HeroSection = () => {
               src={img3}
               className="w-[80px] h-[80px] sm:w-[135px] sm:h-[135px] rounded-full object-cover"
               alt="Gift for Her"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         </div>

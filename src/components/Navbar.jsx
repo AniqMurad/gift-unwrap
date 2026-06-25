@@ -170,6 +170,7 @@ const Navbar = ({
           src={Logo}
           alt="GiftUnwrap Logo"
           className="w-[200px] md:w-[200px] h-[50px]"
+          decoding="async"
         />
       </div>
 
@@ -293,6 +294,8 @@ const Navbar = ({
                         src={item.image || (item.images && item.images[0])}
                         alt={item.name}
                         className="w-16 h-16 object-cover rounded-md"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="flex-grow">
                         <p
@@ -366,6 +369,8 @@ const Navbar = ({
                         src={item.image || (item.images && item.images[0])}
                         alt={item.name}
                         className="w-16 h-16 object-cover rounded-md"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="flex-grow">
                         <p

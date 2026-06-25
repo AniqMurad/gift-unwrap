@@ -126,7 +126,7 @@ const ProductPage = ({ title, category }) => {
     return (
         <div className='px-4 sm:px-6 lg:px-16 py-4'>
             {/* Add CSS animation for pulse effect */}
-            <style jsx>{`
+            <style>{`
                 @keyframes pulse {
                     0%, 100% {
                         opacity: 1;

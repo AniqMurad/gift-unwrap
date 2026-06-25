@@ -96,6 +96,8 @@ const Product = ({ product, columns }) => {
           <img
             src={product.image || (product.images && product.images[0])}
             alt={product.name}
+            loading="lazy"
+            decoding="async"
             className="w-full h-auto aspect-[3/4] object-cover rounded-[16px] transition-transform duration-300 group-hover:scale-105"
           />
 

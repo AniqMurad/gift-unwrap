@@ -40,7 +40,7 @@ const Blogs = () => {
                 {blogs.map((blog) => (
                     <Link key={blog.id} to={`/blog/${generateSlug(blog.title)}`} className='w-full sm:w-[410px]'>
                         <div className='cursor-pointer'>
-                            <img src={blog.mainImage} className="w-full h-[275px] object-cover rounded-[20px]" alt={blog.title} />
+                            <img src={blog.mainImage} className="w-full h-[275px] object-cover rounded-[20px]" alt={blog.title} loading="lazy" decoding="async" />
                             <div className="mt-6">
                                 <span className="bg-[#D2EF9A] text-[#1F1F1F] text-[14px] font-bold px-3 py-1 rounded-full uppercase">
                                     {blog.category}

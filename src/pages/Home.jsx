@@ -35,6 +35,7 @@ const Home = () => {
         <title>Pakistan's Most Unique Gift Shop | Gift Unwrap</title>
         <meta name="description" content="Discover Pakistan's most unique gift shop at Gift Unwrap Shop creative gifts surprise boxes & fast delivery for birthdays anniversaries & special moments." />
         <meta name="google-site-verification" content="IRKZW1tFIrwJARVCWhBIFZv2A_6bx8GHScL9UMH4dVA" />
+        <link rel="canonical" href="https://www.giftunwrap.com/" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         <script type="application/ld+json">
           {JSON.stringify({
@@ -122,6 +123,20 @@ const Home = () => {
                 }
               }
             ]
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": "https://www.giftunwrap.com/#website",
+            "url": "https://www.giftunwrap.com/",
+            "name": "Gift Unwrap",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://www.giftunwrap.com/SearchOutput?query={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
           })}
         </script>
       </Helmet>

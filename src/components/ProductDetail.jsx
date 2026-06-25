@@ -114,15 +114,18 @@ const ProductDetail = () => {
             ""
         );
         currentProduct = productFromState;
-      } else {
-        try {
-          const response = await axios.get(
-            "https://giftunwrapbackend.vercel.app/api/products"
-          );
-          const categoryData = response.data.find(
-            (item) => item.category === category
-          );
-          
+      }
+
+      let categoryData = null;
+      try {
+        const response = await axios.get(
+          "https://giftunwrapbackend.vercel.app/api/products"
+        );
+        categoryData = response.data.find(
+          (item) => item.category === category
+        );
+
+        if (!currentProduct) {
           if (categoryData && categoryData.products) {
             const foundProduct = findProductBySlug(categoryData.products, productSlug);
             if (foundProduct) {
@@ -138,36 +141,29 @@ const ProductDetail = () => {
               setProduct(null);
             }
           }
-        } catch (err) {
+        }
+      } catch (err) {
+        if (!currentProduct) {
           console.error(
             `Failed to fetch product ${category}/${productSlug}:`,
             err
           );
           setProduct(null);
+        } else {
+          console.error("Failed to fetch related products:", err);
         }
       }
+
       setQuantity(1);
       window.scrollTo(0, 0);
 
-      if (currentProduct) {
-        try {
-          const response = await axios.get(
-            "https://giftunwrapbackend.vercel.app/api/products"
-          );
-          const categoryData = response.data.find(
-            (item) => item.category === category
-          );
-          if (categoryData && categoryData.products) {
-            const filteredRelated = categoryData.products.filter(
-              (p) => p.id !== currentProduct.id
-            );
+      if (currentProduct && categoryData && categoryData.products) {
+        const filteredRelated = categoryData.products.filter(
+          (p) => p.id !== currentProduct.id
+        );
 
-            const shuffled = filteredRelated.sort(() => 0.5 - Math.random());
-            setRelatedProducts(shuffled.slice(0, 4));
-          }
-        } catch (err) {
-          console.error("Failed to fetch related products:", err);
-        }
+        const shuffled = filteredRelated.sort(() => 0.5 - Math.random());
+        setRelatedProducts(shuffled.slice(0, 4));
       }
     };
 
@@ -217,16 +213,27 @@ const ProductDetail = () => {
     }
   };
 
-  console.log(product.reviews);
+  const reviewCount = product.reviews ? product.reviews.length : 0;
+  const averageRating = reviewCount > 0
+    ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount
+    : 0;
+  const canonicalUrl = `${window.location.origin}${location.pathname}`;
+
   return (
     <div>
       <Helmet>
         <title>{generateMetaTitle(product, category)}</title>
         <meta name="description" content={generateMetaDescription(product, category)} />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={generateMetaTitle(product, category)} />
         <meta property="og:description" content={generateMetaDescription(product, category)} />
         <meta property="og:image" content={product.images?.[0] || product.image || ''} />
         <meta property="og:type" content="product" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={generateMetaTitle(product, category)} />
+        <meta name="twitter:description" content={generateMetaDescription(product, category)} />
+        <meta name="twitter:image" content={product.images?.[0] || product.image || ''} />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -249,7 +256,52 @@ const ProductDetail = () => {
                 "@type": "Organization",
                 "name": "Gift Unwrap"
               }
-            }
+            },
+            ...(reviewCount > 0 && {
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": averageRating.toFixed(1),
+                "reviewCount": reviewCount
+              },
+              "review": product.reviews.slice(0, 10).map((review) => ({
+                "@type": "Review",
+                "reviewRating": {
+                  "@type": "Rating",
+                  "ratingValue": review.rating
+                },
+                "author": {
+                  "@type": "Person",
+                  "name": review.username || "Verified Buyer"
+                },
+                "reviewBody": review.comment
+              }))
+            })
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": window.location.origin + "/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": getCategoryDisplayName(category),
+                "item": window.location.origin + getCategoryRoute(category)
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": product.name,
+                "item": canonicalUrl
+              }
+            ]
           })}
         </script>
       </Helmet>
@@ -348,6 +400,9 @@ const ProductDetail = () => {
                 alt={product.name}
                 className="w-full h-full object-contain max-h-[200px] sm:max-h-[300px] lg:max-h-[500px] xl:max-h-[600px] cursor-pointer"
                 onClick={() => setIsFullscreen(true)}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
               />
               {/* Fullscreen Modal */}
               {isFullscreen && (
@@ -409,6 +464,7 @@ const ProductDetail = () => {
                       src={imgSrc}
                       alt={`${product.name} thumbnail ${index + 1}`}
                       className="w-full h-full object-cover"
+                      decoding="async"
                     />
                   </div>
                 ))}

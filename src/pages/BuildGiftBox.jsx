@@ -730,6 +730,8 @@
                                             alt={product.name}
                                             className="w-full h-full object-contain cursor-pointer"
                                             onClick={() => openProductModal(product, "giftItem")}
+                                            loading="lazy"
+                                            decoding="async"
                                         />
                                     </div>
                                     <div className="p-3 sm:p-4">
@@ -762,7 +764,7 @@
                                                         !selectedColors[product.id] ? 'border-black ring-1 ring-black ring-offset-1' : 'border-gray-300'
                                                     }`}
                                                 >
-                                                    <img src={product.image} alt="default" className="w-full h-full object-cover" />
+                                                    <img src={product.image} alt="default" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                                                 </button>
                                                 {product.colorVariants.map(v => (
                                                     <button
@@ -774,7 +776,7 @@
                                                             selectedColors[product.id] === v.color ? 'border-black ring-1 ring-black ring-offset-1' : 'border-gray-300'
                                                         }`}
                                                     >
-                                                        <img src={v.image} alt={v.color} className="w-full h-full object-cover" />
+                                                        <img src={v.image} alt={v.color} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                                                     </button>
                                                 ))}
                                             </div>
@@ -839,6 +841,8 @@
                                         e.stopPropagation();
                                         openProductModal(box, "box");
                                     }}
+                                    loading="lazy"
+                                    decoding="async"
                                 />
                                 {selectedBox?.id === box.id && (
                                     <div className="absolute top-2 right-2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
@@ -890,6 +894,8 @@
                                         e.stopPropagation();
                                         openProductModal(card, "card");
                                     }}
+                                    loading="lazy"
+                                    decoding="async"
                                 />
                                 {selectedCard?.id === card.id && (
                                     <div className="absolute top-2 right-2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
@@ -1427,6 +1433,8 @@
                                         className="w-20 h-20 object-cover rounded cursor-pointer"
                                         onClick={() => openProductModal(selectedBox, "box")}
                                         style={{ backgroundColor: selectedBox.color }}
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                     <div className="flex-1">
                                         <div className="flex items-start justify-between">
@@ -1450,6 +1458,8 @@
                                         className="w-20 h-20 object-cover rounded cursor-pointer"
                                         onClick={() => openProductModal(selectedCard, "card")}
                                         style={{ backgroundColor: selectedCard.color }}
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                     <div className="flex-1">
                                         <div className="flex items-start justify-between">
@@ -1479,6 +1489,8 @@
                                         alt={item.name}
                                         className="w-20 h-20 object-cover rounded cursor-zoom-in"
                                         onClick={() => openImagePreview(item.image, item.name)}
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                     <div className="flex-1">
                                         <h4 className="font-semibold text-sm mb-0.5">{item.name}</h4>

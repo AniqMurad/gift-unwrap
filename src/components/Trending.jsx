@@ -114,7 +114,7 @@ const Trending = () => {
                                 onClick={() => handleItemClick(item.url)}
                             >
                                 <div className="rounded-full overflow-hidden w-[180px] h-[180px] sm:w-[180px] sm:h-[180px] md:w-[220px] md:h-[220px] shadow-md group-hover:shadow-lg transition-shadow duration-200">
-                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                                    <img src={item.image} alt={item.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                 </div>
                                 <div className="flex justify-center mt-3 text-center">
                                     <p className="font-semibold text-base group-hover:text-black transition-colors duration-200">

@@ -1,21 +1,24 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback, useMemo } from "react";
 
 const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
     const [wishlist, setWishlist] = useState([]);
 
-    const toggleWishlist = (product, category) => {
+    const toggleWishlist = useCallback((product, category) => {
         const productIdentifier = `${category}-${product.id}`;
-        if (wishlist.some((item) => item.identifier === productIdentifier)) {
-            setWishlist(wishlist.filter((item) => item.identifier !== productIdentifier));
-        } else {
-            setWishlist([...wishlist, { ...product, identifier: productIdentifier, category }]);
-        }
-    };
+        setWishlist((prevWishlist) => {
+            if (prevWishlist.some((item) => item.identifier === productIdentifier)) {
+                return prevWishlist.filter((item) => item.identifier !== productIdentifier);
+            }
+            return [...prevWishlist, { ...product, identifier: productIdentifier, category }];
+        });
+    }, []);
+
+    const value = useMemo(() => ({ wishlist, toggleWishlist }), [wishlist, toggleWishlist]);
 
     return (
-        <WishlistContext.Provider value={{ wishlist, toggleWishlist }}>
+        <WishlistContext.Provider value={value}>
             {children}
         </WishlistContext.Provider>
     );

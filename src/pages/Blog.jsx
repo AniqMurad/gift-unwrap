@@ -60,7 +60,7 @@ const Blog = () => {
               <p className="text-xl text-gray-600">No blogs available at the moment.</p>
             </div>
           ) : (
-            blogs.map((blog) => (
+            blogs.map((blog, index) => (
               <Link key={blog.id} to={`/blog/${generateSlug(blog.title)}`} className="block mb-10">
                 <div className="cursor-pointer">
                   <div className="flex flex-col lg:flex-row bg-white overflow-hidden gap-5">
@@ -69,6 +69,8 @@ const Blog = () => {
                       <img
                         src={blog.mainImage}
                         alt={blog.title}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        decoding="async"
                         className="w-full h-full object-cover"
                       />
                     </div>

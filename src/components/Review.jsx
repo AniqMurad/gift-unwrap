@@ -38,7 +38,7 @@ const Review = () => {
 
       {/* Image Section */}
       <div className="w-full lg:w-[40%] flex justify-center">
-        <img src={flowers} alt="Flowers" className=" w-full h-full object-contain" />
+        <img src={flowers} alt="Flowers" className=" w-full h-full object-contain" loading="lazy" decoding="async" />
       </div>
     </div>
   );
