@@ -11,7 +11,6 @@ import {
   MastercardIcon,
   PaypalIcon,
 } from "./icons";
-// import { FaFacebookF, FaInstagram, FaWhatsapp } from 'react-icons/fa'; // or use FA package if preferred
 import Logo from "../assets/logofooter.png";
 import { useNavigate } from "react-router-dom";
 import NotificationBar from "./NotificationBar";
@@ -100,7 +99,7 @@ const Footer = () => {
         <div className="flex flex-col lg:flex-row lg:justify-between gap-8">
           <div className="w-full lg:w-[300px] flex flex-col gap-4">
             <div className="text-2xl font-bold mb-3">
-              <img src={Logo} alt="" className="w-[173px] h-[42px]" />
+              <img src={Logo} alt="" className="w-[173px] h-[42px]" decoding="async" />
             </div>
             <p>
               <strong>Mail:</strong> giftunwrap@gmail.com

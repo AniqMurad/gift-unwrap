@@ -12,7 +12,7 @@ const Error = () => {
             <SearchPageNavbar backgroundColor='#FBF4E8' />
             <div className='bg-[#FBF4E8] flex items-center justify-between py-16'>
                 <div className='w-[670px]'>
-                    <img src={error} alt="404 Error" className='max-w-full h-auto' />
+                    <img src={error} alt="404 Error" className='max-w-full h-auto' loading="eager" decoding="async" fetchPriority="high" />
                 </div>
                 <div className='w-[490px] mr-[100px]'>
                     <h1 className='text-[140px] font-bold text-[#1F1F1F]'>404</h1>

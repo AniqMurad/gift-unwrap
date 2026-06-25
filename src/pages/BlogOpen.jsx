@@ -7,11 +7,12 @@ import Footer from '../components/Footer';
 import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { Link } from 'react-router-dom';
-import { fetchBlogById, fetchBlogs } from '../config/api';
+import { fetchBlogs } from '../config/api';
 import TableOfContents from '../components/TableOfContents';
+import { generateSlug, findBlogBySlug } from '../utils/slugify';
 
 const BlogOpen = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,12 +22,9 @@ const BlogOpen = () => {
     const loadBlogData = async () => {
       try {
         setLoading(true);
-        const [blogResponse, blogsResponse] = await Promise.all([
-          fetchBlogById(id),
-          fetchBlogs()
-        ]);
-        setBlog(blogResponse.data);
+        const blogsResponse = await fetchBlogs();
         setAllBlogs(blogsResponse.data);
+        setBlog(findBlogBySlug(blogsResponse.data, slug));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching blog:', error);
@@ -35,7 +33,7 @@ const BlogOpen = () => {
     };
 
     loadBlogData();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (
@@ -215,8 +213,15 @@ const BlogOpen = () => {
       <Helmet>
         <title>{generateMetaTitle(blog)}</title>
         <meta name="description" content={generateMetaDescription(blog)} />
+        <link rel="canonical" href={`${window.location.origin}${window.location.pathname}`} />
         <meta property="og:title" content={generateMetaTitle(blog)} />
         <meta property="og:description" content={generateMetaDescription(blog)} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={blog.mainImage || ''} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={generateMetaTitle(blog)} />
+        <meta name="twitter:description" content={generateMetaDescription(blog)} />
+        <meta name="twitter:image" content={blog.mainImage || ''} />
       </Helmet>
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
@@ -243,7 +248,7 @@ const BlogOpen = () => {
                 )}
               </div>
               <div className='flex items-center gap-2 mt-3'>
-                <img src={avatar} className='h-[40px] w-[40px] rounded-full' alt="Author Avatar" />
+                <img src={avatar} className='h-[40px] w-[40px] rounded-full' alt="Author Avatar" decoding="async" />
                 <p className="text-[#696C70] text-[14px] mt-1">{blog.authorDate}</p>
               </div>
             </div>
@@ -254,6 +259,9 @@ const BlogOpen = () => {
                 src={blog.mainImage}
                 alt={blog.title}
                 className="w-full rounded-lg h-[320px] object-cover"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
               />
             </div>
 
@@ -276,6 +284,8 @@ const BlogOpen = () => {
                       src={img}
                       alt={`Content ${index + 1}`}
                       className="w-full rounded-[32px] object-cover h-[300px]"
+                      loading="lazy"
+                      decoding="async"
                     />
                   ))}
                 </div>
@@ -288,7 +298,7 @@ const BlogOpen = () => {
                 {/* Previous */}
                 <div className="flex-1 text-left">
                   <span className="block text-xs text-[#A0A0A0]">PREVIOUS</span>
-                  <Link to={`/blog/${prevBlog.id}`}>
+                  <Link to={`/blog/${generateSlug(prevBlog.title)}`}>
                     <p className="font-medium text-[#1F1F1F] mt-2 hover:underline line-clamp-1">
                       {prevBlog.title}
                     </p>
@@ -301,7 +311,7 @@ const BlogOpen = () => {
                 {/* Next */}
                 <div className="flex-1 text-right">
                   <span className="block text-xs text-[#A0A0A0]">NEXT</span>
-                  <Link to={`/blog/${nextBlog.id}`}>
+                  <Link to={`/blog/${generateSlug(nextBlog.title)}`}>
                     <p className="font-medium text-[#1F1F1F] mt-2 hover:underline line-clamp-1">
                       {nextBlog.title}
                     </p>

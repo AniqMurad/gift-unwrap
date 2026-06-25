@@ -107,6 +107,8 @@ const ShoppingCart = () => {
                       }
                       alt={item.name}
                       className="w-12 h-15 object-cover rounded-lg bg-gray-300 flex-shrink-0"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="flex-1 min-w-0 px-2">
                       <p className="font-medium text-xs leading-tight break-words">
@@ -158,6 +160,8 @@ const ShoppingCart = () => {
                         }
                         alt={item.name}
                         className="w-20 h-24 lg:w-[100px] lg:h-[130px] object-cover rounded-lg bg-gray-300 flex-shrink-0"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="min-w-0 flex-1">
                         <p className="font-medium text-base leading-tight break-words">

@@ -200,6 +200,8 @@ const OrderHistory = () => {
                                                 src={orderItem?.imageUrl}
                                                 alt={orderItem?.name}
                                                 className="w-20 h-23 rounded object-cover"
+                                                loading="lazy"
+                                                decoding="async"
                                             />
                                             <div>
                                                 <p className='text-[16px]'>Order ID: {order._id}</p>

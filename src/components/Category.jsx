@@ -14,7 +14,7 @@ const Category = ({image, navigateTo, heading }) => {
 
     return (
         <div className="relative rounded-lg overflow-hidden shadow-lg cursor-pointer w-full lg:w-[33%]" onClick={handleClick}>
-            <img src={image} className="w-full h-full object-cover" />
+            <img src={image} alt={heading} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             <div className="absolute inset-0 flex flex-col justify-center px-6 ">
                 <h2 className="text-lg font-semibold text-black">{heading}</h2>
                 <button className="text-sm text-start font-semibold text-black underline cursor-pointer">

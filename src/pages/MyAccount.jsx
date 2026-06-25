@@ -127,7 +127,7 @@ const MyAccount = () => {
                 {/* Sidebar */}
                 <div className="w-full lg:w-[28%] bg-[#F7F7F7] shadow-lg rounded-[20px] px-4 sm:px-6 lg:px-[32px] py-6 sm:py-8 lg:py-[40px]">
                     <div className="flex flex-col items-center text-center">
-                        <img src={avatar} className="w-16 h-16 sm:w-20 sm:h-20 lg:w-[46%] lg:h-[46%] bg-gray-300 rounded-full" alt="User Avatar" />
+                        <img src={avatar} className="w-16 h-16 sm:w-20 sm:h-20 lg:w-[46%] lg:h-[46%] bg-gray-300 rounded-full" alt="User Avatar" loading="lazy" decoding="async" />
                         <h3 className="text-lg sm:text-xl lg:text-[20px] font-semibold mt-3">{userData.firstName} {userData.lastName}</h3>
                         <p className="text-sm sm:text-base lg:text-[20px] text-gray-600 break-all">{userData.email}</p>
                     </div>

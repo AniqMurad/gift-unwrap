@@ -80,6 +80,8 @@ const ProductDetailModal = ({
                   alt={item.name}
                   className="w-full h-full object-contain max-h-[400px]"
                   style={item.color ? { backgroundColor: item.color } : {}}
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -100,6 +102,8 @@ const ProductDetailModal = ({
                         src={imgSrc}
                         alt={`${item.name} thumbnail ${index + 1}`}
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </div>
                   ))}
@@ -195,7 +199,7 @@ const ProductDetailModal = ({
                       }`}
                       title="Default"
                     >
-                      <img src={item.image} alt="default" className="w-full h-full object-cover" />
+                      <img src={item.image} alt="default" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                     </button>
                     {item.colorVariants.map((v) => (
                       <button
@@ -210,7 +214,7 @@ const ProductDetailModal = ({
                         }`}
                         title={v.color}
                       >
-                        <img src={v.image} alt={v.color} className="w-full h-full object-cover" />
+                        <img src={v.image} alt={v.color} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                       </button>
                     ))}
                   </div>

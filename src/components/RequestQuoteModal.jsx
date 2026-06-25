@@ -175,6 +175,8 @@ const RequestQuoteModal = ({ isOpen, onClose, product }) => {
                   }
                   alt={product.name}
                   className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div>
                   <p className="font-semibold text-[#1F1F1F]">{product.name}</p>

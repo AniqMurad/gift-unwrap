@@ -43,6 +43,8 @@ const OrderSummary = ({
                   }
                   alt={item.name}
                   className="w-16 h-20 object-cover rounded-[8px] bg-gray-200"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="flex-1">
                   <p className="font-medium text-[15px] leading-tight">

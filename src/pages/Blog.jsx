@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { fetchBlogs } from "../config/api";
+import { generateSlug } from "../utils/slugify";
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -59,8 +60,8 @@ const Blog = () => {
               <p className="text-xl text-gray-600">No blogs available at the moment.</p>
             </div>
           ) : (
-            blogs.map((blog) => (
-              <Link key={blog.id} to={`/blog/${blog.id}`} className="block mb-10">
+            blogs.map((blog, index) => (
+              <Link key={blog.id} to={`/blog/${generateSlug(blog.title)}`} className="block mb-10">
                 <div className="cursor-pointer">
                   <div className="flex flex-col lg:flex-row bg-white overflow-hidden gap-5">
                     {/* Fixed image container */}
@@ -68,6 +69,8 @@ const Blog = () => {
                       <img
                         src={blog.mainImage}
                         alt={blog.title}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        decoding="async"
                         className="w-full h-full object-cover"
                       />
                     </div>
