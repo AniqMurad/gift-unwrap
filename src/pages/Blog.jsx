@@ -75,16 +75,16 @@ const Blog = () => {
                       <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">
                         {blog.category}
                       </span>
-                      <h2 className="text-3xl font-semibold mt-5 capitalize">
+                      <h2 className="text-lg font-semibold mt-3 leading-snug capitalize">
                         {blog.title}
                       </h2>
-                      <p className="text-[#696C70] text-sm mt-4">
+                      <p className="text-[#696C70] text-xs mt-2">
                         {blog.authorDate}
                       </p>
-                      <p className="text-[#333333] text-[15px] mt-4 leading-relaxed line-clamp-3">
+                      <p className="text-[#333333] text-sm mt-2 leading-snug line-clamp-3">
                         {blog.subHeading}
                       </p>
-                      <span className="text-black font-bold mt-4 inline-block border-b">
+                      <span className="text-black text-sm font-bold mt-2 inline-block border-b">
                         Read More
                       </span>
                     </div>
