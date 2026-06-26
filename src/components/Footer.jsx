@@ -53,6 +53,7 @@ const Footer = () => {
   const goToPrivacy = () => navigate("/privacy-policy");
   const goToRefund = () => navigate("/refund-return-policy");
   const goToTerms = () => navigate("/terms-conditions");
+  const goToBlogs = () => navigate("/blog");
 
   // Email validation function
   const isValidEmail = (email) => {
@@ -133,6 +134,10 @@ const Footer = () => {
                 onClick={goToFaqs}
               >
                 FAQs
+              </p>
+              <p className="cursor-pointer hover:text-black transition-colors"
+                onClick={goToBlogs}>
+                Blogs
               </p>
             </div>
 
