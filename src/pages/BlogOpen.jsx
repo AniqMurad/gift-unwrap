@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import SearchPageNavbar from '../components/SearchPageNavbar';
-import { BlogLine, InvertedComas } from '../components/icons';
+import { BlogLine, InvertedComas, LeftIcon } from '../components/icons';
 import avatar from '../assets/Avatar.png';
+
 import Footer from '../components/Footer';
+import Loader from '../components/Loader';
 import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { Link } from 'react-router-dom';
@@ -40,9 +42,7 @@ const BlogOpen = () => {
       <div>
         <Navbar showSearchInput={false} bgColor="#FBF4E8" />
         <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
-        <div className="flex justify-center items-center h-[400px]">
-          <p className="text-xl">Loading blog...</p>
-        </div>
+        <Loader />
         <Footer />
       </div>
     );
@@ -294,29 +294,43 @@ const BlogOpen = () => {
 
             {/* next prev logic */}
             {allBlogs.length > 1 && (
-              <div className="items-center border-t border-b border-[#E9E9E9] flex justify-between text-sm mt-10 h-[90px]">
+              <div className="border-t border-b border-[#E9E9E9] flex flex-col sm:flex-row text-sm mt-10">
                 {/* Previous */}
-                <div className="flex-1 text-left">
-                  <span className="block text-xs text-[#A0A0A0]">PREVIOUS</span>
-                  <Link to={`/blog/${generateSlug(prevBlog.title)}`}>
-                    <p className="font-medium text-[#1F1F1F] mt-2 hover:underline line-clamp-1">
+                <Link
+                  to={`/blog/${generateSlug(prevBlog.title)}`}
+                  className="group flex-1 flex items-center gap-3 py-5 sm:py-0 sm:h-[90px] px-2 rounded-lg hover:bg-[#FBF4E8] transition-colors duration-200"
+                >
+                  <span className="shrink-0 transition-transform duration-200 group-hover:-translate-x-1">
+                    <LeftIcon />
+                  </span>
+                  <div className="min-w-0">
+                    <span className="block text-xs text-[#A0A0A0]">PREVIOUS</span>
+                    <p className="font-medium text-[#1F1F1F] mt-2 group-hover:underline line-clamp-1">
                       {prevBlog.title}
                     </p>
-                  </Link>
-                </div>
+                  </div>
+                </Link>
 
                 {/* Divider */}
-                <div><BlogLine /></div>
+                <div className="hidden sm:flex items-center justify-center px-2">
+                  <BlogLine />
+                </div>
 
                 {/* Next */}
-                <div className="flex-1 text-right">
-                  <span className="block text-xs text-[#A0A0A0]">NEXT</span>
-                  <Link to={`/blog/${generateSlug(nextBlog.title)}`}>
-                    <p className="font-medium text-[#1F1F1F] mt-2 hover:underline line-clamp-1">
+                <Link
+                  to={`/blog/${generateSlug(nextBlog.title)}`}
+                  className="group flex-1 flex items-center justify-end gap-3 py-5 sm:py-0 sm:h-[90px] px-2 rounded-lg text-right hover:bg-[#FBF4E8] transition-colors duration-200"
+                >
+                  <div className="min-w-0">
+                    <span className="block text-xs text-[#A0A0A0]">NEXT</span>
+                    <p className="font-medium text-[#1F1F1F] mt-2 group-hover:underline line-clamp-1">
                       {nextBlog.title}
                     </p>
-                  </Link>
-                </div>
+                  </div>
+                  <span className="shrink-0 rotate-180 transition-transform duration-200 group-hover:translate-x-1">
+                    <LeftIcon />
+                  </span>
+                </Link>
               </div>
             )}
 
@@ -325,31 +339,6 @@ const BlogOpen = () => {
           <TableOfContents containerRef={contentRef} watch={blog.content} />
 
         </div>
-
-        {/* news insight */}
-        {/* <div className="mt-20">
-          <h1 className="text-3xl font-bold text-center">News Insight</h1>
-          <div className="flex flex-col lg:flex-row mt-10 justify-center gap-5 items-center">
-            {allBlogs
-              .filter(item => item.id !== blog.id) // Exclude current blog
-              .sort(() => Math.random() - 0.5)           // Shuffle remaining blogs
-              .slice(0, 3)                                // Pick 3 blogs
-              .map(item => (
-                <Link to={`/blog/${item.id}`} key={item.id} className="bg-white overflow-hidden mb-6 lg:mb-10 w-full max-w-[400px] lg:w-[400px] hover:scale-105 transition-transform duration-300">
-                  <img
-                    src={item.mainImage}
-                    alt={item.title}
-                    className="w-full h-[270px] rounded-[28px] object-cover"
-                  />
-                  <div className="mt-4 px-2">
-                    <span className="bg-[#D2EF9A] text-black text-xs px-2 py-1 rounded-[48px] uppercase">{item.category}</span>
-                    <h2 className="text-2xl font-semibold mt-2 line-clamp-2">{item.title}</h2>
-                    <p className="text-[#696C70] text-sm mt-4">{item.authorDate}</p>
-                  </div>
-                </Link>
-              ))}
-          </div>
-        </div> */}
 
       </div>
 

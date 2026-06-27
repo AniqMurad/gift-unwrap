@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchPageNavbar from "../components/SearchPageNavbar";
 import { Buttons } from "../components/Buttons";
 import Footer from "../components/Footer";
+import Loader from "../components/Loader";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { fetchBlogs } from "../config/api";
@@ -35,9 +36,7 @@ const Blog = () => {
           titleHome="Home Page"
           backgroundColor="#FBF4E8"
         />
-        <div className="flex justify-center items-center h-[400px]">
-          <p className="text-xl">Loading blogs...</p>
-        </div>
+        <Loader />
         <Footer />
       </div>
     );
