@@ -14,6 +14,7 @@ import {
 } from "../components/icons";
 import Product from "../components/Product";
 import Loader from "../components/Loader";
+import { Buttons } from "../components/Buttons";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -84,6 +85,17 @@ const Forcompanies = () => {
     if (columns === 5 && screenWidth < 1280) setColumns(4);
     if (columns === 4 && screenWidth < 1024) setColumns(3);
   }, [screenWidth, columns]);
+
+  // Show 3 rows worth of products initially; "Load More" reveals 3 more rows at a time
+  const [visibleCount, setVisibleCount] = useState(columns * 3);
+
+  useEffect(() => {
+    setVisibleCount(columns * 3);
+  }, [columns, selectedCategory, minPrice, maxPrice, sortOrder]);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + columns * 3);
+  };
 
   const handleColumnChange = (col) => {
     setColumns(col);
@@ -363,7 +375,7 @@ const Forcompanies = () => {
                 ${columns === 5 ? "lg:grid-cols-5" : ""}
                 `}
             >
-              {giftsForCompanyProducts.map((product) => (
+              {giftsForCompanyProducts.slice(0, visibleCount).map((product) => (
                 <Product
                   key={product.id}
                   product={{ ...product, category: "giftsForCompany" }}
@@ -371,7 +383,13 @@ const Forcompanies = () => {
                 />
               ))}
             </div>
-          ) : (
+          ) : null}
+          {giftsForCompanyProducts.length > visibleCount && (
+            <div className="flex justify-center mt-8 sm:mt-10">
+              <Buttons onClick={handleLoadMore} />
+            </div>
+          )}
+          {giftsForCompanyProducts.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 sm:py-20 lg:py-24">
               <div className="text-center">
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-600 mb-4">

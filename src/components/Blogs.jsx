@@ -3,6 +3,34 @@ import { useState, useEffect } from 'react';
 import { fetchBlogs } from '../config/api';
 import { generateSlug } from '../utils/slugify';
 
+// Skeleton card matching the loaded blog card layout below
+const BlogSkeleton = () => (
+    <div className='w-full sm:w-[410px]'>
+        <div
+            className="w-full h-[275px] rounded-[20px]"
+            style={{ backgroundColor: '#e5e7eb', animation: 'blogPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+        />
+        <div className="mt-6 space-y-3">
+            <div
+                className="h-[26px] w-[120px] rounded-full"
+                style={{ backgroundColor: '#e5e7eb', animation: 'blogPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+            />
+            <div
+                className="h-[20px] w-[90%] rounded"
+                style={{ backgroundColor: '#e5e7eb', animation: 'blogPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+            />
+            <div
+                className="h-[20px] w-[60%] rounded"
+                style={{ backgroundColor: '#e5e7eb', animation: 'blogPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+            />
+            <div
+                className="h-[14px] w-[40%] rounded mt-1"
+                style={{ backgroundColor: '#e5e7eb', animation: 'blogPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
+            />
+        </div>
+    </div>
+);
+
 const Blogs = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -25,9 +53,17 @@ const Blogs = () => {
     if (loading) {
         return (
             <div className='px-4 sm:px-8 lg:px-16 py-12'>
+                <style>{`
+                    @keyframes blogPulse {
+                        0%, 100% { opacity: 1; }
+                        50% { opacity: 0.5; }
+                    }
+                `}</style>
                 <h1 className='flex justify-center font-bold text-3xl'>Blogs</h1>
-                <div className='flex justify-center mt-8'>
-                    <p>Loading blogs...</p>
+                <div className='flex flex-col sm:flex-row sm:justify-between gap-5 mt-8'>
+                    {Array.from({ length: 3 }).map((_, index) => (
+                        <BlogSkeleton key={index} />
+                    ))}
                 </div>
             </div>
         );
