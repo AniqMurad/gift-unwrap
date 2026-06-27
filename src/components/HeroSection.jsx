@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import heroimg1 from "../assets/herosection1.png";
-import heroimg2 from "../assets/herosection2.png";
-import heroimg3 from "../assets/herosection3.png";
-import mothersDayPoster from "../assets/MothersDayPoster.png";
-import img2 from "../assets/herosection2.1.png";
-import img3 from "../assets/herosection2.2.png";
+import heroimg1 from "../assets/herosection1.webp";
+import heroimg2 from "../assets/herosection2.webp";
+import heroimg3 from "../assets/herosection3.webp";
+import mothersDayPoster from "../assets/MothersDayPoster.webp";
+import img2 from "../assets/herosection2.1.webp";
+import img3 from "../assets/herosection2.2.webp";
 import {
   Carousel,
   CarouselContent,
