@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   HeartIcon2,
   HeartIcon3,
@@ -16,7 +16,6 @@ import RequestQuoteModal from "./RequestQuoteModal";
 const Product = ({ product, columns }) => {
   const { wishlist, toggleWishlist } = useWishlist();
   const { addToCart } = useCart();
-  const navigate = useNavigate();
   const [showImagePreview, setShowImagePreview] = useState(false);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
 
@@ -30,17 +29,6 @@ const Product = ({ product, columns }) => {
   const isInWishlist = wishlist.some(
     (item) => item.id === id && item.category === category
   );
-
-  const handleNavigateToDetail = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    console.log("Navigating to:", `/product/${category}/${productSlug}`);
-    if (productSlug && category !== "unknown") {
-      navigate(`/product/${category}/${productSlug}`, {
-        state: { productData: product },
-      });
-    }
-  };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
@@ -88,9 +76,10 @@ const Product = ({ product, columns }) => {
 
   return (
     <>
-      <div
-        className={`${containerWidthClass} group mb-6 cursor-pointer`}
-        onClick={handleNavigateToDetail}
+      <Link
+        to={`/product/${category}/${productSlug}`}
+        state={{ productData: product }}
+        className={`${containerWidthClass} group mb-6 cursor-pointer block`}
       >
         <div className="relative bg-[#FBF4E8] rounded-[24px] overflow-hidden">
           <img
@@ -157,9 +146,11 @@ const Product = ({ product, columns }) => {
           <p className="font-medium text-gray-800 hover:text-black transition-colors truncate text-sm sm:text-base">
             {product.name}
           </p>
-          <div className="flex items-center gap-2 text-xs sm:text-sm mt-1">
-            <span className="font-semibold text-black">PKR {product.price}</span>
-          </div>
+          {!isCorporateGift && (
+            <div className="flex items-center gap-2 text-xs sm:text-sm mt-1">
+              <span className="font-semibold text-black">PKR {product.price}</span>
+            </div>
+          )}
       
       <RequestQuoteModal
         isOpen={showQuoteModal}
@@ -167,7 +158,7 @@ const Product = ({ product, columns }) => {
         product={product}
       />
         </div>
-      </div>
+      </Link>
 
       {ImagePreviewModal}
     </>

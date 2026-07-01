@@ -10,6 +10,7 @@ import Product from "../components/Product";
 import NotificationBar from "../components/NotificationBar";
 import { findProductBySlug } from "../utils/slugify";
 import RequestQuoteModal from "./RequestQuoteModal";
+import Loader from "../components/Loader";
 
 const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState("");
@@ -28,6 +29,7 @@ const ProductDetail = () => {
   });
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const isCorporateGift = category === "giftsForCompany";
 
@@ -165,17 +167,15 @@ const ProductDetail = () => {
         const shuffled = filteredRelated.sort(() => 0.5 - Math.random());
         setRelatedProducts(shuffled.slice(0, 4));
       }
+
+      setLoading(false);
     };
 
     fetchProductAndRelated();
   }, [productSlug, category, navigate, location.state]);
 
-  if (!product) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading product details...
-      </div>
-    );
+  if (loading) {
+    return <Loader />;
   }
 
   const handleIncreaseQuantity = () => {
@@ -478,11 +478,13 @@ const ProductDetail = () => {
               {product.name}
             </h1>
 
-            <div className="flex items-center gap-4">
-              <span className="text-lg sm:text-xl lg:text-2xl font-semibold text-red-500">
-                PKR {product.price ? Math.floor(product.price) : "N/A"}
-              </span>
-            </div>
+            {!isCorporateGift && (
+              <div className="flex items-center gap-4">
+                <span className="text-lg sm:text-xl lg:text-2xl font-semibold text-red-500">
+                  PKR {product.price ? Math.floor(product.price) : "N/A"}
+                </span>
+              </div>
+            )}
 
             <div className="text-[#696C70] border-b border-gray-200 pb-3 sm:pb-4 lg:pb-6 text-sm sm:text-base">
               <p>

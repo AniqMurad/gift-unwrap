@@ -180,9 +180,7 @@ const RequestQuoteModal = ({ isOpen, onClose, product }) => {
                 />
                 <div>
                   <p className="font-semibold text-[#1F1F1F]">{product.name}</p>
-                  <p className="text-sm text-gray-600">
-                    PKR {Math.floor(product.price)}
-                  </p>
+                  <p className="text-sm text-[#696C70]">Corporate pricing · Quote on request</p>
                 </div>
               </div>
             </div>
