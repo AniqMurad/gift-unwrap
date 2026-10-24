@@ -237,11 +237,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-hero { height: 825px; position: relative; width: 100%; }
 .gu-hero-media { height: 1080px; left: max(15.68vw, calc(50% - 659px)); position: absolute; top: -197px; width: 1920px; }
 .gu-hero-video, .gu-hero-poster { height: 100%; max-width: none; object-fit: contain; width: 100%; }
-.gu-hero-video {
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 100%);
+.gu-hero-media {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.15) 5%, rgba(0, 0, 0, 0.5) 13%, rgba(0, 0, 0, 0.85) 21%, #000 28%);
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
-  mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 100%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.15) 5%, rgba(0, 0, 0, 0.5) 13%, rgba(0, 0, 0, 0.85) 21%, #000 28%);
   mask-repeat: no-repeat;
   mask-size: 100% 100%;
 }

@@ -6,7 +6,7 @@ import closeIcon from "../assets/redesign/hello-close.svg";
 const helloBarContent = {
   home: {
     icon: "⏱️",
-    message: "Same-day Karachi delivery on eligible orders before 2 PM Pakistan time.",
+    message: "Same-day delivery is available in Karachi for eligible orders placed before 2:00 PM PKT.",
     linkLabel: "Learn more",
   },
   navigation: {
