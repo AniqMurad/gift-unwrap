@@ -146,7 +146,11 @@ export default function LandingFooter() {
           <p className="gu-site-footer-copyright">©{new Date().getFullYear()} GiftUnwrap. All Rights Reserved.</p>
         </div>
 
-        <div className="gu-site-footer-wordmark" aria-hidden="true">GIFTUNWRAP</div>
+        <div className="gu-site-footer-wordmark" aria-hidden="true">
+          <svg viewBox="0 0 1720 240" preserveAspectRatio="none" focusable="false">
+            <text x="0" y="215" fontSize="260" textLength="1720" lengthAdjust="spacingAndGlyphs">GIFTUNWRAP</text>
+          </svg>
+        </div>
       </div>
     </StickyFooter>
   );

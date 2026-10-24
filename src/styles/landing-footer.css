@@ -55,7 +55,7 @@
   margin-top: 12px;
   max-width: 567px;
 }
-.gu-site-footer-about address { display: flex; flex-direction: column; font-style: normal; gap: 12px; }
+.gu-site-footer-about address { display: flex; flex-direction: column; font-style: normal; gap: 4px; }
 .gu-site-footer-about address a,
 .gu-site-footer-about address span {
   align-items: center;
@@ -189,6 +189,14 @@
   outline-offset: 4px;
 }
 
+.gu-site-footer-wordmark svg {
+  display: block;
+  fill: currentColor;
+  height: .883em;
+  overflow: visible;
+  width: 100%;
+}
+
 @media (max-width: 1799px) and (min-width: 1101px) {
   .gu-site-footer-content { width: calc(100% - 96px); }
   .gu-site-footer-upper { gap: 8vw; grid-template-columns: minmax(420px, 567px) minmax(0, 1fr); }
@@ -255,12 +263,34 @@
 }
 
 @media (min-width: 1101px) and (max-height: 900px) {
-  .sticky-footer.gu-landing-footer { overflow-y: auto; }
-  .gu-site-footer-content { top: 22svh; }
-  .gu-site-footer-art { height: 36svh; top: -2svh; width: calc(36svh * 1.4275); }
-  .gu-site-footer-art img { height: 36svh; width: calc(36svh * 1.4275); }
-  .gu-site-footer-upper { min-height: 386px; }
-  .gu-site-footer-wordmark { font-size: min(13.5vw, 25svh); line-height: .883; }
+  .sticky-footer.gu-landing-footer { overflow: hidden; }
+  .gu-site-footer-content { top: 8svh; }
+  .gu-site-footer-art { height: 24svh; top: 8px; width: calc(24svh * 1.4275); }
+  .gu-site-footer-art img { height: 24svh; width: calc(24svh * 1.4275); }
+  .gu-site-footer-upper { gap: 6vw; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); min-height: 0; }
+  .gu-site-footer-about { align-self: start; gap: 12px; padding-top: calc(16svh + 24px); }
+  .gu-site-footer-about h2,
+  .gu-site-footer-navigation h2 { font-size: 22px; line-height: 1.3; }
+  .gu-site-footer-about p,
+  .gu-site-footer-navigation a { font-size: 16px; }
+  .gu-site-footer-navigation { gap: 3vw; grid-template-columns: 1.2fr .9fr 1fr; }
+  .gu-site-footer-navigation nav > div { gap: 10px; margin-top: 20px; }
+  .gu-site-footer-navigation a { line-height: 1.4; white-space: normal; }
+  .gu-site-footer-divider { margin-top: 24px; }
+  .gu-site-footer-lower { gap: 24px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, .9fr); margin-top: 24px; }
+  .gu-site-footer-newsletter,
+  .gu-site-footer-newsletter > div { width: 100%; }
+  .gu-site-footer-socials { flex-wrap: wrap; gap: 8px 16px; }
+  .gu-site-footer-socials a { font-size: 16px; }
+  .gu-site-footer-copyright { white-space: normal; }
+  .gu-site-footer-wordmark { font-size: min(13.5vw, 15svh); line-height: .883; margin-top: 24px; }
+}
+
+/* Let short windows and zoomed layouts use the page's single scrollbar. */
+@media (min-width: 1101px) and (max-height: 650px) {
+  body .sticky-footer-slot { height: auto; pointer-events: auto; }
+  .sticky-footer.gu-landing-footer { height: auto; position: relative; }
+  .gu-site-footer-content { left: auto; padding: 48px 0 24px; margin: 0 auto; position: relative; top: auto; transform: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
