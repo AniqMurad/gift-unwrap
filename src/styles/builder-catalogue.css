@@ -1,0 +1,58 @@
+/* Revised box/card catalogues only; Step 1 keeps its portrait panels. */
+.gu-builder-page--catalogue .gu-builder-main { max-width: 1920px; padding: 80px 100px 140px; }
+.gu-builder-page--catalogue .gu-builder-revised-catalogue { margin-top: 95px; }
+.gu-builder-design-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px 40px; }
+.gu-builder-design-card { min-width: 0; text-align: center; }
+.gu-builder-design-image { align-items: center; aspect-ratio: 1; background: #fdbe66; border-radius: 20px; display: flex; justify-content: center; position: relative; width: 100%; }
+.gu-builder-design-image > img { width: 83.75%; height: 83.75%; object-fit: contain; }
+.gu-builder-design-image:disabled { cursor: not-allowed; opacity: .65; }
+.gu-builder-design-card h3 { font: 400 18px/24px "Inter Variable", "Inter", sans-serif; margin: 16px 0 4px; }
+.gu-builder-design-card .gu-builder-product-price { justify-content: center; flex-wrap: wrap; gap: 8px; margin: 0; }
+.gu-builder-design-card .gu-builder-product-price strong { font-size: 18px; font-weight: 600; }
+.gu-builder-design-select { width: 100%; height: 44px; border: 1px solid #ff2b3a; color: #ff2b3a; border-radius: 30px; font: 500 18px/24px "Inter Variable", "Inter", sans-serif; letter-spacing: -.3px; margin-top: 16px; }
+.gu-builder-design-select:hover:not(:disabled), .gu-builder-design-select[aria-pressed="true"] { background: #fdbe66; }
+.gu-builder-design-select:disabled { opacity: .6; cursor: not-allowed; }
+.gu-builder-design-check { position: absolute; right: 16px; top: 16px; border-radius: 50%; width: 32px; height: 32px; display: grid; place-items: center; background: #ff2b3a; color: white; }
+.gu-builder-design-card.is-selected .gu-builder-design-image { outline: 2px solid #ff2b3a; outline-offset: -2px; }
+.gu-builder-without-card { text-decoration: underline; margin-top: 32px; font-size: 16px; }
+.gu-builder-step-warning { color: #3c3636; font-size: 15px; margin-top: 24px; }
+.gu-builder-page--catalogue .gu-builder-filter > button { font-weight: 400; }
+.gu-builder-page--catalogue .gu-builder-filter--sort > button { font-weight: 500; }
+.gu-builder-page--catalogue .gu-builder-filter > button > svg { width: 15px; height: 15px; }
+.gu-builder-revised-steps li > button { align-items: center; display: flex; gap: 10px; }
+.gu-builder-revised-steps li.is-complete .gu-builder-step-icon { background: #f0eae3; border-color: #3c3636; border-radius: 15px; }
+.gu-builder-revised-steps li.is-complete .gu-builder-step-label { color: #3c3636; text-decoration: underline; text-underline-offset: 3px; }
+.gu-builder-revised-steps li.is-current .gu-builder-step-icon { background: white; border-radius: 20px; }
+.gu-builder-revised-steps li.is-current .gu-builder-step-icon img { width: 96.48%; height: 96.48%; }
+.gu-builder-revised-steps li.gu-builder-revised-connector { flex: 0 0 85px; width: 85px; margin-inline: 20px; }
+.gu-builder-revised-steps li.gu-builder-revised-connector img { width: 85px; height: 14px; }
+.gu-builder-revised-steps button:hover .gu-builder-step-label { color: #ff2b3a; }
+.gu-builder-page--catalogue button:focus-visible { outline: 3px solid #ff2b3a; outline-offset: 4px; }
+.gu-builder-page--catalogue .gu-builder-bottom-bar { background: white; border-top: 1px solid #efeae5; box-shadow: 0 -2px 7px rgb(30 27 26 / 6%); display: flex; justify-content: space-between; right: var(--removed-body-scroll-bar-size, 0px); width: auto; padding-inline: max(100px, calc((100vw - 1720px) / 2)); }
+.gu-builder-page--catalogue .gu-builder-bottom-bar > .cartoon-button { width: auto; min-width: 222px; white-space: nowrap; }
+.gu-builder-page--catalogue .gu-builder-back { border: 1px solid #ff2b3a; border-radius: 100px; color: #ff2b3a; min-height: 44px; padding: 10px 15px; }
+@media (max-width: 1180px) {
+  .gu-builder-page--catalogue .gu-builder-main { padding: 54px 104px 120px 28px; }
+  .gu-builder-design-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 24px; }
+  .gu-builder-page--catalogue .gu-builder-revised-catalogue { margin-top: 48px; }
+  .gu-builder-revised-steps li > button { flex-direction: column; }
+  .gu-builder-revised-steps li.gu-builder-revised-connector { margin-inline: 12px; align-self: center; }
+  .gu-builder-page--catalogue .gu-builder-bottom-bar { padding-inline: 28px; }
+}
+@media (max-width: 820px) {
+  .gu-builder-page--catalogue .gu-builder-main { padding: 38px 84px 120px 16px; }
+  .gu-builder-page--catalogue .gu-builder-hero-copy h1 { width: auto; }
+  .gu-builder-revised-steps li .gu-builder-step-icon, .gu-builder-revised-steps li.is-current .gu-builder-step-icon { flex-basis: 50px; width: 50px; height: 50px; }
+  .gu-builder-revised-steps li .gu-builder-step-label, .gu-builder-revised-steps li.is-current .gu-builder-step-label { font-size: 18px; line-height: 1.15; letter-spacing: -.4px; }
+  .gu-builder-revised-steps li.gu-builder-revised-connector { flex-basis: 40px; width: 40px; margin-inline: 8px; }
+  .gu-builder-revised-steps li.gu-builder-revised-connector img { width: 40px; }
+  .gu-builder-page--catalogue .gu-builder-bottom-bar { padding-inline: 16px; }
+}
+@media (max-width: 520px) {
+  .gu-builder-design-grid { grid-template-columns: minmax(0, 1fr); }
+  .gu-builder-revised-steps li.gu-builder-revised-connector { flex-basis: 20px; width: 20px; margin-inline: 3px; }
+  .gu-builder-revised-steps li.gu-builder-revised-connector img { width: 20px; }
+  .gu-builder-revised-steps li .gu-builder-step-label, .gu-builder-revised-steps li.is-current .gu-builder-step-label { font-size: 15px; }
+  .gu-builder-page--catalogue .gu-builder-revised-catalogue { margin-top: 32px; }
+  .gu-builder-page--catalogue .gu-builder-bottom-bar > .cartoon-button { min-width: 0; padding-inline: 22px; }
+}

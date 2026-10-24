@@ -1,5 +1,5 @@
 import ConfirmPasswordField from '@/components/ConfirmPasswordField';
-import Footer from '@/components/Footer';
+import { StorefrontFooter as Footer } from "../components/storefront/StorefrontPage";
 import {
     HalfArrowDown2,
     MyLogoutIcon,
@@ -8,12 +8,12 @@ import {
 } from '@/components/icons';
 import NewPasswordField from '@/components/NewPasswordField';
 import PasswordField from '@/components/PasswordField';
-import SearchPageNavbar from '@/components/SearchPageNavbar';
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
 import React, { useState, useEffect } from 'react';
 import avatar from "../assets/avatar2.jpg"; // Updated avatar path
-import Navbar from '@/components/Navbar';
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import OrderHistory from '@/components/OrderHistory';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NotificationBar from '@/components/NotificationBar';
 
@@ -114,6 +114,10 @@ const MyAccount = () => {
         }
     };
 
+    if (!localStorage.getItem('token')) {
+        return <><Navbar /><SearchPageNavbar title="My Account" titleHome="Home Page" /><main className="gu-migration-section gu-migration-content"><div className="gu-migration-state"><h2>Welcome back</h2><p className="my-6">Sign in to view your account details and order history.</p><Link className="gu-migration-button" to="/login">Sign in</Link></div></main><Footer /></>;
+    }
+
     return (
         <div>
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
@@ -123,7 +127,7 @@ const MyAccount = () => {
                 <NotificationBar type={notification.type} message={notification.message} />
             )}
 
-            <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 gap-6 lg:gap-8">
+            <div className="gu-migration-section gu-migration-content gu-migration-columns gu-migration-account flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 gap-6 lg:gap-8">
                 {/* Sidebar */}
                 <div className="w-full lg:w-[28%] bg-[#F7F7F7] shadow-lg rounded-[20px] px-4 sm:px-6 lg:px-[32px] py-6 sm:py-8 lg:py-[40px]">
                     <div className="flex flex-col items-center text-center">
@@ -133,29 +137,29 @@ const MyAccount = () => {
                     </div>
 
                     <div className="mt-6 sm:mt-8">
-                        <div
+                        <button type="button" data-account-tab aria-pressed={activeTab === "account"}
                             className={`flex gap-3 sm:gap-4 lg:gap-5 rounded-[16px] items-center px-3 sm:px-4 lg:px-[20px] py-3 sm:py-4 lg:py-[16px] mb-1 cursor-pointer ${activeTab === 'account' ? 'bg-[#FFFFFF]' : ''}`}
                             onClick={() => setActiveTab('account')}
                         >
                             <MyUserIcon />
-                            <h6 className='text-sm sm:text-base lg:text-[20px] font-semibold'>Account Details</h6>
-                        </div>
+                            <span className='text-sm sm:text-base lg:text-[20px] font-semibold'>Account Details</span>
+                        </button>
 
-                        <div
+                        <button type="button" data-account-tab aria-pressed={activeTab === "orders"}
                             className={`flex gap-3 sm:gap-4 lg:gap-5 rounded-[16px] items-center px-3 sm:px-4 lg:px-[20px] py-3 sm:py-4 lg:py-[16px] mb-1 cursor-pointer ${activeTab === 'orders' ? 'bg-[#FFFFFF]' : ''}`}
                             onClick={() => setActiveTab('orders')}
                         >
                             <MyOrderIcon />
-                            <h6 className='text-sm sm:text-base lg:text-[20px] font-semibold'>Your Orders</h6>
-                        </div>
+                            <span className='text-sm sm:text-base lg:text-[20px] font-semibold'>Your Orders</span>
+                        </button>
 
-                        <div
+                        <button type="button" data-account-tab
                             className='flex gap-3 sm:gap-4 lg:gap-5 rounded-[16px] items-center px-3 sm:px-4 lg:px-[20px] py-3 sm:py-4 lg:py-[16px] mb-1 cursor-pointer'
                             onClick={handleLogout}
                         >
                             <MyLogoutIcon />
-                            <h6 className='text-sm sm:text-base lg:text-[20px] font-semibold'>Logout</h6>
-                        </div>
+                            <span className='text-sm sm:text-base lg:text-[20px] font-semibold'>Logout</span>
+                        </button>
                     </div>
                 </div>
 
@@ -165,28 +169,28 @@ const MyAccount = () => {
                         <div>
                             <h2 className="text-xl sm:text-2xl lg:text-[24px] font-semibold mb-4">Information</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                                <input 
+                                <input aria-label="First Name"
                                     type="text" 
                                     placeholder="First Name" 
                                     value={userData.firstName} 
                                     readOnly 
                                     className="border p-2 sm:p-3 rounded-md bg-gray-100 cursor-not-allowed text-sm sm:text-base" 
                                 />
-                                <input 
+                                <input aria-label="Last Name"
                                     type="text" 
                                     placeholder="Last Name" 
                                     value={userData.lastName} 
                                     readOnly 
                                     className="border p-2 sm:p-3 rounded-md bg-gray-100 cursor-not-allowed text-sm sm:text-base" 
                                 />
-                                <input 
+                                <input aria-label="Email"
                                     type="email" 
                                     placeholder="Email" 
                                     value={userData.email} 
                                     readOnly 
                                     className="border p-2 sm:p-3 rounded-md bg-gray-100 cursor-not-allowed text-sm sm:text-base sm:col-span-2" 
                                 />
-                                <input 
+                                <input aria-label="Phone Number"
                                     type="text" 
                                     placeholder="Phone Number" 
                                     value={userData.phone} 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CloseIcon } from "./icons";
+import { useMigrationDialog } from "./storefront/migration-context";
 
 const ProductDetailModal = ({ 
   isOpen, 
@@ -26,6 +27,7 @@ const ProductDetailModal = ({
     }
   }, [selectedColor, item]);
 
+  const { migrated, ref } = useMigrationDialog(isOpen && Boolean(item), onClose);
   if (!isOpen || !item) return null;
 
   const images = item.images || [item.image];
@@ -52,7 +54,12 @@ const ProductDetailModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 overflow-y-auto"
+      ref={ref}
+      role={migrated ? "dialog" : undefined}
+      aria-modal={migrated || undefined}
+      aria-label={migrated ? item.name : undefined}
+      tabIndex={migrated ? -1 : undefined}
+      className={`${migrated ? "gu-migration-content gu-migration-modal " : ""}fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 overflow-y-auto`}
       onClick={onClose}
     >
       <div

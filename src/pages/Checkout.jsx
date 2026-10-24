@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import SearchPageNavbar from "@/components/SearchPageNavbar";
+import { StorefrontFooter as Footer } from "../components/storefront/StorefrontPage";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
 import OrderSummary from "@/components/OrderSummary";
 import NotificationBar from "@/components/NotificationBar";
-import Loader from "@/components/Loader";
+import { StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const Checkout = () => {
@@ -73,6 +73,9 @@ const Checkout = () => {
   const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 350;
   const discountAmount = 0;
   const totalOrderAmount = subtotal + shippingCost - discountAmount;
+  const hasUnsupportedProductPersonalization = cartItems.some(
+    (item) => item.personalization?.card
+  );
 
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
@@ -105,6 +108,15 @@ const Checkout = () => {
       showNotification(
         "error",
         "Your cart is empty. Please add items before placing an order."
+      );
+      setIsLoading(false);
+      return;
+    }
+
+    if (hasUnsupportedProductPersonalization) {
+      showNotification(
+        "error",
+        "Your card selection is saved in the cart, but this store’s order API cannot receive product-level card messages yet. Remove the personalized cart item and add it again without a card, or contact Gift Unwrap before placing the order."
       );
       setIsLoading(false);
       return;
@@ -228,8 +240,14 @@ const Checkout = () => {
         backgroundColor="#FBF4E8"
       />
 
+      {hasUnsupportedProductPersonalization && (
+        <div className="mx-4 mt-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:mx-8 lg:mx-16">
+          Your greeting-card selection is stored with the correct cart item, but checkout is paused because the current order API does not support product-level card personalization. Remove the personalized cart item and add it again without a card, or contact Gift Unwrap before submitting the order.
+        </div>
+      )}
+
       <form onSubmit={handleSubmitOrder}>
-        <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between gap-6 lg:gap-8">
+        <div className="gu-migration-section gu-migration-content gu-migration-columns flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between gap-6 lg:gap-8">
           <div className="w-full lg:w-[60%] xl:w-[630px] space-y-5 lg:space-y-6">
             <div className="space-y-3 sm:space-y-4">
               <h2 className="text-xl sm:text-2xl lg:text-[30px] font-semibold">
@@ -241,7 +259,7 @@ const Checkout = () => {
                   { name: "lastName", placeholder: "Last Name" },
                 ].map(({ name, placeholder }) => (
                   <div key={name}>
-                    <input
+                    <input aria-label={placeholder}
                       type="text"
                       name={name}
                       value={formData[name]}
@@ -255,7 +273,7 @@ const Checkout = () => {
                 ))}
 
                 <div className="sm:col-span-2">
-                  <input
+                  <input aria-label="Email Address"
                     type="email"
                     name="email"
                     value={formData.email}
@@ -271,7 +289,7 @@ const Checkout = () => {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <input
+                  <input aria-label="Phone Number"
                     type="tel"
                     name="phone"
                     value={formData.phone}
@@ -286,7 +304,7 @@ const Checkout = () => {
                   )}
                 </div>
 
-                <input
+                <input aria-label="Country/Region"
                   type="text"
                   name="country"
                   value={formData.country}
@@ -298,7 +316,7 @@ const Checkout = () => {
                 />
 
                 <div className="sm:col-span-2">
-                  <input
+                  <input aria-label="Street Address"
                     type="text"
                     name="street"
                     value={formData.street}
@@ -314,7 +332,7 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                  <input
+                  <input aria-label="Town / City"
                     type="text"
                     name="city"
                     value={formData.city}
@@ -330,7 +348,7 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                  <input
+                  <input aria-label="State"
                     type="text"
                     name="state"
                     value={formData.state}
@@ -346,7 +364,7 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                  <input
+                  <input aria-label="Postal Code"
                     type="text"
                     name="postalCode"
                     value={formData.postalCode}
@@ -363,7 +381,7 @@ const Checkout = () => {
                   )}
                 </div>
 
-                <textarea
+                <textarea aria-label="Order notes (optional)..."
                   name="additionalInfo"
                   rows="3"
                   placeholder="Order notes (optional)..."

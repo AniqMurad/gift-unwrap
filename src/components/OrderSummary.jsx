@@ -18,7 +18,7 @@ const OrderSummary = ({
           </p> */}
         </div>
       )}
-      <div className="bg-[#F7F7F7] p-5 md:p-6 rounded-xl">
+      <div className="gu-migration-order-summary bg-[#F7F7F7] p-5 md:p-6 rounded-xl">
         <h2 className="text-[24px] md:text-[30px] font-semibold mb-6">
           {title}
         </h2>
@@ -29,11 +29,12 @@ const OrderSummary = ({
             {cartItems.map((item) => (
               <div
                 key={
-                  item.id
+                  item.cartKey || (item.id
                     ? `${item.category}-${item.id}`
                     : `${item.name}-${item.price}`
+                  )
                 }
-                className="flex items-center gap-4 border-b pb-4 last:border-b-0 last:pb-0"
+                className="gu-migration-summary-item flex items-center gap-4 border-b pb-4 last:border-b-0 last:pb-0"
               >
                 <img
                   src={
@@ -53,6 +54,11 @@ const OrderSummary = ({
                   <p className="text-[#696C70] text-[13px]">
                     Qty: {item.quantity}
                   </p>
+                  {item.personalization?.card && (
+                    <p className="text-[#696C70] text-[12px]">
+                      Card: {item.personalization.card.name}
+                    </p>
+                  )}
                 </div>
                 <p className="font-semibold text-[15px]">
                   PKR {(item.price * item.quantity).toFixed(2)}

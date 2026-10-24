@@ -2,19 +2,21 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  HeartIcon2,
-  HeartIcon3,
   DetailEyeIcon,
   CartIcon,
   CloseIcon,
 } from "./icons";
-import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 import { generateSlug } from "../utils/slugify";
 import RequestQuoteModal from "./RequestQuoteModal";
+import fallbackImage from "../assets/error.png";
 
-const Product = ({ product, columns }) => {
-  const { wishlist, toggleWishlist } = useWishlist();
+const formatPrice = (value) =>
+  new Intl.NumberFormat("en-PK", { maximumFractionDigits: 0 }).format(
+    Number(value) || 0,
+  );
+
+const Product = ({ product, columns, variant = "default", eager = false }) => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const [showImagePreview, setShowImagePreview] = useState(false);
@@ -23,20 +25,30 @@ const Product = ({ product, columns }) => {
   if (!product) return null;
 
   const category = product.category || "unknown";
-  const id = product.id || "no-id";
   const productSlug = generateSlug(product.name);
   const isCorporateGift = category === "giftsForCompany";
-
-  const isInWishlist = wishlist.some(
-    (item) => item.id === id && item.category === category
-  );
+  const imageSrc = product.image || product.images?.[0] || fallbackImage;
+  const productHref = `/product/${category}/${productSlug}`;
+  const currentPrice = Number(product.price);
+  const compareAtPrice = Number(product.originalPrice);
+  const hasValidDiscount =
+    Number.isFinite(compareAtPrice) &&
+    Number.isFinite(currentPrice) &&
+    compareAtPrice > currentPrice &&
+    currentPrice > 0;
+  const discountPercentage = hasValidDiscount
+    ? Math.round(((compareAtPrice - currentPrice) / compareAtPrice) * 100)
+    : 0;
+  const isUnavailable =
+    product.available === false ||
+    product.inStock === false ||
+    Number(product.stock) === 0;
 
   const handleNavigateToDetail = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    console.log("Navigating to:", `/product/${category}/${productSlug}`);
     if (productSlug && category !== "unknown") {
-      navigate(`/product/${category}/${productSlug}`, {
+      navigate(productHref, {
         state: { productData: product },
       });
     }
@@ -45,18 +57,13 @@ const Product = ({ product, columns }) => {
   const handleAddToCart = (e) => {
     e.stopPropagation();
     e.preventDefault();
+    if (isUnavailable) return;
     if (isCorporateGift) {
       setShowQuoteModal(true);
     } else {
       addToCart(product);
       window.scrollTo(0, 0);
     }
-  };
-
-  const handleWishlistClick = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    toggleWishlist(product, category);
   };
 
   const containerWidthClass =
@@ -76,8 +83,11 @@ const Product = ({ product, columns }) => {
               <CloseIcon className="w-5 h-5 text-black cursor-pointer" />
             </button>
             <img
-              src={product.image || (product.images && product.images[0])}
+              src={imageSrc}
               alt={product.name}
+              onError={(event) => {
+                event.currentTarget.src = fallbackImage;
+              }}
               className="max-w-full max-h-[90vh] object-contain rounded-xl"
             />
           </div>
@@ -85,6 +95,76 @@ const Product = ({ product, columns }) => {
         document.body
       )
     : null;
+
+  if (variant === "collection") {
+    return (
+      <>
+        <article className="gu-collection-product">
+          <div className="gu-collection-product-media">
+            <Link
+              className="gu-collection-product-link"
+              to={productHref}
+              state={{ productData: product }}
+              aria-label={`View ${product.name}`}
+            >
+              <img
+                src={imageSrc}
+                alt={product.name}
+                loading={eager ? "eager" : "lazy"}
+                fetchPriority={eager ? "high" : "auto"}
+                decoding="async"
+                width="335"
+                height="335"
+                onError={(event) => {
+                  event.currentTarget.src = fallbackImage;
+                }}
+              />
+            </Link>
+
+            {hasValidDiscount && <span className="gu-collection-sale">SALE</span>}
+            {isUnavailable && <span className="gu-collection-sold-out">Sold out</span>}
+
+            <div className="gu-collection-product-actions">
+              <button
+                type="button"
+                onClick={() => setShowImagePreview(true)}
+                aria-label={`Preview ${product.name}`}
+              >
+                <DetailEyeIcon />
+              </button>
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={isUnavailable}
+                aria-label={isUnavailable ? `${product.name} is sold out` : `Add ${product.name} to cart`}
+              >
+                <CartIcon />
+              </button>
+            </div>
+          </div>
+
+          <Link
+            className="gu-collection-product-copy"
+            to={productHref}
+            state={{ productData: product }}
+          >
+            <h2>{product.name}</h2>
+            <p>
+              <strong>{formatPrice(currentPrice)} PKR</strong>
+              {hasValidDiscount && (
+                <>
+                  <del>{formatPrice(compareAtPrice)} PKR</del>
+                  <span>-{discountPercentage}%</span>
+                </>
+              )}
+            </p>
+          </Link>
+        </article>
+
+        {ImagePreviewModal}
+      </>
+    );
+  }
 
   return (
     <>
@@ -94,10 +174,13 @@ const Product = ({ product, columns }) => {
       >
         <div className="relative bg-[#FBF4E8] rounded-[24px] overflow-hidden">
           <img
-            src={product.image || (product.images && product.images[0])}
+            src={imageSrc}
             alt={product.name}
             loading="lazy"
             decoding="async"
+            onError={(event) => {
+              event.currentTarget.src = fallbackImage;
+            }}
             className="w-full h-auto aspect-[3/4] object-cover rounded-[16px] transition-transform duration-300 group-hover:scale-105"
           />
 
@@ -136,21 +219,12 @@ const Product = ({ product, columns }) => {
             </div>
           </div>
 
-          {product.discountPercentage > 0 && (
+          {hasValidDiscount && (
             <p className="bg-red-400 font-semibold px-2 sm:px-3 py-1 text-xs text-white w-max rounded-[36px] absolute top-[8px] sm:top-[10px] left-[8px] sm:left-[10px] z-20">
               SALE
             </p>
           )}
 
-          <button
-            className={`p-1 rounded-full absolute top-[8px] sm:top-[10px] right-[8px] sm:right-[10px] cursor-pointer transition-all duration-300 z-20 ${
-              isInWishlist ? "bg-[#DB4444]" : "bg-white"
-            }`}
-            onClick={handleWishlistClick}
-            aria-label="Toggle Wishlist"
-          >
-            {isInWishlist ? <HeartIcon3 /> : <HeartIcon2 />}
-          </button>
         </div>
 
         <div className="mt-3 sm:mt-4">

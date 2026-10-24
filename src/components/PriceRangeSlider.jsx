@@ -49,6 +49,7 @@ export default function PriceRangeSlider({
 
         {/* Min thumb */}
         <input
+          aria-label="Minimum price"
           type="range"
           min={0}
           max={max}
@@ -73,6 +74,7 @@ export default function PriceRangeSlider({
 
         {/* Max thumb */}
         <input
+          aria-label="Maximum price"
           type="range"
           min={0}
           max={max}

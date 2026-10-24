@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import SearchPageNavbar from '../components/SearchPageNavbar';
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
 import { BlogLine, InvertedComas, LeftIcon } from '../components/icons';
 import avatar from '../assets/Avatar.png';
 
-import Footer from '../components/Footer';
-import Loader from '../components/Loader';
+import LandingFooter from "../components/LandingFooter";
+import { StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import { useParams } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import { Link } from 'react-router-dom';
 import { fetchBlogs } from '../config/api';
 import TableOfContents from '../components/TableOfContents';
@@ -18,18 +18,22 @@ const BlogOpen = () => {
   const [blog, setBlog] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const contentRef = useRef(null);
 
   useEffect(() => {
     const loadBlogData = async () => {
       try {
         setLoading(true);
+        setLoadError(false);
         const blogsResponse = await fetchBlogs();
         setAllBlogs(blogsResponse.data);
         setBlog(findBlogBySlug(blogsResponse.data, slug));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching blog:', error);
+        setLoadError(true);
+        setBlog(null);
         setLoading(false);
       }
     };
@@ -43,7 +47,7 @@ const BlogOpen = () => {
         <Navbar showSearchInput={false} bgColor="#FBF4E8" />
         <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
         <Loader />
-        <Footer />
+        <LandingFooter />
       </div>
     );
   }
@@ -53,8 +57,8 @@ const BlogOpen = () => {
       <div>
         <Navbar showSearchInput={false} bgColor="#FBF4E8" />
         <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
-        <h2 className="text-center text-2xl font-bold mt-10">Blog Not Found</h2>
-        <Footer />
+        <div className="gu-migration-content gu-migration-state" role={loadError ? "alert" : "status"}><h2>{loadError ? "Unable to load this guide" : "Blog Not Found"}</h2><p className="my-6">{loadError ? "Please refresh the page to try again." : "This guide is no longer available. Explore our other stories for inspiration."}</p><Link className="gu-migration-button" to="/blog">Browse gift guides</Link></div>
+        <LandingFooter />
       </div>
     );
   }
@@ -226,7 +230,7 @@ const BlogOpen = () => {
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-      <div className='px-6 md:px-10 lg:px-12 py-4 mt-2 mb-10'>
+      <div className='gu-migration-section gu-migration-content gu-migration-article px-6 md:px-10 lg:px-12 py-4 mt-2 mb-10'>
         <div className='flex justify-center gap-10 lg:gap-14 max-w-[1100px] mx-auto'>
 
           {/* content - comfortable reading width, leaves room for the TOC sidebar */}
@@ -342,7 +346,7 @@ const BlogOpen = () => {
 
       </div>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 }

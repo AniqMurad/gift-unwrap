@@ -1,17 +1,17 @@
 import ConfirmPasswordField from "@/components/ConfirmPasswordField";
-import Footer from "@/components/Footer";
+import { StorefrontFooter as Footer } from "../components/storefront/StorefrontPage";
 import { LoginLine } from "@/components/icons";
 import PasswordField from "@/components/PasswordField";
 import RememberIcon from "@/components/RememberIcon";
-import SearchPageNavbar from "@/components/SearchPageNavbar";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
 import UsernameField from "@/components/UsernameField";
 import PhoneNumberField from "@/components/PhoneNumberField";
 import Namefield from "@/components/Namefield";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "@/components/Navbar";
-import Loader from "@/components/Loader";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
+import { StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import NotificationBar from "@/components/NotificationBar";
 
 const Signup = () => {
@@ -179,7 +179,7 @@ const Signup = () => {
         backgroundColor="#FBF4E8"
       />
 
-      <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between items-start gap-6 lg:gap-8">
+      <div className="gu-migration-section gu-migration-content gu-migration-columns gu-migration-auth flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between items-start gap-6 lg:gap-8">
         <div className="w-full lg:w-[580px]">
           <h2 className="text-2xl sm:text-3xl lg:text-[30px] font-semibold mb-4 sm:mb-6">
             Register
@@ -215,21 +215,16 @@ const Signup = () => {
             disabled={isLoading}
           />
           <div className="flex items-start mt-4 mb-4">
-            <div
-              className={`flex items-start ${
-                isLoading ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-              }`}
-              onClick={!isLoading ? handleTermsChange : undefined}
-            >
-              <RememberIcon checked={formData.agreeToTerms} />
-              <span className="text-[#A0A0A0] ml-2 text-xs sm:text-sm lg:text-base leading-tight">
+            <div className="flex items-start gap-3">
+              <input id="register-terms" type="checkbox" disabled={isLoading} checked={formData.agreeToTerms} onChange={handleTermsChange} aria-describedby={errors.agreeToTerms ? "register-terms-error" : undefined} />
+              <label htmlFor="register-terms" className="text-xs sm:text-sm lg:text-base leading-tight">
                 I agree to the{" "}
-                <span className="text-[#1F1F1F] underline">Terms of Use</span>
-              </span>
+                <Link to="/terms-conditions" className="underline">Terms of Use</Link>
+              </label>
             </div>
           </div>
           {errors.agreeToTerms && (
-            <p className="text-red-600 mb-2 text-sm sm:text-base">
+            <p id="register-terms-error" role="alert" className="text-red-600 mb-2 text-sm sm:text-base">
               {errors.agreeToTerms}
             </p>
           )}

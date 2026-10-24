@@ -2,6 +2,11 @@ import React, { createContext, useState, useContext, useEffect, useCallback, use
 
 const CartContext = createContext();
 
+const matchesCartLine = (item, productId, productCategory, cartKey) => {
+  if (cartKey) return item.cartKey === cartKey;
+  return !item.cartKey && item.id === productId && item.category === productCategory;
+};
+
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
@@ -19,13 +24,18 @@ export const CartProvider = ({ children }) => {
   const addToCart = useCallback((productToAdd) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
-        (item) => item.id === productToAdd.id && item.category === productToAdd.category
+        (item) => matchesCartLine(
+          item,
+          productToAdd.id,
+          productToAdd.category,
+          productToAdd.cartKey,
+        )
       );
 
       if (existingItem) {
         // If item exists, add the new quantity to existing quantity
         return prevItems.map((item) =>
-          item.id === productToAdd.id && item.category === productToAdd.category
+          matchesCartLine(item, productToAdd.id, productToAdd.category, productToAdd.cartKey)
             ? { ...item, quantity: (item.quantity || 1) + (productToAdd.quantity || 1) }
             : item
         );
@@ -36,21 +46,21 @@ export const CartProvider = ({ children }) => {
     });
   }, []);
 
-  const removeFromCart = useCallback((productId, productCategory) => {
+  const removeFromCart = useCallback((productId, productCategory, cartKey) => {
     setCartItems((prevItems) =>
       prevItems.filter(
-        (item) => !(item.id === productId && item.category === productCategory)
+        (item) => !matchesCartLine(item, productId, productCategory, cartKey)
       )
     );
   }, []);
 
-  const updateQuantity = useCallback((productId, productCategory, newQuantity) => {
+  const updateQuantity = useCallback((productId, productCategory, newQuantity, cartKey) => {
     if (newQuantity <= 0) {
-      removeFromCart(productId, productCategory);
+      removeFromCart(productId, productCategory, cartKey);
     } else {
       setCartItems((prevItems) =>
         prevItems.map((item) =>
-          item.id === productId && item.category === productCategory
+          matchesCartLine(item, productId, productCategory, cartKey)
             ? { ...item, quantity: newQuantity }
             : item
         )

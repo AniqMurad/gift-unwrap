@@ -1,17 +1,41 @@
-    import React, { useState, useEffect } from "react";
-    import SearchPageNavbar from "../components/SearchPageNavbar";
-    import Footer from "../components/Footer";
-    import Navbar from "@/components/Navbar";
-    import DeliveryMarquee from "@/components/DeliveryMarquee";
+    import React, { useState, useEffect, useRef } from "react";
+    import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
+    import LandingFooter from "../components/LandingFooter";
+import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
     import { CloseIcon } from "@/components/icons";
     import OrderSummary from "@/components/OrderSummary";
     import NotificationBar from "@/components/NotificationBar";
-    import Loader from "@/components/Loader";
+    import Loader from "../components/Loader";
+    import { StorefrontLoading } from "../components/storefront/StorefrontPage";
     import ProductDetailModal from "@/components/ProductDetailModal";
+    import StorefrontDialog from "@/components/storefront/StorefrontDialog";
+    import BuilderStepOne from "@/components/gift-box-builder/BuilderStepOne";
+    import BuilderStepTwo from "@/components/gift-box-builder/BuilderStepTwo";
+    import BuilderStepThree from "@/components/gift-box-builder/BuilderStepThree";
+    import BuilderProductModal from "@/components/gift-box-builder/BuilderProductModal";
+    import BuilderMessageModal from "@/components/gift-box-builder/BuilderMessageModal";
+    import { getStockLimit, isUnavailable } from "@/components/gift-box-builder/builder-utils";
+    import { emptyCardDetails, restoreCardDetails, serializeCardMessage, getBuilderStepError, getBuilderCardPrice, giftItemOrderPayload } from "@/components/gift-box-builder/builder-card-state";
     import { useNavigate } from "react-router-dom";
+
+    const GIFT_BOX_DRAFT_KEY = "giftunwrap:gift-box-draft:v1";
+
+    const readGiftBoxDraft = () => {
+        try {
+            return JSON.parse(localStorage.getItem(GIFT_BOX_DRAFT_KEY) || "null");
+        } catch {
+            return null;
+        }
+    };
+
+    const getItemId = (item) => String(item?.id ?? item?._id ?? "");
+
+    const getItemLimit = getStockLimit;
 
     const BuildGiftBox = () => {
     const navigate = useNavigate();
+    const savedDraftRef = useRef(readGiftBoxDraft());
+    const draftRestoredRef = useRef(false);
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [giftBoxItems, setGiftBoxItems] = useState([]);
@@ -19,6 +43,11 @@
     const [selectedBox, setSelectedBox] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
     const [cardMessage, setCardMessage] = useState("");
+    const [greetingDetails, setGreetingDetails] = useState(emptyCardDetails);
+    const [cardEditor, setCardEditor] = useState(null);
+    const modalReturnFocus = useRef(null);
+    const orderSubmitting = useRef(false);
+    const completingStep = useRef(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
     
@@ -33,7 +62,7 @@
     const [cardNumber, setCardNumber] = useState("");
     const [expiry, setExpiry] = useState("");
     const [cvv, setCvv] = useState("");
-    const [saveCardDetails, setSaveCardDetails] = useState(false);
+    const [saveCardDetails] = useState(false);
     const [productModal, setProductModal] = useState({
         isOpen: false,
         item: null,
@@ -82,6 +111,10 @@
                     fetch(`${API_BASE_URL}/cards`)
                 ]);
 
+                if (!itemsRes.ok || !boxesRes.ok || !cardsRes.ok) {
+                    throw new Error("One or more builder catalog requests failed.");
+                }
+
                 const itemsData = await itemsRes.json();
                 const boxesData = await boxesRes.json();
                 const cardsData = await cardsRes.json();
@@ -89,9 +122,45 @@
                 setProducts(itemsData);
                 setBoxOptions(boxesData);
                 setCardOptions(cardsData);
+                const savedDraft = savedDraftRef.current;
+                if (savedDraft) {
+                    const restoredItems = (savedDraft.items || []).flatMap((savedItem) => {
+                        const currentProduct = itemsData.find((product) => getItemId(product) === String(savedItem.id));
+                        if (!currentProduct || currentProduct.inStock === false) return [];
+                        const selectedColor = savedItem.selectedColor && currentProduct.colorVariants?.some((variant) => variant.color === savedItem.selectedColor)
+                            ? savedItem.selectedColor
+                            : null;
+                        const selectedVariant = selectedColor
+                            ? currentProduct.colorVariants.find((variant) => variant.color === selectedColor)
+                            : null;
+                        const quantity = Math.min(Math.max(1, Number(savedItem.quantity) || 1), getItemLimit(currentProduct, selectedColor));
+                        if (quantity < 1) return [];
+                        const productId = getItemId(currentProduct);
+                        return [{
+                            ...currentProduct,
+                            cartKey: selectedColor ? `${productId}_${selectedColor}` : productId,
+                            stockLimit: getItemLimit(currentProduct, selectedColor),
+                            selectedColor,
+                            image: selectedVariant?.image || currentProduct.image,
+                            quantity,
+                        }];
+                    });
+                    setGiftBoxItems(restoredItems);
+                    setSelectedColors(restoredItems.reduce((colors, item) => ({
+                        ...colors,
+                        [getItemId(item)]: item.selectedColor || null,
+                    }), {}));
+                    setSelectedBox(boxesData.find((box) => getItemId(box) === String(savedDraft.selectedBoxId)) || null);
+                    setSelectedCard(cardsData.find((card) => getItemId(card) === String(savedDraft.selectedCardId)) || null);
+                    const restoredDetails = restoreCardDetails(savedDraft.greetingDetails, savedDraft.cardMessage);
+                    setGreetingDetails(restoredDetails);
+                    setCardMessage(savedDraft.selectedCardId ? serializeCardMessage(restoredDetails) : "");
+                }
+                draftRestoredRef.current = true;
                 setDataLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
+                draftRestoredRef.current = true;
                 setDataLoading(false);
                 showNotification("error", "Failed to load gift box items. Please refresh the page.");
             }
@@ -99,6 +168,28 @@
 
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (!draftRestoredRef.current || dataLoading) return;
+        const draft = {
+            items: giftBoxItems.map((item) => ({
+                id: getItemId(item),
+                quantity: item.quantity,
+                selectedColor: item.selectedColor || null,
+            })),
+            selectedBoxId: selectedBox ? getItemId(selectedBox) : null,
+            selectedCardId: selectedCard ? getItemId(selectedCard) : null,
+            cardMessage,
+            greetingDetails,
+            updatedAt: new Date().toISOString(),
+        };
+        try { localStorage.setItem(GIFT_BOX_DRAFT_KEY, JSON.stringify(draft)); } catch { /* Browsers may block storage; the in-memory draft still works. */ }
+    }, [giftBoxItems, selectedBox, selectedCard, cardMessage, greetingDetails, dataLoading]);
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+        if (currentStep < 4) completingStep.current = false;
+    }, [currentStep]);
 
     // Get unique categories from products
     const categories = [
@@ -129,7 +220,7 @@
             setMinPrice(Math.floor(actualMinPrice));
             setMaxPrice(Math.ceil(actualMaxPrice));
         }
-    }, [products]);
+    }, [products, minPrice, maxPrice, actualMinPrice, actualMaxPrice]);
 
     const toggleProductType = (typeName) => {
         setSelectedProductTypes(prev => 
@@ -196,21 +287,27 @@
         const colorVariant = chosenColor && product.colorVariants?.find(v => v.color === chosenColor);
         const displayImage = colorVariant ? colorVariant.image : product.image;
         // Each (product + color) combo is a separate cart entry
-        const cartKey = chosenColor ? `${product.id}_${chosenColor}` : String(product.id);
+        const productId = getItemId(product);
+        const cartKey = chosenColor ? `${productId}_${chosenColor}` : productId;
+        const limit = getItemLimit(product, chosenColor);
+        if (isUnavailable(product, chosenColor) || limit < 1) {
+            showNotification("error", `${product.name} is currently unavailable.`);
+            return;
+        }
 
         setGiftBoxItems((prevItems) => {
             const existingItem = prevItems.find(item => item.cartKey === cartKey);
             if (existingItem) {
                 return prevItems.map(item =>
                     item.cartKey === cartKey
-                        ? { ...item, quantity: item.quantity + quantity }
+                        ? { ...item, quantity: Math.min(item.quantity + quantity, limit) }
                         : item
                 );
             }
-            return [...prevItems, { ...product, cartKey, selectedColor: chosenColor, image: displayImage, quantity }];
+            return [...prevItems, { ...product, cartKey, stockLimit: limit, selectedColor: chosenColor, image: displayImage, quantity: Math.min(quantity, limit) }];
         });
         
-        setIsDrawerOpen(true);
+        if (currentStep !== 1) setIsDrawerOpen(true);
         showNotification("success", `${product.name}${chosenColor ? ` (${chosenColor})` : ''} added to your gift box!`);
     };
 
@@ -222,11 +319,10 @@
         if (newQuantity <= 0) {
             removeFromBox(cartKey);
         } else {
-            setGiftBoxItems((prevItems) =>
-                prevItems.map(item =>
-                    item.cartKey === cartKey ? { ...item, quantity: newQuantity } : item
-                )
-            );
+            setGiftBoxItems((prevItems) => prevItems.map(item => {
+                if (item.cartKey !== cartKey) return item;
+                return { ...item, quantity: Math.min(newQuantity, getItemLimit(item, item.selectedColor)) };
+            }));
         }
     };
 
@@ -237,7 +333,7 @@
     const getTotalBoxPrice = () => {
         let total = giftBoxItems.reduce((total, item) => total + (item.price * item.quantity), 0);
         if (selectedBox) total += selectedBox.price;
-        if (selectedCard) total += 0; // Cards are free, but you can add price if needed
+        if (selectedCard) total += getBuilderCardPrice(selectedCard);
         return total;
     };
 
@@ -272,6 +368,9 @@
     };
 
     const openProductModal = (item, itemType) => {
+        modalReturnFocus.current = document.activeElement;
+        setIsDrawerOpen(false);
+        setCardEditor(null);
         setProductModal({
             isOpen: true,
             item: item,
@@ -341,6 +440,9 @@
 
     const handleSubmitOrder = async (e) => {
         e.preventDefault();
+        if (orderSubmitting.current) return;
+        const selectionError = getBuilderStepError(3, giftBoxItems, selectedBox, selectedCard, greetingDetails);
+        if (selectionError) { showNotification("error", selectionError); return; }
         setIsLoading(true);
         setNotification((prev) => ({ ...prev, show: false }));
 
@@ -385,24 +487,17 @@
             giftBoxOrder: true,
             selectedBox: selectedBox,
             selectedCard: selectedCard,
-            cardMessage: cardMessage,
+            cardMessage: selectedCard ? serializeCardMessage(greetingDetails) : "",
             shippingInfo: formData,
             paymentMethod: paymentMethod,
             cardDetails:
                 paymentMethod === "creditCard"
                     ? { cardName, cardNumber, expiry, cvv, saveCardDetails }
                     : null,
-            orderItems: giftBoxItems.map((item) => ({
-                id: item.id,
-                name: item.name,
-                quantity: item.quantity,
-                price: item.price,
-                image: item.image,
-                category: item.category,
-                selectedColor: item.selectedColor || null,
-            })),
+            orderItems: giftBoxItems.map(giftItemOrderPayload),
         };
 
+        orderSubmitting.current = true;
         try {
             const response = await fetch(
                 `${API_BASE_URL}/orders`,
@@ -451,6 +546,7 @@
                     "success",
                     `Gift box order placed successfully! Order ID: ${data._id}. Redirecting...`
                 );
+                localStorage.removeItem(GIFT_BOX_DRAFT_KEY);
 
                 setTimeout(() => {
                     navigate("/order-confirmation", {
@@ -463,13 +559,15 @@
                     });
                 }, 2000);
             } else {
+                orderSubmitting.current = false;
                 showNotification(
                     "error",
                     `Failed to place order: ${data.message || "Server error"}`
                 );
                 setIsLoading(false);
             }
-        } catch (error) {
+        } catch {
+            orderSubmitting.current = false;
             showNotification(
                 "error",
                 "An error occurred while submitting your order. Please try again."
@@ -479,6 +577,13 @@
     };
 
     const handleNextStep = () => {
+        const error = getBuilderStepError(currentStep, giftBoxItems, selectedBox, selectedCard, greetingDetails);
+        if (error) { showNotification("error", error); return; }
+        if (currentStep === 3) {
+            if (completingStep.current) return;
+            completingStep.current = true;
+        }
+        setIsDrawerOpen(false);
         if (currentStep < steps.length) {
         setCurrentStep(currentStep + 1);
         }
@@ -489,6 +594,40 @@
         setCurrentStep(currentStep - 1);
         }
     };
+
+    const openCardEditor = (card, trigger = document.activeElement) => {
+        if (!card || isUnavailable(card)) return;
+        closeProductModal();
+        setIsDrawerOpen(false);
+        setCardEditor({ card, trigger });
+    };
+
+    const removeCard = () => {
+        setSelectedCard(null);
+        setCardMessage("");
+        // Keep the saved text available if a different design is chosen later.
+    };
+
+    const sharedBuilderProps = {
+        giftBoxItems, selectedBox, selectedCard, cardDetails: greetingDetails, dataLoading,
+        onQuantityChange: updateBoxQuantity, onRemove: removeFromBox,
+        onRemoveCard: removeCard, onEditCard: openCardEditor,
+        onStepChange: step => { setIsDrawerOpen(false); setCardEditor(null); setCurrentStep(step); },
+        onNext: handleNextStep, drawerOpen: isDrawerOpen,
+        onDrawerOpenChange: open => {
+            if (open) { closeProductModal(); setCardEditor(null); }
+            setIsDrawerOpen(open);
+        },
+    };
+
+    const messageEditor = cardEditor && <BuilderMessageModal
+        card={cardEditor.card} savedDetails={greetingDetails} returnFocus={cardEditor.trigger}
+        onClose={() => setCardEditor(null)} onSave={(card, details) => {
+            setSelectedCard(card);
+            setGreetingDetails(details);
+            setCardMessage(serializeCardMessage(details));
+            setCardEditor(null);
+        }} />;
 
     const renderStepContent = () => {
         switch (currentStep) {
@@ -869,99 +1008,16 @@
                 )}
             </div>
             );
-        case 3:
-            return (
-            <div className="py-6">
-                <h2 className="text-xl sm:text-2xl font-semibold mb-6">Write Your Card</h2>
-                <p className="text-gray-600 mb-8">Choose a card design and add a personal message (optional)</p>
-                
-                {/* Card Options Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-8">
-                    {cardOptions.map((card) => (
-                        <div
-                            key={card.id}
-                            onClick={() => setSelectedCard(card)}
-                            className={`bg-white border-2 rounded-lg overflow-hidden cursor-pointer transition-all hover:shadow-lg ${
-                                selectedCard?.id === card.id ? 'border-black shadow-lg' : 'border-gray-200'
-                            }`}
-                        >
-                            <div className="relative aspect-[3/4]" style={{ backgroundColor: card.color }}>
-                                <img
-                                    src={card.image}
-                                    alt={card.name}
-                                    className="w-full h-full object-cover opacity-70 cursor-pointer"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        openProductModal(card, "card");
-                                    }}
-                                    loading="lazy"
-                                    decoding="async"
-                                />
-                                {selectedCard?.id === card.id && (
-                                    <div className="absolute top-2 right-2 bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
-                                        ✓
-                                    </div>
-                                )}
-                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
-                                    <p className="text-white text-xs font-semibold">{card.design}</p>
-                                </div>
-                            </div>
-                            <div className="p-2">
-                                <p className="text-xs font-semibold truncate">{card.name}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Message Input Section */}
-                {selectedCard && (
-                    <div className="bg-gray-50 p-6 rounded-lg">
-                        <h3 className="font-semibold text-lg mb-3">Add Your Message (Optional)</h3>
-                        <textarea
-                            value={cardMessage}
-                            onChange={(e) => setCardMessage(e.target.value)}
-                            placeholder="Write your personal message here..."
-                            className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
-                            maxLength={250}
-                        />
-                        <div className="flex justify-between items-center mt-2">
-                            <p className="text-xs text-gray-500">
-                                {cardMessage.length}/250 characters
-                            </p>
-                            {cardMessage && (
-                                <button
-                                    onClick={() => setCardMessage("")}
-                                    className="text-xs text-red-600 hover:text-red-800"
-                                >
-                                    Clear message
-                                </button>
-                            )}
-                        </div>
-                        
-                        {/* Preview */}
-                        {cardMessage && (
-                            <div className="mt-4 p-4 bg-white border border-gray-200 rounded-lg">
-                                <p className="text-xs text-gray-600 mb-2 font-semibold">Message Preview:</p>
-                                <p className="text-sm text-gray-800 italic">"{cardMessage}"</p>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {selectedCard && !cardMessage && (
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-blue-800 text-sm">
-                            💡 Tip: Adding a personal message makes your gift extra special!
-                        </p>
-                    </div>
-                )}
-            </div>
-            );
         case 4:
             return (
             <div className="py-6">
                 <form onSubmit={handleSubmitOrder}>
-                    <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-8">
+                    {selectedCard && <section className="gu-builder-checkout-card" aria-label="Saved greeting card">
+                        <h2>{selectedCard.name}</h2>
+                        <p>{greetingDetails.blank ? "Leave card blank" : cardMessage}</p>
+                        <button type="button" onClick={() => setCurrentStep(3)} disabled={isLoading}>Edit card and message</button>
+                    </section>}
+                    <div className="gu-migration-builder-checkout">
                         {/* Shipping Information Form */}
                         <div className="w-full lg:w-[60%] space-y-5">
                             <div className="space-y-4">
@@ -972,7 +1028,7 @@
                                         { name: "lastName", placeholder: "Last Name" },
                                     ].map(({ name, placeholder }) => (
                                         <div key={name}>
-                                            <input
+                                            <input aria-label={placeholder}
                                                 type="text"
                                                 name={name}
                                                 value={formData[name]}
@@ -986,7 +1042,7 @@
                                     ))}
 
                                     <div className="sm:col-span-2">
-                                        <input
+                                        <input aria-label="Email Address"
                                             type="email"
                                             name="email"
                                             value={formData.email}
@@ -1002,7 +1058,7 @@
                                     </div>
 
                                     <div className="sm:col-span-2">
-                                        <input
+                                        <input aria-label="Phone Number"
                                             type="tel"
                                             name="phone"
                                             value={formData.phone}
@@ -1017,7 +1073,7 @@
                                         )}
                                     </div>
 
-                                    <input
+                                    <input aria-label="Country/Region"
                                         type="text"
                                         name="country"
                                         value={formData.country}
@@ -1029,7 +1085,7 @@
                                     />
 
                                     <div className="sm:col-span-2">
-                                        <input
+                                        <input aria-label="Street Address"
                                             type="text"
                                             name="street"
                                             value={formData.street}
@@ -1045,7 +1101,7 @@
                                     </div>
 
                                     <div>
-                                        <input
+                                        <input aria-label="Town / City"
                                             type="text"
                                             name="city"
                                             value={formData.city}
@@ -1061,7 +1117,7 @@
                                     </div>
 
                                     <div>
-                                        <input
+                                        <input aria-label="State"
                                             type="text"
                                             name="state"
                                             value={formData.state}
@@ -1077,7 +1133,7 @@
                                     </div>
 
                                     <div className="sm:col-span-2">
-                                        <input
+                                        <input aria-label="Postal Code"
                                             type="text"
                                             name="postalCode"
                                             value={formData.postalCode}
@@ -1093,7 +1149,7 @@
                                     </div>
 
                                     <div className="sm:col-span-2">
-                                        <textarea
+                                        <textarea aria-label="Additional Information (Optional)"
                                             name="additionalInfo"
                                             value={formData.additionalInfo}
                                             onChange={handleChange}
@@ -1136,7 +1192,7 @@
                                 {paymentMethod === "creditCard" && (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 p-4 bg-gray-50 rounded-lg">
                                         <div className="sm:col-span-2">
-                                            <input
+                                            <input aria-label="Cardholder Name"
                                                 type="text"
                                                 placeholder="Cardholder Name"
                                                 value={cardName}
@@ -1146,7 +1202,7 @@
                                             />
                                         </div>
                                         <div className="sm:col-span-2">
-                                            <input
+                                            <input aria-label="Card Number"
                                                 type="text"
                                                 placeholder="Card Number"
                                                 value={cardNumber}
@@ -1155,7 +1211,7 @@
                                                 required={paymentMethod === "creditCard"}
                                             />
                                         </div>
-                                        <input
+                                        <input aria-label="MM/YY"
                                             type="text"
                                             placeholder="MM/YY"
                                             value={expiry}
@@ -1163,7 +1219,7 @@
                                             className="border px-3 py-2.5 rounded-lg w-full text-sm"
                                             required={paymentMethod === "creditCard"}
                                         />
-                                        <input
+                                        <input aria-label="CVV"
                                             type="text"
                                             placeholder="CVV"
                                             value={cvv}
@@ -1210,14 +1266,77 @@
         }
     };
 
+    if (currentStep === 1) {
+        return (
+            <>
+                {(isLoading || dataLoading) && <Loader />}
+                {notification.show && <NotificationBar type={notification.type} message={notification.message} />}
+                <BuilderStepOne
+                    {...sharedBuilderProps}
+                    products={products}
+                    giftBoxItems={giftBoxItems}
+                    selectedBox={selectedBox}
+                    selectedColors={selectedColors}
+                    dataLoading={dataLoading}
+                    onAdd={(product, selectedColor) => addToBox(product, 1, selectedColor)}
+                    onQuantityChange={updateBoxQuantity}
+                    onRemove={removeFromBox}
+                    onColorChange={(productId, color) => setSelectedColors((previous) => ({ ...previous, [productId]: color }))}
+                    onQuickView={(product) => openProductModal(product, "giftItem")}
+                    onBack={() => window.history.length > 1 ? navigate(-1) : navigate("/")}
+                    onNext={handleNextStep}
+                />
+                {productModal.isOpen && productModal.item && <BuilderProductModal
+                    product={productModal.item} items={giftBoxItems}
+                    initialColor={selectedColors[getItemId(productModal.item)]}
+                    returnFocus={modalReturnFocus.current} onClose={closeProductModal}
+                    onAdd={(product, quantity, color) => {
+                        addToBox(product, quantity, color);
+                        setSelectedColors(previous => ({ ...previous, [getItemId(product)]: color }));
+                    }} />}
+                {messageEditor}
+            </>
+        );
+    }
+
+    if (currentStep === 2) {
+        return (
+            <>
+                {(isLoading || dataLoading) && <Loader />}
+                {notification.show && <NotificationBar type={notification.type} message={notification.message} />}
+                <BuilderStepTwo
+                    {...sharedBuilderProps}
+                    boxes={boxOptions}
+                    giftBoxItems={giftBoxItems}
+                    selectedBox={selectedBox}
+                    dataLoading={dataLoading}
+                    onSelect={(box) => {
+                        setSelectedBox(box);
+                        showNotification("success", `${box.name} selected as your gift box!`);
+                    }}
+                    onQuantityChange={updateBoxQuantity}
+                    onRemove={removeFromBox}
+                />
+                {messageEditor}
+            </>
+        );
+    }
+
+    if (currentStep === 3) {
+        return <>
+            {(isLoading || dataLoading) && <Loader />}
+            {notification.show && <NotificationBar type={notification.type} message={notification.message} />}
+            <BuilderStepThree {...sharedBuilderProps} cards={cardOptions} onSelect={openCardEditor} />
+            {messageEditor}
+        </>;
+    }
+
     return (
-        <div>
-        {(isLoading || dataLoading) && <Loader />}
+        <StorefrontPage kind="builder">
         {notification.show && (
             <NotificationBar type={notification.type} message={notification.message} />
         )}
         <Navbar showSearchInput={false} bgColor="#FBF4E8" />
-        <DeliveryMarquee />
         <SearchPageNavbar
             title="Build A Gift Box"
             titleHome="Homepage"
@@ -1226,7 +1345,7 @@
         />
         
         {/* Step Indicator */}
-        <div className="bg-[#FBF4E8] px-4 sm:px-8 lg:px-16 py-2 flex justify-center">
+        <div className="gu-migration-content gu-migration-builder-progress bg-[#FBF4E8] px-4 sm:px-8 lg:px-16 py-2 flex justify-center">
             <div className="bg-white rounded-full px-2 sm:px-4 py-2 mb-2 border-2 border-black border-black-600 shadow-lg inline-flex items-center gap-4 sm:gap-6 flex-wrap justify-center max-w-full">
             {/* Step Counter */}
             <div className="flex items-center gap-3">
@@ -1283,7 +1402,8 @@
         </div>
 
         {/* Step Content */}
-        <div className="bg-[#ffffff] px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 min-h-[60vh]">
+        <div className="gu-migration-section gu-migration-content gu-migration-builder-content bg-[#ffffff] px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 min-h-[60vh]">
+            {(isLoading || dataLoading) && <StorefrontLoading />}
             {renderStepContent()}
 
             {/* Navigation Buttons - Hidden on step 4 (shipping) as it has its own form submit */}
@@ -1344,13 +1464,13 @@
             <>
                 {/* Overlay */}
                 <div
-                    className="fixed inset-0 bg-transparent z-50 transition-opacity duration-300"
+                    className="gu-migration-drawer-backdrop fixed inset-0 bg-transparent z-50 transition-opacity duration-300"
                     onClick={() => setIsDrawerOpen(false)}
                 />
                 
                 {/* Drawer */}
-                <div 
-                    className="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 overflow-y-auto"
+                <StorefrontDialog onClose={() => setIsDrawerOpen(false)} label="Your gift box"
+                    className="gu-migration-content gu-migration-drawer fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 overflow-y-auto"
                     style={{ 
                         animation: 'slideInFromRight 0.3s ease-out',
                     }}
@@ -1488,7 +1608,7 @@
                                         src={item.image}
                                         alt={item.name}
                                         className="w-20 h-20 object-cover rounded cursor-zoom-in"
-                                        onClick={() => openImagePreview(item.image, item.name)}
+                                        onClick={() => openProductModal(item, "giftItem")}
                                         loading="lazy"
                                         decoding="async"
                                     />
@@ -1533,7 +1653,7 @@
                             Continue to Next Step
                         </button>
                     </div>
-                </div>
+                </StorefrontDialog>
             </>
         )}
 
@@ -1551,8 +1671,8 @@
             onColorChange={setModalSelectedColor}
         />
 
-        <Footer />
-        </div>
+        <LandingFooter />
+        </StorefrontPage>
     );
     };
 

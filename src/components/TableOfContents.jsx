@@ -76,7 +76,7 @@ const TableOfContents = ({ containerRef, watch, title = 'Table of Contents' }) =
     const offset = 96;
     const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
 
-    window.scrollTo({ top, behavior: 'smooth' });
+    window.scrollTo({ top, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     window.history.replaceState(null, '', `#${id}`);
     setActiveId(id);
   };

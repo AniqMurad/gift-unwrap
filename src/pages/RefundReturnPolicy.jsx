@@ -1,7 +1,7 @@
 import React from "react";
-import SearchPageNavbar from "../components/SearchPageNavbar";
-import Footer from "../components/Footer";
-import Navbar from "@/components/Navbar";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
+import LandingFooter from "../components/LandingFooter";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const RefundReturnPolicy = () => {
@@ -15,7 +15,7 @@ const RefundReturnPolicy = () => {
         backgroundColor="#FBF4E8"
       />
 
-      <div className="px-4 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-14">
+      <div className="gu-migration-section gu-migration-content gu-migration-policy px-4 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-14">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">
@@ -48,7 +48,7 @@ const RefundReturnPolicy = () => {
         </div>
       </div>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

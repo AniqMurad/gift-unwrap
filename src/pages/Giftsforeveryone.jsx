@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import SearchPageNavbar from "../components/SearchPageNavbar";
-import Footer from "../components/Footer";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
+import LandingFooter from "../components/LandingFooter";
 import {
   ArrowDown,
   FilterIcon,
@@ -15,17 +15,18 @@ import {
   ThreeBars,
 } from "../components/icons";
 import Product from "../components/Product";
-import Loader from "../components/Loader";
+import { StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import { Buttons } from "../components/Buttons";
 // import ProductData from "../components/ProductData";
 import axios from "axios";
-import Navbar from "@/components/Navbar";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import PriceRangeSlider from "../components/PriceRangeSlider";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const Giftsforeveryone = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [columns, setColumns] = useState(4); // Default to 4 columns
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [minPrice, setMinPrice] = useState(0);
@@ -59,7 +60,7 @@ const Giftsforeveryone = () => {
           setProducts(categoryData.products);
         }
       })
-      .catch((err) => console.error("Failed to load products:", err))
+      .catch((err) => { console.error("Failed to load products:", err); setLoadError(true); })
       .finally(() => setLoading(false));
   }, [category]);
 
@@ -111,7 +112,6 @@ const Giftsforeveryone = () => {
 
   return (
     <div>
-      {loading && <Loader />}
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <DeliveryMarquee />
       <SearchPageNavbar
@@ -120,10 +120,12 @@ const Giftsforeveryone = () => {
         backgroundColor="#FBF4E8"
       />
 
-      <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
+      <div className="gu-migration-section gu-migration-content gu-migration-catalog px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
         {/* Left sidebar is removed from here */}
 
         <div className="w-full transition-all duration-300">
+          {loading && <Loader />}
+          {loadError && <div className="gu-migration-state" role="alert">We couldn’t load the gifts. Please refresh the page to try again.</div>}
           {" "}
           {/* Adjusted width to w-full */}
           {/* filters */}
@@ -131,7 +133,7 @@ const Giftsforeveryone = () => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0 sm:space-x-6">
               {/* Layout Switch Buttons */}
               <div className="flex items-center space-x-4">
-                <select
+                <select aria-label="Sort by price"
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
                   className="border border-[#E9E9E9] px-3 py-1.5 rounded text-sm bg-white cursor-pointer hidden sm:block"
@@ -141,7 +143,7 @@ const Giftsforeveryone = () => {
                   <option value="highToLow">High to Low</option>
                 </select>
                 <div className="flex space-x-2">
-                  <div
+                  <button type="button" aria-label="Show 3 columns" aria-pressed={columns === 3}
                     className={`border ${
                       columns === 3 ? "bg-black" : "border-[#E9E9E9]"
                     } p-1 rounded cursor-pointer hidden sm:block`}
@@ -150,9 +152,9 @@ const Giftsforeveryone = () => {
                     <ThreeBars
                       fillColor={columns === 3 ? "white" : "#A0A0A0"}
                     />
-                  </div>
+                  </button>
                   {screenWidth >= 1024 && (
-                    <div
+                    <button type="button" aria-label="Show 4 columns" aria-pressed={columns === 4}
                       className={`border ${
                         columns === 4 ? "bg-black" : "border-[#E9E9E9]"
                       } p-1 rounded cursor-pointer hidden sm:block`}
@@ -161,10 +163,10 @@ const Giftsforeveryone = () => {
                       <FourBars
                         fillColor={columns === 4 ? "white" : "#A0A0A0"}
                       />
-                    </div>
+                    </button>
                   )}
                   {screenWidth >= 1280 && (
-                    <div
+                    <button type="button" aria-label="Show 5 columns" aria-pressed={columns === 5}
                       className={`border ${
                         columns === 5 ? "bg-black" : "border-[#E9E9E9]"
                       } p-1 rounded cursor-pointer hidden sm:block`}
@@ -173,7 +175,7 @@ const Giftsforeveryone = () => {
                       <FiveBars
                         fillColor={columns === 5 ? "white" : "#A0A0A0"}
                       />
-                    </div>
+                    </button>
                   )}
                 </div>
               </div>
@@ -256,7 +258,7 @@ const Giftsforeveryone = () => {
           {/* products */}
           {giftsForEveryoneProducts.length > 0 ? (
             <div
-              className={`justify-items-center grid gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300
+              className={`gu-migration-grid justify-items-center grid gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300
                 grid-cols-2 sm:grid-cols-3
                 ${columns === 3 ? "lg:grid-cols-3" : ""}
                 ${columns === 4 ? "lg:grid-cols-4" : ""}
@@ -264,7 +266,7 @@ const Giftsforeveryone = () => {
                 `}
             >
               {giftsForEveryoneProducts.slice(0, visibleCount).map((product) => (
-                <Product
+                <Product variant="collection"
                   key={product.id}
                   product={{ ...product, category: "giftsForEveryone" }}
                   columns={columns}
@@ -277,11 +279,11 @@ const Giftsforeveryone = () => {
               <Buttons onClick={handleLoadMore} />
             </div>
           )}
-          {giftsForEveryoneProducts.length === 0 && (
+          {!loading && !loadError && giftsForEveryoneProducts.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 sm:py-20 lg:py-24">
               <div className="text-center">
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-600 mb-4">
-                  No Products Available
+                  No gifts match these filters. Try adjusting your selection.
                 </h3>
                 <p className="text-sm sm:text-base text-gray-500">
                   Sorry, there are no products available in this category at the
@@ -293,7 +295,7 @@ const Giftsforeveryone = () => {
         </div>
       </div>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

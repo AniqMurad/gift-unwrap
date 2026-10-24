@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const ScrollToTop = () => {
-    const location = useLocation();
+    const { pathname, search } = useLocation();
 
     useEffect(() => {
-        // Scroll to the top of the page whenever the location changes
+        // Reset for actual route/query navigation, not hash or state-only updates.
         window.scrollTo(0, 0);
-    }, [location]); // Depend on location so it triggers when the route changes
+    }, [pathname, search]);
 
     return null; // This component does not render anything visually
 };

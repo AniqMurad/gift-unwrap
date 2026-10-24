@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import SearchPageNavbar from "../components/SearchPageNavbar";
-import Footer from "../components/Footer";
-import Navbar from "@/components/Navbar";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
+import LandingFooter from "../components/LandingFooter";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import NotificationBar from "../components/NotificationBar";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
 
@@ -97,8 +97,8 @@ const ContactUs = () => {
         backgroundColor="#FBF4E8"
       />
 
-      <div className="px-4 sm:px-8 lg:px-16 py-4">
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-12 mt-6 sm:mt-10">
+      <div className="gu-migration-section gu-migration-content px-4 sm:px-8 lg:px-16 py-4">
+        <div className="gu-migration-contact-layout flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-12 mt-6 sm:mt-10">
           <div className="w-full lg:w-[850px]">
             <div>
               <h2 className="text-2xl sm:text-3xl font-semibold">
@@ -111,7 +111,7 @@ const ContactUs = () => {
 
             <form className="mt-4 sm:mt-6" onSubmit={handleSubmit}>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <input
+                <input aria-label="Your Name"
                   type="text"
                   name="name"
                   value={formData.name}
@@ -121,7 +121,7 @@ const ContactUs = () => {
                   required
                   disabled={loading}
                 />
-                <input
+                <input aria-label="Your Email"
                   type="email"
                   name="email"
                   value={formData.email}
@@ -133,7 +133,7 @@ const ContactUs = () => {
                 />
               </div>
 
-              <textarea
+              <textarea aria-label="Your Message"
                 name="content"
                 value={formData.content}
                 onChange={handleChange}
@@ -203,7 +203,7 @@ const ContactUs = () => {
         </div>
       </div>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

@@ -1,14 +1,14 @@
 import ConfirmPasswordField from '@/components/ConfirmPasswordField';
-import Footer from '@/components/Footer';
+import { StorefrontFooter as Footer } from "../components/storefront/StorefrontPage";
 import { LoginLine } from '@/components/icons';
 import PasswordField from '@/components/PasswordField';
-import SearchPageNavbar from '@/components/SearchPageNavbar';
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
 import UsernameField from '@/components/UsernameField';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import Navbar from '@/components/Navbar';
-import Loader from '../components/Loader';
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
+import { StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import NotificationBar from '../components/NotificationBar';
 
 const ForgetPassword = () => {
@@ -148,7 +148,7 @@ const ForgetPassword = () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Forget Your Password" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-            <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between items-start gap-6 lg:gap-8">
+            <div className="gu-migration-section gu-migration-content gu-migration-columns gu-migration-auth flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between items-start gap-6 lg:gap-8">
                 <div className="w-full lg:w-[580px]">
                     <h2 className="text-2xl sm:text-3xl lg:text-[30px] font-semibold mb-2">Reset Your Password</h2>
                     <p className='text-base sm:text-lg lg:text-[18px] mb-6'>

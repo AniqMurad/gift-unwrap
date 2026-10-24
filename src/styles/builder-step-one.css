@@ -1,0 +1,96 @@
+/* Revised Step 1 only: box/card catalogues have separate square-panel styles. */
+.gu-builder-product-name { font: inherit; color: inherit; text-align: inherit; }
+.gu-builder-product-name:focus-visible { outline: 2px solid #ff2b3a; outline-offset: 4px; }
+.gu-builder-page--drawer .gu-builder-content {
+  display: block;
+}
+.gu-builder-page--drawer .gu-builder-catalog,
+.gu-builder-page--drawer .gu-builder-product-card {
+  min-width: 0;
+  width: 100%;
+}
+.gu-builder-page--drawer .gu-builder-product-grid {
+  gap: 30px 40px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.gu-builder-page--drawer .gu-builder-product-image {
+  aspect-ratio: 4 / 5;
+  background: #fdbe66;
+  border-radius: 20px;
+  height: auto;
+  padding: 0;
+  width: 100%;
+}
+.gu-builder-page--drawer .gu-builder-product-image img {
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  width: 335px;
+  aspect-ratio: 1;
+}
+.gu-builder-page--drawer .gu-builder-product-copy {
+  padding-top: 16px;
+  text-align: center;
+}
+.gu-builder-page--drawer .gu-builder-product-copy h3 {
+  color: #000;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+  margin: 0;
+}
+.gu-builder-page--drawer .gu-builder-product-price {
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 4px;
+}
+.gu-builder-page--drawer .gu-builder-add {
+  font-size: 18px;
+  font-weight: 500;
+  height: 44px;
+  letter-spacing: -.3px;
+  margin-top: 16px;
+  width: 100%;
+}
+.gu-builder-page--drawer .gu-builder-quantity {
+  min-height: 44px;
+}
+.gu-builder-page--drawer .gu-builder-filter > button {
+  font-weight: 400;
+}
+.gu-builder-page--drawer .gu-builder-filter--sort > button {
+  font-weight: 500;
+}
+.gu-builder-page--drawer .gu-builder-filter > button > svg {
+  width: 15px;
+  height: 15px;
+}
+.gu-builder-page--drawer .gu-builder-bottom-bar {
+  background: #fff;
+  border-top: 1px solid #efeae5;
+  box-shadow: 0 -2px 7px rgb(30 27 26 / 6%);
+  right: var(--removed-body-scroll-bar-size, 0px);
+  width: auto;
+}
+@media (min-width: 1181px) {
+  .gu-builder-page--drawer .gu-builder-main {
+    margin-inline: auto;
+    max-width: 1920px;
+    padding: 80px 100px 120px;
+  }
+  .gu-builder-page--drawer .gu-builder-content { margin-top: 95px; }
+  .gu-builder-page--drawer .gu-builder-bottom-bar {
+    padding-inline: max(100px, calc((100vw - 1720px) / 2));
+  }
+}
+/* Keep the existing compact layout usable; no separate responsive redesign. */
+@media (max-width: 1180px) {
+  .gu-builder-page--drawer .gu-builder-main { padding-right: 104px; }
+  .gu-builder-page--drawer .gu-builder-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 15px; }
+}
+@media (max-width: 520px) {
+  .gu-builder-page--drawer .gu-builder-main { padding-right: 84px; }
+  .gu-builder-page--drawer .gu-builder-product-grid { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,42 +1,23 @@
-import BillingEmailField from '@/components/BillingEmailField'
-import Footer from '@/components/Footer'
-import { LoginLine } from '@/components/icons'
-import Navbar from '@/components/Navbar'
-import SearchPageNavbar from '@/components/SearchPageNavbar'
-import UsernameField from '@/components/UsernameField'
-import React from 'react'
+import { Link } from 'react-router-dom';
+import { StorefrontHeader, StorefrontFooter, StorefrontTitle } from '../components/storefront/StorefrontPage';
 
-const OrderTracking = () => {
-    return (
-        <div>
-            <Navbar showSearchInput={false} bgColor="#FBF4E8" />
-            <SearchPageNavbar title="Order Tracking" titleHome="Home Page" backgroundColor='#FBF4E8' />
-
-            <div className="flex px-16 py-20 justify-between items-center">
-
-                <div className="w-[580px]">
-                    <h2 className="text-[30px] font-semibold mb-2">Order Tracking</h2>
-                    <p className='text-[18px] mb-6'>To track your order please enter your Order ID in the box below and press the "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</p>
-                    <UsernameField />
-                    <BillingEmailField />
-                    <button className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-8 uppercase">Track Order</button>
-                </div>
-
-                <LoginLine />
-
-                <div className="w-[580px]">
-                    <h2 className="text-[30px] font-semibold mb-2">Already have an account?</h2>
-                    <p className="text-[#696C70] text-[16px] mb-4">
-                        Welcome back. Sign in to access your personalized experience, saved preferences, and more. We're thrilled to have you with us again!
-                    </p>
-                    <button className="bg-black text-[14px] text-white px-[40px] py-[16px] rounded-[12px] mt-4 uppercase">LOGIN</button>
-                </div>
-
-            </div>
-
-            <Footer />
-        </div>
-    )
+export default function OrderTracking() {
+  return <>
+    <StorefrontHeader />
+    <StorefrontTitle title="Order Tracking" titleHome="Home Page" />
+    <main className="gu-migration-section gu-migration-content gu-migration-columns gu-migration-auth">
+      <div>
+        <h2>Looking for your order?</h2>
+        <p className="my-6">Your Order ID is on your receipt and in your confirmation email. Contact us with this ID for help tracking your delivery.</p>
+        <p className="mb-8">Online tracking by Order ID is not available on this page yet.</p>
+        <Link className="gu-migration-button" to="/contact-us">Contact us</Link>
+      </div>
+      <div>
+        <h2>Already have an account?</h2>
+        <p className="my-6">Sign in to see your order history and the latest order status.</p>
+        <Link className="gu-migration-button gu-migration-button--secondary" to="/myAccount" state={{ activeTab: 'orders' }}>View my orders</Link>
+      </div>
+    </main>
+    <StorefrontFooter />
+  </>;
 }
-
-export default OrderTracking

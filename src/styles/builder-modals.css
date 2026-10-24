@@ -1,0 +1,63 @@
+.gu-builder-modal-backdrop { z-index: 300; background: rgb(0 0 0 / 45%); }
+.gu-builder-modal { background: white; border: 2px solid #fdbe66; border-radius: 30px; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 310; max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; width: calc(100% - 32px); font-family: "Inter Variable", "Inter", sans-serif; color: #000; animation: gu-builder-modal-enter 200ms ease-out; }
+.gu-builder-modal-close { position: absolute; top: 20px; right: 20px; width: 32px; height: 32px; display: grid; place-items: center; z-index: 1; border-radius: 50%; background: white; }
+.gu-builder-modal-close img { width: 24px; height: 24px; }
+.gu-builder-modal button:focus-visible, .gu-builder-modal input:focus-visible, .gu-builder-modal textarea:focus-visible { outline: 2px solid #ff2b3a; outline-offset: 3px; }
+.gu-builder-product-modal { display: grid; grid-template-columns: 410px minmax(0, 1fr); max-width: 896px; min-height: 528px; }
+.gu-builder-modal-photo { background: #fbf4e8; min-height: 524px; display: flex; align-items: center; justify-content: center; }
+.gu-builder-modal-photo img { width: 100%; height: 100%; max-height: 620px; object-fit: contain; }
+.gu-builder-modal-product-copy { padding: 54px 50px 54px 36px; min-width: 0; }
+.gu-builder-modal-product-title { font: 500 30px/36px "Recoleta", serif; letter-spacing: -.6px; margin: 0; }
+.gu-builder-modal-price { font-size: 26px; font-weight: 600; line-height: 36px; letter-spacing: -.78px; color: #ff2b3a; margin: 12px 0 0; padding-bottom: 16px; border-bottom: 1px solid #d8d8d8; }
+.gu-builder-modal-description { font-size: 14px; font-weight: 400; line-height: 22.75px; color: #364153; padding: 16px 0; margin: 0; border-bottom: 1px solid #d8d8d8; white-space: pre-line; overflow-wrap: anywhere; }
+.gu-builder-modal-category { margin: 0; padding: 16px 0; border-bottom: 1px solid #d8d8d8; display: flex; align-items: baseline; gap: 8px; }
+.gu-builder-modal-category b { font-size: 16px; font-weight: 500; }
+.gu-builder-modal-category span { font-size: 14px; color: #364153; }
+.gu-builder-modal-quantity-row { display: flex; align-items: center; gap: 12px; margin-top: 16px; font-size: 16px; font-weight: 500; }
+.gu-builder-modal-quantity { display: grid; grid-template-columns: 40px 61px 40px; border: 1px solid #d8d8d8; border-radius: 10px; height: 46px; align-items: center; text-align: center; }
+.gu-builder-modal-quantity button { height: 44px; font-size: 24px; font-weight: 400; }
+.gu-builder-modal button:disabled { cursor: not-allowed; opacity: .45; }
+.gu-builder-modal-product-actions { display: grid; gap: 15px; margin-top: 28px; }
+.gu-builder-modal-primary { background: #ff2b3a; color: #fff; border: 0; box-shadow: 0 6px 0 #000; border-radius: 30px; width: 100%; min-height: 52px; font: 500 18px/24px "Inter Variable", "Inter", sans-serif; padding: 12px 16px; }
+.gu-builder-modal-primary:hover:not(:disabled) { background: #e92332; }
+.gu-builder-modal-secondary { width: 100%; min-height: 46px; color: #ff2b3a; border: 1px solid #ff2b3a; border-radius: 100px; font: 500 16px/24px "Inter Variable", "Inter", sans-serif; padding: 10px 16px; }
+.gu-builder-modal-secondary:hover { background: #fbf4e8; }
+.gu-builder-modal-variants { padding: 16px 0 0; border: 0; font-size: 14px; }
+.gu-builder-modal-variants > div { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.gu-builder-modal-variants button { border: 1px solid #ddd; border-radius: 6px; display: flex; align-items: center; gap: 6px; padding: 4px 8px; }
+.gu-builder-modal-variants button[aria-pressed="true"] { border-color: #ff2b3a; }
+.gu-builder-modal-variants img { width: 30px; height: 30px; object-fit: contain; }
+.gu-builder-message-modal { max-width: 645px; min-height: 578px; padding: 22px 28px 28px 33px; }
+.gu-builder-message-title { font: 500 40px/36px "Recoleta", serif; letter-spacing: -.8px; text-align: center; margin: 0 32px 39px; }
+.gu-builder-blank-card { display: flex; gap: 9px; align-items: center; font-size: 16px; font-weight: 500; line-height: 18px; color: #4a4340; cursor: pointer; }
+.gu-builder-blank-card input { appearance: none; width: 18px; height: 18px; border: 1px solid #ff2b3a; border-radius: 50%; background: white; flex-shrink: 0; }
+.gu-builder-blank-card input:checked { background: #ff2b3a; box-shadow: inset 0 0 0 3px white; }
+.gu-builder-message-fields { display: grid; gap: 25px; border: 0; padding: 0; margin: 39px 0 25px; min-width: 0; }
+.gu-builder-message-fields:disabled { opacity: .45; }
+.gu-builder-message-field label { display: block; color: #5a514c; font: 400 16px/24px "Inter Variable", "Inter", sans-serif; margin-bottom: 2px; }
+.gu-builder-message-field label span { color: #ff2b3a; font-weight: 700; }
+.gu-builder-message-field input, .gu-builder-message-field textarea { border: 1px solid #e5e5e5; border-radius: 6px; font: 400 16px/22px "Inter Variable", "Inter", sans-serif; width: 100%; padding: 6px 10px; background: white; }
+.gu-builder-message-field input { height: 36px; }
+.gu-builder-message-textarea { position: relative; }
+.gu-builder-message-field textarea { display: block; height: 115px; resize: vertical; min-height: 115px; padding-bottom: 30px; }
+.gu-builder-message-textarea > span { position: absolute; bottom: 5px; right: 10px; color: #5a514c; font-size: 16px; line-height: 24px; letter-spacing: -.48px; pointer-events: none; }
+.gu-builder-modal-quantity output { border-inline: 1px solid #e5e5e5; height: 40px; display: grid; place-items: center; }
+.gu-builder-modal-error { font-size: 13px; color: #b51825; margin: 6px 0 0; }
+@keyframes gu-builder-modal-enter { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 820px) {
+  .gu-builder-product-modal { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
+  .gu-builder-modal-photo { min-height: 0; height: 260px; }
+  .gu-builder-modal-product-copy { padding: 24px; }
+}
+@media (max-width: 520px) {
+  .gu-builder-message-modal { padding: 24px 20px 30px; min-height: 0; }
+  .gu-builder-message-title { font-size: 36px; margin-bottom: 28px; }
+  .gu-builder-message-fields { margin-top: 28px; gap: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gu-builder-modal, .gu-builder-modal-backdrop { animation: none !important; transition: none !important; }
+}
+.gu-builder-checkout-card { margin-bottom: 24px; padding: 20px; background: #fbf4e8; border-radius: 16px; }
+.gu-builder-checkout-card h2 { font: 500 24px/1.3 "Recoleta", serif; }
+.gu-builder-checkout-card p { white-space: pre-wrap; overflow-wrap: anywhere; margin: 12px 0; }
+.gu-builder-checkout-card button { text-decoration: underline; }

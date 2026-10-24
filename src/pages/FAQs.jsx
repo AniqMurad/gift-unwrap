@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import SearchPageNavbar from '../components/SearchPageNavbar'
-import Footer from '../components/Footer'
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
+import LandingFooter from "../components/LandingFooter";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";
-import Navbar from "@/components/Navbar";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const FAQs = () => {
@@ -49,13 +49,13 @@ const FAQs = () => {
             <DeliveryMarquee />
             <SearchPageNavbar title="FAQs" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-            <div className='px-4 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-14 flex flex-col lg:flex-row gap-6 lg:gap-8'>
+            <div className='gu-migration-section gu-migration-content gu-migration-faq-layout px-4 sm:px-8 lg:px-16 py-8 sm:py-10 lg:py-14 flex flex-col lg:flex-row gap-6 lg:gap-8'>
 
                 {/* Sidebar Categories */}
                 <div className='w-full lg:w-[300px] order-2 lg:order-1'>
                     {/* Mobile dropdown for categories */}
                     <div className="lg:hidden mb-4">
-                        <select 
+                        <select aria-label="FAQ category"
                             value={selectedCategory} 
                             onChange={(e) => setSelectedCategory(e.target.value)}
                             className="w-full p-3 border border-gray-300 rounded-lg text-base bg-white"
@@ -73,13 +73,12 @@ const FAQs = () => {
                         {categories.map((category) => (
                             <li
                                 key={category}
-                                onClick={() => handleCategoryClick(category)}
                                 className={`mb-2 cursor-pointer px-4 py-2 rounded-lg transition text-base lg:text-lg ${selectedCategory === category
                                     ? "font-bold text-black underline"
                                     : "hover:bg-white"
                                     }`}
                             >
-                                {category}
+                                <button type="button" aria-pressed={selectedCategory === category} onClick={() => handleCategoryClick(category)}>{category}</button>
                             </li>
                         ))}
                     </ul>
@@ -105,7 +104,7 @@ const FAQs = () => {
 
             </div>
 
-            <Footer />
+            <LandingFooter />
         </div >
     )
 }

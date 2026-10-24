@@ -1,866 +1,709 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import SearchPageNavbar from "../components/SearchPageNavbar";
-import Footer from "../components/Footer";
-import { useCart } from "../context/CartContext";
-import Navbar from "./Navbar";
-import axios from "axios";
-import Product from "../components/Product";
-import NotificationBar from "../components/NotificationBar";
-import { findProductBySlug } from "../utils/slugify";
+import { Link, useLocation, useParams } from "react-router-dom";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Gift,
+  Minus,
+  Plus,
+  Truck,
+} from "lucide-react";
+import LandingHeader from "./LandingHeader";
+import LandingFooter from "./LandingFooter";
+import { Testimonials } from "./LandingSections";
+import FAQSection from "./ui/faq1";
+import CartoonButton from "./ui/cartoon-button";
+import NotificationBar from "./NotificationBar";
 import RequestQuoteModal from "./RequestQuoteModal";
+import { useCart } from "../context/CartContext";
+import { fetchGreetingCards, fetchProductCollections } from "../config/api";
+import { findProductBySlug, generateSlug } from "../utils/slugify";
+import {
+  defaultGiftPackaging,
+  getProductFaqContent,
+} from "../config/productPageContent";
+import packagingBox from "../assets/redesign/product/packaging-box.png";
+import packagingKeepsake from "../assets/redesign/product/packaging-keepsake.svg";
+import packagingWrapped from "../assets/redesign/product/packaging-wrapped.svg";
+import packagingReady from "../assets/redesign/product/packaging-ready.svg";
+import fallbackImage from "../assets/error.png";
+
+const packagingIcons = [packagingKeepsake, packagingWrapped, packagingReady];
+
+const categoryNames = {
+  giftsForHer: "Gifts For Her",
+  giftsForHim: "Gifts For Him",
+  giftsForBabies: "Gifts For Babies",
+  giftsForCompany: "Gifts For Companies",
+  giftsForCompanies: "Gifts For Companies",
+  giftsForEveryone: "Gifts For Everyone",
+  giftsForWedding: "Wedding Gifts",
+  giftsForReligions: "Religious Gifts",
+  giftsForBirthday: "Birthday Gifts",
+  flowerChocolate: "Sweets & Bouquets",
+  FlowersChocolates: "Sweets & Bouquets",
+};
+
+const categoryRoutes = {
+  giftsForHer: "/giftforher",
+  giftsForHim: "/giftforhim",
+  giftsForBabies: "/Giftforbabies",
+  giftsForCompany: "/giftforcompanies",
+  giftsForCompanies: "/giftforcompanies",
+  giftsForEveryone: "/giftforeveryone",
+  giftsForWedding: "/giftforwedding",
+  giftsForReligions: "/Giftforreligions",
+  giftsForBirthday: "/Giftforbirthday",
+  flowerChocolate: "/flower-chocolate",
+  FlowersChocolates: "/flower-chocolate",
+};
+
+const formatPrice = (value) =>
+  new Intl.NumberFormat("en-PK", { maximumFractionDigits: 0 }).format(Number(value) || 0);
+
+const setAdaptiveImageFit = (event) => {
+  const image = event.currentTarget;
+  const ratio = image.naturalWidth / image.naturalHeight;
+  image.dataset.fit = ratio >= 0.82 && ratio <= 1.22 ? "cover" : "contain";
+};
+
+const getProductImages = (product) => {
+  if (!product) return [];
+  return [...new Set([...(product.images || []), product.image].filter(Boolean))];
+};
+
+const normalizeContents = (product) => {
+  const contents = product?.contents || product?.items || product?.whatsInside;
+  if (!Array.isArray(contents)) return [];
+
+  return contents
+    .map((item, index) => {
+      if (typeof item === "string") {
+        return { id: `content-${index}`, name: item, quantity: null, description: "" };
+      }
+      return {
+        id: item.id || item._id || `content-${index}`,
+        name: item.name || item.title || item.productName || "Included item",
+        quantity: item.quantity ?? item.qty ?? null,
+        description: item.description || item.details || "",
+      };
+    })
+    .filter((item) => item.name);
+};
+
+const getStockLimit = (product) => {
+  const value = product?.countInStock ?? product?.stock;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : 99;
+};
+
+const isUnavailableProduct = (product) =>
+  product?.available === false ||
+  product?.inStock === false ||
+  getStockLimit(product) === 0;
+
+const getPackagingContent = (product) => {
+  if (product?.packaging?.items?.length) return product.packaging;
+  const packagingSignals = [
+    product?.name,
+    product?.subcategory,
+    product?.keyGift,
+    product?.shortDescription,
+    product?.longDescription,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return /\b(box|hamper)\b/.test(packagingSignals) ? defaultGiftPackaging : null;
+};
 
 const ProductDetail = () => {
-  const [selectedImage, setSelectedImage] = useState("");
   const { productSlug, category } = useParams();
-  const navigate = useNavigate();
   const location = useLocation();
-  const [product, setProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState("description");
-  const [relatedProducts, setRelatedProducts] = useState([]);
   const { addToCart } = useCart();
-  const [notification, setNotification] = useState({
-    show: false,
-    type: "success",
-    message: "",
-  });
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const addingRef = useRef(false);
+
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [status, setStatus] = useState("loading");
+  const [requestError, setRequestError] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
+  const [relatedStart, setRelatedStart] = useState(0);
+  const [activeInfoTab, setActiveInfoTab] = useState("contents");
+  const [quantity, setQuantity] = useState(1);
+  const [cards, setCards] = useState([]);
+  const [cardsStatus, setCardsStatus] = useState("loading");
+  const [cardStart, setCardStart] = useState(0);
+  const [cardChoice, setCardChoice] = useState("without-card");
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [messageMode, setMessageMode] = useState("write");
+  const [messageDraft, setMessageDraft] = useState({ from: "", to: "", message: "" });
+  const [messageErrors, setMessageErrors] = useState({});
+  const [isAdding, setIsAdding] = useState(false);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
-  
-  const isCorporateGift = category === "giftsForCompany";
+  const [notification, setNotification] = useState({ show: false, type: "success", message: "" });
 
-  // Category mapping functions
-  const getCategoryDisplayName = (categorySlug) => {
-    const categoryMap = {
-      'giftsForHer': 'Gifts For Her',
-      'giftsForHim': 'Gifts For Him',
-      'giftsForBabies': 'Gifts For Babies',
-      'giftsForCompany': 'Gifts For Companies',
-      'giftsForCompanies': 'Gifts For Companies',
-      'giftsForEveryone': 'Gifts For Everyone',
-      'giftsForWedding': 'Wedding Gifts',
-      'giftsForReligions': 'Religious Gifts',
-      'giftsForBirthday': 'Birthday Gifts',
-      'flowerChocolate': 'Sweets & Bouquets',
-    };
-    return categoryMap[categorySlug] || categorySlug;
-  };
+  const isCorporateGift = category === "giftsForCompany" || category === "giftsForCompanies";
+  const categoryName = categoryNames[category] || category || "Gifts";
+  const categoryRoute = categoryRoutes[category] || "/giftforeveryone";
 
-  const getCategoryRoute = (categorySlug) => {
-    const routeMap = {
-      'giftsForHer': '/giftforher',
-      'giftsForHim': '/giftforhim',
-      'giftsForBabies': '/Giftforbabies',
-      'giftsForCompany': '/giftforcompanies',
-      'giftsForCompanies': '/giftforcompanies',
-      'giftsForEveryone': '/giftforeveryone',
-      'giftsForWedding': '/giftforwedding',
-      'giftsForReligions': '/Giftforreligions',
-      'giftsForBirthday': '/Giftforbirthday',
-      'flowerChocolate': '/flower-chocolate',
-    };
-    return routeMap[categorySlug] || '/';
-  };
-
-  // Generate meta tags with fallback to auto-generated values
-  const generateMetaTitle = (product, category) => {
-    if (product.metaTitle) {
-      return product.metaTitle;
-    }
-    const categoryName = getCategoryDisplayName(category);
-    return `${product.name} | ${categoryName} | Gift Unwrap Pakistan`;
-  };
-
-  const generateMetaDescription = (product, category) => {
-    if (product.metaDescription) {
-      return product.metaDescription;
-    }
-    const categoryName = getCategoryDisplayName(category);
-    const price = `PKR ${Math.floor(product.price)}`;
-    const shortDesc = product.shortDescription ? `${product.shortDescription} ` : '';
-    return `Shop ${product.name} at ${price}. ${shortDesc}Perfect ${categoryName.toLowerCase()} with fast delivery across Pakistan.`;
-  };
-
-  // Auto-hide notification after 3 seconds
   useEffect(() => {
-    if (notification.show) {
-      const timer = setTimeout(() => {
-        setNotification((prev) => ({ ...prev, show: false }));
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
+    let active = true;
+    const stateProduct = location.state?.productData;
+    const stateMatches = stateProduct && stateProduct.category === category;
+
+    setStatus(stateMatches ? "ready" : "loading");
+    setRequestError("");
+    setProduct(stateMatches ? { ...stateProduct, category } : null);
+    setRelatedProducts([]);
+    setRelatedStart(0);
+    setQuantity(1);
+    setActiveInfoTab("contents");
+    setCardChoice("without-card");
+    setSelectedCard(null);
+    setMessageMode("write");
+    setMessageDraft({ from: "", to: "", message: "" });
+    setMessageErrors({});
+
+    fetchProductCollections()
+      .then(({ data }) => {
+        if (!active) return;
+        const groups = Array.isArray(data) ? data : [];
+        const group = groups.find((item) => item.category === category);
+        const found = group?.products
+          ? findProductBySlug(group.products, productSlug)
+          : null;
+
+        if (found) {
+          const authoritativeProduct = { ...found, category };
+          setProduct(authoritativeProduct);
+          setRelatedProducts(
+            group.products
+              .filter((item) => item.id !== found.id)
+              .map((item) => ({ ...item, category })),
+          );
+          setStatus("ready");
+          return;
+        }
+
+        if (stateMatches) {
+          const groupProducts = group?.products || [];
+          setRelatedProducts(
+            groupProducts
+              .filter((item) => item.id !== stateProduct.id)
+              .map((item) => ({ ...item, category })),
+          );
+          setStatus("ready");
+        } else {
+          setStatus("missing");
+        }
+      })
+      .catch(() => {
+        if (!active) return;
+        if (stateMatches) {
+          setStatus("ready");
+        } else {
+          setRequestError("We couldn’t load this product right now. Please try again shortly.");
+          setStatus("error");
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [category, productSlug]);
+
+  useEffect(() => {
+    let active = true;
+    setCardsStatus("loading");
+    fetchGreetingCards()
+      .then(({ data }) => {
+        if (!active) return;
+        setCards((Array.isArray(data) ? data : []).filter((card) => card.inStock !== false));
+        setCardsStatus("ready");
+      })
+      .catch(() => {
+        if (!active) return;
+        setCards([]);
+        setCardsStatus("error");
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const images = getProductImages(product);
+    setSelectedImage(images[0] || "");
+  }, [product?.id]);
+
+  useEffect(() => {
+    if (!notification.show) return undefined;
+    const timer = window.setTimeout(
+      () => setNotification((current) => ({ ...current, show: false })),
+      5000,
+    );
+    return () => window.clearTimeout(timer);
   }, [notification.show]);
 
-  const showNotification = (type, message) => {
-    setNotification({
-      show: true,
-      type,
-      message,
-    });
-  };
+  const images = useMemo(() => getProductImages(product), [product]);
+  const contents = useMemo(() => normalizeContents(product), [product]);
+  const faqContent = useMemo(() => getProductFaqContent(product, category), [product, category]);
+  const stockLimit = getStockLimit(product);
+  const unavailable = isUnavailableProduct(product);
+  const reviewCount = product?.reviews?.length || 0;
+  const averageRating = reviewCount
+    ? product.reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / reviewCount
+    : 0;
 
-  useEffect(() => {
-    const fetchProductAndRelated = async () => {
-      let currentProduct = null;
+  const labels = useMemo(
+    () =>
+      [...new Set([product?.subcategory, product?.keyGift, categoryName].filter(Boolean))].slice(0, 3),
+    [categoryName, product],
+  );
 
-      const productFromState = location.state?.productData;
-      if (productFromState && productFromState.category === category) {
-        setProduct(productFromState);
-        setSelectedImage(
-          productFromState.image ||
-            (productFromState.images && productFromState.images[0]) ||
-            ""
-        );
-        currentProduct = productFromState;
-      }
+  const visibleCards = useMemo(() => {
+    const count = Math.min(5, cards.length);
+    return Array.from({ length: count }, (_, index) => cards[(cardStart + index) % cards.length]);
+  }, [cardStart, cards]);
 
-      let categoryData = null;
-      try {
-        const response = await axios.get(
-          "https://giftunwrapbackend.vercel.app/api/products"
-        );
-        categoryData = response.data.find(
-          (item) => item.category === category
-        );
+  const visibleRelatedProducts = useMemo(() => {
+    const count = Math.min(4, relatedProducts.length);
+    return Array.from(
+      { length: count },
+      (_, index) => relatedProducts[(relatedStart + index) % relatedProducts.length],
+    );
+  }, [relatedProducts, relatedStart]);
 
-        if (!currentProduct) {
-          if (categoryData && categoryData.products) {
-            const foundProduct = findProductBySlug(categoryData.products, productSlug);
-            if (foundProduct) {
-              setProduct(foundProduct);
-              setSelectedImage(
-                foundProduct.image ||
-                  (foundProduct.images && foundProduct.images[0]) ||
-                  ""
-              );
-              currentProduct = foundProduct;
-            } else {
-              console.error(`Product with slug "${productSlug}" not found in category "${category}"`);
-              setProduct(null);
-            }
-          }
-        }
-      } catch (err) {
-        if (!currentProduct) {
-          console.error(
-            `Failed to fetch product ${category}/${productSlug}:`,
-            err
-          );
-          setProduct(null);
-        } else {
-          console.error("Failed to fetch related products:", err);
-        }
-      }
-
-      setQuantity(1);
-      window.scrollTo(0, 0);
-
-      if (currentProduct && categoryData && categoryData.products) {
-        const filteredRelated = categoryData.products.filter(
-          (p) => p.id !== currentProduct.id
-        );
-
-        const shuffled = filteredRelated.sort(() => 0.5 - Math.random());
-        setRelatedProducts(shuffled.slice(0, 4));
-      }
-    };
-
-    fetchProductAndRelated();
-  }, [productSlug, category, navigate, location.state]);
-
-  if (!product) {
+  if (status === "loading") {
     return (
-      <div className="flex justify-center items-center h-screen">
-        Loading product details...
+      <div className="gu-pdp-page">
+        <div className="gu-pdp-header-shell"><LandingHeader variant="product" /></div>
+        <main className="gu-pdp-state" aria-live="polite">
+          <div className="gu-pdp-loading-card" />
+          <p>Loading product details…</p>
+        </main>
       </div>
     );
   }
 
-  const handleIncreaseQuantity = () => {
-    setQuantity((prevQty) => prevQty + 1);
+  if (status === "missing" || status === "error" || !product) {
+    return (
+      <div className="gu-pdp-page">
+        <div className="gu-pdp-header-shell"><LandingHeader variant="product" /></div>
+        <main className="gu-pdp-state">
+          <Gift aria-hidden="true" />
+          <h1>{status === "missing" ? "We couldn’t find that gift" : "This gift is taking a moment"}</h1>
+          <p>{requestError || "It may have moved or no longer be available."}</p>
+          <a href={categoryRoute}>Browse {categoryName}</a>
+        </main>
+        <LandingFooter />
+      </div>
+    );
+  }
+
+  const selectedImageIndex = Math.max(0, images.indexOf(selectedImage));
+  const moveGallery = (direction) => {
+    if (images.length < 2) return;
+    const nextIndex = (selectedImageIndex + direction + images.length) % images.length;
+    setSelectedImage(images[nextIndex]);
   };
 
-  const handleDecreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity((prevQty) => prevQty - 1);
+  const changeDraft = (field, value) => {
+    setMessageDraft((current) => ({ ...current, [field]: value }));
+    if (messageErrors[field]) {
+      setMessageErrors((current) => ({ ...current, [field]: "" }));
     }
+  };
+
+  const chooseCard = (card) => {
+    setSelectedCard(card);
+    setCardChoice("card");
+    setMessageErrors({});
+  };
+
+  const validatePersonalization = () => {
+    if (cardChoice !== "card" || messageMode === "blank") {
+      setMessageErrors({});
+      return true;
+    }
+
+    const nextErrors = {};
+    if (!messageDraft.from.trim()) nextErrors.from = "Please add the sender’s name.";
+    if (!messageDraft.to.trim()) nextErrors.to = "Please add the recipient’s name.";
+    if (!messageDraft.message.trim()) nextErrors.message = "Please write a message or choose Leave blank.";
+    setMessageErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
   const handleAddToCart = () => {
-    if (product) {
-      if (isCorporateGift) {
-        setShowQuoteModal(true);
-      } else {
-        addToCart({ ...product, quantity });
-        showNotification(
-          "success",
-          `${product.name} (Qty: ${quantity}) added to cart!`
-        );
-      }
+    if (addingRef.current) return;
+    if (isCorporateGift) {
+      setShowQuoteModal(true);
+      return;
+    }
+    if (unavailable) {
+      setNotification({ show: true, type: "error", message: "This product is currently unavailable." });
+      return;
+    }
+    if (!validatePersonalization()) return;
+
+    const personalization = cardChoice === "card" && selectedCard
+      ? {
+          card: {
+            id: selectedCard.id,
+            name: selectedCard.name,
+            design: selectedCard.design,
+            image: selectedCard.image,
+          },
+          messageMode,
+          ...(messageMode === "write"
+            ? {
+                from: messageDraft.from.trim(),
+                to: messageDraft.to.trim(),
+                message: messageDraft.message.trim(),
+              }
+            : {}),
+        }
+      : null;
+
+    const personalizationKey = personalization
+      ? [
+          personalization.card.id,
+          personalization.messageMode,
+          personalization.from || "",
+          personalization.to || "",
+          personalization.message || "",
+        ].join("|")
+      : "without-card";
+    const cartKey = `${category}-${product.id}-${encodeURIComponent(personalizationKey)}`;
+
+    addingRef.current = true;
+    setIsAdding(true);
+    try {
+      addToCart({ ...product, category, quantity, cartKey, personalization });
+      setNotification({
+        show: true,
+        type: "success",
+        message: personalization
+          ? "Added to cart with your card selection. Checkout will flag the current order-system limitation before submission."
+          : `${product.name} (Qty: ${quantity}) added to cart.`,
+      });
+    } catch {
+      setNotification({ show: true, type: "error", message: "We couldn’t add this gift to your cart. Please try again." });
+    } finally {
+      window.setTimeout(() => {
+        addingRef.current = false;
+        setIsAdding(false);
+      }, 400);
     }
   };
 
-  const handleBuyNow = () => {
-    if (product) {
-      if (isCorporateGift) {
-        setShowQuoteModal(true);
-      } else {
-        addToCart({ ...product, quantity });
-        navigate("/ShoppingCart");
-      }
-    }
-  };
-
-  const reviewCount = product.reviews ? product.reviews.length : 0;
-  const averageRating = reviewCount > 0
-    ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount
-    : 0;
   const canonicalUrl = `${window.location.origin}${location.pathname}`;
+  const mainImage = selectedImage || images[0] || fallbackImage;
+  const packaging = getPackagingContent(product);
+  const shippingLabel = product.shippingTime || product.deliveryTime || product.shippingLabel || "Delivery confirmed at checkout";
+  const metaTitle = product.metaTitle || `${product.name} | ${categoryName} | Gift Unwrap Pakistan`;
+  const metaDescription = product.metaDescription || `${product.shortDescription || product.name} Shop this gift from Gift Unwrap Pakistan.`;
 
   return (
-    <div>
+    <div className="gu-pdp-page">
       <Helmet>
-        <title>{generateMetaTitle(product, category)}</title>
-        <meta name="description" content={generateMetaDescription(product, category)} />
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={generateMetaTitle(product, category)} />
-        <meta property="og:description" content={generateMetaDescription(product, category)} />
-        <meta property="og:image" content={product.images?.[0] || product.image || ''} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:image" content={images[0] || ""} />
         <meta property="og:type" content="product" />
         <meta property="og:url" content={canonicalUrl} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={generateMetaTitle(product, category)} />
-        <meta name="twitter:description" content={generateMetaDescription(product, category)} />
-        <meta name="twitter:image" content={product.images?.[0] || product.image || ''} />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Product",
-            "name": product.name || "Gift Product",
-            "image": product.images || [product.image] || [],
-            "description": product.shortDescription || product.description || "Beautiful gift for any occasion",
-            "sku": product.id || product.productId || `GIFT-${Date.now()}`,
-            "brand": {
-              "@type": "Brand",
-              "name": "Gift Unwrap"
-            },
-            "offers": {
+            name: product.name,
+            image: images,
+            description: product.shortDescription || product.longDescription || product.name,
+            sku: String(product.id || product._id || productSlug),
+            brand: { "@type": "Brand", name: "Gift Unwrap" },
+            offers: {
               "@type": "Offer",
-              "priceCurrency": "PKR",
-              "price": product.price || "2000",
-              "availability": "https://schema.org/InStock",
-              "url": window.location.href,
-              "seller": {
-                "@type": "Organization",
-                "name": "Gift Unwrap"
-              }
+              priceCurrency: "PKR",
+              price: Number(product.price) || 0,
+              availability: unavailable
+                ? "https://schema.org/OutOfStock"
+                : "https://schema.org/InStock",
+              url: canonicalUrl,
             },
             ...(reviewCount > 0 && {
-              "aggregateRating": {
+              aggregateRating: {
                 "@type": "AggregateRating",
-                "ratingValue": averageRating.toFixed(1),
-                "reviewCount": reviewCount
+                ratingValue: averageRating.toFixed(1),
+                reviewCount,
               },
-              "review": product.reviews.slice(0, 10).map((review) => ({
-                "@type": "Review",
-                "reviewRating": {
-                  "@type": "Rating",
-                  "ratingValue": review.rating
-                },
-                "author": {
-                  "@type": "Person",
-                  "name": review.username || "Verified Buyer"
-                },
-                "reviewBody": review.comment
-              }))
-            })
-          })}
-        </script>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-              {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": window.location.origin + "/"
-              },
-              {
-                "@type": "ListItem",
-                "position": 2,
-                "name": getCategoryDisplayName(category),
-                "item": window.location.origin + getCategoryRoute(category)
-              },
-              {
-                "@type": "ListItem",
-                "position": 3,
-                "name": product.name,
-                "item": canonicalUrl
-              }
-            ]
+            }),
           })}
         </script>
       </Helmet>
-      {notification.show && (
-        <NotificationBar
-          type={notification.type}
-          message={notification.message}
-        />
-      )}
-      <Navbar showSearchInput={false} bgColor="#FBF4E8" />
-      <SearchPageNavbar
-        title={product.name}
-        title2={getCategoryDisplayName(category)}
-        title2Route={getCategoryRoute(category)}
-        titleHome="Home"
-        backgroundColor="#FBF4E8"
-      />
 
-      <div className="container mx-auto px-4 sm:px-8 lg:px-16 py-4 sm:py-6 lg:py-12">
-        {/* Product Detail Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-10 xl:gap-16">
-          {/* Left: Product Images */}
-          <div className="space-y-0 sm:space-y-2 lg:space-y-6">
-            {/* Main Image with carousel controls on mobile */}
-            <div className="bg-gray-50 p-2 sm:p-4 lg:p-8 rounded-lg flex items-center justify-center relative">
-              {/* Mobile carousel arrows */}
-              {product.images && product.images.length > 1 && (
-                <>
-                  <button
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 text-gray-500 bg-white bg-opacity-70 rounded-full sm:hidden"
-                    style={{ left: 0 }}
-                    onClick={() => {
-                      const currentIdx = product.images.indexOf(
-                        selectedImage || product.images[0]
-                      );
-                      const prevIdx =
-                        (currentIdx - 1 + product.images.length) %
-                        product.images.length;
-                      setSelectedImage(product.images[prevIdx]);
-                    }}
-                    aria-label="Previous image"
-                    disabled={product.images.length < 2}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </button>
-                  <button
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 text-gray-500 bg-white bg-opacity-70 rounded-full sm:hidden"
-                    style={{ right: 0 }}
-                    onClick={() => {
-                      const currentIdx = product.images.indexOf(
-                        selectedImage || product.images[0]
-                      );
-                      const nextIdx = (currentIdx + 1) % product.images.length;
-                      setSelectedImage(product.images[nextIdx]);
-                    }}
-                    aria-label="Next image"
-                    disabled={product.images.length < 2}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                </>
-              )}
-              <img
-                src={
-                  selectedImage ||
-                  product.image ||
-                  (product.images && product.images[0]) ||
-                  "https://via.placeholder.com/600"
-                }
-                alt={product.name}
-                className="w-full h-full object-contain max-h-[200px] sm:max-h-[300px] lg:max-h-[500px] xl:max-h-[600px] cursor-pointer"
-                onClick={() => setIsFullscreen(true)}
-                loading="eager"
-                decoding="async"
-                fetchPriority="high"
-              />
-              {/* Fullscreen Modal */}
-              {isFullscreen && (
-                <div
-                  className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90"
-                  onClick={() => setIsFullscreen(false)}
+      {notification.show && <NotificationBar type={notification.type} message={notification.message} />}
+      <div className="gu-pdp-header-shell"><LandingHeader variant="product" /></div>
+
+      <main>
+        <section className="gu-pdp-hero" aria-labelledby="gu-pdp-title">
+          <div className="gu-pdp-gallery" aria-label={`${product.name} image gallery`}>
+            <div className="gu-pdp-thumbnails">
+              {images.map((image, index) => (
+                <button
+                  className={selectedImage === image ? "is-active" : ""}
+                  key={`${image}-${index}`}
+                  type="button"
+                  onClick={() => setSelectedImage(image)}
+                  aria-label={`View ${product.name} image ${index + 1}`}
+                  aria-pressed={selectedImage === image}
                 >
-                  <img
-                    src={
-                      selectedImage ||
-                      product.image ||
-                      (product.images && product.images[0]) ||
-                      "https://via.placeholder.com/600"
-                    }
-                    alt={product.name}
-                    className="max-h-[90vh] max-w-[95vw] object-contain rounded shadow-lg"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <button
-                    className="absolute top-4 right-4 text-white bg-black bg-opacity-60 rounded-full p-2 hover:bg-opacity-80 focus:outline-none"
-                    onClick={() => setIsFullscreen(false)}
-                    aria-label="Close fullscreen"
-                    style={{ zIndex: 60 }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-7 w-7"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
+                  <img src={image} alt="" decoding="async" />
+                </button>
+              ))}
+            </div>
+            <div className="gu-pdp-main-image">
+              <img src={mainImage} alt={product.name} fetchPriority="high" decoding="async" onLoad={setAdaptiveImageFit} />
+              {images.length > 1 && (
+                <div className="gu-pdp-gallery-controls">
+                  <button type="button" onClick={() => moveGallery(-1)} aria-label="Previous product image"><ChevronLeft /></button>
+                  <button type="button" onClick={() => moveGallery(1)} aria-label="Next product image"><ChevronRight /></button>
                 </div>
               )}
             </div>
-
-            {/* Thumbnails for sm+ screens only */}
-            {product.images && product.images.length > 1 && (
-              <div className="hidden sm:grid grid-cols-4 gap-3 lg:gap-4">
-                {product.images.map((imgSrc, index) => (
-                  <div
-                    key={index}
-                    className={`border p-2 rounded cursor-pointer aspect-square ${
-                      selectedImage === imgSrc
-                        ? "border-black"
-                        : "border-gray-200 hover:border-gray-400"
-                    }`}
-                    onMouseEnter={() => setSelectedImage(imgSrc)}
-                    onClick={() => setSelectedImage(imgSrc)}
-                  >
-                    <img
-                      src={imgSrc}
-                      alt={`${product.name} thumbnail ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      decoding="async"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Right: Product Info */}
-          <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-            <h1 className="text-lg sm:text-xl lg:text-3xl font-bold text-[#1F1F1F]">
-              {product.name}
-            </h1>
-
-            <div className="flex items-center gap-4">
-              <span className="text-lg sm:text-xl lg:text-2xl font-semibold text-red-500">
-                PKR {product.price ? Math.floor(product.price) : "N/A"}
-              </span>
-            </div>
-
-            <div className="text-[#696C70] border-b border-gray-200 pb-3 sm:pb-4 lg:pb-6 text-sm sm:text-base">
-              <p>
-                {product.shortDescription || "No short description available."}
-              </p>
-            </div>
-
-            {/* Customization Message - Desktop only */}
-            <div className="hidden sm:block bg-blue-50 border border-blue-200 rounded-md p-3 sm:p-4">
-              <div className="flex items-start gap-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <div className="text-blue-700 text-sm sm:text-base">
-                  <p className="font-medium mb-1">Need customization?</p>
-                  <p>
-                    Feel free to contact us before or after placing your order,
-                    we are here to help! We will also reach out shortly to
-                    confirm your preferences.
-                  </p>
-                  <p className="mt-2">
-                    You can call or WhatsApp us at{" "}
-                    <strong>+92 326 8927354</strong>. Just tap below:
-                  </p>
-                  <p className="mt-1">
-                    <a
-                      href="tel:+923268927354"
-                      className="underline hover:text-blue-900 mr-4"
-                    >
-                      Call Now
-                    </a>
-                    |
-                    <a
-                      href="https://wa.me/923268927354"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline hover:text-green-800 ml-4"
-                    >
-                      WhatsApp Now
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Quantity and Buttons Section - Compact on mobile */}
-            {isCorporateGift ? (
-              // Corporate Gift - Only Request Quote button
-              <div className="pt-2 sm:pt-4">
-                <button
-                  onClick={handleAddToCart}
-                  className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
-                >
-                  Request Quote
-                </button>
-                <p className="text-sm text-gray-600 mt-3 text-center">
-                  Get a custom quote for bulk orders and corporate gifting
-                </p>
-              </div>
-            ) : (
-              // Regular Product - Quantity selector and cart buttons
-              <div className="flex gap-3 sm:gap-4 lg:gap-6 pt-2 sm:pt-4">
-                <div className="flex items-center justify-center sm:justify-start border border-gray-300 rounded-md w-fit mx-auto sm:mx-0">
-                  <button
-                    className="px-3 sm:px-4 py-2 cursor-pointer text-gray-500 hover:bg-gray-100 rounded-l-md text-lg sm:text-base"
-                    onClick={handleDecreaseQuantity}
-                    aria-label="Decrease quantity"
-                  >
-                    –
-                  </button>
-                  <span className="px-3 sm:px-4 py-2 text-center w-12 sm:w-14">
-                    {quantity}
-                  </span>
-                  <button
-                    className="px-3 sm:px-4 py-2 cursor-pointer text-gray-500 hover:bg-gray-100 rounded-r-md text-lg sm:text-base"
-                    onClick={handleIncreaseQuantity}
-                    aria-label="Increase quantity"
-                  >
-                    +
-                  </button>
-                </div>
-
-                <div className="flex gap-3 w-full">
-                  <button
-                    onClick={handleAddToCart}
-                    className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-black text-white rounded-md hover:bg-gray-800 transition text-sm sm:text-base font-medium"
-                  >
-                    Add to Cart
-                  </button>
-
-                  <button
-                    onClick={handleBuyNow}
-                    className="w-full px-0 sm:px-8 lg:px-12 cursor-pointer py-3 sm:py-4 bg-red-500 text-white rounded-md hover:bg-red-600 transition text-sm sm:text-base font-medium"
-                  >
-                    Buy Now
-                  </button>
-                </div>
+          <div className="gu-pdp-purchase">
+            <h1 id="gu-pdp-title">{product.name}</h1>
+            {labels.length > 0 && (
+              <div className="gu-pdp-perfect-for">
+                <span>PERFECT FOR</span>
+                <div>{labels.map((label) => <strong key={label}>{label}</strong>)}</div>
               </div>
             )}
+            <div className="gu-pdp-price-row">
+              <strong>{formatPrice(product.price)} PKR</strong>
+              {Number(product.originalPrice) > Number(product.price) && (
+                <del>{formatPrice(product.originalPrice)} PKR</del>
+              )}
+              {unavailable && <span className="gu-pdp-unavailable">Unavailable</span>}
+            </div>
+            <p className="gu-pdp-description">
+              {product.shortDescription || product.longDescription || "Product details are being updated."}
+            </p>
 
-            {/* Customization Message - Mobile only, after buttons */}
-            <div className="block sm:hidden bg-blue-50 border border-blue-200 rounded-md p-3 mt-3">
-              <div className="flex items-start gap-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+            <section className="gu-pdp-info-panel" aria-label="Product details">
+              <div className="gu-pdp-info-tabs" role="tablist" aria-label="Product information">
+                <button
+                  className={activeInfoTab === "contents" ? "is-active" : ""}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeInfoTab === "contents"}
+                  onClick={() => setActiveInfoTab("contents")}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <div className="text-blue-700 text-sm">
-                  <p className="font-medium mb-1">Need customization?</p>
-                  <p>
-                    Feel free to contact us before or after placing your order,
-                    we are here to help! We will also reach out shortly to
-                    confirm your preferences.
-                  </p>
-                  <p className="mt-2">
-                    You can also call or WhatsApp us at{" "}
-                    <strong>+92 326 8927354</strong>. Just tap below:
-                  </p>
-                  <p className="mt-1">
-                    <a
-                      href="tel:+923268927354"
-                      className="underline hover:text-blue-900 mr-4"
-                    >
-                      Call Now
-                    </a>
-                    |
-                    <a
-                      href="https://wa.me/923268927354"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline hover:text-green-800 ml-4"
-                    >
-                      WhatsApp Now
-                    </a>
-                  </p>
+                  What’s inside
+                </button>
+                <button
+                  className={activeInfoTab === "packaging" ? "is-active" : ""}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeInfoTab === "packaging"}
+                  onClick={() => setActiveInfoTab("packaging")}
+                >
+                  How it’s packaged
+                </button>
+              </div>
+
+              {activeInfoTab === "contents" ? (
+                <div className="gu-pdp-contents" role="tabpanel">
+                  {contents.length > 0 ? (
+                    <ul>
+                      {contents.map((item) => (
+                        <li key={item.id}>
+                          <span>{item.quantity ? `${item.quantity} ×` : "•"}</span>
+                          <div><strong>{item.name}</strong>{item.description && <p>{item.description}</p>}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="gu-pdp-empty-contents">
+                      <Gift aria-hidden="true" />
+                      <div>
+                        <strong>Detailed contents are not available for this product yet.</strong>
+                        <p>Please review the photographs or <a href="https://wa.me/923268927354" target="_blank" rel="noreferrer">contact us on WhatsApp</a> before ordering.</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            </div>
-
-            <div className="border border-gray-200 rounded-md p-3 sm:p-4 mt-6 sm:mt-7 lg:mt-8 space-y-2 sm:space-y-3">
-              <div className="flex items-center gap-3 text-xs sm:text-sm">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2.05-2.05A1 1 0 015.71 14h7.29zM13 16l-2-2m2 2l2-2m-2 2v-2m0 0h4.586a1 1 0 00.707-.293l2.828-2.828a1 1 0 000-1.414l-2.828-2.828A1 1 0 0017.586 6H13"
-                  />
-                </svg>
-                <span>Free shipping on orders over PKR 4000</span>
-              </div>
-              <div className="flex items-center gap-3 text-xs sm:text-sm">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16 15v-1a4 4 0 00-4-4H8m0 0l4 4m-4-4l4-4m-4 4H4"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                  />
-                </svg>
-                <span>30-day returns</span>
-              </div>
-            </div>
-
-            <div className="mt-16 sm:mt-20 lg:mt-32">
-              <div className="flex border-b border-gray-200 overflow-x-auto">
-                <button
-                  className={`py-2 sm:py-3 px-3 sm:px-6 cursor-pointer font-medium whitespace-nowrap text-sm sm:text-base ${
-                    activeTab === "description"
-                      ? "border-b-2 border-black text-black"
-                      : "text-gray-500 hover:text-black"
-                  }`}
-                  onClick={() => setActiveTab("description")}
-                >
-                  Description
-                </button>
-                <button
-                  className={`py-2 sm:py-3 px-3 sm:px-6 cursor-pointer font-medium whitespace-nowrap text-sm sm:text-base ${
-                    activeTab === "reviews"
-                      ? "border-b-2 border-black text-black"
-                      : "text-gray-500 hover:text-black"
-                  }`}
-                  onClick={() => setActiveTab("reviews")}
-                >
-                  Reviews ({product.reviews ? product.reviews.length : 0})
-                </button>
-                <button
-                  className={`py-2 sm:py-3 px-3 sm:px-6 cursor-pointer font-medium whitespace-nowrap text-sm sm:text-base ${
-                    activeTab === "shipping"
-                      ? "border-b-2 border-black text-black"
-                      : "text-gray-500 hover:text-black"
-                  }`}
-                  onClick={() => setActiveTab("shipping")}
-                >
-                  Shipping & Returns
-                </button>
-              </div>
-
-              <div className="py-4 sm:py-6 lg:py-8 text-gray-700 leading-relaxed text-sm sm:text-base">
-                {activeTab === "description" && (
-                  <div>
-                    <p>
-                      {product.longDescription ||
-                        "Detailed description not available."}
-                    </p>
-                  </div>
-                )}
-
-                {activeTab === "reviews" && (
-                  <div className="space-y-6">
-                    {product.reviews && product.reviews.length > 0 ? (
-                      product.reviews.map((review, index) => (
-                        <div
-                          key={index}
-                          className="border-b pb-4 last:border-none"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-semibold text-sm sm:text-base">
-                                <strong>Username:</strong> {review.username}
-                              </p>
-                              {review.createdAt && (
-                                <span className="text-xs text-gray-500 block mb-1">
-                                  {new Date(
-                                    review.createdAt
-                                  ).toLocaleDateString(undefined, {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                  })}
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center">
-                              <strong>Rating:</strong>
-                              {[...Array(5)].map((_, i) => (
-                                <svg
-                                  key={i}
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill={
-                                    i < review.rating ? "currentColor" : "none"
-                                  }
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                  className={`h-5 w-5 ${
-                                    i < review.rating
-                                      ? "text-yellow-400"
-                                      : "text-gray-300"
-                                  }`}
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1}
-                                    d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.62 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"
-                                  />
-                                </svg>
-                              ))}
-                            </div>
+              ) : (
+                <div className="gu-pdp-packaging" role="tabpanel">
+                  {packaging ? (
+                    <>
+                      <img className="gu-pdp-packaging-image" src={packagingBox} alt="Gift Unwrap keepsake box with ribbon" />
+                      <div className="gu-pdp-packaging-copy">
+                        <p>{packaging.intro}</p>
+                        {packaging.items.map((item, index) => (
+                          <div className="gu-pdp-packaging-point" key={item.id || item.title}>
+                            <img src={packagingIcons[index] || packagingReady} alt="" aria-hidden="true" />
+                            <div><strong>{item.title}</strong><span>{item.description}</span></div>
                           </div>
-                          <p className="mt-2 text-sm sm:text-base text-gray-700">
-                            <strong>Comment:</strong> {review.comment}
-                          </p>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-sm text-gray-500">
-                        No reviews yet for this product.
-                      </p>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="gu-pdp-empty-contents gu-pdp-packaging-unavailable">
+                      <Gift aria-hidden="true" />
+                      <div>
+                        <strong>Packaging details are not available for this product yet.</strong>
+                        <p><a href="https://wa.me/923268927354" target="_blank" rel="noreferrer">Contact us on WhatsApp</a> if you would like to confirm how it will arrive.</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </section>
+
+            {!isCorporateGift && (
+              <section className="gu-pdp-card-panel" aria-labelledby="gu-pdp-card-title">
+                <div className="gu-pdp-card-heading">
+                  <h2 id="gu-pdp-card-title">Add your card</h2>
+                  <div>
+                    <button type="button" aria-label="Previous greeting cards" disabled={cards.length <= 5} onClick={() => setCardStart((current) => (current - 1 + cards.length) % cards.length)}><ChevronLeft /></button>
+                    <button type="button" aria-label="Next greeting cards" disabled={cards.length <= 5} onClick={() => setCardStart((current) => (current + 1) % cards.length)}><ChevronRight /></button>
+                  </div>
+                </div>
+
+                <div className="gu-pdp-card-selection">
+                  <div className="gu-pdp-card-picker" role="radiogroup" aria-label="Choose a greeting card">
+                    {cardsStatus === "loading" && <p className="gu-pdp-card-status">Loading greeting cards…</p>}
+                    {cardsStatus === "error" && <p className="gu-pdp-card-status">Greeting cards are unavailable right now. You can still send your gift without one.</p>}
+                    {cardsStatus === "ready" && cards.length === 0 && <p className="gu-pdp-card-status">No greeting cards are currently in stock.</p>}
+                    {visibleCards.map((card) => {
+                      const active = cardChoice === "card" && selectedCard?.id === card.id;
+                      return (
+                        <button
+                          className={active ? "is-active" : ""}
+                          key={card.id ?? card._id}
+                          type="button"
+                          role="radio"
+                          aria-checked={active}
+                          onClick={() => chooseCard(card)}
+                        >
+                          <img src={card.image} alt={card.name} loading="lazy" decoding="async" />
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <label className="gu-pdp-without-card">
+                    <input
+                      type="radio"
+                      name="card-choice"
+                      checked={cardChoice === "without-card"}
+                      onChange={() => { setCardChoice("without-card"); setMessageErrors({}); }}
+                    />
+                    <span>Send without a card</span>
+                  </label>
+                </div>
+
+                {cardChoice === "card" && selectedCard && (
+                  <div className="gu-pdp-message-editor">
+                    <div className="gu-pdp-message-tabs" role="tablist" aria-label="Card message options">
+                      <button className={messageMode === "write" ? "is-active" : ""} type="button" role="tab" aria-selected={messageMode === "write"} onClick={() => setMessageMode("write")}>Write a message</button>
+                      <button className={messageMode === "blank" ? "is-active" : ""} type="button" role="tab" aria-selected={messageMode === "blank"} onClick={() => { setMessageMode("blank"); setMessageErrors({}); }}>Leave blank</button>
+                    </div>
+                    {messageMode === "write" && (
+                      <div className="gu-pdp-message-fields">
+                        <label>
+                          <span>From <em>*</em></span>
+                          <input value={messageDraft.from} maxLength={80} onChange={(event) => changeDraft("from", event.target.value)} aria-invalid={Boolean(messageErrors.from)} />
+                          {messageErrors.from && <small>{messageErrors.from}</small>}
+                        </label>
+                        <label>
+                          <span>To <em>*</em></span>
+                          <input value={messageDraft.to} maxLength={80} onChange={(event) => changeDraft("to", event.target.value)} aria-invalid={Boolean(messageErrors.to)} />
+                          {messageErrors.to && <small>{messageErrors.to}</small>}
+                        </label>
+                        <label className="gu-pdp-message-field">
+                          <span>Message <em>*</em></span>
+                          <textarea value={messageDraft.message} maxLength={300} onChange={(event) => changeDraft("message", event.target.value)} aria-invalid={Boolean(messageErrors.message)} />
+                          <span className="gu-pdp-character-count">{messageDraft.message.length}/300</span>
+                          {messageErrors.message && <small>{messageErrors.message}</small>}
+                        </label>
+                      </div>
                     )}
                   </div>
                 )}
+              </section>
+            )}
 
-                {activeTab === "shipping" && (
-                  <div className="space-y-3 sm:space-y-4">
-                    <div>
-                      <h4 className="font-semibold mb-2 text-sm sm:text-base">
-                        Shipping Information:
-                      </h4>
-                      <ul className="list-disc list-inside space-y-1 text-sm sm:text-base">
-                        <li>Free shipping on orders over PKR 4000.</li>
-                        <li>
-                          Express shipping available for an additional fee.
-                        </li>
-                        <li>Most orders ship within 1-2 business days.</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-2 text-sm sm:text-base">
-                        Return Policy:
-                      </h4>
-                      <ul className="list-disc list-inside space-y-1 text-sm sm:text-base">
-                        <li>
-                          30-day return window for unused items in original
-                          packaging.
-                        </li>
-                        <li>
-                          Return shipping is free for defective or incorrect
-                          items.
-                        </li>
-                        <li>
-                          Contact customer service for return authorization and
-                          instructions.
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                )}
-              </div>
+            <div className="gu-pdp-buy-row">
+              {!isCorporateGift && (
+                <div className="gu-pdp-quantity" aria-label="Quantity selector">
+                  <button type="button" onClick={() => setQuantity((current) => Math.max(1, current - 1))} disabled={quantity <= 1} aria-label="Decrease quantity"><Minus /></button>
+                  <output aria-live="polite">{quantity}</output>
+                  <button type="button" onClick={() => setQuantity((current) => Math.min(stockLimit, current + 1))} disabled={quantity >= stockLimit || unavailable} aria-label="Increase quantity"><Plus /></button>
+                </div>
+              )}
+              <CartoonButton
+                className="gu-pdp-add"
+                color="#ff2b3a"
+                disabled={unavailable || isAdding}
+                label={isCorporateGift ? "Request a quote" : unavailable ? "Currently unavailable" : isAdding ? "Adding…" : "Add to cart"}
+                onClick={handleAddToCart}
+              />
+            </div>
+
+            <div className="gu-pdp-support-details">
+              <div><Gift aria-hidden="true" /><span>Hand-packed</span></div>
+              <i aria-hidden="true" />
+              <div><Truck aria-hidden="true" /><span>{shippingLabel}</span></div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* You May Also Like Section */}
         {relatedProducts.length > 0 && (
-          <div className="mt-12 sm:mt-14 lg:mt-16">
-            <h2 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-center">
-              You May Also Like
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
-              {relatedProducts.map((p) => (
-                <Product
-                  key={p.id}
-                  product={{ ...p, category: category }}
-                  columns={4}
-                />
-              ))}
+          <section className="gu-pdp-related" aria-labelledby="gu-pdp-related-title">
+            <div className="gu-pdp-section-heading">
+              <h2 id="gu-pdp-related-title">You might also love</h2>
             </div>
-          </div>
+            <div className="gu-pdp-related-carousel">
+              <button className="gu-pdp-related-arrow gu-pdp-related-arrow--previous" type="button" aria-label="Previous related products" disabled={relatedProducts.length <= 4} onClick={() => setRelatedStart((current) => (current - 1 + relatedProducts.length) % relatedProducts.length)}><ChevronLeft /></button>
+              <div className="gu-pdp-related-grid">
+                {visibleRelatedProducts.map((related) => (
+                  <Link
+                    className="gu-pdp-related-card"
+                    key={`${related.category}-${related.id}`}
+                    state={{ productData: related }}
+                    to={`/product/${related.category}/${generateSlug(related.name)}`}
+                  >
+                    <span className="gu-pdp-related-image">
+                      <img src={related.image || related.images?.[0] || fallbackImage} alt={related.name} loading="lazy" decoding="async" onLoad={setAdaptiveImageFit} />
+                    </span>
+                    <span className="gu-pdp-related-copy">
+                      <strong>{related.name}</strong>
+                      <b>{formatPrice(related.price)} PKR</b>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+              <button className="gu-pdp-related-arrow gu-pdp-related-arrow--next" type="button" aria-label="Next related products" disabled={relatedProducts.length <= 4} onClick={() => setRelatedStart((current) => (current + 1) % relatedProducts.length)}><ChevronRight /></button>
+            </div>
+          </section>
         )}
-      </div>
 
-      <Footer />
-      
-      <RequestQuoteModal
-        isOpen={showQuoteModal}
-        onClose={() => setShowQuoteModal(false)}
-        product={product}
-      />
+        <Testimonials />
+        {faqContent && <FAQSection {...faqContent} variant="product" />}
+      </main>
+
+      <LandingFooter />
+      {isCorporateGift && <RequestQuoteModal isOpen={showQuoteModal} onClose={() => setShowQuoteModal(false)} product={product} />}
     </div>
   );
 };

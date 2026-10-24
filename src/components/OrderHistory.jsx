@@ -9,6 +9,8 @@ const filters = ['All', 'In Progress', 'Delivered', 'Cancelled'];
 const OrderHistory = () => {
     const [activeFilter, setActiveFilter] = useState('All');
     const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(false);
     const [filteredOrders, setFilteredOrders] = useState([]);
     const [reviewInputs, setReviewInputs] = useState({});
     const [reviewRatings, setReviewRatings] = useState({});
@@ -59,6 +61,9 @@ const OrderHistory = () => {
             } catch (error) {
                 console.error('Error fetching orders:', error);
                 showNotification('error', 'Failed to load orders. Please try again.');
+                setLoadError(true);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -158,15 +163,16 @@ const OrderHistory = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-6">
+        <div className="gu-migration-orders max-w-3xl mx-auto">
             {notification.show && (
                 <NotificationBar type={notification.type} message={notification.message} />
             )}
 
-            <div className="flex gap-3 mb-6">
+            <div className="flex flex-wrap gap-3 mb-6">
                 {filters.map((filter) => (
                     <button
                         key={filter}
+                        aria-pressed={activeFilter === filter}
                         className={`px-4 py-1 border rounded-full text-sm ${activeFilter === filter
                             ? 'border-black text-black font-bold bg-[#F7F7F7]'
                             : 'border-none text-black bg-[#F7F7F7]'
@@ -179,7 +185,7 @@ const OrderHistory = () => {
             </div>
 
             <div className="space-y-4">
-                {filteredOrders.length > 0 ? (
+                {loading ? <p role="status" className="gu-migration-state">Loading your orders…</p> : loadError ? <p role="alert" className="gu-migration-state">We couldn’t load your orders. Please refresh the page to try again.</p> : filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => (
                         order.orderItems.map((orderItem) => (
                             <div
@@ -195,7 +201,7 @@ const OrderHistory = () => {
                                             <MyorderLine />
                                             <p className="text-[16px]">{new Date(order.createdAt).toLocaleDateString()}</p>
                                         </div>
-                                        <div className="flex items-center gap-4">
+                                        <div className="gu-migration-order-item flex items-center gap-4">
                                             <img
                                                 src={orderItem?.imageUrl}
                                                 alt={orderItem?.name}
@@ -224,16 +230,20 @@ const OrderHistory = () => {
                                         </label>
                                         <div className="mb-2">
                                             {[1, 2, 3, 4, 5].map((star) => (
-                                                <span
+                                                <button type="button"
                                                     key={star}
+                                                    aria-label={`Rate ${star} out of 5 stars`}
+                                                    aria-pressed={star === reviewRatings[orderItem.productId]}
+                                                    disabled={reviewSubmitting[orderItem.productId]}
                                                     className={`cursor-pointer text-2xl ${star <= (reviewRatings[orderItem.productId] || 0) ? 'text-yellow-500' : 'text-gray-300'}`}
                                                     onClick={() => handleRatingChange(orderItem.productId, star)}
                                                 >
                                                     &#9733;
-                                                </span>
+                                                </button>
                                             ))}
                                         </div>
                                         <textarea
+                                            aria-label={`Review for ${orderItem.name}`}
                                             className="border rounded-md p-2 w-full min-h-[60px] resize-y focus:outline-none focus:border-black"
                                             placeholder="Write your review here..."
                                             value={reviewInputs[orderItem.productId] || ""}

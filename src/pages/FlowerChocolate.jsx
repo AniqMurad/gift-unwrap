@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import SearchPageNavbar from "../components/SearchPageNavbar";
-import Footer from "../components/Footer";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
+import LandingFooter from "../components/LandingFooter";
 import {
   ArrowDown,
   FilterIcon,
@@ -15,17 +15,18 @@ import {
   ThreeBars,
 } from "../components/icons";
 import Product from "../components/Product";
-import Loader from "../components/Loader";
+import { StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import { Buttons } from "../components/Buttons";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import Navbar from "@/components/Navbar";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import PriceRangeSlider from "../components/PriceRangeSlider";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const FlowerChocolate = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const location = useLocation();
   const [columns, setColumns] = useState(4);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -63,7 +64,7 @@ const FlowerChocolate = () => {
           setProducts(categoryData.products);
         }
       })
-      .catch((err) => console.error("Failed to load products:", err))
+      .catch((err) => { console.error("Failed to load products:", err); setLoadError(true); })
       .finally(() => setLoading(false));
   }, [category]);
 
@@ -128,7 +129,6 @@ const FlowerChocolate = () => {
 
   return (
     <div>
-      {loading && <Loader />}
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <DeliveryMarquee />
       <SearchPageNavbar
@@ -136,8 +136,8 @@ const FlowerChocolate = () => {
         titleHome="Home Page"
         backgroundColor="#FBF4E8"
       />
-      <div className="bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2">
-        <p
+      <div className="gu-migration-content gu-migration-chips bg-[#FBF4E8] justify-center gap-2 sm:gap-4 lg:gap-8 flex flex-wrap text-[10px] sm:text-[12px] lg:text-[14px] font-semibold text-[#1F1F1F] uppercase py-4 sm:py-6 px-2">
+        <button type="button" aria-pressed={selectedCategory === "cake"}
           className={`cursor-pointer ${
             selectedCategory === "cake" ? "underline" : ""
           }`}
@@ -145,8 +145,8 @@ const FlowerChocolate = () => {
         >
           <span className="hidden sm:inline">Cake</span>
           <span className="sm:hidden">Cake</span>
-        </p>
-        <p
+        </button>
+        <button type="button" aria-pressed={selectedCategory === "bouquets"}
           className={`cursor-pointer ${
             selectedCategory === "bouquets" ? "underline" : ""
           }`}
@@ -154,8 +154,8 @@ const FlowerChocolate = () => {
         >
           <span className="hidden sm:inline">Bouquets</span>
           <span className="sm:hidden">Bouquets</span>
-        </p>
-        <p
+        </button>
+        <button type="button" aria-pressed={selectedCategory === "cakebouquets"}
           className={`cursor-pointer ${
             selectedCategory === "cakebouquets" ? "underline" : ""
           }`}
@@ -163,16 +163,18 @@ const FlowerChocolate = () => {
         >
           <span className="hidden sm:inline">Cake & Bouquets</span>
           <span className="sm:hidden">Both</span>
-        </p>
+        </button>
       </div>
 
-      <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
+      <div className="gu-migration-section gu-migration-content gu-migration-catalog px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between">
         <div className="w-full transition-all duration-300">
+          {loading && <Loader />}
+          {loadError && <div className="gu-migration-state" role="alert">We couldn’t load the gifts. Please refresh the page to try again.</div>}
           <div className="flex flex-col flex-wrap gap-3">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0 sm:space-x-6">
               {/* Layout Switch Buttons */}
               <div className="flex items-center space-x-4">
-                <select
+                <select aria-label="Sort by price"
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
                   className="border border-[#E9E9E9] px-3 py-1.5 rounded text-sm bg-white cursor-pointer hidden sm:block"
@@ -182,7 +184,7 @@ const FlowerChocolate = () => {
                   <option value="highToLow">High to Low</option>
                 </select>
                 <div className="flex space-x-2">
-                  <div
+                  <button type="button" aria-label="Show 3 columns" aria-pressed={columns === 3}
                     className={`border ${
                       columns === 3 ? "bg-black" : "border-[#E9E9E9]"
                     } p-1 rounded cursor-pointer hidden sm:block`}
@@ -191,9 +193,9 @@ const FlowerChocolate = () => {
                     <ThreeBars
                       fillColor={columns === 3 ? "white" : "#A0A0A0"}
                     />
-                  </div>
+                  </button>
                   {screenWidth >= 1024 && (
-                    <div
+                    <button type="button" aria-label="Show 4 columns" aria-pressed={columns === 4}
                       className={`border ${
                         columns === 4 ? "bg-black" : "border-[#E9E9E9]"
                       } p-1 rounded cursor-pointer hidden sm:block`}
@@ -202,10 +204,10 @@ const FlowerChocolate = () => {
                       <FourBars
                         fillColor={columns === 4 ? "white" : "#A0A0A0"}
                       />
-                    </div>
+                    </button>
                   )}
                   {screenWidth >= 1280 && (
-                    <div
+                    <button type="button" aria-label="Show 5 columns" aria-pressed={columns === 5}
                       className={`border ${
                         columns === 5 ? "bg-black" : "border-[#E9E9E9]"
                       } p-1 rounded cursor-pointer hidden sm:block`}
@@ -214,7 +216,7 @@ const FlowerChocolate = () => {
                       <FiveBars
                         fillColor={columns === 5 ? "white" : "#A0A0A0"}
                       />
-                    </div>
+                    </button>
                   )}
                 </div>
               </div>
@@ -297,7 +299,7 @@ const FlowerChocolate = () => {
           {/* Product Grid */}
           {giftsForflowersProducts.length > 0 ? (
             <div
-              className={`justify-items-center grid gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300
+              className={`gu-migration-grid justify-items-center grid gap-3 sm:gap-4 lg:gap-6 mt-6 sm:mt-8 lg:mt-10 transition-all duration-300
                 grid-cols-2 sm:grid-cols-3
                 ${columns === 3 ? "lg:grid-cols-3" : ""}
                 ${columns === 4 ? "lg:grid-cols-4" : ""}
@@ -305,7 +307,7 @@ const FlowerChocolate = () => {
                 `}
             >
               {giftsForflowersProducts.slice(0, visibleCount).map((product) => (
-                <Product
+                <Product variant="collection"
                   key={product.id}
                   product={{ ...product, category: "FlowersChocolates" }}
                   columns={columns}
@@ -318,11 +320,11 @@ const FlowerChocolate = () => {
               <Buttons onClick={handleLoadMore} />
             </div>
           )}
-          {giftsForflowersProducts.length === 0 && (
+          {!loading && !loadError && giftsForflowersProducts.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 sm:py-20 lg:py-24">
               <div className="text-center">
                 <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-600 mb-4">
-                  No Products Available
+                  No gifts match these filters. Try adjusting your selection.
                 </h3>
                 <p className="text-sm sm:text-base text-gray-500">
                   Sorry, there are no products available in this category at the
@@ -334,7 +336,7 @@ const FlowerChocolate = () => {
         </div>
       </div>
 
-      <Footer />
+      <LandingFooter />
     </div>
   );
 };

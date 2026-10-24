@@ -14,14 +14,35 @@ function AnalyticsTracker() {
   return null;
 }
 import { HelmetProvider } from 'react-helmet-async';
-import { WishlistProvider } from "./context/WishlistContext";
 import { CartProvider } from './context/CartContext';
 import Loader from "./components/Loader";
 import Home from "./pages/Home";
 import ScrollToTop from './components/ScrollToTop';
+import HelloBar from './components/HelloBar';
+import StorefrontPage from './components/storefront/StorefrontPage';
+
+const navigationAnnouncementRoutes = new Set([
+  "/giftforher",
+  "/giftforhim",
+  "/giftforbirthday",
+  "/personalized-gifts",
+  "/giftforcompanies",
+  "/greeting-cards",
+  "/floral-arrangements",
+  "/sweet-treats",
+  "/build-gift-box",
+]);
+
+function NavigationAnnouncement() {
+  const { pathname } = useLocation();
+  const normalizedPath = pathname.toLowerCase();
+  const hasNavigationAnnouncement = navigationAnnouncementRoutes.has(normalizedPath)
+    || normalizedPath.startsWith("/product/");
+
+  return hasNavigationAnnouncement ? <HelloBar variant="navigation" /> : null;
+}
 
 const SearchOutput = lazy(() => import("./pages/SearchOutput"));
-const WishList = lazy(() => import("./pages/WishList"));
 const Blog = lazy(() => import("./pages/Blog"));
 const CustomerFeedback = lazy(() => import("./pages/CustomerFeedback"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
@@ -45,6 +66,10 @@ const Forcompanies = lazy(() => import("./pages/Forcompanies"));
 const Giftsforwedding = lazy(() => import("./pages/Giftsforwedding"));
 const Giftforreligions = lazy(() => import("./pages/Giftforreligions"));
 const BirthdayGifts = lazy(() => import("./pages/BirthdayGifts"));
+const PersonalizedGifts = lazy(() => import("./pages/PersonalizedGifts"));
+const GreetingCards = lazy(() => import("./pages/GreetingCards"));
+const FloralArrangements = lazy(() => import("./pages/FloralArrangements"));
+const SweetTreats = lazy(() => import("./pages/SweetTreats"));
 const SuccessScreen = lazy(() => import("./pages/SuccessScreen"));
 const FlowerChocolate = lazy(() => import('./pages/FlowerChocolate'));
 const ShippingPolicy = lazy(() => import("./pages/ShippingPolicy"));
@@ -59,47 +84,49 @@ function App() {
       <Router>
         <AnalyticsTracker />
         <ScrollToTop />
-        <WishlistProvider>
-          <CartProvider>
+        <CartProvider>
+            <NavigationAnnouncement />
             <Suspense fallback={<Loader />}>
               <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/wishlist" element={<WishList />} />
               <Route path="/blog" element={<Blog />} />
-              <Route path="/customer-feedback" element={<CustomerFeedback />} />
-              <Route path="/contact-us" element={<ContactUs />} />
-              <Route path="/blog/:slug" element={<BlogOpen />} />
-              <Route path="/error" element={<Error />} />
-              <Route path="/coming-soon" element={<ComingSoon />} />
-              <Route path="/faqs" element={<FAQs />} />
+              <Route path="/customer-feedback" element={<StorefrontPage kind="reviews"><CustomerFeedback /></StorefrontPage>} />
+              <Route path="/contact-us" element={<StorefrontPage kind="contact"><ContactUs /></StorefrontPage>} />
+              <Route path="/blog/:slug" element={<StorefrontPage kind="article"><BlogOpen /></StorefrontPage>} />
+              <Route path="/error" element={<StorefrontPage kind="error"><Error /></StorefrontPage>} />
+              <Route path="/coming-soon" element={<StorefrontPage kind="coming"><ComingSoon /></StorefrontPage>} />
+              <Route path="/faqs" element={<StorefrontPage kind="faq"><FAQs /></StorefrontPage>} />
               <Route path="/giftforher" element={<Giftsforher />} />
               <Route path="/giftforhim" element={<Giftsforhim />} />
-              <Route path="/forgetPassword" element={<ForgetPassword />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/OrderTracking" element={<OrderTracking />} />
-              <Route path="/myAccount" element={<MyAccount />} />
+              <Route path="/forgetPassword" element={<StorefrontPage kind="auth"><ForgetPassword /></StorefrontPage>} />
+              <Route path="/login" element={<StorefrontPage kind="auth"><Login /></StorefrontPage>} />
+              <Route path="/signup" element={<StorefrontPage kind="auth"><Signup /></StorefrontPage>} />
+              <Route path="/OrderTracking" element={<StorefrontPage kind="tracking"><OrderTracking /></StorefrontPage>} />
+              <Route path="/myAccount" element={<StorefrontPage kind="account"><MyAccount /></StorefrontPage>} />
               <Route path="/product/:category/:productSlug" element={<ProductDetail />} />
-              <Route path="/Giftforbabies" element={<Giftsforbabies />} />
-              <Route path="/giftforeveryone" element={<Giftsforeveryone />} />
-              <Route path="/giftforcompanies" element={<Forcompanies />} />
-              <Route path="/giftforwedding" element={<Giftsforwedding />} />
-              <Route path="/Giftforreligions" element={<Giftforreligions />} />
+              <Route path="/Giftforbabies" element={<StorefrontPage kind="catalog"><Giftsforbabies /></StorefrontPage>} />
+              <Route path="/giftforeveryone" element={<StorefrontPage kind="catalog"><Giftsforeveryone /></StorefrontPage>} />
+              <Route path="/giftforcompanies" element={<StorefrontPage kind="catalog"><Forcompanies /></StorefrontPage>} />
+              <Route path="/giftforwedding" element={<StorefrontPage kind="catalog"><Giftsforwedding /></StorefrontPage>} />
+              <Route path="/Giftforreligions" element={<StorefrontPage kind="catalog"><Giftforreligions /></StorefrontPage>} />
               <Route path="/Giftforbirthday" element={<BirthdayGifts />} />
-              <Route path="/Checkout" element={<Checkout />} />
-              <Route path="/ShoppingCart" element={<ShoppingCart />} />
-              <Route path="/SearchOutput" element={<SearchOutput />} />
-              <Route path="/order-confirmation" element={<SuccessScreen/>}></Route>
-              <Route path="/flower-chocolate" element={<FlowerChocolate/>}></Route>
-              <Route path="/shipping-policy" element={<ShippingPolicy />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/refund-return-policy" element={<RefundReturnPolicy />} />
-              <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Route path="/personalized-gifts" element={<PersonalizedGifts />} />
+              <Route path="/greeting-cards" element={<GreetingCards />} />
+              <Route path="/floral-arrangements" element={<FloralArrangements />} />
+              <Route path="/sweet-treats" element={<SweetTreats />} />
+              <Route path="/Checkout" element={<StorefrontPage kind="checkout"><Checkout /></StorefrontPage>} />
+              <Route path="/ShoppingCart" element={<StorefrontPage kind="cart"><ShoppingCart /></StorefrontPage>} />
+              <Route path="/SearchOutput" element={<StorefrontPage kind="search"><SearchOutput /></StorefrontPage>} />
+              <Route path="/order-confirmation" element={<StorefrontPage kind="success"><SuccessScreen/></StorefrontPage>}></Route>
+              <Route path="/flower-chocolate" element={<StorefrontPage kind="catalog"><FlowerChocolate/></StorefrontPage>}></Route>
+              <Route path="/shipping-policy" element={<StorefrontPage kind="policy"><ShippingPolicy /></StorefrontPage>} />
+              <Route path="/privacy-policy" element={<StorefrontPage kind="policy"><PrivacyPolicy /></StorefrontPage>} />
+              <Route path="/refund-return-policy" element={<StorefrontPage kind="policy"><RefundReturnPolicy /></StorefrontPage>} />
+              <Route path="/terms-conditions" element={<StorefrontPage kind="policy"><TermsConditions /></StorefrontPage>} />
               <Route path="/build-gift-box" element={<BuildGiftBox />} />
             </Routes>
             </Suspense>
         </CartProvider>
-      </WishlistProvider>
     </Router>
     </HelmetProvider>
   );

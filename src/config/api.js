@@ -8,6 +8,10 @@ const api = axios.create({
 });
 
 // Blog APIs
-export const fetchBlogs = () => api.get('/blogs/admin/all');
+// The public storefront must only receive published articles. The admin route
+// includes drafts and is intentionally reserved for the admin application.
+export const fetchBlogs = () => api.get('/blogs');
+export const fetchProductCollections = () => api.get('/products');
+export const fetchGreetingCards = () => api.get('/cards');
 
 export default api;

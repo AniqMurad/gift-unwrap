@@ -1,9 +1,9 @@
 import React from "react";
-import SearchPageNavbar from "../components/SearchPageNavbar";
-import Footer from "../components/Footer";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
+import LandingFooter from "../components/LandingFooter";
 import { StarRating } from "../components/icons";
 import { customerReviews } from "../components/ReviewsData";
-import Navbar from "@/components/Navbar";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
 
 const CustomerFeedback = () => {
@@ -19,7 +19,7 @@ const CustomerFeedback = () => {
         />
       </div>
 
-      <div className="px-4 sm:px-8 lg:px-16 py-4 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+      <div className="gu-migration-section gu-migration-content gu-migration-reviews px-4 sm:px-8 lg:px-16 py-4 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
         {customerReviews.map((review) => (
           <div
             key={review.id}
@@ -43,7 +43,7 @@ const CustomerFeedback = () => {
         ))}
       </div>
       <div className="mt-10">
-        <Footer />
+        <LandingFooter />
       </div>
     </div>
   );

@@ -1,16 +1,16 @@
 // Login.jsx
-import Footer from "../components/Footer";
+import { StorefrontFooter as Footer } from "../components/storefront/StorefrontPage";
 import { LoginLine } from "../components/icons";
-import SearchPageNavbar from "../components/SearchPageNavbar";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
 import React, { useState, useEffect } from "react";
 import UsernameField from "@/components/UsernameField";
 import PasswordField from "@/components/PasswordField";
 import RememberIcon from "@/components/RememberIcon";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Loader from "../components/Loader";
+import { StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import NotificationBar from "../components/NotificationBar";
-import Navbar from "@/components/Navbar";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -143,7 +143,7 @@ const Login = () => {
             <Navbar showSearchInput={false} bgColor="#FBF4E8" />
             <SearchPageNavbar title="Login" titleHome="Home Page" backgroundColor='#FBF4E8' />
 
-            <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between items-start gap-6 lg:gap-8">
+            <div className="gu-migration-section gu-migration-content gu-migration-columns gu-migration-auth flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between items-start gap-6 lg:gap-8">
 
                 <div className="w-full lg:w-[580px]">
                     <h2 className="text-2xl sm:text-3xl lg:text-[30px] font-semibold mb-4 sm:mb-6">Login</h2>
@@ -164,9 +164,9 @@ const Login = () => {
                             {/* <RememberIcon />
                             <span className="text-[#1F1F1F] ml-2 text-sm sm:text-base">Remember me</span> */}
                         </div>
-                        <a className={`text-sm sm:text-base underline font-semibold ${isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:text-blue-600'}`} onClick={!isLoading ? handleForgotPass : undefined}>
+                        <button type="button" disabled={isLoading} className="text-sm sm:text-base underline" onClick={handleForgotPass}>
                             Forgot Your Password?
-                        </a>
+                        </button>
                     </div>
                     <div className="mt-4 h-[58px]">
                         <button

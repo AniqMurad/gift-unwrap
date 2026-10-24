@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { CloseIcon } from "./icons";
 import axios from "axios";
+import { useMigrationDialog } from "./storefront/migration-context";
 
 const RequestQuoteModal = ({ isOpen, onClose, product }) => {
   const [formData, setFormData] = useState({
@@ -116,10 +117,11 @@ const RequestQuoteModal = ({ isOpen, onClose, product }) => {
     }
   };
 
+  const { migrated, ref } = useMigrationDialog(isOpen, handleClose);
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}>
+    <div ref={ref} role={migrated ? "dialog" : undefined} aria-modal={migrated || undefined} aria-label={migrated ? "Request a Corporate Quote" : undefined} tabIndex={migrated ? -1 : undefined} className={`${migrated ? "gu-migrated gu-migration-content gu-migration-modal " : ""}fixed inset-0 z-[9999] flex items-center justify-center p-4`} style={migrated ? undefined : { backgroundColor: 'rgba(0, 0, 0, 0)' }}>
       <div className="bg-[#FBF4E8] rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-gray-200">
         {/* Header */}
         <div className="sticky top-0 bg-[#FBF4E8] border-b border-gray-300 px-6 py-4 flex items-center justify-between rounded-t-xl">

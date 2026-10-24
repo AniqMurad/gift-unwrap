@@ -1,21 +1,5 @@
-import React from 'react'
+import StorefrontField from "./storefront/StorefrontField";
 
-const Namefield = ({ value, onChange, error }) => {
-  return (
-     <div className="mb-4">
-            <input
-                type="text"
-                name="name"
-                value={value}
-                onChange={onChange}
-                placeholder="Name"
-                className={`w-full p-4 border rounded-lg ${error ? 'border-red-500' : 'border-gray-300'}`}
-            />
-            {error && (
-                <p className="text-red-500 text-sm mt-1">{error}</p>
-            )}
-        </div>
-  )
+export default function Namefield(props) {
+  return <StorefrontField label="Name" name="name" autoComplete="name" {...props} />;
 }
-
-export default Namefield

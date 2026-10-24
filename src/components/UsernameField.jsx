@@ -1,21 +1,5 @@
-import React, { useState } from 'react'
+import StorefrontField from "./storefront/StorefrontField";
 
-const UsernameField = ({ value, onChange, error }) => {
-    return (
-        <div className="mb-4">
-            <input
-                type="text"
-                name="email"
-                value={value}
-                onChange={onChange}
-                placeholder="Username or email address"
-                className={`w-full p-4 border rounded-lg ${error ? 'border-red-500' : 'border-gray-300'}`}
-            />
-            {error && (
-                <p className="text-red-500 text-sm mt-1">{error}</p>
-            )}
-        </div>
-    );
-};
-
-export default UsernameField
+export default function UsernameField(props) {
+  return <StorefrontField label="Username or email address" name="email" autoComplete="username" password={false} {...props} />;
+}

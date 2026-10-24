@@ -1,6 +1,7 @@
 import { CheckoutLine, SuccessIcon, NeedHelpIcon } from "@/components/icons";
-import Navbar from "@/components/Navbar";
-import SearchPageNavbar from "@/components/SearchPageNavbar";
+import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
+import { StorefrontFooter } from "../components/storefront/StorefrontPage";
+import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
 import React from "react"; // Removed useEffect and useState as they are no longer needed for map logic
 import { useLocation, Link } from "react-router-dom";
 import OrderSummary from "@/components/OrderSummary";
@@ -33,6 +34,10 @@ const SuccessScreen = () => {
   // No need for coords or mapLoadError state, or the useEffect hook
   // as map functionality is removed.
 
+  if (!orderId) {
+    return <><Navbar /><SearchPageNavbar title="Your Order" titleHome="Home Page" /><main className="gu-migration-section gu-migration-content"><div className="gu-migration-state" role="status"><h2>No order to display</h2><p className="my-6">An order confirmation appears here after checkout. You can view previous orders in your account.</p><Link className="gu-migration-button" to="/myAccount" state={{ activeTab: "orders" }}>View my orders</Link></div></main><StorefrontFooter /></>;
+  }
+
   return (
     <div>
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
@@ -42,7 +47,7 @@ const SuccessScreen = () => {
         backgroundColor="#FBF4E8"
       />
 
-      <div className="flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between gap-6 lg:gap-8">
+      <div className="gu-migration-section gu-migration-content gu-migration-columns flex flex-col lg:flex-row px-4 sm:px-8 lg:px-16 py-6 sm:py-10 lg:py-20 justify-between gap-6 lg:gap-8">
         {/* Left Side - Order Confirmation */}
         <div className="w-full lg:w-[60%] xl:w-[630px] space-y-4 sm:space-y-5">
           <div className="flex gap-2 sm:gap-3">
@@ -160,6 +165,7 @@ const SuccessScreen = () => {
           </div>
         </div>
       </div>
+      <StorefrontFooter />
     </div>
   );
 };
