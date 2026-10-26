@@ -137,7 +137,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                         source: "builder-card",
                     })),
                     ...greetingCardProducts,
-                ];
+                ].filter((card) => Number(card.price) > 0);
 
                 setProducts(itemsData);
                 setBoxOptions(boxesData);

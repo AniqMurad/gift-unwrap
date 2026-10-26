@@ -6,6 +6,8 @@
 .gu-builder-design-image { align-items: center; aspect-ratio: 1; background: #fdbe66; border-radius: 20px; display: flex; justify-content: center; position: relative; width: 100%; }
 .gu-builder-design-image > img { width: 83.75%; height: 83.75%; object-fit: contain; }
 .gu-builder-page--catalogue-2 .gu-builder-design-image { overflow: hidden; }
+.gu-builder-page--catalogue-3 .gu-builder-design-image { overflow: hidden; }
+.gu-builder-page--catalogue-3 .gu-builder-design-image > img { height: 100%; object-fit: cover; width: 100%; }
 .gu-builder-box-gallery { inset: 0; position: absolute; }
 .gu-builder-box-gallery img { height: 100%; inset: 0; object-fit: cover; opacity: 0; position: absolute; transition: opacity 500ms ease-in-out; width: 100%; }
 .gu-builder-box-gallery img.is-active { opacity: 1; }
