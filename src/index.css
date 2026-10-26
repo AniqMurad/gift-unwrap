@@ -274,14 +274,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-cart-heading h2 { font-family: "Recoleta", serif; font-size: 25px; }
 .gu-cart-heading button, .gu-cart-item > button { cursor: pointer; padding: 6px; }
 .gu-empty-cart { color: #696c70; flex: 1; overflow-y: auto; padding: 48px 0; text-align: center; }
-.gu-cart-items { flex: 1; min-height: 0; overflow-y: auto; }
+.gu-cart-items { flex: 1; max-height: min(52vh, 420px); min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; scrollbar-gutter: stable; }
 .gu-cart-item { align-items: center; border-bottom: 1px solid #e9e9e9; display: grid; gap: 12px; grid-template-columns: 72px minmax(0, 1fr) auto auto; padding: 16px 0; }
 .gu-cart-item > img { border-radius: 12px; height: 72px; object-fit: cover; width: 72px; }
 .gu-cart-item h3 { font-size: 15px; font-weight: 650; }
 .gu-cart-item p { color: #696c70; font-size: 13px; }
 .gu-cart-item strong { font-size: 14px; white-space: nowrap; }
 .gu-cart-footer { border-top: 1px solid #e9e9e9; margin-top: 16px; padding-top: 16px; }
-.gu-cart-checkout { background: #000; border-radius: 999px; color: #fff; cursor: pointer; margin-top: 16px; padding: 13px 20px; width: 100%; }
+.gu-cart-checkout { margin-top: 16px; width: 100%; }
 .gu-cart-continue { cursor: pointer; display: block; font-size: 14px; margin: 14px auto 0; text-decoration: underline; }
 
 @media (max-width: 1600px) {

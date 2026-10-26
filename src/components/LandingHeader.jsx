@@ -14,6 +14,7 @@ import floatingLogoBackdrop from "../assets/redesign/nav-logo-floating-vector-7.
 import caretDown from "../assets/redesign/caret-down.svg";
 import cartIcon from "../assets/redesign/cart.svg";
 import { CloseIcon } from "./icons";
+import CartoonButton from "./ui/cartoon-button";
 
 const recipientMenus = {
   him: {
@@ -513,7 +514,12 @@ const LandingHeader = ({ variant = "default" }) => {
             {cartItems.length > 0 && (
               <div className="gu-cart-footer">
                 <div><span>Subtotal</span><strong>PKR {getTotalCartAmount()}</strong></div>
-                <button className="gu-cart-checkout" type="button" onClick={() => { setIsCartOpen(false); navigate("/ShoppingCart"); }}>View Cart &amp; Checkout</button>
+                <CartoonButton
+                  className="gu-cart-checkout"
+                  color="#ff2b3a"
+                  label="View Cart & Checkout"
+                  onClick={() => { setIsCartOpen(false); navigate("/ShoppingCart"); }}
+                />
                 <button className="gu-cart-continue" type="button" onClick={closeCart}>Continue Shopping</button>
               </div>
             )}
