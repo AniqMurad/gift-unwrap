@@ -28,7 +28,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
         }
     };
 
-    const getItemId = (item) => String(item?.id ?? item?._id ?? "");
+    const getItemId = (item) => String(item?.builderKey ?? item?.id ?? item?._id ?? "");
 
     const getItemLimit = getStockLimit;
 
@@ -105,23 +105,43 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
         const fetchData = async () => {
             try {
                 setDataLoading(true);
-                const [itemsRes, boxesRes, cardsRes] = await Promise.all([
+                const [itemsRes, boxesRes, cardsRes, productCollectionsRes] = await Promise.all([
                     fetch(`${API_BASE_URL}/gift-box-items`),
                     fetch(`${API_BASE_URL}/boxes`),
-                    fetch(`${API_BASE_URL}/cards`)
+                    fetch(`${API_BASE_URL}/cards`),
+                    fetch(`${API_BASE_URL}/products`)
                 ]);
 
-                if (!itemsRes.ok || !boxesRes.ok || !cardsRes.ok) {
+                if (!itemsRes.ok || !boxesRes.ok || !cardsRes.ok || !productCollectionsRes.ok) {
                     throw new Error("One or more builder catalog requests failed.");
                 }
 
                 const itemsData = await itemsRes.json();
                 const boxesData = await boxesRes.json();
                 const cardsData = await cardsRes.json();
+                const productCollections = await productCollectionsRes.json();
+                const greetingCardProducts = (productCollections.find((collection) => collection.category === "greetingCards")?.products || [])
+                    .map((card) => ({
+                        ...card,
+                        builderKey: `catalog-card-${card.id ?? card._id}`,
+                        source: "product",
+                        productCategory: "greetingCards",
+                        image: card.image || card.images?.[0],
+                        design: card.subcategory || (Array.isArray(card.keyGift) ? card.keyGift.join(", ") : card.keyGift) || "Greeting card",
+                        occasions: [card.subcategory, ...(Array.isArray(card.keyGift) ? card.keyGift : [card.keyGift])].filter(Boolean),
+                    }));
+                const builderCards = [
+                    ...cardsData.map((card) => ({
+                        ...card,
+                        builderKey: `builder-card-${card.id ?? card._id}`,
+                        source: "builder-card",
+                    })),
+                    ...greetingCardProducts,
+                ];
 
                 setProducts(itemsData);
                 setBoxOptions(boxesData);
-                setCardOptions(cardsData);
+                setCardOptions(builderCards);
                 const savedDraft = savedDraftRef.current;
                 if (savedDraft) {
                     const restoredItems = (savedDraft.items || []).flatMap((savedItem) => {
@@ -152,7 +172,10 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                     }), {}));
                     const restoredBox = boxesData.find((box) => getItemId(box) === String(savedDraft.selectedBoxId));
                     setSelectedBox(restoredBox ? applyBoxSizeVariant(restoredBox, savedDraft.selectedBoxSize) : null);
-                    setSelectedCard(cardsData.find((card) => getItemId(card) === String(savedDraft.selectedCardId)) || null);
+                    setSelectedCard(builderCards.find((card) =>
+                        getItemId(card) === String(savedDraft.selectedCardId) ||
+                        String(card.id ?? card._id ?? "") === String(savedDraft.selectedCardId)
+                    ) || null);
                     const restoredDetails = restoreCardDetails(savedDraft.greetingDetails, savedDraft.cardMessage);
                     setGreetingDetails(restoredDetails);
                     setCardMessage(savedDraft.selectedCardId ? serializeCardMessage(restoredDetails) : "");
@@ -525,7 +548,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                             selectedColor: item.selectedColor || null,
                         })),
                         ...(selectedBox ? [{ id: 'box', name: `${selectedBox.name} (${selectedBox.size})`, quantity: 1, price: selectedBox.price, image: selectedBox.image }] : []),
-                        ...(selectedCard ? [{ id: 'card', name: selectedCard.name, quantity: 1, price: 0, image: selectedCard.image }] : []),
+                        ...(selectedCard ? [{ id: 'card', name: selectedCard.name, quantity: 1, price: getBuilderCardPrice(selectedCard), image: selectedCard.image }] : []),
                     ],
                     subtotal,
                     shippingCost,
@@ -1249,7 +1272,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                                 cartItems={[
                                     ...giftBoxItems,
                                     ...(selectedBox ? [{ id: 'box', name: `${selectedBox.name} (${selectedBox.size})`, quantity: 1, price: selectedBox.price, image: selectedBox.image }] : []),
-                                    ...(selectedCard ? [{ id: 'card', name: selectedCard.name, quantity: 1, price: 0, image: selectedCard.image }] : []),
+                                    ...(selectedCard ? [{ id: 'card', name: selectedCard.name, quantity: 1, price: getBuilderCardPrice(selectedCard), image: selectedCard.image }] : []),
                                 ]}
                                 subtotal={subtotal}
                                 shippingCost={shippingCost}

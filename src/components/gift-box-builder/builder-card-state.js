@@ -32,9 +32,9 @@ export function restoreCardDetails(saved, legacyMessage = "") {
   return { ...emptyCardDetails(), blank: !legacyMessage, message: String(legacyMessage).slice(0, CARD_MESSAGE_LIMIT) };
 }
 
-// Card has no price field in the current API; gift-box orders include it free.
-// Keep all builder/checkout displays consistent with that server pricing rule.
-export const getBuilderCardPrice = () => 0;
+// Legacy builder-card records have no price and remain free. Greeting-card
+// products carry their catalogue price into the box total.
+export const getBuilderCardPrice = (card) => Number(card?.price) || 0;
 
 export const BOX_SIZE_ORDER = ["small", "medium", "large"];
 

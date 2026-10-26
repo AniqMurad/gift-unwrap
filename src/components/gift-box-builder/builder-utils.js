@@ -1,4 +1,4 @@
-export const getProductId = (product) => String(product?.id ?? product?._id ?? "");
+export const getProductId = (product) => String(product?.builderKey ?? product?.id ?? product?._id ?? "");
 
 export const getProductPrice = (product) => Number(product?.price) || 0;
 

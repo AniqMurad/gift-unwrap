@@ -677,6 +677,16 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-greeting-card-media { align-items: center; display: flex; justify-content: center; padding: 8%; }
 .gu-greeting-card-media img { height: auto; max-height: 100%; max-width: 100%; object-fit: contain; width: auto; }
 .gu-greeting-card:hover .gu-greeting-card-media img { transform: scale(1.025); }
+.gu-collection-page--greetingCards .gu-collection-product-media > img {
+  display: block;
+  height: 100%;
+  max-height: none;
+  max-width: none;
+  object-fit: cover;
+  transition: transform 220ms ease;
+  width: 100%;
+}
+.gu-collection-page--greetingCards .gu-collection-product:hover .gu-collection-product-media > img { transform: scale(1.025); }
 .gu-greeting-card-copy { display: block; }
 .gu-greeting-card-copy p { color: var(--gu-body); display: block; font-size: 15px; margin-top: 2px; }
 .gu-greeting-card-copy > strong { color: var(--gu-red); display: block; font-size: 14px; margin-top: 7px; }
@@ -817,7 +827,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 @media (prefers-reduced-motion: reduce) {
   .gu-collection-reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
-  .gu-collection-product-link img, .gu-collection-product-actions { transition: none; }
+  .gu-collection-product-link img,
+  .gu-collection-page--greetingCards .gu-collection-product-media > img,
+  .gu-collection-product-actions { transition: none; }
 }
 
 /* Product details and purchase page */
