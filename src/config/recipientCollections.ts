@@ -77,9 +77,9 @@ export const recipientCollectionConfigs: Record<
     heading: "Gifts for Men in Pakistan",
     introduction:
       "For his birthday, a milestone, or a little thank-you. Explore gifts for the men who matter to you, or build a box around his favourite things. Add a personal message and make it something he’ll love to unwrap.",
-    seoTitle: "Gifts for Men in Pakistan | Gift Boxes for Him | Gift Unwrap",
+    seoTitle: "Gifts for Him in Pakistan | Gift Unwrap",
     seoDescription:
-      "Shop thoughtful gifts for men in Pakistan. Explore gift boxes for him or build your own with a personal message. Nationwide delivery on selected items.",
+      "Shop gifts for him in Pakistan. Explore gift boxes and hampers for birthdays, anniversaries and meaningful surprises for the men who matter to you.",
     builder: {
       heading: "His Favourite Things, All in One Box",
       paragraph:
@@ -158,9 +158,9 @@ export const recipientCollectionConfigs: Record<
     heading: "Gifts for Her in Pakistan",
     introduction:
       "For her birthday, a milestone, or a little thank-you. Explore gifts for the women who matter to you, or build a box around her favourite things. Add a personal message and make it something she’ll love to unwrap.",
-    seoTitle: "Gifts for Her in Pakistan | Thoughtful Gifts | Gift Unwrap",
+    seoTitle: "Gifts for Her in Pakistan | Gift Unwrap",
     seoDescription:
-      "Shop thoughtful gifts for her in Pakistan. Explore curated gift boxes or build your own with a personal message. Nationwide delivery on selected items.",
+      "Shop gifts for her in Pakistan. Explore gift boxes and hampers for birthdays, anniversaries and thoughtful surprises chosen with her in mind.",
     builder: {
       heading: "Make It Feel Like\nYou Chose It for Them",
       paragraph:
@@ -251,7 +251,7 @@ export const recipientCollectionConfigs: Record<
       "Their favourite things. A message only you could write. A little birthday happiness, wrapped up together. Explore thoughtful birthday gifts or build a box that feels just like them.",
     seoTitle: "Birthday Gifts in Pakistan | Gift Unwrap",
     seoDescription:
-      "Explore thoughtful birthday gifts in Pakistan or build a personal birthday gift box with their favourites and your message.",
+      "Explore birthday gifts in Pakistan for friends and family. Choose a thoughtful hamper or build a gift box around their favourite things and your budget.",
     builder: {
       heading: "Their Favourite Things,\nOne Happy Birthday Box",
       paragraph:
@@ -358,7 +358,7 @@ export const recipientCollectionConfigs: Record<
       "Their name. Your words. A little detail that means something to both of you. Explore gifts you can make more personal, and let’s create something that feels like it was chosen just for them.",
     seoTitle: "Personalized Gifts in Pakistan | Gift Unwrap",
     seoDescription:
-      "Explore personalized gifts in Pakistan and contact Gift Unwrap to confirm the available options, timing, and delivery for your chosen gift.",
+      "Make your gift more personal with Gift Unwrap. Discuss available personalization options, pricing, preparation time and delivery before ordering.",
     builder: {
       heading: "A Little Detail.\nA Lot of Meaning.",
       paragraph:
@@ -465,7 +465,7 @@ export const recipientCollectionConfigs: Record<
       "For a big birthday, a heartfelt thank-you, or a little “hope you feel better.” Find a greeting card that sounds like you and says what they mean to you. Sometimes, a few thoughtful words are the part they’ll keep.",
     seoTitle: "Greeting Cards in Pakistan | Gift Unwrap",
     seoDescription:
-      "Explore greeting cards in Pakistan and add a thoughtful message to a Gift Unwrap gift box.",
+      "Add a greeting card to your Gift Unwrap gift box. Explore available designs and share a personal message for birthdays, thank-yous and special moments.",
     builder: {
       heading: "A Thoughtful Gift.\nA Few Words From You.",
       paragraph:
@@ -554,9 +554,9 @@ export const recipientCollectionConfigs: Record<
     headingAmpersandSans: true,
     introduction:
       "For the birthday you wouldn’t miss, the thank-you you’ve been meaning to send, or a little “thinking of you.” Choose flowers that bring your feelings to their doorstep and give them a reason to smile.",
-    seoTitle: "Flowers & Floral Arrangements in Karachi | Gift Unwrap",
+    seoTitle: "Flowers & Bouquets in Karachi | Gift Unwrap",
     seoDescription:
-      "Send flowers and floral arrangements in Karachi for birthdays, anniversaries, thank-yous, and thoughtful everyday moments.",
+      "Send flowers in Karachi for birthdays, anniversaries and thoughtful surprises. Explore bouquets and floral arrangements, and check delivery availability.",
     faqHeading: "A Little Help Sending Flowers",
     faqIntroduction: "A few useful details before you brighten their day.",
     faqItems: [
@@ -632,9 +632,9 @@ export const recipientCollectionConfigs: Record<
     heading: "Sweet Treats Delivered in Karachi",
     introduction:
       "For the friend who never skips dessert, Ammi’s evening chai, or a birthday that calls for something sweet. Explore cakes, brownies, and cookies to share, surprise, and make an ordinary day feel a little more special.",
-    seoTitle: "Sweet Treats Delivered in Karachi | Gift Unwrap",
+    seoTitle: "Chocolate Gifts & Sweet Hampers in Karachi | Gift Unwrap",
     seoDescription:
-      "Explore cakes, brownies, cookies, chocolates, and sweet gift bundles available for delivery in Karachi.",
+      "Explore chocolate gifts and sweet hampers in Karachi. Choose a thoughtful treat for birthdays, celebrations or a little surprise to brighten their day.",
     faqHeading: "A Little Help Choosing Something Sweet",
     faqIntroduction: "A few useful details before you send their treat.",
     faqItems: [

@@ -21,8 +21,8 @@ const Home = () => {
   return (
     <div className="gu-page">
       <Helmet>
-        <title>Pakistan's Most Unique Gift Shop | Gift Unwrap</title>
-        <meta name="description" content="Discover Pakistan's most unique gift shop at Gift Unwrap Shop creative gifts surprise boxes & fast delivery for birthdays anniversaries & special moments." />
+        <title>Send Gifts to Pakistan Online | Gift Unwrap</title>
+        <meta name="description" content="Send thoughtful gifts to loved ones in Pakistan. Explore curated hampers or build your own gift box. Check delivery availability for their city." />
         <meta name="google-site-verification" content="IRKZW1tFIrwJARVCWhBIFZv2A_6bx8GHScL9UMH4dVA" />
         <link rel="canonical" href="https://www.giftunwrap.com/" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />

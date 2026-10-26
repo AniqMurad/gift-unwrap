@@ -130,8 +130,8 @@ const Forcompanies = () => {
   const getMetaTags = () => {
     const metaData = {
       "": {
-        title: "Corporate Gifts for Companies | Gift Unwrap Pakistan",
-        description: "Explore corporate gifts for companies at Gift Unwrap. Discover unique, professional & customized gift solutions with fast delivery in Pakistan."
+        title: "Corporate Gifts in Pakistan | Gift Unwrap",
+        description: "Explore corporate gifting options in Pakistan for employees and clients. Share your quantity, budget and delivery needs to discuss suitable gifts."
       },
       "newhire": {
         title: "Gifts for New Hire | Corporate Gifts Unwrap",

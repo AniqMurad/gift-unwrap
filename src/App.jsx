@@ -20,6 +20,7 @@ import Home from "./pages/Home";
 import ScrollToTop from './components/ScrollToTop';
 import HelloBar from './components/HelloBar';
 import StorefrontPage from './components/storefront/StorefrontPage';
+import RouteSeo from './components/RouteSeo';
 
 const navigationAnnouncementRoutes = new Set([
   "/giftforher",
@@ -79,6 +80,7 @@ function App() {
       <Router>
         <AnalyticsTracker />
         <ScrollToTop />
+        <RouteSeo />
         <CartProvider>
             <NavigationAnnouncement />
             <Suspense fallback={<Loader />}>

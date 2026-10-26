@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { fetchBlogs } from '../config/api';
 import TableOfContents from '../components/TableOfContents';
 import { generateSlug, findBlogBySlug } from '../utils/slugify';
+import { blogArticleSeoMetadata } from '../config/seoMetadata';
 
 const BlogOpen = () => {
   const { slug } = useParams();
@@ -70,6 +71,9 @@ const BlogOpen = () => {
 
   // Generate meta tags with fallback to auto-generated values
   const generateMetaTitle = (blogPost) => {
+    if (blogArticleSeoMetadata[slug]?.title) {
+      return blogArticleSeoMetadata[slug].title;
+    }
     if (blogPost.metaTitle) {
       return blogPost.metaTitle;
     }
@@ -77,6 +81,9 @@ const BlogOpen = () => {
   };
 
   const generateMetaDescription = (blogPost) => {
+    if (blogArticleSeoMetadata[slug]?.description) {
+      return blogArticleSeoMetadata[slug].description;
+    }
     if (blogPost.metaDescription) {
       return blogPost.metaDescription;
     }
