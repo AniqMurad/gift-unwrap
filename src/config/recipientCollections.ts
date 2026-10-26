@@ -10,6 +10,7 @@ export interface RecipientCollectionConfig {
   key: "him" | "her" | "birthday" | "personalized" | "greetingCards" | "floral" | "sweetTreats";
   collectionId: string;
   dataSource?: "products" | "greetingCards";
+  directPurchaseOnly?: boolean;
   sourceCollectionIds?: string[];
   productScope?: "birthday" | "personalized" | "floral" | "sweetTreats";
   profileFilteringSupported?: boolean;
@@ -454,9 +455,9 @@ export const recipientCollectionConfigs: Record<
   greetingCards: {
     key: "greetingCards",
     collectionId: "greetingCards",
-    dataSource: "greetingCards",
-    featuredSortLabel: "Sorting unavailable",
-    sortingSupported: false,
+    directPurchaseOnly: true,
+    profileFilteringSupported: false,
+    featuredSortLabel: "Featured",
     alwaysShowPagination: true,
     route: "/greeting-cards",
     navigationLabel: "Greeting Cards",

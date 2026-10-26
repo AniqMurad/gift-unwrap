@@ -425,7 +425,7 @@ export default function RecipientCollectionPage({
           {!loading && !error && (
             <p className="gu-collection-result-count" aria-live="polite">
               {filteredProducts.length}{" "}
-              {config.dataSource === "greetingCards"
+              {config.key === "greetingCards"
                 ? filteredProducts.length === 1 ? "card" : "cards"
                 : filteredProducts.length === 1 ? "gift" : "gifts"}
             </p>
@@ -463,6 +463,7 @@ export default function RecipientCollectionPage({
                       product={{ ...product, category: product.category || config.collectionId }}
                       columns={4}
                       variant="collection"
+                      directPurchaseOnly={config.directPurchaseOnly}
                       eager={index < 4}
                     />
                   )}

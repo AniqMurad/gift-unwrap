@@ -16,7 +16,7 @@ const formatPrice = (value) =>
     Number(value) || 0,
   );
 
-const Product = ({ product, columns, variant = "default", eager = false }) => {
+const Product = ({ product, columns, variant = "default", eager = false, directPurchaseOnly = false }) => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const [showImagePreview, setShowImagePreview] = useState(false);
@@ -101,12 +101,7 @@ const Product = ({ product, columns, variant = "default", eager = false }) => {
       <>
         <article className="gu-collection-product">
           <div className="gu-collection-product-media">
-            <Link
-              className="gu-collection-product-link"
-              to={productHref}
-              state={{ productData: product }}
-              aria-label={`View ${product.name}`}
-            >
+            {directPurchaseOnly ? (
               <img
                 src={imageSrc}
                 alt={product.name}
@@ -119,7 +114,27 @@ const Product = ({ product, columns, variant = "default", eager = false }) => {
                   event.currentTarget.src = fallbackImage;
                 }}
               />
-            </Link>
+            ) : (
+              <Link
+                className="gu-collection-product-link"
+                to={productHref}
+                state={{ productData: product }}
+                aria-label={`View ${product.name}`}
+              >
+                <img
+                  src={imageSrc}
+                  alt={product.name}
+                  loading={eager ? "eager" : "lazy"}
+                  fetchPriority={eager ? "high" : "auto"}
+                  decoding="async"
+                  width="335"
+                  height="335"
+                  onError={(event) => {
+                    event.currentTarget.src = fallbackImage;
+                  }}
+                />
+              </Link>
+            )}
 
             {hasValidDiscount && <span className="gu-collection-sale">SALE</span>}
             {isUnavailable && <span className="gu-collection-sold-out">Sold out</span>}
@@ -143,22 +158,37 @@ const Product = ({ product, columns, variant = "default", eager = false }) => {
             </div>
           </div>
 
-          <Link
-            className="gu-collection-product-copy"
-            to={productHref}
-            state={{ productData: product }}
-          >
-            <h2>{product.name}</h2>
-            <p>
-              <strong>{formatPrice(currentPrice)} PKR</strong>
-              {hasValidDiscount && (
-                <>
-                  <del>{formatPrice(compareAtPrice)} PKR</del>
-                  <span>-{discountPercentage}%</span>
-                </>
-              )}
-            </p>
-          </Link>
+          {directPurchaseOnly ? (
+            <div className="gu-collection-product-copy">
+              <h2>{product.name}</h2>
+              <p>
+                <strong>{formatPrice(currentPrice)} PKR</strong>
+                {hasValidDiscount && (
+                  <>
+                    <del>{formatPrice(compareAtPrice)} PKR</del>
+                    <span>-{discountPercentage}%</span>
+                  </>
+                )}
+              </p>
+            </div>
+          ) : (
+            <Link
+              className="gu-collection-product-copy"
+              to={productHref}
+              state={{ productData: product }}
+            >
+              <h2>{product.name}</h2>
+              <p>
+                <strong>{formatPrice(currentPrice)} PKR</strong>
+                {hasValidDiscount && (
+                  <>
+                    <del>{formatPrice(compareAtPrice)} PKR</del>
+                    <span>-{discountPercentage}%</span>
+                  </>
+                )}
+              </p>
+            </Link>
+          )}
         </article>
 
         {ImagePreviewModal}
