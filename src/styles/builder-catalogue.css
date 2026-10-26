@@ -5,8 +5,17 @@
 .gu-builder-design-card { min-width: 0; text-align: center; }
 .gu-builder-design-image { align-items: center; aspect-ratio: 1; background: #fdbe66; border-radius: 20px; display: flex; justify-content: center; position: relative; width: 100%; }
 .gu-builder-design-image > img { width: 83.75%; height: 83.75%; object-fit: contain; }
+.gu-builder-page--catalogue-2 .gu-builder-design-image { overflow: hidden; }
+.gu-builder-box-gallery { inset: 0; position: absolute; }
+.gu-builder-box-gallery img { height: 100%; inset: 0; object-fit: cover; opacity: 0; position: absolute; transition: opacity 500ms ease-in-out; width: 100%; }
+.gu-builder-box-gallery img.is-active { opacity: 1; }
 .gu-builder-design-image:disabled { cursor: not-allowed; opacity: .65; }
 .gu-builder-design-card h3 { font: 400 18px/24px "Inter Variable", "Inter", sans-serif; margin: 16px 0 4px; }
+.gu-builder-box-sizes { display: flex; gap: 8px; justify-content: center; margin: 12px 0 8px; }
+.gu-builder-box-sizes button { border: 1px solid #3c3636; border-radius: 999px; color: #3c3636; font: 400 14px/20px "Inter Variable", "Inter", sans-serif; min-width: 72px; padding: 7px 12px; text-transform: capitalize; }
+.gu-builder-box-sizes button:hover:not(:disabled), .gu-builder-box-sizes button.is-active { background: #fdbe66; border-color: #ff2b3a; color: #ff2b3a; }
+.gu-builder-box-sizes button:disabled { cursor: not-allowed; opacity: .35; }
+.gu-builder-box-capacity { color: #3c3636; font: 400 14px/20px "Inter Variable", "Inter", sans-serif; margin: 0 0 4px; }
 .gu-builder-design-card .gu-builder-product-price { justify-content: center; flex-wrap: wrap; gap: 8px; margin: 0; }
 .gu-builder-design-card .gu-builder-product-price strong { font-size: 18px; font-weight: 600; }
 .gu-builder-design-select { width: 100%; height: 44px; border: 1px solid #ff2b3a; color: #ff2b3a; border-radius: 30px; font: 500 18px/24px "Inter Variable", "Inter", sans-serif; letter-spacing: -.3px; margin-top: 16px; }
@@ -55,4 +64,7 @@
   .gu-builder-revised-steps li .gu-builder-step-label, .gu-builder-revised-steps li.is-current .gu-builder-step-label { font-size: 15px; }
   .gu-builder-page--catalogue .gu-builder-revised-catalogue { margin-top: 32px; }
   .gu-builder-page--catalogue .gu-builder-bottom-bar > .cartoon-button { min-width: 0; padding-inline: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gu-builder-box-gallery img { transition: none; }
 }

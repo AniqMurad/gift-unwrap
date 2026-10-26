@@ -181,33 +181,32 @@
 .gu-migration-policy h2 { font-size: clamp(26px, 2vw, 36px); margin-top: 40px; }
 .gu-migration-policy p { color: var(--gu-body); font-size: 18px; line-height: 1.7; }
 
-/* Shipping policy — Figma node 7620:26729. */
-.gu-migrated--policy:has(.gu-policy-page--shipping),
-.gu-migrated--policy:has(.gu-policy-page--shipping) .gu-migration-header,
-.gu-policy-page--shipping,
-.gu-policy-page--shipping .gu-policy-shell { background: var(--gu-cream-soft); }
-.gu-migrated--policy:has(.gu-policy-page--shipping) .gu-migration-header { position: relative; z-index: 2; }
-.gu-migrated--policy:has(.gu-policy-page--shipping) .gu-migration-utilities { display: none; }
-.gu-policy-page--shipping { color: #1f1f1f; min-height: 100vh; }
-.gu-policy-page--shipping .gu-policy-shell {
+/* Redesigned policy pages — Figma nodes 7620:26729, 7620:26957, 7620:27116, and 7620:27326. */
+.gu-migrated--policy:has(.gu-policy-page--redesign),
+.gu-migrated--policy:has(.gu-policy-page--redesign) .gu-migration-header,
+.gu-policy-page--redesign,
+.gu-policy-page--redesign .gu-policy-shell { background: var(--gu-cream-soft); }
+.gu-migrated--policy:has(.gu-policy-page--redesign) .gu-migration-header { position: relative; z-index: 2; }
+.gu-migrated--policy:has(.gu-policy-page--redesign) .gu-migration-utilities { display: none; }
+.gu-policy-page--redesign { color: #1f1f1f; min-height: 100vh; }
+.gu-policy-page--redesign .gu-policy-shell {
   margin-inline: auto;
   max-width: 1920px;
-  min-height: 999px;
-  padding: 55px 100px 100px;
+  min-height: 0;
+  padding: 55px 100px 80px;
   position: relative;
   z-index: 1;
 }
-.gu-policy-page--shipping .gu-policy-card {
+.gu-policy-page--redesign .gu-policy-card {
   background: #fff;
   border-radius: 60px;
   display: flex;
   flex-direction: column;
   gap: 64px;
-  min-height: 844px;
-  padding: 80px 280px 80px 80px;
+  padding: 80px 160px 80px 80px;
   width: 100%;
 }
-.gu-policy-page--shipping .gu-policy-card > h1 {
+.gu-policy-page--redesign .gu-policy-card > h1 {
   color: #000;
   font-family: "Recoleta", serif;
   font-size: 72px;
@@ -216,53 +215,54 @@
   line-height: 1.15;
   margin: 0;
 }
-.gu-policy-page--shipping .gu-policy-sections {
+.gu-policy-page--redesign .gu-policy-sections {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
-.gu-policy-page--shipping .gu-policy-sections section {
+.gu-policy-page--redesign .gu-policy-sections section {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.gu-policy-page--shipping .gu-policy-sections h2 {
+.gu-policy-page--redesign .gu-policy-sections h2 {
   color: #000;
   font-family: "Inter Variable", "Inter", sans-serif;
-  font-size: 44px;
+  font-size: 32px;
   font-weight: 500;
-  letter-spacing: -.88px;
+  letter-spacing: -.64px;
   line-height: 1.15;
   margin: 0;
+  white-space: pre-wrap;
 }
-.gu-policy-page--shipping .gu-policy-sections p {
+.gu-policy-page--redesign .gu-policy-sections p {
   color: #3c3636;
   font-family: "Inter Variable", "Inter", sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
-  letter-spacing: -.4px;
+  letter-spacing: -.36px;
   line-height: 1.5;
   margin: 0;
 }
 
 @media (max-width: 1540px) {
-  .gu-policy-page--shipping .gu-policy-shell { padding-left: 64px; padding-right: 64px; }
-  .gu-policy-page--shipping .gu-policy-card { padding-right: 160px; }
+  .gu-policy-page--redesign .gu-policy-shell { padding-left: 64px; padding-right: 64px; }
+  .gu-policy-page--redesign .gu-policy-card { padding-right: 160px; }
 }
 
 @media (max-width: 1080px) {
-  .gu-policy-page--shipping .gu-policy-shell { min-height: 0; padding: 48px 32px 80px; }
-  .gu-policy-page--shipping .gu-policy-card { border-radius: 40px; min-height: 0; padding: 64px; }
-  .gu-policy-page--shipping .gu-policy-card > h1 { font-size: 58px; }
-  .gu-policy-page--shipping .gu-policy-sections h2 { font-size: 36px; }
+  .gu-policy-page--redesign .gu-policy-shell { min-height: 0; padding: 48px 32px 80px; }
+  .gu-policy-page--redesign .gu-policy-card { border-radius: 40px; min-height: 0; padding: 64px; }
+  .gu-policy-page--redesign .gu-policy-card > h1 { font-size: 58px; }
+  .gu-policy-page--redesign .gu-policy-sections h2 { font-size: 30px; letter-spacing: -.6px; }
 }
 
 @media (max-width: 640px) {
-  .gu-policy-page--shipping .gu-policy-shell { padding: 40px 16px 64px; }
-  .gu-policy-page--shipping .gu-policy-card { border-radius: 28px; gap: 40px; padding: 40px 24px; }
-  .gu-policy-page--shipping .gu-policy-card > h1 { font-size: 44px; letter-spacing: -.88px; }
-  .gu-policy-page--shipping .gu-policy-sections h2 { font-size: 28px; letter-spacing: -.56px; }
-  .gu-policy-page--shipping .gu-policy-sections p { font-size: 16px; letter-spacing: -.32px; }
+  .gu-policy-page--redesign .gu-policy-shell { padding: 40px 16px 64px; }
+  .gu-policy-page--redesign .gu-policy-card { border-radius: 28px; gap: 40px; padding: 40px 24px; }
+  .gu-policy-page--redesign .gu-policy-card > h1 { font-size: 44px; letter-spacing: -.88px; }
+  .gu-policy-page--redesign .gu-policy-sections h2 { font-size: 28px; letter-spacing: -.56px; }
+  .gu-policy-page--redesign .gu-policy-sections p { font-size: 16px; letter-spacing: -.32px; }
 }
 .gu-migration-chips { background: var(--gu-cream-soft); display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; padding: 0 20px 40px; }
 .gu-migration-chips button { border: 1px solid var(--gu-orange); border-radius: 999px; font-size: 16px; font-weight: 400; min-height: 44px; padding: 10px 20px; text-transform: none; }

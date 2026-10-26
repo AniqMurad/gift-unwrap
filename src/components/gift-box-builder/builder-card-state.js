@@ -36,6 +36,39 @@ export function restoreCardDetails(saved, legacyMessage = "") {
 // Keep all builder/checkout displays consistent with that server pricing rule.
 export const getBuilderCardPrice = () => 0;
 
+export const BOX_SIZE_ORDER = ["small", "medium", "large"];
+
+export function getBoxSizeVariants(box) {
+  if (Array.isArray(box?.sizeVariants) && box.sizeVariants.length) {
+    return BOX_SIZE_ORDER.flatMap(size => {
+      const variant = box.sizeVariants.find(entry => String(entry?.size || "").toLowerCase() === size);
+      const price = Number(variant?.price);
+      const capacity = Number(variant?.capacity);
+      return variant && Number.isFinite(price) && price >= 0 && Number.isFinite(capacity) && capacity > 0
+        ? [{ size, price, capacity }]
+        : [];
+    });
+  }
+
+  if (!box) return [];
+  const legacySize = BOX_SIZE_ORDER.find(size => String(box.size || "").toLowerCase().includes(size)) || "small";
+  return [{ size: legacySize, price: Number(box.price) || 0, capacity: box.capacity }];
+}
+
+export function applyBoxSizeVariant(box, requestedSize) {
+  if (!box) return null;
+  const variants = getBoxSizeVariants(box);
+  const variant = variants.find(entry => entry.size === String(requestedSize || "").toLowerCase()) || variants[0];
+  if (!variant) return box;
+  return {
+    ...box,
+    selectedSize: variant.size,
+    size: variant.size.replace(/^./, character => character.toUpperCase()),
+    capacity: variant.capacity,
+    price: variant.price,
+  };
+}
+
 export function getBoxCapacity(box) {
   const value = String(box?.capacity ?? "").trim();
   const match = value.match(/^(\d+)(?:\s*[-–]\s*(\d+))?(?:\s*items?)?$/i);

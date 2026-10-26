@@ -5,7 +5,7 @@ import {
 
 const policySections = [
   {
-    title: "Processing and Delivery Times",
+    title: "Processing  and Delivery Times",
     body: "We know you're excited to send your love, so we work quickly! Most orders are processed and ready for dispatch within 2-3 business days. Once your gift is on its way, you will receive a tracking number via email so you can follow its journey from our warehouse to your doorstep. Shipping times vary by location, but most domestic deliveries arrive within 5-7 business days. We always aim to beat these estimates whenever possible.",
   },
   {
@@ -20,7 +20,7 @@ const policySections = [
 
 export default function ShippingPolicy() {
   return (
-    <div className="gu-policy-page gu-policy-page--shipping">
+    <div className="gu-policy-page gu-policy-page--redesign gu-policy-page--shipping">
       <Navbar showUtilities={false} />
 
       <main className="gu-policy-shell">

@@ -22,7 +22,7 @@ const CONTACT_METHODS = [
   },
   {
     title: "Office Location",
-    value: "Rehmani Garden, Garden West, Karachi",
+    value: "Shop No. 226 PIB Colony near Jail Chowrangi, Karachi",
     icon: locationIcon,
   },
 ];

@@ -15,7 +15,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
     import BuilderProductModal from "@/components/gift-box-builder/BuilderProductModal";
     import BuilderMessageModal from "@/components/gift-box-builder/BuilderMessageModal";
     import { getStockLimit, isUnavailable } from "@/components/gift-box-builder/builder-utils";
-    import { emptyCardDetails, restoreCardDetails, serializeCardMessage, getBuilderStepError, getBuilderCardPrice, giftItemOrderPayload } from "@/components/gift-box-builder/builder-card-state";
+    import { applyBoxSizeVariant, emptyCardDetails, restoreCardDetails, serializeCardMessage, getBuilderStepError, getBuilderCardPrice, giftItemOrderPayload } from "@/components/gift-box-builder/builder-card-state";
     import { useNavigate } from "react-router-dom";
 
     const GIFT_BOX_DRAFT_KEY = "giftunwrap:gift-box-draft:v1";
@@ -150,7 +150,8 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                         ...colors,
                         [getItemId(item)]: item.selectedColor || null,
                     }), {}));
-                    setSelectedBox(boxesData.find((box) => getItemId(box) === String(savedDraft.selectedBoxId)) || null);
+                    const restoredBox = boxesData.find((box) => getItemId(box) === String(savedDraft.selectedBoxId));
+                    setSelectedBox(restoredBox ? applyBoxSizeVariant(restoredBox, savedDraft.selectedBoxSize) : null);
                     setSelectedCard(cardsData.find((card) => getItemId(card) === String(savedDraft.selectedCardId)) || null);
                     const restoredDetails = restoreCardDetails(savedDraft.greetingDetails, savedDraft.cardMessage);
                     setGreetingDetails(restoredDetails);
@@ -178,6 +179,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                 selectedColor: item.selectedColor || null,
             })),
             selectedBoxId: selectedBox ? getItemId(selectedBox) : null,
+            selectedBoxSize: selectedBox?.selectedSize || null,
             selectedCardId: selectedCard ? getItemId(selectedCard) : null,
             cardMessage,
             greetingDetails,
@@ -522,7 +524,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                             category: item.category,
                             selectedColor: item.selectedColor || null,
                         })),
-                        ...(selectedBox ? [{ id: 'box', name: selectedBox.name, quantity: 1, price: selectedBox.price, image: selectedBox.image }] : []),
+                        ...(selectedBox ? [{ id: 'box', name: `${selectedBox.name} (${selectedBox.size})`, quantity: 1, price: selectedBox.price, image: selectedBox.image }] : []),
                         ...(selectedCard ? [{ id: 'card', name: selectedCard.name, quantity: 1, price: 0, image: selectedCard.image }] : []),
                     ],
                     subtotal,
@@ -1246,7 +1248,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                             <OrderSummary
                                 cartItems={[
                                     ...giftBoxItems,
-                                    ...(selectedBox ? [{ id: 'box', name: selectedBox.name, quantity: 1, price: selectedBox.price, image: selectedBox.image }] : []),
+                                    ...(selectedBox ? [{ id: 'box', name: `${selectedBox.name} (${selectedBox.size})`, quantity: 1, price: selectedBox.price, image: selectedBox.image }] : []),
                                     ...(selectedCard ? [{ id: 'card', name: selectedCard.name, quantity: 1, price: 0, image: selectedCard.image }] : []),
                                 ]}
                                 subtotal={subtotal}
