@@ -1,16 +1,63 @@
-import React, { useState, useEffect } from "react";
-import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
+import { useEffect, useState } from "react";
+import NotificationBar from "../components/NotificationBar";
 import LandingFooter from "../components/LandingFooter";
 import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
-import NotificationBar from "../components/NotificationBar";
-import DeliveryMarquee from "@/components/DeliveryMarquee";
+import mailIcon from "../assets/redesign/contact/mail.png";
+import headphonesIcon from "../assets/redesign/contact/headphones.png";
+import locationIcon from "../assets/redesign/contact/location.png";
+import arrowRightIcon from "../assets/redesign/contact/arrow-right.svg";
 
-const ContactUs = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    content: "",
-  });
+const CONTACT_METHODS = [
+  {
+    title: "Message Us",
+    value: "giftunwrap@gmail.com",
+    href: "mailto:giftunwrap@gmail.com",
+    icon: mailIcon,
+  },
+  {
+    title: "Call Us",
+    value: "+92 326 8927354",
+    href: "tel:+923268927354",
+    icon: headphonesIcon,
+  },
+  {
+    title: "Office Location",
+    value: "Rehmani Garden, Garden West, Karachi",
+    icon: locationIcon,
+  },
+];
+
+const INITIAL_FORM_DATA = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  content: "",
+};
+
+function ContactField({ label, name, type = "text", value, onChange, disabled, autoComplete }) {
+  return (
+    <label className="gu-contact-field">
+      <span className="sr-only">{label}</span>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        autoComplete={autoComplete}
+        placeholder=" "
+        required
+        disabled={disabled}
+      />
+      <span className="gu-contact-placeholder" aria-hidden="true">
+        {label} <strong>*</strong>
+      </span>
+    </label>
+  );
+}
+
+export default function ContactUs() {
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [loading, setLoading] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
   const [notification, setNotification] = useState({
@@ -19,193 +66,144 @@ const ContactUs = () => {
     message: "",
   });
 
-  // Auto-hide notification after 3 seconds
   useEffect(() => {
-    if (notification.show) {
-      const timer = setTimeout(() => {
-        setNotification((prev) => ({ ...prev, show: false }));
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
+    if (!notification.show) return undefined;
+    const timer = window.setTimeout(() => {
+      setNotification((current) => ({ ...current, show: false }));
+    }, 3000);
+    return () => window.clearTimeout(timer);
   }, [notification.show]);
 
   const showNotification = (type, message) => {
-    setNotification({
-      show: true,
-      type,
-      message,
-    });
+    setNotification({ show: true, type, message });
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Hide notification when user starts typing
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
     if (notification.show) {
-      setNotification((prev) => ({ ...prev, show: false }));
+      setNotification((current) => ({ ...current, show: false }));
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
     setMessageSent(false);
-    setNotification((prev) => ({ ...prev, show: false })); // Hide any existing notifications
+    setNotification((current) => ({ ...current, show: false }));
+
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    const phoneLine = `Phone: +92 ${formData.phone.trim()}`;
 
     try {
       const response = await fetch("https://giftunwrapbackend.vercel.app/api/messages", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fullName,
+          email: formData.email,
+          content: `${phoneLine}\n\n${formData.content}`,
+        }),
       });
 
       if (response.ok) {
-        setFormData({ name: "", email: "", content: "" });
+        setFormData(INITIAL_FORM_DATA);
         setMessageSent(true);
         showNotification("success", "Your message has been sent successfully!");
       } else {
         const errorData = await response.json();
-        const errorMessage =
-          errorData.message || "Failed to send message. Please try again.";
-        showNotification("error", errorMessage);
+        showNotification(
+          "error",
+          errorData.message || "Failed to send message. Please try again.",
+        );
       }
     } catch (error) {
       console.error("Error sending message:", error);
-      showNotification(
-        "error",
-        "Something went wrong. Please try again later."
-      );
+      showNotification("error", "Something went wrong. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="gu-contact-page">
       {notification.show && (
-        <NotificationBar
-          type={notification.type}
-          message={notification.message}
-        />
+        <NotificationBar type={notification.type} message={notification.message} />
       )}
-      <Navbar showSearchInput={false} bgColor="#FBF4E8" />
-      <DeliveryMarquee />
-      <SearchPageNavbar
-        title="Contact Us"
-        titleHome="Home Page"
-        backgroundColor="#FBF4E8"
-      />
 
-      <div className="gu-migration-section gu-migration-content px-4 sm:px-8 lg:px-16 py-4">
-        <div className="gu-migration-contact-layout flex flex-col lg:flex-row justify-between items-start gap-8 lg:gap-12 mt-6 sm:mt-10">
-          <div className="w-full lg:w-[850px]">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-semibold">
-                Drop Us A Line
-              </h2>
-              <p className="text-[#A0A0A0] mt-2 text-sm sm:text-base">
-                Use the form below to get in touch with the sales team{" "}
-              </p>
+      <Navbar showUtilities={false} />
+
+      <main className="gu-contact-main">
+        <section className="gu-contact-hero" aria-labelledby="gu-contact-title">
+          <div className="gu-contact-container">
+            <header className="gu-contact-heading">
+              <h1 id="gu-contact-title">Get in Touch</h1>
+              <p>Have questions? We’re here to help. Reach out and let’s connect.</p>
+            </header>
+
+            <div className="gu-contact-methods">
+              {CONTACT_METHODS.map((method) => (
+                <article className="gu-contact-method" key={method.title}>
+                  <img src={method.icon} alt="" aria-hidden="true" />
+                  <div>
+                    <h2>{method.title}</h2>
+                    {method.href ? (
+                      <a href={method.href}>{method.value}</a>
+                    ) : (
+                      <p>{method.value}</p>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="gu-contact-form-section" aria-labelledby="gu-contact-form-title">
+          <div className="gu-contact-form-layout">
+            <div className="gu-contact-form-copy">
+              <h2 id="gu-contact-form-title">Reach us out<br />for any query</h2>
+              <p>We’d love to hear from you. Fill out the form, and our team will get back to you soon.</p>
             </div>
 
-            <form className="mt-4 sm:mt-6" onSubmit={handleSubmit}>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <input aria-label="Your Name"
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Your Name"
-                  className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:ring focus:ring-gray-200 outline-none"
-                  required
-                  disabled={loading}
-                />
-                <input aria-label="Your Email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Your Email"
-                  className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base focus:ring focus:ring-gray-200 outline-none"
-                  required
-                  disabled={loading}
-                />
+            <form className="gu-contact-form" onSubmit={handleSubmit}>
+              <div className="gu-contact-name-row">
+                <ContactField label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} disabled={loading} autoComplete="given-name" />
+                <ContactField label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} disabled={loading} autoComplete="family-name" />
               </div>
 
-              <textarea aria-label="Your Message"
-                name="content"
-                value={formData.content}
-                onChange={handleChange}
-                placeholder="Your Message"
-                className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 sm:py-3 mt-3 sm:mt-4 h-24 sm:h-28 text-sm sm:text-base focus:ring focus:ring-gray-200 outline-none"
-                required
-                disabled={loading}
-              ></textarea>
+              <ContactField label="Email" name="email" type="email" value={formData.email} onChange={handleChange} disabled={loading} autoComplete="email" />
 
-              <button
-                type="submit"
-                className="mt-3 sm:mt-4 px-4 sm:px-6 py-2 sm:py-3 bg-black text-white text-sm sm:text-base rounded-lg hover:bg-gray-800 transition w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={loading}
-              >
-                {loading ? "Sending..." : "SEND MESSAGE"}
+              <label className="gu-contact-phone-field">
+                <span className="sr-only">Phone Number</span>
+                <span className="gu-contact-phone-prefix" aria-hidden="true">🇵🇰 +92</span>
+                <span className="gu-contact-phone-divider" aria-hidden="true" />
+                <span className="gu-contact-phone-input">
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} autoComplete="tel-national" inputMode="tel" placeholder=" " required disabled={loading} />
+                  <span className="gu-contact-placeholder" aria-hidden="true">Phone Number <strong>*</strong></span>
+                </span>
+              </label>
+
+              <label className="gu-contact-field gu-contact-message-field">
+                <span className="sr-only">Write a Message</span>
+                <textarea name="content" value={formData.content} onChange={handleChange} placeholder=" " required disabled={loading} />
+                <span className="gu-contact-placeholder" aria-hidden="true">Write a Message <strong>*</strong></span>
+              </label>
+
+              <button type="submit" className="gu-contact-submit" disabled={loading}>
+                <span>{loading ? "Sending..." : "Submit Message"}</span>
+                <img src={arrowRightIcon} alt="" aria-hidden="true" />
               </button>
-              {messageSent && (
-                <p className="mt-2 text-green-600 text-sm sm:text-base">
-                  Your message has been sent!
-                </p>
-              )}
+
+              <p className="sr-only" role="status" aria-live="polite">
+                {messageSent ? "Your message has been sent." : ""}
+              </p>
             </form>
           </div>
+        </section>
+      </main>
 
-          <div className="w-full lg:w-[300px] text-[#1F1F1F]">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-semibold">Our Store</h3>
-              <p className="mt-2 text-sm sm:text-base leading-relaxed">
-                Shop No. 226 PIB Colony near Jail Chowrangi, Karachi, Pakistan
-              </p>
-              <p className="mt-2 text-sm sm:text-base">
-                Phone: +92 326 8927354
-              </p>
-              <p className="text-sm sm:text-base">
-                Email: giftunwrap@gmail.com
-              </p>
-            </div>
-
-            {/* <div>
-                <h3 className="text-xl sm:text-2xl font-semibold mt-4 sm:mt-6">Open Hours</h3>
-                <p className="text-sm sm:text-base">Mon - Fri: 7:30am - 8:00pm PST</p>
-                <p className="text-sm sm:text-base">Saturday: 8:00am - 6:00pm PST</p>
-                <p className="text-sm sm:text-base">Sunday: 9:00am - 5:00pm PST</p>
-            </div> */}
-
-            <div>
-              <h3 className="text-xl sm:text-2xl font-semibold mt-4 sm:mt-6">
-                Open Hours
-              </h3>
-              <p className="text-sm sm:text-base">Available 24/7</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-full mt-8 sm:mt-12">
-          <iframe
-            title="Store Location"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28950.479383254168!2d67.06026213656998!3d24.89173305270807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33e5cf6b037fb%3A0x9b7f2c3c1b4a0efb!2sPIB%20Colony%2C%20Karachi%2C%20Pakistan!5e0!3m2!1sen!2s!4v1721218654847!5m2!1sen!2s"
-            width="100%"
-            height="300"
-            className="sm:h-[400px] rounded-lg shadow-md"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </div>
-
-      <LandingFooter />
+      <LandingFooter staticMode />
     </div>
   );
-};
-
-export default ContactUs;
+}

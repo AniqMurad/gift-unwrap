@@ -31,6 +31,8 @@ const navigationAnnouncementRoutes = new Set([
   "/floral-arrangements",
   "/sweet-treats",
   "/build-gift-box",
+  "/checkout",
+  "/shoppingcart",
 ]);
 
 function NavigationAnnouncement() {
@@ -44,34 +46,27 @@ function NavigationAnnouncement() {
 
 const SearchOutput = lazy(() => import("./pages/SearchOutput"));
 const Blog = lazy(() => import("./pages/Blog"));
-const CustomerFeedback = lazy(() => import("./pages/CustomerFeedback"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const BlogOpen = lazy(() => import("./pages/BlogOpen"));
 const Error = lazy(() => import("./pages/Error"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
-const FAQs = lazy(() => import("./pages/FAQs"));
 const Giftsforher = lazy(() => import("./pages/Giftsforher"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const ForgetPassword = lazy(() => import("./pages/ForgetPassword"));
-const OrderTracking = lazy(() => import("./pages/OrderTracking"));
 const MyAccount = lazy(() => import("./pages/MyAccount"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const ShoppingCart = lazy(() => import("./pages/ShoppingCart"));
 const ProductDetail = lazy(() => import("./components/ProductDetail"));
 const Giftsforhim = lazy(() => import("./pages/Giftsforhim"));
-const Giftsforbabies = lazy(() => import("./pages/Giftsforbabies"));
-const Giftsforeveryone = lazy(() => import("./pages/Giftsforeveryone"));
 const Forcompanies = lazy(() => import("./pages/Forcompanies"));
 const Giftsforwedding = lazy(() => import("./pages/Giftsforwedding"));
-const Giftforreligions = lazy(() => import("./pages/Giftforreligions"));
 const BirthdayGifts = lazy(() => import("./pages/BirthdayGifts"));
 const PersonalizedGifts = lazy(() => import("./pages/PersonalizedGifts"));
 const GreetingCards = lazy(() => import("./pages/GreetingCards"));
 const FloralArrangements = lazy(() => import("./pages/FloralArrangements"));
 const SweetTreats = lazy(() => import("./pages/SweetTreats"));
 const SuccessScreen = lazy(() => import("./pages/SuccessScreen"));
-const FlowerChocolate = lazy(() => import('./pages/FlowerChocolate'));
 const ShippingPolicy = lazy(() => import("./pages/ShippingPolicy"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const RefundReturnPolicy = lazy(() => import("./pages/RefundReturnPolicy"));
@@ -90,25 +85,19 @@ function App() {
               <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/blog" element={<Blog />} />
-              <Route path="/customer-feedback" element={<StorefrontPage kind="reviews"><CustomerFeedback /></StorefrontPage>} />
               <Route path="/contact-us" element={<StorefrontPage kind="contact"><ContactUs /></StorefrontPage>} />
               <Route path="/blog/:slug" element={<StorefrontPage kind="article"><BlogOpen /></StorefrontPage>} />
               <Route path="/error" element={<StorefrontPage kind="error"><Error /></StorefrontPage>} />
               <Route path="/coming-soon" element={<StorefrontPage kind="coming"><ComingSoon /></StorefrontPage>} />
-              <Route path="/faqs" element={<StorefrontPage kind="faq"><FAQs /></StorefrontPage>} />
               <Route path="/giftforher" element={<Giftsforher />} />
               <Route path="/giftforhim" element={<Giftsforhim />} />
               <Route path="/forgetPassword" element={<StorefrontPage kind="auth"><ForgetPassword /></StorefrontPage>} />
               <Route path="/login" element={<StorefrontPage kind="auth"><Login /></StorefrontPage>} />
               <Route path="/signup" element={<StorefrontPage kind="auth"><Signup /></StorefrontPage>} />
-              <Route path="/OrderTracking" element={<StorefrontPage kind="tracking"><OrderTracking /></StorefrontPage>} />
               <Route path="/myAccount" element={<StorefrontPage kind="account"><MyAccount /></StorefrontPage>} />
               <Route path="/product/:category/:productSlug" element={<ProductDetail />} />
-              <Route path="/Giftforbabies" element={<StorefrontPage kind="catalog"><Giftsforbabies /></StorefrontPage>} />
-              <Route path="/giftforeveryone" element={<StorefrontPage kind="catalog"><Giftsforeveryone /></StorefrontPage>} />
               <Route path="/giftforcompanies" element={<StorefrontPage kind="catalog"><Forcompanies /></StorefrontPage>} />
               <Route path="/giftforwedding" element={<StorefrontPage kind="catalog"><Giftsforwedding /></StorefrontPage>} />
-              <Route path="/Giftforreligions" element={<StorefrontPage kind="catalog"><Giftforreligions /></StorefrontPage>} />
               <Route path="/Giftforbirthday" element={<BirthdayGifts />} />
               <Route path="/personalized-gifts" element={<PersonalizedGifts />} />
               <Route path="/greeting-cards" element={<GreetingCards />} />
@@ -118,7 +107,6 @@ function App() {
               <Route path="/ShoppingCart" element={<StorefrontPage kind="cart"><ShoppingCart /></StorefrontPage>} />
               <Route path="/SearchOutput" element={<StorefrontPage kind="search"><SearchOutput /></StorefrontPage>} />
               <Route path="/order-confirmation" element={<StorefrontPage kind="success"><SuccessScreen/></StorefrontPage>}></Route>
-              <Route path="/flower-chocolate" element={<StorefrontPage kind="catalog"><FlowerChocolate/></StorefrontPage>}></Route>
               <Route path="/shipping-policy" element={<StorefrontPage kind="policy"><ShippingPolicy /></StorefrontPage>} />
               <Route path="/privacy-policy" element={<StorefrontPage kind="policy"><PrivacyPolicy /></StorefrontPage>} />
               <Route path="/refund-return-policy" element={<StorefrontPage kind="policy"><RefundReturnPolicy /></StorefrontPage>} />

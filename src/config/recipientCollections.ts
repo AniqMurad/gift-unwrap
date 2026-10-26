@@ -162,16 +162,16 @@ export const recipientCollectionConfigs: Record<
     seoDescription:
       "Shop thoughtful gifts for her in Pakistan. Explore curated gift boxes or build your own with a personal message. Nationwide delivery on selected items.",
     builder: {
-      heading: "Her Favourite Things, All in One Box",
+      heading: "Make It Feel Like\nYou Chose It for Them",
       paragraph:
-        "You know her little favourites. Choose the gifts, add your message, and build a box that shows you’ve been paying attention. Make it personal, with choices that work for your budget.",
+        "You know the little things they love. Choose their favourites, add your words, and create a gift box that feels personally chosen.",
       steps: [
-        "Choose Your Box",
         "Pick Her Gifts",
+        "Choose Your Box",
         "Add Your Message",
         "Send It To Your Loved Ones",
       ],
-      cta: "Build Her Gift Box",
+      cta: "Build Your Own Gift Box",
       route: "/build-gift-box",
     },
     faqHeading: "A Little Help Choosing Her Gift",

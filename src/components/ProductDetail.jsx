@@ -48,15 +48,10 @@ const categoryNames = {
 const categoryRoutes = {
   giftsForHer: "/giftforher",
   giftsForHim: "/giftforhim",
-  giftsForBabies: "/Giftforbabies",
   giftsForCompany: "/giftforcompanies",
   giftsForCompanies: "/giftforcompanies",
-  giftsForEveryone: "/giftforeveryone",
   giftsForWedding: "/giftforwedding",
-  giftsForReligions: "/Giftforreligions",
   giftsForBirthday: "/Giftforbirthday",
-  flowerChocolate: "/flower-chocolate",
-  FlowersChocolates: "/flower-chocolate",
 };
 
 const formatPrice = (value) =>
@@ -146,7 +141,7 @@ const ProductDetail = () => {
 
   const isCorporateGift = category === "giftsForCompany" || category === "giftsForCompanies";
   const categoryName = categoryNames[category] || category || "Gifts";
-  const categoryRoute = categoryRoutes[category] || "/giftforeveryone";
+  const categoryRoute = categoryRoutes[category] || "/#featured-gifts";
 
   useEffect(() => {
     let active = true;

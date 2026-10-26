@@ -17,7 +17,7 @@ const footerGroups = [
   {
     heading: "Explore",
     links: [
-      ["Shop Gifts", "/giftforeveryone"],
+      ["Shop Gifts", "/#featured-gifts"],
       ["Gifts for Her", "/giftforher"],
       ["Gifts for Him", "/giftforhim"],
       ["Sweet Treats", "/sweet-treats"],
@@ -63,7 +63,7 @@ const socialLinks = [
   },
 ];
 
-export default function LandingFooter() {
+export default function LandingFooter({ staticMode = false }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
 
@@ -78,7 +78,7 @@ export default function LandingFooter() {
   };
 
   return (
-    <StickyFooter className="gu-landing-footer">
+    <StickyFooter className="gu-landing-footer" staticMode={staticMode}>
       <div className="gu-site-footer-art" aria-hidden="true">
         <img src={footerPerson} alt="" />
       </div>
@@ -116,7 +116,7 @@ export default function LandingFooter() {
         <div className="gu-site-footer-lower">
           <form className="gu-site-footer-newsletter" onSubmit={handleNewsletterSubmit}>
             <label htmlFor="gu-site-footer-email">A little joy in your inbox</label>
-            <p>Sign up for gifting inspiration and updates.</p>
+            <p>Sign up for our newsletter and get 10% off your first purchase.</p>
             <div>
               <input
                 id="gu-site-footer-email"

@@ -83,14 +83,6 @@ const Home = () => {
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Product",
-                  "name": "Baby Gifts",
-                  "url": "https://www.giftunwrap.com/Giftforbabies"
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Product",
                   "name": "Birthday Gifts",
                   "url": "https://www.giftunwrap.com/Giftforbirthday"
                 }

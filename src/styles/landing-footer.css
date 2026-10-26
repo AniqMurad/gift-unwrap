@@ -6,26 +6,27 @@
 }
 
 .gu-site-footer-art {
-  height: 400px;
+  height: 364.8px;
   left: 59px;
   pointer-events: none;
   position: absolute;
-  top: -27px;
-  width: 571px;
+  top: -30.56px;
+  width: 608px;
 }
 
 .gu-site-footer-art img {
   display: block;
-  height: 400px;
+  height: 364.8px;
   object-fit: contain;
-  width: 571px;
+  object-position: left top;
+  width: 521px;
 }
 
 .gu-site-footer-content {
   left: 50%;
   max-width: 1720px;
   position: absolute;
-  top: 248.5px;
+  top: 219.88px;
   transform: translateX(-50%);
   width: calc(100% - 200px);
 }
@@ -35,27 +36,34 @@
   display: grid;
   gap: 377px;
   grid-template-columns: 567px minmax(0, 1fr);
-  min-height: 386px;
 }
 
 .gu-site-footer-about { display: flex; flex-direction: column; gap: 27px; }
+.gu-site-footer-about > div { display: flex; flex-direction: column; gap: 8px; }
 .gu-site-footer-about h2,
 .gu-site-footer-navigation h2 {
+  align-items: center;
+  display: flex;
   font-family: "Inter Variable", "Inter", sans-serif;
   font-size: 26px;
   font-weight: 500;
+  height: 38px;
   letter-spacing: -.52px;
   line-height: 33.6px;
 }
 .gu-site-footer-about p {
+  display: flex;
+  flex-direction: column;
   font-size: 18px;
   font-weight: 400;
   letter-spacing: -.36px;
   line-height: 1.4;
-  margin-top: 12px;
+  height: 70px;
+  justify-content: center;
+  margin-top: 0;
   max-width: 567px;
 }
-.gu-site-footer-about address { display: flex; flex-direction: column; font-style: normal; gap: 4px; }
+.gu-site-footer-about address { display: flex; flex-direction: column; font-style: normal; gap: 8px; }
 .gu-site-footer-about address a,
 .gu-site-footer-about address span {
   align-items: center;
@@ -63,6 +71,7 @@
   font-size: 16px;
   font-weight: 400;
   gap: 12px;
+  height: 26px;
   line-height: 25.6px;
 }
 .gu-site-footer-about address img { flex: 0 0 auto; }
@@ -73,7 +82,7 @@
   grid-template-columns: 203px 202px 160px;
 }
 .gu-site-footer-navigation nav { min-width: 0; }
-.gu-site-footer-navigation nav > div { display: flex; flex-direction: column; gap: 16px; margin-top: 34px; }
+.gu-site-footer-navigation nav > div { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
 .gu-site-footer-navigation a {
   font-size: 18px;
   font-weight: 400;
@@ -86,17 +95,17 @@
 .gu-site-footer-about address a:hover,
 .gu-site-footer-about address a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
 
-.gu-site-footer-divider { height: 2px; margin-top: 55px; overflow: hidden; width: 100%; }
+.gu-site-footer-divider { height: 2px; margin-top: 36px; overflow: hidden; width: 100%; }
 .gu-site-footer-divider img { display: block; max-width: none; }
 
 .gu-site-footer-lower {
   align-items: end;
   display: grid;
-  grid-template-columns: 446px minmax(0, 1fr) auto;
-  margin-top: 55px;
+  grid-template-columns: 450px minmax(0, 1fr) auto;
+  margin-top: 34px;
 }
 
-.gu-site-footer-newsletter { width: 446px; }
+.gu-site-footer-newsletter { width: 450px; }
 .gu-site-footer-newsletter > label {
   display: block;
   font-size: 18px;
@@ -105,11 +114,15 @@
   line-height: 27px;
 }
 .gu-site-footer-newsletter > p {
+  align-items: center;
+  display: flex;
   font-size: 16px;
   font-weight: 400;
+  height: 26px;
   letter-spacing: -.32px;
   line-height: 25.6px;
-  margin-top: 15px;
+  margin-top: 8px;
+  white-space: nowrap;
 }
 .gu-site-footer-newsletter > div {
   background: #fff;
@@ -117,7 +130,7 @@
   height: 52px;
   margin-top: 19px;
   position: relative;
-  width: 446px;
+  width: 450px;
 }
 .gu-site-footer-newsletter input {
   background: transparent;
@@ -149,7 +162,7 @@
 }
 .gu-site-footer-newsletter button:hover { background: #ff2b3a; }
 
-.gu-site-footer-socials { display: flex; gap: 26px; justify-self: center; padding-bottom: 7px; }
+.gu-site-footer-socials { display: flex; gap: 35px; justify-self: center; }
 .gu-site-footer-socials a {
   align-items: center;
   display: inline-flex;
@@ -170,7 +183,6 @@
   font-weight: 400;
   letter-spacing: -.32px;
   line-height: 1.4;
-  padding-bottom: 11px;
   white-space: nowrap;
 }
 
@@ -180,7 +192,7 @@
   font-weight: 600;
   letter-spacing: -4px;
   line-height: 229.6px;
-  margin-top: 55px;
+  margin-top: 36px;
   white-space: nowrap;
 }
 
@@ -195,6 +207,11 @@
   height: .883em;
   overflow: visible;
   width: 100%;
+}
+
+.gu-site-footer-wordmark text {
+  font-family: "Recoleta Alt", "Recoleta", serif;
+  font-weight: 600;
 }
 
 @media (max-width: 1799px) and (min-width: 1101px) {
@@ -232,6 +249,7 @@
   .gu-site-footer-about { max-width: 620px; }
   .gu-site-footer-navigation { gap: 36px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .gu-site-footer-navigation a { white-space: normal; }
+  .gu-site-footer-newsletter > p { white-space: normal; }
   .gu-site-footer-lower { gap: 40px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .gu-site-footer-socials { align-self: end; flex-wrap: wrap; justify-self: start; }
   .gu-site-footer-copyright { grid-column: 1 / -1; padding: 0; }
@@ -256,6 +274,7 @@
   .gu-site-footer-lower { gap: 42px; grid-template-columns: minmax(0, 1fr); margin-top: 46px; }
   .gu-site-footer-newsletter,
   .gu-site-footer-newsletter > div { width: 100%; }
+  .gu-site-footer-newsletter > p { white-space: normal; }
   .gu-site-footer-socials { gap: 14px 18px; }
   .gu-site-footer-socials a { font-size: 16px; }
   .gu-site-footer-copyright { grid-column: auto; font-size: 14px; white-space: normal; }
@@ -295,4 +314,24 @@
 
 @media (prefers-reduced-motion: reduce) {
   .gu-site-footer-newsletter button { transition: none; }
+}
+
+/* Checkout flow pages use the same footer design without the sticky reveal. */
+.sticky-footer.gu-static-footer {
+  bottom: auto;
+  left: auto;
+  opacity: 1;
+  pointer-events: auto;
+  position: relative;
+  visibility: visible;
+  width: 100%;
+  z-index: auto;
+}
+
+@media (min-width: 1101px) {
+  .sticky-footer.gu-static-footer { height: min(1025px, 100svh); }
+}
+
+@media (max-width: 1100px) {
+  .sticky-footer.gu-static-footer { height: auto; }
 }

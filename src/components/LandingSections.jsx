@@ -83,7 +83,7 @@ const categories = [
     title: "Curated Gift Hampers",
     description: "Thoughtfully paired gifts for birthdays, anniversaries, and the thank-yous you’ve been meaning to send.",
     link: "Shop Gift Hampers →",
-    route: "/giftforeveryone",
+    route: "/#featured-gifts",
     image: categoryHampers,
   },
   {
@@ -449,7 +449,7 @@ export const FeaturedGifts = () => {
   const visibleProducts = products.length ? products : groups.flatMap((group) => (group.products || []).map((item) => ({ ...item, category: group.category }))).slice(0, 8);
 
   return (
-    <section className="gu-section gu-featured-section" aria-labelledby="featured-title">
+    <section className="gu-section gu-featured-section" id="featured-gifts" aria-labelledby="featured-title">
       <div className="gu-section-heading gu-section-heading--center">
         <h2 id="featured-title">What Would Make Their Day?</h2>
         <p>Explore gifts for their favourite things, little celebrations, and moments worth remembering.</p>
@@ -461,7 +461,6 @@ export const FeaturedGifts = () => {
       {loading
         ? <div className="gu-product-loading-rail">{Array.from({ length: 4 }).map((_, index) => <div className="gu-product-skeleton" key={index} />)}</div>
         : <ContinuousProductCarousel products={visibleProducts} />}
-      <CartoonButton label="Shop All Gifts" color="#ff2b3a" to="/giftforeveryone" />
     </section>
   );
 };

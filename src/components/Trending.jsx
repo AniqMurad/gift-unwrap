@@ -1,11 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
-import eidimage from '../assets/Eid.png';
 import birthdayimage from '../assets/birthday.png';
 import companyimage from '../assets/company.webp';
 import weddingGiftImg from '../assets/weddingGiftsImg.jpg';
 import box2 from '../assets/box2.jpg';
 import giftForhimImg from '../assets/giftForhimImg.webp';
-import giftForKids from '../assets/giftforkids.jfif';
 import { useNavigate } from 'react-router-dom';
 
 const Trending = () => {
@@ -17,11 +15,9 @@ const Trending = () => {
     const originalItems = [
         { image: companyimage, title: "Business", url: "/Giftforcompanies" },
         { image: birthdayimage, title: "Birthday", url: "/Giftforbirthday" },
-        { image: giftForKids, title: "Kids", url: "/Giftforbabies" },
         { image: box2, title: "For Her", url: "/Giftforher" },
         { image: giftForhimImg, title: "For Him", url: "/Giftforhim" },
         { image: weddingGiftImg, title: "Wedding", url: "/Giftforwedding" },
-        { image: eidimage, title: "Religious Events", url: "/Giftforreligions" },
     ];
 
     const itemWidth = 200 + 24; 

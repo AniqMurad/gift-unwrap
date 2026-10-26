@@ -16,7 +16,7 @@ export default function ComingSoon() {
           <label htmlFor="coming-email" className="block mb-4">Create your GiftUnwrap account</label>
           <div><input id="coming-email" type="email" required autoComplete="email" placeholder="Your email address" value={email} onChange={(event) => setEmail(event.target.value)} /><button className="gu-migration-button" type="submit">Register</button></div>
         </form>
-        <Link to="/giftforeveryone" className="mt-8 underline">Explore gifts →</Link>
+        <Link to="/#featured-gifts" className="mt-8 underline">Explore gifts →</Link>
       </div>
     </main>
     <LandingFooter />

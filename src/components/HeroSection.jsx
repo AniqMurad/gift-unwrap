@@ -32,7 +32,7 @@ const HeroSection = () => {
           from afar.
         </p>
         <div className="gu-hero-actions">
-          <CartoonButton label="Shop Gifts" color="#ff2b3a" to="/giftforeveryone" />
+          <CartoonButton label="Shop Gifts" color="#ff2b3a" to="/#featured-gifts" />
           <CartoonButton label="Build Your Own Gift Box" to="/build-gift-box" />
         </div>
       </div>

@@ -68,6 +68,19 @@ const builderImages = [
   },
 ];
 
+const herBuilderImages = [
+  { imageSrc: stepPickGifts, imageWidth: 154, imageHeight: 115, imageOffsetY: -3.5 },
+  { imageSrc: stepChooseBox, imageWidth: 144, imageHeight: 101, imageOffsetY: 0.5 },
+  { imageSrc: stepAddMessage, imageWidth: 134, imageHeight: 111, imageOffsetY: -1.5 },
+  {
+    imageSrc: stepSend,
+    imageWidth: 196,
+    imageHeight: 154,
+    imageOffsetX: -16,
+    imageOffsetY: -8,
+  },
+];
+
 const labelFromValue = (value: string, labels: Record<string, string>) =>
   labels[value] ||
   value
@@ -518,7 +531,7 @@ export default function RecipientCollectionPage({
             <ol className="gu-recipient-steps">
               {config.builder.steps.map((title, index) => (
                 <FeatureCard
-                  {...builderImages[index]}
+                  {...(config.key === "her" ? herBuilderImages[index] : builderImages[index])}
                   className="gu-recipient-step"
                   number={index + 1}
                   title={title}

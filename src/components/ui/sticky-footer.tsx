@@ -3,13 +3,16 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 export interface StickyFooterProps {
   children: ReactNode;
   className?: string;
+  staticMode?: boolean;
 }
 
-export function StickyFooter({ children, className = "" }: StickyFooterProps) {
+export function StickyFooter({ children, className = "", staticMode = false }: StickyFooterProps) {
   const slotRef = useRef<HTMLDivElement>(null);
   const [isRevealing, setIsRevealing] = useState(false);
 
   useEffect(() => {
+    if (staticMode) return undefined;
+
     const slot = slotRef.current;
     if (!slot) return;
 
@@ -20,7 +23,15 @@ export function StickyFooter({ children, className = "" }: StickyFooterProps) {
 
     observer.observe(slot);
     return () => observer.disconnect();
-  }, []);
+  }, [staticMode]);
+
+  if (staticMode) {
+    return (
+      <footer className={`sticky-footer gu-static-footer is-revealing ${className}`.trim()}>
+        {children}
+      </footer>
+    );
+  }
 
   return (
     <div ref={slotRef} className="sticky-footer-slot">

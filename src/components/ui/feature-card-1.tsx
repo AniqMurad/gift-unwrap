@@ -7,6 +7,7 @@ export interface FeatureCardProps extends HTMLAttributes<HTMLLIElement> {
   imageWidth: number;
   imageHeight: number;
   imageOffsetX?: number;
+  imageOffsetY?: number;
   number: number;
   title: string;
 }
@@ -18,6 +19,7 @@ export function FeatureCard({
   imageWidth,
   imageHeight,
   imageOffsetX = 0,
+  imageOffsetY = 0,
   number,
   title,
   style,
@@ -27,6 +29,7 @@ export function FeatureCard({
     "--gu-feature-image-width": `${imageWidth}px`,
     "--gu-feature-image-height": `${imageHeight}px`,
     "--gu-feature-image-offset-x": `${imageOffsetX}px`,
+    "--gu-feature-image-offset-y": `${imageOffsetY}px`,
     ...style,
   } as CSSProperties;
 

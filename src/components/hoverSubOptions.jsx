@@ -26,13 +26,6 @@ const hoverSubOptions = {
             url: "/Giftforher"
         },
         {
-            title: "FOR BABIES",
-            items: [
-                { name: "New Born", url: "/Giftforbabies?category=newborn" },
-            ],
-            url: "/Giftforbabies"
-        },
-        {
             title: "FOR COMPANIES",
             items: [
                 { name: "New Hire", url: "/Giftforcompanies?category=newhire" },
@@ -93,16 +86,6 @@ const hoverSubOptions = {
                 { name: "For Company", url: "/Giftforcompanies" },
             ],
             url: "/Giftforcompanies"
-        },
-        {
-            title: "RELIGIOUS MOMENTS",
-            items: [
-                { name: "EID", url: "/Giftforreligions?category=eid" },
-                { name: "HOLI", url: "/Giftforreligions?category=holi" },
-                { name: "DIWALI", url: "/Giftforreligions?category=diwali" },
-                { name: "Navroz", url: "/Giftforreligions?category=navroz" }
-            ],
-            url: "/Giftforreligions"
         }
     ],
 };

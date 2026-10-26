@@ -77,10 +77,6 @@ const SubNavbar = () => {
     navigate(url);
     setActiveDropdown(null);
   };
-  const navigateToFlowers = () => {
-    navigate("flower-chocolate");
-  };
-  
   const navigateToBuildGiftBox = () => {
     navigate("/build-gift-box");
   };
@@ -104,14 +100,6 @@ const SubNavbar = () => {
             onMouseEnter={() => handleButtonClick("occasions")}
           >
             OCCASIONS
-          </button>
-          <button
-            className={`font-bold cursor-pointer text-xs sm:text-sm text-red-300 dropdown-button ${activeDropdown === "birthday" ? "border-b-2 border-black" : ""
-              }`}
-            onClick={navigateToFlowers}
-          >
-            <span className="hidden sm:inline">SWEETS &  BOUQUETS</span>
-            <span className="sm:hidden">SWEETS & BOUQUETS</span>
           </button>
           {/* <button
             className="font-bold cursor-pointer text-xs sm:text-sm dropdown-button"
