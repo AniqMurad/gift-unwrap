@@ -21,12 +21,13 @@ import FeatureCard from "./ui/feature-card-1";
 import ProductScrollReveal from "./ui/product-scroll-reveal";
 import GreetingCardCollectionItem from "./GreetingCardCollectionItem";
 import CollectionFilterBar from "./CollectionFilterBar";
+import { getKeyGiftValues, hasKeyGift } from "../utils/keyGifts";
 
 interface StoreProduct {
   id: number | string;
   name: string;
   price?: number;
-  keyGift?: string;
+  keyGift?: string | string[];
   subcategory?: string;
   image?: string;
   images?: string[];
@@ -243,7 +244,7 @@ export default function RecipientCollectionPage({
       config.profileFilteringSupported === false
         ? []
         : Array.from(
-          new Set(products.map((product) => product.keyGift).filter(Boolean)),
+          new Set(products.flatMap((product) => getKeyGiftValues(product.keyGift))),
         ) as string[],
     [config.profileFilteringSupported, products],
   );
@@ -287,7 +288,7 @@ export default function RecipientCollectionPage({
   const filteredProducts = useMemo(() => {
     const results = products.filter(
       (product) =>
-        (!profile || product.keyGift === profile) &&
+        (!profile || hasKeyGift(product.keyGift, profile)) &&
         (config.fixedOccasion ||
           !occasion ||
           (catalogueOccasions.length

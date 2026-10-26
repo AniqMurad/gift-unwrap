@@ -20,6 +20,7 @@ import { useLocation } from "react-router-dom";
 import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import PriceRangeSlider from "../components/PriceRangeSlider";
 import DeliveryMarquee from "@/components/DeliveryMarquee";
+import { hasKeyGift } from "@/utils/keyGifts";
 
 const Forcompanies = () => {
   const [products, setProducts] = useState([]);
@@ -35,7 +36,7 @@ const Forcompanies = () => {
   const giftsForCompanyProducts = products
     .filter(
       (product) =>
-        (selectedCategory === "" || product.keyGift === selectedCategory) &&
+        (selectedCategory === "" || hasKeyGift(product.keyGift, selectedCategory)) &&
         product.price >= minPrice &&
         product.price <= maxPrice
     )

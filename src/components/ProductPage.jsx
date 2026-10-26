@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Product from './Product';
+import { getKeyGiftValues, hasKeyGift } from '../utils/keyGifts';
 
 const ProductPage = ({ title, category }) => {
     const navigate = useNavigate();
@@ -41,17 +42,13 @@ const ProductPage = ({ title, category }) => {
     const subcategories = [
         "All",
         ...new Set(
-            products
-                .map(item => item.keyGift?.trim())
-                .filter(Boolean)
+            products.flatMap(item => getKeyGiftValues(item.keyGift))
         )
     ];
 
     const allFilteredProducts = selectedSubcategory === "All"
         ? randomFour
-        : products.filter(item =>
-            item.keyGift?.toLowerCase().trim() === selectedSubcategory.toLowerCase().trim()
-        );
+        : products.filter(item => hasKeyGift(item.keyGift, selectedSubcategory));
 
     // Limit to 4 products
     const filteredProducts = allFilteredProducts.slice(0, 4);

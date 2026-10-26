@@ -3,6 +3,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchBlogs, fetchProductCollections } from "../config/api";
 import { generateSlug } from "../utils/slugify";
+import { keyGiftSearchText } from "../utils/keyGifts";
 import stepChooseBox from "../assets/redesign/step-choose-box.png";
 import stepPickGifts from "../assets/redesign/step-pick-gifts.png";
 import stepAddMessage from "../assets/redesign/step-add-message.png";
@@ -440,8 +441,8 @@ export const FeaturedGifts = () => {
     let items = [];
     if (activeTab === "GIFT BOX") items = getGroup(gender === "Male" ? "giftsForHim" : "giftsForHer");
     if (activeTab === "FLORAL ARRANGEMENTS") items = getGroup("FlowersChocolates");
-    if (activeTab === "SWEET TREATS") items = getGroup("FlowersChocolates").filter((item) => /cake|chocolate|sweet|brownie|cookie/i.test(`${item.name} ${item.keyGift || ""}`));
-    if (activeTab === "GREETING CARDS") items = groups.flatMap((group) => (group.products || []).map((item) => ({ ...item, category: group.category }))).filter((item) => /card/i.test(`${item.name} ${item.keyGift || ""}`));
+    if (activeTab === "SWEET TREATS") items = getGroup("FlowersChocolates").filter((item) => /cake|chocolate|sweet|brownie|cookie/i.test(`${item.name} ${keyGiftSearchText(item.keyGift)}`));
+    if (activeTab === "GREETING CARDS") items = groups.flatMap((group) => (group.products || []).map((item) => ({ ...item, category: group.category }))).filter((item) => /card/i.test(`${item.name} ${keyGiftSearchText(item.keyGift)}`));
     const category = activeTab === "GIFT BOX" ? (gender === "Male" ? "giftsForHim" : "giftsForHer") : "FlowersChocolates";
     return items.map((item) => ({ ...item, category: item.category || category }));
   }, [activeTab, gender, groups]);

@@ -1,3 +1,5 @@
+import { keyGiftSearchText } from "../utils/keyGifts";
+
 export const defaultGiftPackaging = {
   intro: "Every box arrives hand-packed and ready to gift.",
   items: [
@@ -65,7 +67,7 @@ export const getProductFaqContent = (product, category) => {
     category,
     product?.name,
     product?.subcategory,
-    product?.keyGift,
+    keyGiftSearchText(product?.keyGift),
     product?.shortDescription,
     product?.longDescription,
   ]

@@ -6,6 +6,7 @@ import { Buttons } from "../components/Buttons";
 import { StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import { StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import { useSearchParams } from "react-router-dom";
+import { getKeyGiftValues, keyGiftSearchText } from "../utils/keyGifts";
 
 const recipientLabels = {
   him: "Him",
@@ -40,7 +41,7 @@ const normalize = (value = "") =>
 const searchableProductText = (product) =>
   [
     product.name,
-    product.keyGift,
+    keyGiftSearchText(product.keyGift),
     product.subcategory,
     product.shortDescription,
     product.longDescription,
@@ -54,16 +55,16 @@ const searchableProductText = (product) =>
 const matchesRecipient = (product, recipient) => {
   if (!recipient) return true;
   const category = normalize(product.category).replaceAll(" ", "");
-  const profile = normalize(product.keyGift);
+  const profiles = getKeyGiftValues(product.keyGift).map(normalize);
   const text = searchableProductText(product);
 
   if (recipient === "him") return category === "giftsforhim";
   if (recipient === "her") return category === "giftsforher";
   if (recipient === "friend") {
-    return profile === "friend" || category === "giftsforeveryone" || text.includes("friend");
+    return profiles.includes("friend") || category === "giftsforeveryone" || text.includes("friend");
   }
   if (recipient === "family") {
-    return familyProfiles.has(profile) || category === "giftsforeveryone" || /\bfamil(?:y|ies)\b/.test(text);
+    return profiles.some((profile) => familyProfiles.has(profile)) || category === "giftsforeveryone" || /\bfamil(?:y|ies)\b/.test(text);
   }
   return true;
 };

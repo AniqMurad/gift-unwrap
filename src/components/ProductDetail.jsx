@@ -19,6 +19,7 @@ import RequestQuoteModal from "./RequestQuoteModal";
 import { useCart } from "../context/CartContext";
 import { fetchGreetingCards, fetchProductCollections } from "../config/api";
 import { findProductBySlug, generateSlug } from "../utils/slugify";
+import { getKeyGiftValues, keyGiftSearchText } from "../utils/keyGifts";
 import {
   defaultGiftPackaging,
   getProductFaqContent,
@@ -103,7 +104,7 @@ const getPackagingContent = (product) => {
   const packagingSignals = [
     product?.name,
     product?.subcategory,
-    product?.keyGift,
+    keyGiftSearchText(product?.keyGift),
     product?.shortDescription,
     product?.longDescription,
   ]
@@ -254,7 +255,7 @@ const ProductDetail = () => {
 
   const labels = useMemo(
     () =>
-      [...new Set([product?.subcategory, product?.keyGift, categoryName].filter(Boolean))].slice(0, 3),
+      [...new Set([product?.subcategory, ...getKeyGiftValues(product?.keyGift), categoryName].filter(Boolean))].slice(0, 3),
     [categoryName, product],
   );
 
