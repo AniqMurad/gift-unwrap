@@ -58,12 +58,6 @@ const categoryRoutes = {
 const formatPrice = (value) =>
   new Intl.NumberFormat("en-PK", { maximumFractionDigits: 0 }).format(Number(value) || 0);
 
-const setAdaptiveImageFit = (event) => {
-  const image = event.currentTarget;
-  const ratio = image.naturalWidth / image.naturalHeight;
-  image.dataset.fit = ratio >= 0.82 && ratio <= 1.22 ? "cover" : "contain";
-};
-
 const getProductImages = (product) => {
   if (!product) return [];
   return [...new Set([...(product.images || []), product.image].filter(Boolean))];
@@ -465,7 +459,7 @@ const ProductDetail = () => {
               ))}
             </div>
             <div className="gu-pdp-main-image">
-              <img src={mainImage} alt={product.name} fetchPriority="high" decoding="async" onLoad={setAdaptiveImageFit} />
+              <img src={mainImage} alt={product.name} fetchPriority="high" decoding="async" />
               {images.length > 1 && (
                 <div className="gu-pdp-gallery-controls">
                   <button type="button" onClick={() => moveGallery(-1)} aria-label="Previous product image"><ChevronLeft /></button>
@@ -680,7 +674,7 @@ const ProductDetail = () => {
                     to={`/product/${related.category}/${generateSlug(related.name)}`}
                   >
                     <span className="gu-pdp-related-image">
-                      <img src={related.image || related.images?.[0] || fallbackImage} alt={related.name} loading="lazy" decoding="async" onLoad={setAdaptiveImageFit} />
+                      <img src={related.image || related.images?.[0] || fallbackImage} alt={related.name} loading="lazy" decoding="async" />
                     </span>
                     <span className="gu-pdp-related-copy">
                       <strong>{related.name}</strong>

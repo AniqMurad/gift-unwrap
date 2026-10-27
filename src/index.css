@@ -853,8 +853,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-thumbnails button:hover, .gu-pdp-thumbnails button:focus-visible, .gu-pdp-thumbnails button.is-active { border-color: var(--gu-orange); opacity: 1; outline: none; }
 .gu-pdp-thumbnails img { height: 100%; object-fit: cover; width: 100%; }
 .gu-pdp-main-image { align-items: center; aspect-ratio: 1; background: #fff; border-radius: 16.422px; display: flex; justify-content: center; overflow: hidden; padding: 0; position: relative; width: 100%; }
-.gu-pdp-main-image > img { height: 100%; object-fit: cover; width: 100%; }
-.gu-pdp-main-image > img[data-fit="contain"] { object-fit: contain; }
+.gu-pdp-main-image > img { display: block; height: 100%; max-height: none; max-width: none; object-fit: cover; width: 100%; }
 .gu-pdp-gallery-controls { inset: 0; pointer-events: none; position: absolute; }
 .gu-pdp-gallery-controls button { pointer-events: auto; position: absolute; top: 50%; transform: translateY(-50%); }
 .gu-pdp-gallery-controls button:first-child { left: 26px; }
@@ -958,8 +957,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-related-grid { display: grid; gap: 20px; grid-template-columns: repeat(4, minmax(0, 400px)); justify-content: center; }
 .gu-pdp-related-card { align-items: center; color: var(--gu-ink); display: flex; flex-direction: column; gap: 11px; min-width: 0; text-align: center; }
 .gu-pdp-related-image { align-items: center; aspect-ratio: 1; background: #efede8; border-radius: 27.778px; display: flex; justify-content: center; overflow: hidden; width: 100%; }
-.gu-pdp-related-image img { height: 100%; object-fit: cover; width: 100%; }
-.gu-pdp-related-image img[data-fit="contain"] { object-fit: contain; }
+.gu-pdp-related-image img { display: block; height: 100%; max-height: none; max-width: none; object-fit: cover; width: 100%; }
 .gu-pdp-related-copy { align-items: center; display: flex; flex-direction: column; font-size: 18px; gap: 8px; line-height: 24px; }
 .gu-pdp-related-copy strong { color: var(--gu-red); font-weight: 500; min-height: 48px; text-transform: capitalize; }
 .gu-pdp-related-copy b { color: var(--gu-body); font-weight: 700; }
