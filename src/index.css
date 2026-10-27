@@ -883,11 +883,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-info-tabs button:hover, .gu-pdp-info-tabs button:focus-visible, .gu-pdp-info-tabs button.is-active { color: var(--gu-red); outline: none; }
 .gu-pdp-info-tabs button.is-active::after { background: var(--gu-red); }
 .gu-pdp-contents { min-height: 300px; padding: 24px 18px 28px; }
-.gu-pdp-contents ul { display: grid; gap: 17px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.gu-pdp-contents li { align-items: flex-start; display: flex; gap: 12px; }
-.gu-pdp-contents li > span { align-items: center; background: #f6ecfb; border-radius: 999px; color: var(--gu-red); display: flex; flex: 0 0 32px; font-size: 13px; font-weight: 600; height: 32px; justify-content: center; }
-.gu-pdp-contents li strong { display: block; font-size: 16px; font-weight: 600; line-height: 1.3; }
-.gu-pdp-contents li p { color: var(--gu-body); font-size: 14px; line-height: 1.45; margin-top: 3px; }
+.gu-pdp-contents ul { column-gap: 17px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 13px; }
+.gu-pdp-contents li { align-items: flex-start; display: flex; gap: 10px; min-width: 0; }
+.gu-pdp-content-image { align-items: center; background: #f1e9e3; border-radius: 9px; display: flex; flex: 0 0 40px; height: 40px; justify-content: center; overflow: hidden; }
+.gu-pdp-content-image img { height: 100%; object-fit: cover; width: 100%; }
+.gu-pdp-contents li > div { min-width: 0; }
+.gu-pdp-contents li strong { color: #000; display: block; font-family: "Inter", sans-serif; font-size: 16px; font-weight: 400; letter-spacing: -0.48px; line-height: 24px; }
+.gu-pdp-contents li p { color: #3c3636; font-family: "Inter", sans-serif; font-size: 13px; font-weight: 400; letter-spacing: -0.52px; line-height: 1.2; margin-top: 0; }
 .gu-pdp-empty-contents { align-items: flex-start; color: var(--gu-body); display: flex; gap: 16px; padding-top: 8px; }
 .gu-pdp-empty-contents > svg { color: var(--gu-red); flex: 0 0 30px; }
 .gu-pdp-empty-contents strong { color: var(--gu-ink); display: block; font-size: 17px; }

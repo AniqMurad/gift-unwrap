@@ -70,13 +70,13 @@ const normalizeContents = (product) => {
   return contents
     .map((item, index) => {
       if (typeof item === "string") {
-        return { id: `content-${index}`, name: item, quantity: null, description: "" };
+        return { id: `content-${index}`, name: item, description: "", image: "" };
       }
       return {
         id: item.id || item._id || `content-${index}`,
         name: item.name || item.title || item.productName || "Included item",
-        quantity: item.quantity ?? item.qty ?? null,
         description: item.description || item.details || "",
+        image: item.image || item.imageUrl || item.thumbnail || "",
       };
     })
     .filter((item) => item.name);
@@ -548,7 +548,9 @@ const ProductDetail = () => {
                     <ul>
                       {contents.map((item) => (
                         <li key={item.id}>
-                          <span>{item.quantity ? `${item.quantity} ×` : "•"}</span>
+                          <span className="gu-pdp-content-image">
+                            {item.image && <img src={item.image} alt="" loading="lazy" decoding="async" />}
+                          </span>
                           <div><strong>{item.name}</strong>{item.description && <p>{item.description}</p>}</div>
                         </li>
                       ))}
