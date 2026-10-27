@@ -64,7 +64,7 @@ const getProductImages = (product) => {
 };
 
 const normalizeContents = (product) => {
-  const contents = product?.contents || product?.items || product?.whatsInside;
+  const contents = product?.whatsInside || product?.contents || product?.items;
   if (!Array.isArray(contents)) return [];
 
   return contents
