@@ -207,11 +207,40 @@ const ProductDetail = () => {
   useEffect(() => {
     let active = true;
     setCardsStatus("loading");
-    fetchGreetingCards()
-      .then(({ data }) => {
+    Promise.allSettled([fetchGreetingCards(), fetchProductCollections()])
+      .then(([builderCardsResult, productCollectionsResult]) => {
         if (!active) return;
-        setCards((Array.isArray(data) ? data : []).filter((card) => card.inStock !== false));
-        setCardsStatus("ready");
+
+        const builderCards = builderCardsResult.status === "fulfilled" && Array.isArray(builderCardsResult.value.data)
+          ? builderCardsResult.value.data.map((card) => ({
+              ...card,
+              id: card.id ?? card._id,
+              source: "builder-card",
+              image: card.image || card.images?.[0],
+            }))
+          : [];
+        const productCollections = productCollectionsResult.status === "fulfilled" && Array.isArray(productCollectionsResult.value.data)
+          ? productCollectionsResult.value.data
+          : [];
+        const greetingCardProducts = (productCollections.find((collection) => collection.category === "greetingCards")?.products || [])
+          .map((card) => ({
+            ...card,
+            id: card.id ?? card._id,
+            source: "product",
+            productCategory: "greetingCards",
+            image: card.image || card.images?.[0],
+            design: card.subcategory || keyGiftSearchText(card.keyGift) || "Greeting card",
+          }));
+        const availableCards = [...builderCards, ...greetingCardProducts]
+          .filter((card) => card.id && card.image && Number(card.price) > 0 && !isUnavailableProduct(card));
+
+        setCards(availableCards);
+        setCardStart(0);
+        setCardsStatus(
+          builderCardsResult.status === "fulfilled" || productCollectionsResult.status === "fulfilled"
+            ? "ready"
+            : "error",
+        );
       })
       .catch(() => {
         if (!active) return;
