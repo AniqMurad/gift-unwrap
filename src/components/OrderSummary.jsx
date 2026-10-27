@@ -1,4 +1,5 @@
 import React from "react";
+import { getCartItemCardPrice, getCartItemLinePrice } from "../utils/cartPricing";
 
 const OrderSummary = ({
   cartItems,
@@ -56,12 +57,12 @@ const OrderSummary = ({
                   </p>
                   {item.personalization?.card && (
                     <p className="text-[#696C70] text-[12px]">
-                      Card: {item.personalization.card.name}
+                      Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})
                     </p>
                   )}
                 </div>
                 <p className="font-semibold text-[15px]">
-                  PKR {(item.price * item.quantity).toFixed(2)}
+                  PKR {getCartItemLinePrice(item).toFixed(2)}
                 </p>
               </div>
             ))}

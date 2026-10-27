@@ -2,6 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StorefrontFooter as Footer, StorefrontHeader as Navbar } from "../components/storefront/StorefrontPage";
 import { useCart } from "../context/CartContext";
+import {
+  FREE_SHIPPING_THRESHOLD,
+  getCartItemCardPrice,
+  getCartItemLinePrice,
+  getCartItemUnitPrice,
+} from "../utils/cartPricing";
 import minusIcon from "../assets/redesign/cart/minus.svg";
 import plusIcon from "../assets/redesign/cart/plus.svg";
 import removeIcon from "../assets/redesign/cart/remove-outline.svg";
@@ -14,7 +20,7 @@ const ShoppingCart = () => {
   const [discountCode, setDiscountCode] = useState("");
 
   const subtotal = getTotalCartAmount();
-  const freeShippingThreshold = 10000;
+  const freeShippingThreshold = FREE_SHIPPING_THRESHOLD;
   const amountNeededForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
   const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 350;
   const discountAmount = 0;
@@ -81,6 +87,7 @@ const ShoppingCart = () => {
                 {cartItems.map((item) => {
                   const itemImage = item.image || item.images?.[0];
                   const itemKey = item.cartKey || `${item.category}-${item.id}`;
+                  const cardPrice = getCartItemCardPrice(item);
 
                   return (
                     <li className="gu-cart-item" key={itemKey}>
@@ -96,12 +103,13 @@ const ShoppingCart = () => {
                           {item.personalization?.card && (
                             <p>
                               Card: {item.personalization.card.name}
+                              {` · ${formatPkr(cardPrice)}`}
                               {item.personalization.messageMode === "write" && ` · To ${item.personalization.to}, from ${item.personalization.from}`}
                             </p>
                           )}
                         </div>
 
-                        <span className="gu-cart-unit-price">{formatPkr(item.price)}</span>
+                        <span className="gu-cart-unit-price">{formatPkr(getCartItemUnitPrice(item))}</span>
 
                         <div className="gu-cart-quantity" aria-label={`Quantity for ${item.name}`}>
                           <button type="button" aria-label={`Decrease quantity of ${item.name}`} onClick={() => handleQuantityChange(item, item.quantity - 1)}>
@@ -113,7 +121,7 @@ const ShoppingCart = () => {
                           </button>
                         </div>
 
-                        <span className="gu-cart-line-price">{formatPkr(item.price * item.quantity)}</span>
+                        <span className="gu-cart-line-price">{formatPkr(getCartItemLinePrice(item))}</span>
 
                         <button className="gu-cart-remove" type="button" aria-label={`Remove ${item.name}`} onClick={() => removeFromCart(item.id, item.category, item.cartKey)}>
                           <img src={removeIcon} alt="" aria-hidden="true" />

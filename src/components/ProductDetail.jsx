@@ -375,6 +375,9 @@ const ProductDetail = () => {
             name: selectedCard.name,
             design: selectedCard.design,
             image: selectedCard.image,
+            price: Number(selectedCard.price) || 150,
+            source: selectedCard.source || "product",
+            productCategory: selectedCard.productCategory || "greetingCards",
           },
           messageMode,
           ...(messageMode === "write"

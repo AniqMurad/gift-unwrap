@@ -16,6 +16,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
     import BuilderMessageModal from "@/components/gift-box-builder/BuilderMessageModal";
     import { getStockLimit, isUnavailable } from "@/components/gift-box-builder/builder-utils";
     import { applyBoxSizeVariant, emptyCardDetails, restoreCardDetails, serializeCardMessage, getBuilderStepError, getBuilderCardPrice, giftItemOrderPayload } from "@/components/gift-box-builder/builder-card-state";
+    import { FREE_SHIPPING_THRESHOLD } from "@/utils/cartPricing";
     import { useNavigate } from "react-router-dom";
 
     const GIFT_BOX_DRAFT_KEY = "giftunwrap:gift-box-draft:v1";
@@ -458,7 +459,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
     };
 
     const subtotal = getTotalBoxPrice();
-    const freeShippingThreshold = 10000;
+    const freeShippingThreshold = FREE_SHIPPING_THRESHOLD;
     const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 350;
     const discountAmount = 0;
     const totalOrderAmount = subtotal + shippingCost - discountAmount;

@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useCart } from "../context/CartContext";
 import { ShoppingCart, User } from "lucide-react";
+import { getCartItemCardPrice, getCartItemLinePrice } from "../utils/cartPricing";
 
 const Navbar = ({
   showSearchInput = true,
@@ -310,12 +311,12 @@ const Navbar = ({
                         </p>
                         {item.personalization?.card && (
                           <p className="text-xs text-red-500">
-                            Card: {item.personalization.card.name}
+                            Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})
                           </p>
                         )}
                       </div>
                       <div className="text-sm font-semibold">
-                        PKR {item.price * item.quantity}
+                        PKR {getCartItemLinePrice(item)}
                       </div>
                       {/* This is the remove button in the dropdown */}
                       <button

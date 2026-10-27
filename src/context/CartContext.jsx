@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
+import { getCartItemLinePrice } from '../utils/cartPricing';
 
 const CartContext = createContext();
 
@@ -73,7 +74,7 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   const getTotalCartAmount = useCallback(() => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return cartItems.reduce((total, item) => total + getCartItemLinePrice(item), 0);
   }, [cartItems]);
 
   const getTotalCartItems = useCallback(() => {

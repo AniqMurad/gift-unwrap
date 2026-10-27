@@ -135,7 +135,7 @@ const ProductDetailModal = ({
               {/* Price */}
               <div className="flex items-center gap-4 border-b pb-4">
                 <span className="text-2xl sm:text-3xl font-bold text-red-500">
-                  {itemType === "card" ? "Free" : `PKR ${Math.floor(item.price)}`}
+                  PKR {Math.floor(Number(item.price) || 0)}
                 </span>
                 {item.originalPrice && item.originalPrice > item.price && (
                   <span className="text-lg text-gray-400 line-through">

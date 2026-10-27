@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { FREE_SHIPPING_THRESHOLD, getCartItemCardPrice, getCartItemLinePrice } from "../utils/cartPricing";
 import { StorefrontFooter as Footer, StorefrontHeader as Navbar, StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import NotificationBar from "@/components/NotificationBar";
 import { countryNames } from "../data/countries";
@@ -154,11 +155,10 @@ const Checkout = () => {
   };
 
   const subtotal = getTotalCartAmount();
-  const freeShippingThreshold = 10000;
+  const freeShippingThreshold = FREE_SHIPPING_THRESHOLD;
   const shippingCost = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 350;
   const discountAmount = 0;
   const totalOrderAmount = subtotal + shippingCost - discountAmount;
-  const hasUnsupportedProductPersonalization = cartItems.some((item) => item.personalization?.card);
 
   useEffect(() => {
     setShowDiscountApplied(subtotal >= 500);
@@ -194,12 +194,6 @@ const Checkout = () => {
       setIsLoading(false);
       return;
     }
-    if (hasUnsupportedProductPersonalization) {
-      showNotification("error", "Your card selection is saved in the cart, but this store’s order API cannot receive product-level card messages yet. Remove the personalized cart item and add it again without a card, or contact Gift Unwrap before placing the order.");
-      setIsLoading(false);
-      return;
-    }
-
     const orderData = {
       userId: localStorage.getItem("userId"),
       shippingInfo: formData,
@@ -214,6 +208,7 @@ const Checkout = () => {
         quantity: item.quantity,
         price: item.price,
         image: item.image || item.images?.[0],
+        personalization: item.personalization || undefined,
       })),
     };
 
@@ -238,6 +233,7 @@ const Checkout = () => {
           quantity: item.quantity,
           price: item.price,
           image: item.image || item.images?.[0],
+          personalization: item.personalization || undefined,
         })),
         subtotal,
         shippingCost,
@@ -284,12 +280,6 @@ const Checkout = () => {
           <h1>Check Out</h1>
           <p>Have questions? We’re here to help. Reach out and let’s connect.</p>
         </header>
-
-        {hasUnsupportedProductPersonalization && (
-          <div className="gu-checkout-warning" role="alert">
-            Your greeting-card selection is stored with the correct cart item, but checkout is paused because the current order API does not support product-level card personalization. Remove the personalized cart item and add it again without a card, or contact Gift Unwrap before submitting the order.
-          </div>
-        )}
 
         <form className="gu-checkout-layout" onSubmit={handleSubmitOrder}>
           <div className="gu-checkout-details">
@@ -362,8 +352,8 @@ const Checkout = () => {
                   {cartItems.map((item) => (
                     <article className="gu-checkout-product" key={item.cartKey || `${item.category}-${item.id}`}>
                       <img src={item.image || item.images?.[0]} alt={item.name} loading="lazy" decoding="async" />
-                      <div className="gu-checkout-product-copy"><h3>{item.name}</h3><p>Quantity: {String(item.quantity).padStart(2, "0")}</p>{item.personalization?.card && <p>Card: {item.personalization.card.name}</p>}</div>
-                      <strong>{formatPkr(Number(item.price) * Number(item.quantity))}</strong>
+                      <div className="gu-checkout-product-copy"><h3>{item.name}</h3><p>Quantity: {String(item.quantity).padStart(2, "0")}</p>{item.personalization?.card && <p>Card: {item.personalization.card.name} · {formatPkr(getCartItemCardPrice(item))}</p>}</div>
+                      <strong>{formatPkr(getCartItemLinePrice(item))}</strong>
                     </article>
                   ))}
                 </div>
