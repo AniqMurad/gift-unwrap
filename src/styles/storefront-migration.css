@@ -1141,6 +1141,7 @@
   line-height: 26px;
   text-align: center;
 }
+.gu-cart-quantity--fixed { grid-template-columns: 1fr; }
 .gu-cart-page .gu-cart-remove {
   align-items: center;
   background: #fff;

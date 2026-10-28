@@ -47,6 +47,27 @@ export const CartProvider = ({ children }) => {
     });
   }, []);
 
+  const upsertCartItem = useCallback((productToAdd) => {
+    setCartItems((prevItems) => {
+      const hasMatchingLine = prevItems.some((item) => matchesCartLine(
+        item,
+        productToAdd.id,
+        productToAdd.category,
+        productToAdd.cartKey,
+      ));
+
+      if (!hasMatchingLine) {
+        return [...prevItems, { ...productToAdd, quantity: productToAdd.quantity || 1 }];
+      }
+
+      return prevItems.map((item) =>
+        matchesCartLine(item, productToAdd.id, productToAdd.category, productToAdd.cartKey)
+          ? { ...productToAdd, quantity: productToAdd.quantity || 1 }
+          : item
+      );
+    });
+  }, []);
+
   const removeFromCart = useCallback((productId, productCategory, cartKey) => {
     setCartItems((prevItems) =>
       prevItems.filter(
@@ -84,12 +105,13 @@ export const CartProvider = ({ children }) => {
   const value = useMemo(() => ({
     cartItems,
     addToCart,
+    upsertCartItem,
     removeFromCart,
     updateQuantity,
     clearCart,
     getTotalCartAmount,
     getTotalCartItems
-  }), [cartItems, addToCart, removeFromCart, updateQuantity, clearCart, getTotalCartAmount, getTotalCartItems]);
+  }), [cartItems, addToCart, upsertCartItem, removeFromCart, updateQuantity, clearCart, getTotalCartAmount, getTotalCartItems]);
 
   return (
     <CartContext.Provider value={value}>

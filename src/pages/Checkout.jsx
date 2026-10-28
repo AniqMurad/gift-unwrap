@@ -194,6 +194,14 @@ const Checkout = () => {
       setIsLoading(false);
       return;
     }
+    const giftBoxBundles = cartItems.filter((item) => item.isGiftBoxBundle && item.giftBox);
+    const regularCartItems = cartItems.filter((item) => !item.isGiftBoxBundle);
+    if (giftBoxBundles.length > 1 || (giftBoxBundles.length && regularCartItems.length)) {
+      showNotification("error", "Please check out one custom gift box separately from other cart items.");
+      setIsLoading(false);
+      return;
+    }
+    const giftBoxBundle = giftBoxBundles[0] || null;
     const orderData = {
       userId: localStorage.getItem("userId"),
       shippingInfo: formData,
@@ -201,15 +209,23 @@ const Checkout = () => {
       cardDetails: paymentMethod === "creditCard"
         ? { cardName, cardNumber, expiry, cvv: "bank-transfer", saveCardDetails }
         : null,
-      orderItems: cartItems.map((item) => ({
-        category: item.category,
-        id: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-        image: item.image || item.images?.[0],
-        personalization: item.personalization || undefined,
-      })),
+      orderItems: giftBoxBundle
+        ? giftBoxBundle.giftBox.items
+        : cartItems.map((item) => ({
+            category: item.category,
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image || item.images?.[0],
+            personalization: item.personalization || undefined,
+          })),
+      ...(giftBoxBundle ? {
+        giftBoxOrder: true,
+        selectedBox: giftBoxBundle.giftBox.selectedBox,
+        selectedCard: giftBoxBundle.giftBox.selectedCard,
+        cardMessage: giftBoxBundle.giftBox.cardMessage,
+      } : {}),
     };
 
     try {

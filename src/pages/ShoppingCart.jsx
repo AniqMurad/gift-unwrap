@@ -88,6 +88,10 @@ const ShoppingCart = () => {
                   const itemImage = item.image || item.images?.[0];
                   const itemKey = item.cartKey || `${item.category}-${item.id}`;
                   const cardPrice = getCartItemCardPrice(item);
+                  const giftBoxItemCount = item.giftBox?.items.reduce(
+                    (total, giftItem) => total + Number(giftItem.quantity || 0),
+                    0,
+                  ) || 0;
 
                   return (
                     <li className="gu-cart-item" key={itemKey}>
@@ -107,19 +111,32 @@ const ShoppingCart = () => {
                               {item.personalization.messageMode === "write" && ` · To ${item.personalization.to}, from ${item.personalization.from}`}
                             </p>
                           )}
+                          {item.isGiftBoxBundle && item.giftBox && (
+                            <p>
+                              {giftBoxItemCount} {giftBoxItemCount === 1 ? "goodie" : "goodies"}
+                              {item.giftBox.selectedBox?.size ? ` · ${item.giftBox.selectedBox.size} box` : ""}
+                              {item.giftBox.selectedCard?.name ? ` · Card: ${item.giftBox.selectedCard.name}` : " · No card"}
+                            </p>
+                          )}
                         </div>
 
                         <span className="gu-cart-unit-price">{formatPkr(getCartItemUnitPrice(item))}</span>
 
-                        <div className="gu-cart-quantity" aria-label={`Quantity for ${item.name}`}>
-                          <button type="button" aria-label={`Decrease quantity of ${item.name}`} onClick={() => handleQuantityChange(item, item.quantity - 1)}>
-                            <img src={minusIcon} alt="" aria-hidden="true" />
-                          </button>
-                          <span aria-live="polite">{item.quantity}</span>
-                          <button type="button" aria-label={`Increase quantity of ${item.name}`} onClick={() => handleQuantityChange(item, item.quantity + 1)}>
-                            <img src={plusIcon} alt="" aria-hidden="true" />
-                          </button>
-                        </div>
+                        {item.isGiftBoxBundle ? (
+                          <div className="gu-cart-quantity gu-cart-quantity--fixed" aria-label={`Quantity for ${item.name}`}>
+                            <span aria-live="polite">1</span>
+                          </div>
+                        ) : (
+                          <div className="gu-cart-quantity" aria-label={`Quantity for ${item.name}`}>
+                            <button type="button" aria-label={`Decrease quantity of ${item.name}`} onClick={() => handleQuantityChange(item, item.quantity - 1)}>
+                              <img src={minusIcon} alt="" aria-hidden="true" />
+                            </button>
+                            <span aria-live="polite">{item.quantity}</span>
+                            <button type="button" aria-label={`Increase quantity of ${item.name}`} onClick={() => handleQuantityChange(item, item.quantity + 1)}>
+                              <img src={plusIcon} alt="" aria-hidden="true" />
+                            </button>
+                          </div>
+                        )}
 
                         <span className="gu-cart-line-price">{formatPkr(getCartItemLinePrice(item))}</span>
 

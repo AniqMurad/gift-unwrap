@@ -17,6 +17,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
     import { getStockLimit, isUnavailable } from "@/components/gift-box-builder/builder-utils";
     import { applyBoxSizeVariant, emptyCardDetails, restoreCardDetails, serializeCardMessage, getBuilderStepError, getBuilderCardPrice, giftItemOrderPayload } from "@/components/gift-box-builder/builder-card-state";
     import { FREE_SHIPPING_THRESHOLD } from "@/utils/cartPricing";
+    import { useCart } from "@/context/CartContext";
     import { useNavigate } from "react-router-dom";
 
     const GIFT_BOX_DRAFT_KEY = "giftunwrap:gift-box-draft:v1";
@@ -35,6 +36,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
 
     const BuildGiftBox = () => {
     const navigate = useNavigate();
+    const { upsertCartItem } = useCart();
     const savedDraftRef = useRef(readGiftBoxDraft());
     const draftRestoredRef = useRef(false);
     const [currentStep, setCurrentStep] = useState(1);
@@ -295,8 +297,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
     const steps = [
         { id: 1, name: "PICK GIFTS", label: "Pick Gifts" },
         { id: 2, name: "SELECT YOUR BOX", label: "Select Your Box" },
-        { id: 3, name: "WRITE YOUR CARD", label: "Write Your Card" },
-        { id: 4, name: "SHIPPING", label: "Shipping" }
+        { id: 3, name: "WRITE YOUR CARD", label: "Write Your Card" }
     ];
 
     // Get the image to display on a card based on selected color
@@ -602,12 +603,43 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
         }
     };
 
+    const completeGiftBox = () => {
+        const selectionError = getBuilderStepError(3, giftBoxItems, selectedBox, selectedCard, greetingDetails);
+        if (selectionError) { showNotification("error", selectionError); return; }
+        if (completingStep.current) return;
+        completingStep.current = true;
+
+        const selectedBoxImage = selectedBox?.image || selectedBox?.images?.[0];
+        const giftBoxBundle = {
+            id: "custom-gift-box",
+            cartKey: "custom-gift-box-builder",
+            category: "giftBox",
+            name: selectedBox?.name || "Build Your Own Gift Box",
+            image: selectedBoxImage || giftBoxItems[0]?.image,
+            price: getTotalBoxPrice(),
+            quantity: 1,
+            isGiftBoxBundle: true,
+            giftBox: {
+                items: giftBoxItems.map(giftItemOrderPayload),
+                selectedBox,
+                selectedCard,
+                cardMessage: selectedCard ? serializeCardMessage(greetingDetails) : "",
+                greetingDetails,
+            },
+        };
+
+        upsertCartItem(giftBoxBundle);
+        localStorage.removeItem(GIFT_BOX_DRAFT_KEY);
+        setIsDrawerOpen(false);
+        navigate("/ShoppingCart");
+    };
+
     const handleNextStep = () => {
         const error = getBuilderStepError(currentStep, giftBoxItems, selectedBox, selectedCard, greetingDetails);
         if (error) { showNotification("error", error); return; }
         if (currentStep === 3) {
-            if (completingStep.current) return;
-            completingStep.current = true;
+            completeGiftBox();
+            return;
         }
         setIsDrawerOpen(false);
         if (currentStep < steps.length) {
