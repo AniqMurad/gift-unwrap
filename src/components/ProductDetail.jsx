@@ -667,7 +667,7 @@ const ProductDetail = () => {
               </section>
             )}
 
-            <div className="gu-pdp-buy-row">
+            <div className={`gu-pdp-buy-row${isCorporateGift ? " is-corporate" : ""}`}>
               {!isCorporateGift && (
                 <div className="gu-pdp-quantity" aria-label="Quantity selector">
                   <button type="button" onClick={() => setQuantity((current) => Math.max(1, current - 1))} disabled={quantity <= 1} aria-label="Decrease quantity"><Minus /></button>
