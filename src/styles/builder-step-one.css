@@ -85,12 +85,241 @@
     padding-inline: max(100px, calc((100vw - 1720px) / 2));
   }
 }
-/* Keep the existing compact layout usable; no separate responsive redesign. */
+/* Keep the existing compact layout usable. */
 @media (max-width: 1180px) {
   .gu-builder-page--drawer .gu-builder-main { padding-right: 104px; }
   .gu-builder-page--drawer .gu-builder-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 15px; }
 }
 @media (max-width: 520px) {
-  .gu-builder-page--drawer .gu-builder-main { padding-right: 84px; }
-  .gu-builder-page--drawer .gu-builder-product-grid { grid-template-columns: minmax(0, 1fr); }
+  .gu-builder-page--drawer .gu-builder-main { padding-right: 16px; }
+}
+
+/* Build-a-box mobile layout. These rules intentionally live in the builder
+   stylesheet so the landing-page and catalogue desktop measurements remain
+   unchanged. */
+@media (max-width: 600px) {
+  .gu-builder-page,
+  .gu-builder-page *,
+  .gu-builder-page *::before,
+  .gu-builder-page *::after {
+    box-sizing: border-box;
+  }
+
+  .gu-builder-page .gu-builder-hero {
+    height: 505px;
+    min-width: 0;
+  }
+
+  .gu-builder-page .gu-builder-hero-copy {
+    left: 0;
+    padding-inline: 16px;
+    top: 150px;
+    transform: none;
+    width: 100%;
+  }
+
+  .gu-builder-page .gu-builder-hero-copy h1 {
+    font-size: 32px;
+    letter-spacing: -.64px;
+    line-height: 1.15;
+    max-width: 410px;
+    text-wrap: balance;
+    width: 100%;
+  }
+
+  .gu-builder-page .gu-builder-hero-copy h1 br { display: none; }
+
+  .gu-builder-page .gu-builder-hero-copy p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-top: 12px;
+    max-width: 410px;
+  }
+
+  .gu-builder-page .gu-builder-steps {
+    align-items: start;
+    bottom: 24px;
+    column-gap: 4px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16px, 24px) minmax(0, 1fr) minmax(16px, 24px) minmax(0, 1fr);
+    left: 16px;
+    min-width: 0;
+    transform: none;
+    width: calc(100% - 32px);
+  }
+
+  .gu-builder-page .gu-builder-steps li,
+  .gu-builder-page .gu-builder-revised-steps li > button {
+    align-items: center;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: flex-start;
+    min-width: 0;
+    white-space: normal;
+    width: 100%;
+  }
+
+  .gu-builder-page .gu-builder-steps li .gu-builder-step-icon,
+  .gu-builder-page .gu-builder-steps li.is-current .gu-builder-step-icon {
+    border-radius: 12px;
+    flex: 0 0 52px;
+    height: 52px;
+    width: 52px;
+  }
+
+  .gu-builder-page .gu-builder-steps li .gu-builder-step-icon img,
+  .gu-builder-page .gu-builder-steps li.is-current .gu-builder-step-icon img {
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+
+  .gu-builder-page .gu-builder-steps li .gu-builder-step-label,
+  .gu-builder-page .gu-builder-steps li.is-current .gu-builder-step-label {
+    display: block;
+    font-family: "Recoleta", serif;
+    font-size: 14px;
+    letter-spacing: -.2px;
+    line-height: 1.15;
+    min-width: 0;
+    text-align: center;
+    width: 100%;
+  }
+
+  .gu-builder-page .gu-builder-steps li .gu-builder-step-label b,
+  .gu-builder-page .gu-builder-steps li.is-current .gu-builder-step-label b {
+    font-weight: inherit;
+    letter-spacing: inherit;
+  }
+
+  .gu-builder-page .gu-builder-step-connector,
+  .gu-builder-page .gu-builder-revised-steps li.gu-builder-revised-connector {
+    align-self: start;
+    height: 12px;
+    margin: 22px 0 0;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .gu-builder-page .gu-builder-revised-steps li.gu-builder-revised-connector img {
+    height: 12px;
+    max-width: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+
+  .gu-builder-page--drawer .gu-builder-main {
+    min-width: 0;
+    padding: 28px 16px 132px;
+    width: 100%;
+  }
+
+  .gu-builder-page--drawer .gu-builder-filter-row,
+  .gu-builder-page--drawer .gu-builder-filter-group,
+  .gu-builder-page--drawer .gu-builder-content,
+  .gu-builder-page--drawer .gu-builder-catalog,
+  .gu-builder-page--drawer .gu-builder-product-grid,
+  .gu-builder-page--drawer .gu-builder-product-card {
+    min-width: 0;
+  }
+
+  .gu-builder-page--drawer .gu-builder-content { margin-top: 28px; }
+
+  .gu-builder-page--drawer .gu-builder-product-grid {
+    gap: 32px 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gu-builder-page--drawer .gu-builder-product-card { width: 100%; }
+
+  .gu-builder-page--drawer .gu-builder-product-image {
+    aspect-ratio: 4 / 5;
+    border-radius: 16px;
+    height: auto;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .gu-builder-page--drawer .gu-builder-product-image img {
+    aspect-ratio: auto;
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+
+  .gu-builder-page--drawer .gu-builder-product-copy {
+    padding-top: 10px;
+    text-align: center;
+  }
+
+  .gu-builder-page--drawer .gu-builder-product-copy h3 {
+    font-size: 15px;
+    line-height: 19px;
+    min-height: 38px;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .gu-builder-page--drawer .gu-builder-product-price {
+    gap: 4px;
+    justify-content: center;
+    margin-top: 6px;
+    min-height: 20px;
+  }
+
+  .gu-builder-page--drawer .gu-builder-product-price strong,
+  .gu-builder-page--drawer .gu-builder-product-price s {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .gu-builder-page--drawer .gu-builder-product-price span {
+    font-size: 11px;
+    line-height: 16px;
+    padding: 1px 6px;
+  }
+
+  .gu-builder-page--drawer .gu-builder-add {
+    font-size: 14px;
+    height: auto;
+    line-height: 20px;
+    margin-top: 10px;
+    min-height: 44px;
+    padding-inline: 8px;
+    width: 100%;
+  }
+
+  .gu-builder-page--drawer .gu-builder-quantity {
+    min-height: 44px;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 350px) {
+  .gu-builder-page .gu-builder-hero {
+    height: 535px;
+  }
+
+  .gu-builder-page .gu-builder-hero-copy {
+    padding-inline: 16px;
+    top: 140px;
+  }
+
+  .gu-builder-page .gu-builder-hero-copy h1 {
+    font-size: 30px;
+  }
+
+  .gu-builder-page .gu-builder-steps {
+    column-gap: 2px;
+  }
+
+  .gu-builder-page .gu-builder-steps li .gu-builder-step-label,
+  .gu-builder-page .gu-builder-steps li.is-current .gu-builder-step-label {
+    font-size: 13px;
+  }
 }
