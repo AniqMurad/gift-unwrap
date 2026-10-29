@@ -40,10 +40,12 @@ const categoryNames = {
   giftsForCompanies: "Gifts For Companies",
   giftsForEveryone: "Gifts For Everyone",
   giftsForWedding: "Wedding Gifts",
-  giftsForReligions: "Religious Gifts",
+  giftsForReligions: "Floral Arrangements",
   giftsForBirthday: "Birthday Gifts",
-  flowerChocolate: "Sweets & Bouquets",
-  FlowersChocolates: "Sweets & Bouquets",
+  floralArrangements: "Floral Arrangements",
+  sweetTreats: "Sweet Treats",
+  flowerChocolate: "Gifts",
+  FlowersChocolates: "Gifts",
 };
 
 const categoryRoutes = {
@@ -53,6 +55,14 @@ const categoryRoutes = {
   giftsForCompanies: "/giftforcompanies",
   giftsForWedding: "/giftforwedding",
   giftsForBirthday: "/Giftforbirthday",
+  floralArrangements: "/floral-arrangements",
+  sweetTreats: "/sweet-treats",
+};
+
+const categoryAliases = {
+  giftsForReligions: ["floralArrangements"],
+  FlowersChocolates: ["floralArrangements", "sweetTreats"],
+  flowerChocolate: ["floralArrangements", "sweetTreats"],
 };
 
 const formatPrice = (value) =>
@@ -134,14 +144,16 @@ const ProductDetail = () => {
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: "success", message: "" });
 
-  const isCorporateGift = category === "giftsForCompany" || category === "giftsForCompanies";
-  const categoryName = categoryNames[category] || category || "Gifts";
-  const categoryRoute = categoryRoutes[category] || "/#featured-gifts";
+  const effectiveCategory = product?.category || category;
+  const isCorporateGift = effectiveCategory === "giftsForCompany" || effectiveCategory === "giftsForCompanies";
+  const categoryName = categoryNames[effectiveCategory] || effectiveCategory || "Gifts";
+  const categoryRoute = categoryRoutes[effectiveCategory] || "/#featured-gifts";
 
   useEffect(() => {
     let active = true;
     const stateProduct = location.state?.productData;
-    const stateMatches = stateProduct && stateProduct.category === category;
+    const candidateCategories = categoryAliases[category] || [category];
+    const stateMatches = stateProduct && candidateCategories.includes(stateProduct.category);
 
     setStatus(stateMatches ? "ready" : "loading");
     setRequestError("");
@@ -160,18 +172,19 @@ const ProductDetail = () => {
       .then(({ data }) => {
         if (!active) return;
         const groups = Array.isArray(data) ? data : [];
-        const group = groups.find((item) => item.category === category);
-        const found = group?.products
-          ? findProductBySlug(group.products, productSlug)
-          : null;
+        const group = candidateCategories
+          .map((candidateCategory) => groups.find((item) => item.category === candidateCategory))
+          .find((candidateGroup) => candidateGroup?.products && findProductBySlug(candidateGroup.products, productSlug));
+        const found = group?.products ? findProductBySlug(group.products, productSlug) : null;
+        const resolvedCategory = group?.category || category;
 
         if (found) {
-          const authoritativeProduct = { ...found, category };
+          const authoritativeProduct = { ...found, category: resolvedCategory };
           setProduct(authoritativeProduct);
           setRelatedProducts(
             group.products
               .filter((item) => item.id !== found.id)
-              .map((item) => ({ ...item, category })),
+              .map((item) => ({ ...item, category: resolvedCategory })),
           );
           setStatus("ready");
           return;
@@ -182,7 +195,7 @@ const ProductDetail = () => {
           setRelatedProducts(
             groupProducts
               .filter((item) => item.id !== stateProduct.id)
-              .map((item) => ({ ...item, category })),
+              .map((item) => ({ ...item, category: resolvedCategory })),
           );
           setStatus("ready");
         } else {

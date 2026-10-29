@@ -131,7 +131,7 @@ const matchesBirthdayScope = (product: StoreProduct) =>
 const matchesPersonalizedScope = (_product: StoreProduct) => false;
 
 const matchesFloralScope = (product: StoreProduct) =>
-  [
+  product.category === "floralArrangements" || [
     product.name,
     product.shortDescription,
     product.longDescription,
@@ -147,12 +147,10 @@ const SWEET_TREAT_TERMS =
   /\b(?:cake|cakes|brownie|brownies|cookie|cookies|choco|chocolate|chocolates|truffle|truffles|dessert|desserts|snack|snacks|candy|candies|confection|confections)\b|\bsweet treats?\b/;
 
 const matchesSweetTreatScope = (product: StoreProduct) => {
-  const name = product.name.toLocaleLowerCase();
-  if (product.category !== "FlowersChocolates") {
-    return SWEET_TREAT_TERMS.test(name);
-  }
+  if (product.category === "sweetTreats") return true;
 
-  return [
+  const name = product.name.toLocaleLowerCase();
+  return SWEET_TREAT_TERMS.test(name) || [
     product.name,
     product.shortDescription,
     product.longDescription,

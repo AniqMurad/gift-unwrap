@@ -440,10 +440,16 @@ export const FeaturedGifts = () => {
     const getGroup = (category) => groups.find((group) => group.category === category)?.products || [];
     let items = [];
     if (activeTab === "GIFT BOX") items = getGroup(gender === "Male" ? "giftsForHim" : "giftsForHer");
-    if (activeTab === "FLORAL ARRANGEMENTS") items = getGroup("FlowersChocolates");
-    if (activeTab === "SWEET TREATS") items = getGroup("FlowersChocolates").filter((item) => /cake|chocolate|sweet|brownie|cookie/i.test(`${item.name} ${keyGiftSearchText(item.keyGift)}`));
+    if (activeTab === "FLORAL ARRANGEMENTS") items = getGroup("floralArrangements");
+    if (activeTab === "SWEET TREATS") items = getGroup("sweetTreats");
     if (activeTab === "GREETING CARDS") items = groups.flatMap((group) => (group.products || []).map((item) => ({ ...item, category: group.category }))).filter((item) => /card/i.test(`${item.name} ${keyGiftSearchText(item.keyGift)}`));
-    const category = activeTab === "GIFT BOX" ? (gender === "Male" ? "giftsForHim" : "giftsForHer") : "FlowersChocolates";
+    const category = activeTab === "GIFT BOX"
+      ? (gender === "Male" ? "giftsForHim" : "giftsForHer")
+      : activeTab === "FLORAL ARRANGEMENTS"
+        ? "floralArrangements"
+        : activeTab === "SWEET TREATS"
+          ? "sweetTreats"
+          : "greetingCards";
     return items.map((item) => ({ ...item, category: item.category || category }));
   }, [activeTab, gender, groups]);
 
