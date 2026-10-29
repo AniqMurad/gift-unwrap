@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { FREE_SHIPPING_THRESHOLD, getCartItemCardPrice, getCartItemLinePrice } from "../utils/cartPricing";
+import { getStandaloneCardMessageSummary } from "../utils/cardPersonalization";
 import { StorefrontFooter as Footer, StorefrontHeader as Navbar, StorefrontLoading as Loader } from "../components/storefront/StorefrontPage";
 import NotificationBar from "@/components/NotificationBar";
 import { countryNames } from "../data/countries";
@@ -368,7 +369,7 @@ const Checkout = () => {
                   {cartItems.map((item) => (
                     <article className="gu-checkout-product" key={item.cartKey || `${item.category}-${item.id}`}>
                       <img src={item.image || item.images?.[0]} alt={item.name} loading="lazy" decoding="async" />
-                      <div className="gu-checkout-product-copy"><h3>{item.name}</h3><p>Quantity: {String(item.quantity).padStart(2, "0")}</p>{item.personalization?.card && <p>Card: {item.personalization.card.name} · {formatPkr(getCartItemCardPrice(item))}</p>}</div>
+                      <div className="gu-checkout-product-copy"><h3>{item.name}</h3><p>Quantity: {String(item.quantity).padStart(2, "0")}</p>{item.personalization?.card && <p>Card: {item.personalization.card.name} · {formatPkr(getCartItemCardPrice(item))}</p>}{getStandaloneCardMessageSummary(item) && <p>{getStandaloneCardMessageSummary(item)}</p>}</div>
                       <strong>{formatPkr(getCartItemLinePrice(item))}</strong>
                     </article>
                   ))}

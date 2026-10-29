@@ -3,7 +3,7 @@ import { Title } from "@radix-ui/react-dialog";
 import BuilderModal from "./BuilderModal";
 import { CARD_MESSAGE_LIMIT, normalizeCardDetails, validateCardDetails } from "./builder-card-state";
 
-export default function BuilderMessageModal({ card, savedDetails, onSave, onClose, returnFocus }) {
+export default function BuilderMessageModal({ card, savedDetails, onSave, onClose, returnFocus, submitLabel = "Save Message" }) {
   const [draft, setDraft] = useState(() => ({ ...savedDetails }));
   const [errors, setErrors] = useState({});
   const committed = useRef(false);
@@ -38,7 +38,7 @@ export default function BuilderMessageModal({ card, savedDetails, onSave, onClos
           {errors.message && <p id={`${id}-message-error`} className="gu-builder-modal-error" role="alert">{errors.message}</p>}
         </div>
       </fieldset>
-      <button type="submit" className="gu-builder-modal-primary">Save Message</button>
+      <button type="submit" className="gu-builder-modal-primary">{submitLabel}</button>
     </form>
   </BuilderModal>;
 }

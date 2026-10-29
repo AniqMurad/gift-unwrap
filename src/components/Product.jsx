@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -9,7 +9,11 @@ import {
 import { useCart } from "../context/CartContext";
 import { generateSlug } from "../utils/slugify";
 import RequestQuoteModal from "./RequestQuoteModal";
+import BuilderMessageModal from "./gift-box-builder/BuilderMessageModal";
+import { emptyCardDetails } from "./gift-box-builder/builder-card-state";
 import fallbackImage from "../assets/error.png";
+
+const EMPTY_CARD_DETAILS = emptyCardDetails();
 
 const formatPrice = (value) =>
   new Intl.NumberFormat("en-PK", { maximumFractionDigits: 0 }).format(
@@ -21,12 +25,15 @@ const Product = ({ product, columns, variant = "default", eager = false, directP
   const navigate = useNavigate();
   const [showImagePreview, setShowImagePreview] = useState(false);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const messageReturnFocusRef = useRef(null);
 
   if (!product) return null;
 
   const category = product.category || "unknown";
   const productSlug = generateSlug(product.name);
   const isCorporateGift = category === "giftsForCompany";
+  const isStandaloneGreetingCard = directPurchaseOnly && category === "greetingCards";
   const imageSrc = product.image || product.images?.[0] || fallbackImage;
   const productHref = `/product/${category}/${productSlug}`;
   const currentPrice = Number(product.price);
@@ -60,10 +67,41 @@ const Product = ({ product, columns, variant = "default", eager = false, directP
     if (isUnavailable) return;
     if (isCorporateGift) {
       setShowQuoteModal(true);
+    } else if (isStandaloneGreetingCard) {
+      messageReturnFocusRef.current = e.currentTarget;
+      setShowMessageModal(true);
     } else {
       addToCart(product);
       window.scrollTo(0, 0);
     }
+  };
+
+  const handleGreetingCardSave = (_card, details) => {
+    const personalization = details.blank
+      ? { messageMode: "blank" }
+      : {
+          messageMode: "write",
+          to: details.to,
+          from: details.from,
+          message: details.message,
+        };
+    const personalizationKey = [
+      personalization.messageMode,
+      personalization.to || "",
+      personalization.from || "",
+      personalization.message || "",
+    ].join("|");
+
+    addToCart({
+      ...product,
+      category,
+      image: imageSrc,
+      quantity: 1,
+      cartKey: `greeting-card-${product.id}-${encodeURIComponent(personalizationKey)}`,
+      personalization,
+    });
+    setShowMessageModal(false);
+    window.scrollTo(0, 0);
   };
 
   const containerWidthClass =
@@ -102,18 +140,26 @@ const Product = ({ product, columns, variant = "default", eager = false, directP
         <article className="gu-collection-product">
           <div className="gu-collection-product-media">
             {directPurchaseOnly ? (
-              <img
-                src={imageSrc}
-                alt={product.name}
-                loading={eager ? "eager" : "lazy"}
-                fetchPriority={eager ? "high" : "auto"}
-                decoding="async"
-                width="335"
-                height="335"
-                onError={(event) => {
-                  event.currentTarget.src = fallbackImage;
-                }}
-              />
+              <button
+                type="button"
+                className="gu-collection-product-link"
+                onClick={handleAddToCart}
+                disabled={isUnavailable}
+                aria-label={isUnavailable ? `${product.name} is sold out` : `Personalize and add ${product.name} to cart`}
+              >
+                <img
+                  src={imageSrc}
+                  alt={product.name}
+                  loading={eager ? "eager" : "lazy"}
+                  fetchPriority={eager ? "high" : "auto"}
+                  decoding="async"
+                  width="335"
+                  height="335"
+                  onError={(event) => {
+                    event.currentTarget.src = fallbackImage;
+                  }}
+                />
+              </button>
             ) : (
               <Link
                 className="gu-collection-product-link"
@@ -151,7 +197,7 @@ const Product = ({ product, columns, variant = "default", eager = false, directP
                 type="button"
                 onClick={handleAddToCart}
                 disabled={isUnavailable}
-                aria-label={isUnavailable ? `${product.name} is sold out` : `Add ${product.name} to cart`}
+                aria-label={isUnavailable ? `${product.name} is sold out` : isStandaloneGreetingCard ? `Personalize and add ${product.name} to cart` : `Add ${product.name} to cart`}
               >
                 <CartIcon />
               </button>
@@ -192,6 +238,16 @@ const Product = ({ product, columns, variant = "default", eager = false, directP
         </article>
 
         {ImagePreviewModal}
+        {showMessageModal && (
+          <BuilderMessageModal
+            card={product}
+            savedDetails={EMPTY_CARD_DETAILS}
+            onSave={handleGreetingCardSave}
+            onClose={() => setShowMessageModal(false)}
+            returnFocus={messageReturnFocusRef.current}
+            submitLabel="Add to Cart"
+          />
+        )}
       </>
     );
   }

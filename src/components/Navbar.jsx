@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "../context/CartContext";
 import { ShoppingCart, User } from "lucide-react";
 import { getCartItemCardPrice, getCartItemLinePrice } from "../utils/cartPricing";
+import { getStandaloneCardMessageSummary } from "../utils/cardPersonalization";
 
 const Navbar = ({
   showSearchInput = true,
@@ -312,6 +313,11 @@ const Navbar = ({
                         {item.personalization?.card && (
                           <p className="text-xs text-red-500">
                             Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})
+                          </p>
+                        )}
+                        {getStandaloneCardMessageSummary(item) && (
+                          <p className="text-xs text-red-500">
+                            {getStandaloneCardMessageSummary(item)}
                           </p>
                         )}
                       </div>

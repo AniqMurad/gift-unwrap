@@ -16,6 +16,7 @@ import cartIcon from "../assets/redesign/cart.svg";
 import { CloseIcon } from "./icons";
 import CartoonButton from "./ui/cartoon-button";
 import { getCartItemCardPrice, getCartItemLinePrice } from "../utils/cartPricing";
+import { getStandaloneCardMessageSummary } from "../utils/cardPersonalization";
 
 const recipientMenus = {
   him: {
@@ -505,6 +506,7 @@ const LandingHeader = ({ variant = "default" }) => {
                       <h3>{item.name}</h3>
                       <p>Qty: {item.quantity}</p>
                       {item.personalization?.card && <p className="gu-cart-personalization">Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})</p>}
+                      {getStandaloneCardMessageSummary(item) && <p className="gu-cart-personalization">{getStandaloneCardMessageSummary(item)}</p>}
                     </div>
                     <strong>PKR {getCartItemLinePrice(item)}</strong>
                     <button type="button" aria-label={`Remove ${item.name} from cart`} onClick={() => removeFromCart(item.id, item.category, item.cartKey)}><CloseIcon className="h-4 w-4" /></button>

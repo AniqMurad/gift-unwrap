@@ -1,5 +1,6 @@
 import React from "react";
 import { getCartItemCardPrice, getCartItemLinePrice } from "../utils/cartPricing";
+import { getStandaloneCardMessageSummary } from "../utils/cardPersonalization";
 
 const OrderSummary = ({
   cartItems,
@@ -58,6 +59,11 @@ const OrderSummary = ({
                   {item.personalization?.card && (
                     <p className="text-[#696C70] text-[12px]">
                       Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})
+                    </p>
+                  )}
+                  {getStandaloneCardMessageSummary(item) && (
+                    <p className="text-[#696C70] text-[12px]">
+                      {getStandaloneCardMessageSummary(item)}
                     </p>
                   )}
                 </div>
