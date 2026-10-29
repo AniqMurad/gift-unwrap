@@ -904,14 +904,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .gu-pdp-info-panel, .gu-pdp-card-panel { background: #fff; border: 1px solid var(--gu-orange); border-radius: 16px; margin-top: 30px; overflow: hidden; }
 .gu-pdp-info-panel { width: 100%; }
-.gu-pdp-info-tabs { border-bottom: 1px solid var(--gu-orange); display: flex; gap: 58px; margin: 0 18px; padding: 16px 0 0; }
+.gu-pdp-info-tabs { border-bottom: 1px solid var(--gu-orange); display: flex; gap: 58px; margin: 0 15px; padding: 16px 0 0; }
 .gu-pdp-info-tabs button { color: #2b2320; cursor: pointer; font-family: "Recoleta", serif; font-size: 20px; font-weight: 500; line-height: 20px; padding: 0 0 9px; position: relative; }
 .gu-pdp-info-tabs button::after { background: transparent; bottom: -1px; content: ""; height: 4px; left: 0; position: absolute; right: 0; }
 .gu-pdp-info-tabs button:hover, .gu-pdp-info-tabs button:focus-visible, .gu-pdp-info-tabs button.is-active { color: var(--gu-red); outline: none; }
 .gu-pdp-info-tabs button.is-active::after { background: var(--gu-red); }
-.gu-pdp-contents { min-height: 300px; padding: 24px 18px 28px; }
+.gu-pdp-contents { min-height: 0; padding: 15px; }
 .gu-pdp-contents ul { column-gap: 17px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 13px; }
-.gu-pdp-contents li { align-items: flex-start; display: flex; gap: 10px; min-width: 0; }
+.gu-pdp-contents li { align-items: center; display: flex; gap: 10px; min-width: 0; }
 .gu-pdp-content-image { align-items: center; background: #f1e9e3; border-radius: 9px; display: flex; flex: 0 0 40px; height: 40px; justify-content: center; overflow: hidden; }
 .gu-pdp-content-image img { height: 100%; object-fit: cover; width: 100%; }
 .gu-pdp-contents li > div { min-width: 0; }
@@ -923,7 +923,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-empty-contents p { line-height: 1.55; margin-top: 6px; }
 .gu-pdp-empty-contents a { color: var(--gu-red); text-decoration: underline; text-underline-offset: 3px; }
 
-.gu-pdp-packaging { align-items: center; display: grid; gap: 52px; grid-template-columns: 295px 377px; min-height: 300px; padding: 20px 18px 28px; }
+.gu-pdp-packaging { align-items: center; display: grid; gap: 52px; grid-template-columns: 295px 377px; min-height: 0; padding: 15px; }
 .gu-pdp-packaging-image { border-radius: 12px; height: 197px; object-fit: cover; width: 295px; }
 .gu-pdp-packaging-copy { width: 377px; }
 .gu-pdp-packaging-copy > p { color: var(--gu-body); font-size: 16px; letter-spacing: -.48px; line-height: 24px; margin-bottom: 20px; white-space: nowrap; }
@@ -1040,11 +1040,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
   .gu-pdp-info-panel { margin-top: 40px; }
   .gu-pdp-info-tabs { gap: 58px; }
-  .gu-pdp-contents { min-height: 119px; padding: 22px 18px 24px; }
+  .gu-pdp-contents { min-height: 0; padding: 15px; }
   .gu-pdp-empty-contents { gap: 15px; padding-top: 0; }
   .gu-pdp-empty-contents strong { font-size: 16px; }
   .gu-pdp-empty-contents p { font-size: 16px; line-height: 1.2; margin-top: 4px; }
-  .gu-pdp-packaging { gap: 40px; grid-template-columns: 208px minmax(0, 343px); min-height: 300px; padding: 20px 18px 28px; }
+  .gu-pdp-packaging { gap: 40px; grid-template-columns: 208px minmax(0, 343px); min-height: 0; padding: 15px; }
   .gu-pdp-packaging-image { border-radius: 14px; height: 189px; width: 208px; }
   .gu-pdp-packaging-copy { min-width: 0; width: 343px; }
   .gu-pdp-packaging-copy > p { white-space: normal; }
@@ -1186,15 +1186,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .gu-pdp-price-row del { font-size: 16px; }
   .gu-pdp-description { font-size: 15px; margin-top: 14px; }
 
-  .gu-pdp-info-tabs { gap: 22px; margin-inline: 14px; overflow-x: auto; padding-top: 14px; }
+  .gu-pdp-info-tabs { gap: 22px; margin-inline: 15px; overflow-x: auto; padding-top: 14px; }
   .gu-pdp-info-tabs button { flex: 0 0 auto; font-size: 17px; }
-  .gu-pdp-contents { padding: 18px 14px 22px; }
+  .gu-pdp-contents { padding: 15px; }
   .gu-pdp-contents li strong { font-size: 15px; line-height: 21px; }
   .gu-pdp-empty-contents { gap: 12px; }
   .gu-pdp-empty-contents > svg { flex-basis: 24px; height: 24px; width: 24px; }
   .gu-pdp-empty-contents strong { font-size: 15px; }
   .gu-pdp-empty-contents p { font-size: 14px; }
-  .gu-pdp-packaging { gap: 22px; padding: 18px 14px 22px; }
+  .gu-pdp-packaging { gap: 22px; padding: 15px; }
   .gu-pdp-packaging-copy > p { font-size: 14px; line-height: 21px; }
 
   .gu-pdp-card-heading { padding: 16px 14px 12px; }
