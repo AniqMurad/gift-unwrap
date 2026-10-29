@@ -105,6 +105,8 @@ const isUnavailableProduct = (product) =>
 
 const getPackagingContent = (product) => {
   if (product?.packaging?.items?.length) return product.packaging;
+  if (product?.showPackaging === true) return defaultGiftPackaging;
+  if (product?.showPackaging === false) return null;
   const packagingSignals = [
     product?.name,
     product?.subcategory,
@@ -281,6 +283,9 @@ const ProductDetail = () => {
 
   const images = useMemo(() => getProductImages(product), [product]);
   const contents = useMemo(() => normalizeContents(product), [product]);
+  const packaging = useMemo(() => getPackagingContent(product), [product]);
+  const showContents = product?.showWhatsInside ?? contents.length > 0;
+  const showPackaging = product?.showPackaging ?? Boolean(packaging);
   const faqContent = useMemo(() => getProductFaqContent(product, category), [product, category]);
   const stockLimit = getStockLimit(product);
   const unavailable = isUnavailableProduct(product);
@@ -307,6 +312,14 @@ const ProductDetail = () => {
       (_, index) => relatedProducts[(relatedStart + index) % relatedProducts.length],
     );
   }, [relatedProducts, relatedStart]);
+
+  useEffect(() => {
+    if (showContents) {
+      setActiveInfoTab("contents");
+    } else if (showPackaging) {
+      setActiveInfoTab("packaging");
+    }
+  }, [product?.id, showContents, showPackaging]);
 
   if (status === "loading") {
     return (
@@ -437,7 +450,6 @@ const ProductDetail = () => {
 
   const canonicalUrl = `${window.location.origin}${location.pathname}`;
   const mainImage = selectedImage || images[0] || fallbackImage;
-  const packaging = getPackagingContent(product);
   const shippingLabel = product.shippingTime || product.deliveryTime || product.shippingLabel || "Delivery confirmed at checkout";
   const metaTitle = product.metaTitle || `${product.name} | ${categoryName} | Gift Unwrap Pakistan`;
   const metaDescription = product.metaDescription || `${product.shortDescription || product.name} Shop this gift from Gift Unwrap Pakistan.`;
@@ -533,9 +545,9 @@ const ProductDetail = () => {
               {product.shortDescription || product.longDescription || "Product details are being updated."}
             </p>
 
-            <section className="gu-pdp-info-panel" aria-label="Product details">
+            {(showContents || showPackaging) && <section className="gu-pdp-info-panel" aria-label="Product details">
               <div className="gu-pdp-info-tabs" role="tablist" aria-label="Product information">
-                <button
+                {showContents && <button
                   className={activeInfoTab === "contents" ? "is-active" : ""}
                   type="button"
                   role="tab"
@@ -543,8 +555,8 @@ const ProductDetail = () => {
                   onClick={() => setActiveInfoTab("contents")}
                 >
                   What’s inside
-                </button>
-                <button
+                </button>}
+                {showPackaging && <button
                   className={activeInfoTab === "packaging" ? "is-active" : ""}
                   type="button"
                   role="tab"
@@ -552,10 +564,10 @@ const ProductDetail = () => {
                   onClick={() => setActiveInfoTab("packaging")}
                 >
                   How it’s packaged
-                </button>
+                </button>}
               </div>
 
-              {activeInfoTab === "contents" ? (
+              {showContents && (activeInfoTab === "contents" || !showPackaging) ? (
                 <div className="gu-pdp-contents" role="tabpanel">
                   {contents.length > 0 ? (
                     <ul>
@@ -604,7 +616,7 @@ const ProductDetail = () => {
                   )}
                 </div>
               )}
-            </section>
+            </section>}
 
             {!isCorporateGift && (
               <section className="gu-pdp-card-panel" aria-labelledby="gu-pdp-card-title">
