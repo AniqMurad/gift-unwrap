@@ -108,17 +108,6 @@ const OrderHistory = () => {
         const reviewText = reviewInputs[orderItemNumericProductId];
         const rating = reviewRatings[orderItemNumericProductId];
         const userId = localStorage.getItem('userId'); // Ensure this is a valid MongoDB ObjectId string
-        const userString = localStorage.getItem('user');
-        console.log("User String:", userString);
-        let username = '';
-        if (userString) {
-            try {
-                const userObj = JSON.parse(userString);
-                username = userObj.name || '';
-            } catch (e) {
-                username = '';
-            }
-        }
 
         if (!reviewText || reviewText.trim() === "") {
             showNotification('error', 'Please provide a comment for your review.');
@@ -212,6 +201,7 @@ const OrderHistory = () => {
                                             <div>
                                                 <p className='text-[16px]'>Order ID: {order._id}</p>
                                                 <p className="text-[16px]">{orderItem?.name}</p>
+                                                {(orderItem?.selectedSize || orderItem?.selectedColor) && <p className="text-[14px]">{[orderItem.selectedSize && `Size: ${orderItem.selectedSize}`, orderItem.selectedColor && `Color: ${orderItem.selectedColor}`].filter(Boolean).join(' · ')}</p>}
                                                 <p className="text-[24px] font-bold">Rs {orderItem?.priceAtTimeOfOrder.toFixed(2)}</p>
                                             </div>
                                             <div>

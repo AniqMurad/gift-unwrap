@@ -901,6 +901,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-price-row del { color: #8b8580; font-size: 21px; }
 .gu-pdp-unavailable { background: #fff; border: 1px solid var(--gu-red); border-radius: 999px; color: var(--gu-red); font-size: 14px; font-weight: 600; padding: 6px 12px; }
 .gu-pdp-description { color: var(--gu-body); font-size: 18px; line-height: 1.55; margin-top: 18px; max-width: 725px; }
+.gu-pdp-options { display: grid; gap: 16px; margin-top: 24px; }
+.gu-pdp-option-group { align-items: flex-start; display: grid; gap: 12px; grid-template-columns: 68px minmax(0, 1fr); }
+.gu-pdp-option-group > span { color: var(--gu-ink); font-size: 14px; font-weight: 600; letter-spacing: .08em; line-height: 40px; text-transform: uppercase; }
+.gu-pdp-option-group > div { display: flex; flex-wrap: wrap; gap: 10px; }
+.gu-pdp-option-group button { background: #fff; border: 1px solid var(--gu-orange); border-radius: 999px; color: var(--gu-ink); cursor: pointer; font-family: "Inter", sans-serif; font-size: 14px; min-height: 40px; min-width: 76px; padding: 8px 18px; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
+.gu-pdp-option-group button:hover, .gu-pdp-option-group button:focus-visible { border-color: var(--gu-red); color: var(--gu-red); outline: none; }
+.gu-pdp-option-group button.is-selected { background: var(--gu-red); border-color: var(--gu-red); color: #fff; }
 
 .gu-pdp-info-panel, .gu-pdp-card-panel { background: #fff; border: 1px solid var(--gu-orange); border-radius: 16px; margin-top: 30px; overflow: hidden; }
 .gu-pdp-info-panel { width: 100%; }
@@ -1185,6 +1192,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .gu-pdp-price-row > strong { font-size: 28px; }
   .gu-pdp-price-row del { font-size: 16px; }
   .gu-pdp-description { font-size: 15px; margin-top: 14px; }
+  .gu-pdp-options { gap: 14px; margin-top: 20px; }
+  .gu-pdp-option-group { gap: 8px; grid-template-columns: minmax(0, 1fr); }
+  .gu-pdp-option-group > span { line-height: 1.2; }
+  .gu-pdp-option-group button { min-height: 44px; min-width: 72px; padding-inline: 16px; }
 
   .gu-pdp-info-tabs { gap: 22px; margin-inline: 15px; overflow-x: auto; padding-top: 14px; }
   .gu-pdp-info-tabs button { flex: 0 0 auto; font-size: 17px; }

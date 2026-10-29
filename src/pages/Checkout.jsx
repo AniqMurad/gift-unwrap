@@ -209,6 +209,8 @@ const Checkout = () => {
             quantity: item.quantity,
             price: item.price,
             image: item.image || item.images?.[0],
+            selectedSize: item.selectedSize || undefined,
+            selectedColor: item.selectedColor || undefined,
             personalization: item.personalization || undefined,
           })),
       ...(giftBoxBundle ? {
@@ -240,6 +242,8 @@ const Checkout = () => {
           quantity: item.quantity,
           price: item.price,
           image: item.image || item.images?.[0],
+          selectedSize: item.selectedSize || undefined,
+          selectedColor: item.selectedColor || undefined,
           personalization: item.personalization || undefined,
         })),
         subtotal,
@@ -349,7 +353,7 @@ const Checkout = () => {
                   {cartItems.map((item) => (
                     <article className="gu-checkout-product" key={item.cartKey || `${item.category}-${item.id}`}>
                       <img src={item.image || item.images?.[0]} alt={item.name} loading="lazy" decoding="async" />
-                      <div className="gu-checkout-product-copy"><h3>{item.name}</h3><p>Quantity: {String(item.quantity).padStart(2, "0")}</p>{item.personalization?.card && <p>Card: {item.personalization.card.name} · {formatPkr(getCartItemCardPrice(item))}</p>}{getStandaloneCardMessageSummary(item) && <p>{getStandaloneCardMessageSummary(item)}</p>}</div>
+                      <div className="gu-checkout-product-copy"><h3>{item.name}</h3><p>Quantity: {String(item.quantity).padStart(2, "0")}</p>{(item.selectedSize || item.selectedColor) && <p>{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>}{item.personalization?.card && <p>Card: {item.personalization.card.name} · {formatPkr(getCartItemCardPrice(item))}</p>}{getStandaloneCardMessageSummary(item) && <p>{getStandaloneCardMessageSummary(item)}</p>}</div>
                       <strong>{formatPkr(getCartItemLinePrice(item))}</strong>
                     </article>
                   ))}

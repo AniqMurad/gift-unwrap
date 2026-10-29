@@ -114,6 +114,9 @@ export default function SuccessScreen() {
                       <div className="gu-success-product-copy">
                         <h3>{item.name || "Gift item"}</h3>
                         <p>Quantity {String(quantity).padStart(2, "0")}</p>
+                        {(item.selectedSize || item.selectedColor) && (
+                          <p>{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>
+                        )}
                       </div>
                       <strong>{formatPkr(Number(item.price || 0) * quantity)}</strong>
                     </article>

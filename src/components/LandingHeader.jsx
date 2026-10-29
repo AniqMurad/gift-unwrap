@@ -505,6 +505,7 @@ const LandingHeader = ({ variant = "default" }) => {
                     <div>
                       <h3>{item.name}</h3>
                       <p>Qty: {item.quantity}</p>
+                      {(item.selectedSize || item.selectedColor) && <p className="gu-cart-personalization">{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>}
                       {item.personalization?.card && <p className="gu-cart-personalization">Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})</p>}
                       {getStandaloneCardMessageSummary(item) && <p className="gu-cart-personalization">{getStandaloneCardMessageSummary(item)}</p>}
                     </div>

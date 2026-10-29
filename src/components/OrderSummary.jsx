@@ -56,6 +56,11 @@ const OrderSummary = ({
                   <p className="text-[#696C70] text-[13px]">
                     Qty: {item.quantity}
                   </p>
+                  {(item.selectedSize || item.selectedColor) && (
+                    <p className="text-[#696C70] text-[12px]">
+                      {[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}
+                    </p>
+                  )}
                   {item.personalization?.card && (
                     <p className="text-[#696C70] text-[12px]">
                       Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})

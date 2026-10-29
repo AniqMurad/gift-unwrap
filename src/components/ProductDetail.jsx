@@ -142,6 +142,8 @@ const ProductDetail = () => {
   const [messageMode, setMessageMode] = useState("write");
   const [messageDraft, setMessageDraft] = useState({ from: "", to: "", message: "" });
   const [messageErrors, setMessageErrors] = useState({});
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: "success", message: "" });
@@ -217,7 +219,7 @@ const ProductDetail = () => {
     return () => {
       active = false;
     };
-  }, [category, productSlug]);
+  }, [category, productSlug, location.state?.productData]);
 
   useEffect(() => {
     let active = true;
@@ -270,7 +272,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const images = getProductImages(product);
     setSelectedImage(images[0] || "");
-  }, [product?.id]);
+  }, [product]);
 
   useEffect(() => {
     if (!notification.show) return undefined;
@@ -286,6 +288,14 @@ const ProductDetail = () => {
   const packaging = useMemo(() => getPackagingContent(product), [product]);
   const showContents = product?.showWhatsInside ?? contents.length > 0;
   const showPackaging = product?.showPackaging ?? Boolean(packaging);
+  const sizeOptions = useMemo(
+    () => product?.showSizeOptions ? [...new Set((product.sizeOptions || []).map((value) => String(value).trim()).filter(Boolean))] : [],
+    [product],
+  );
+  const colorOptions = useMemo(
+    () => product?.showColorOptions ? [...new Set((product.colorOptions || []).map((value) => String(value).trim()).filter(Boolean))] : [],
+    [product],
+  );
   const faqContent = useMemo(() => getProductFaqContent(product, category), [product, category]);
   const stockLimit = getStockLimit(product);
   const unavailable = isUnavailableProduct(product);
@@ -320,6 +330,11 @@ const ProductDetail = () => {
       setActiveInfoTab("packaging");
     }
   }, [product?.id, showContents, showPackaging]);
+
+  useEffect(() => {
+    setSelectedSize(sizeOptions[0] || "");
+    setSelectedColor(colorOptions[0] || "");
+  }, [product?.id, sizeOptions, colorOptions]);
 
   if (status === "loading") {
     return (
@@ -425,12 +440,21 @@ const ProductDetail = () => {
           personalization.message || "",
         ].join("|")
       : "without-card";
-    const cartKey = `${category}-${product.id}-${encodeURIComponent(personalizationKey)}`;
+    const variantKey = [selectedSize || "no-size", selectedColor || "no-color"].join("|");
+    const cartKey = `${category}-${product.id}-${encodeURIComponent(`${variantKey}|${personalizationKey}`)}`;
 
     addingRef.current = true;
     setIsAdding(true);
     try {
-      addToCart({ ...product, category, quantity, cartKey, personalization });
+      addToCart({
+        ...product,
+        category,
+        quantity,
+        cartKey,
+        personalization,
+        selectedSize: selectedSize || undefined,
+        selectedColor: selectedColor || undefined,
+      });
       setNotification({
         show: true,
         type: "success",
@@ -544,6 +568,35 @@ const ProductDetail = () => {
             <p className="gu-pdp-description">
               {product.shortDescription || product.longDescription || "Product details are being updated."}
             </p>
+
+            {(sizeOptions.length > 0 || colorOptions.length > 0) && (
+              <section className="gu-pdp-options" aria-label="Choose product options">
+                {sizeOptions.length > 0 && (
+                  <div className="gu-pdp-option-group">
+                    <span>Size</span>
+                    <div role="radiogroup" aria-label="Choose a size">
+                      {sizeOptions.map((size) => (
+                        <button key={size} className={selectedSize === size ? "is-selected" : ""} type="button" role="radio" aria-checked={selectedSize === size} onClick={() => setSelectedSize(size)}>
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {colorOptions.length > 0 && (
+                  <div className="gu-pdp-option-group">
+                    <span>Color</span>
+                    <div role="radiogroup" aria-label="Choose a color">
+                      {colorOptions.map((color) => (
+                        <button key={color} className={selectedColor === color ? "is-selected" : ""} type="button" role="radio" aria-checked={selectedColor === color} onClick={() => setSelectedColor(color)}>
+                          {color}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </section>
+            )}
 
             {(showContents || showPackaging) && <section className="gu-pdp-info-panel" aria-label="Product details">
               <div className="gu-pdp-info-tabs" role="tablist" aria-label="Product information">

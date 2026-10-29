@@ -184,6 +184,9 @@ const ShoppingCart = () => {
                       <div className="gu-cart-item-details">
                         <div className="gu-cart-item-copy">
                           <h2>{item.name}</h2>
+                          {(item.selectedSize || item.selectedColor) && (
+                            <p>{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>
+                          )}
                           {item.personalization?.card && (
                             <p>
                               Card: {item.personalization.card.name}

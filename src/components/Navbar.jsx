@@ -310,6 +310,11 @@ const Navbar = ({
                         <p className="text-xs text-gray-500">
                           Qty: {item.quantity}
                         </p>
+                        {(item.selectedSize || item.selectedColor) && (
+                          <p className="text-xs text-red-500">
+                            {[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}
+                          </p>
+                        )}
                         {item.personalization?.card && (
                           <p className="text-xs text-red-500">
                             Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})
