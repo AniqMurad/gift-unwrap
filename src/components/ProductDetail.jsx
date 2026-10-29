@@ -86,6 +86,18 @@ const normalizeColorOptions = (values) => (Array.isArray(values) ? values : [])
   })
   .filter(Boolean);
 
+const normalizeSizeOptions = (values, fallbackPrice) => (Array.isArray(values) ? values : [])
+  .map((value) => {
+    const option = typeof value === "string" ? { name: value } : (value || {});
+    const name = String(option.name || option.size || "").trim();
+    const requestedPrice = Number(option.price);
+    const price = Number.isFinite(requestedPrice) && requestedPrice > 0
+      ? requestedPrice
+      : Number(fallbackPrice);
+    return name && Number.isFinite(price) && price > 0 ? { name, price } : null;
+  })
+  .filter(Boolean);
+
 const normalizeContents = (product) => {
   const contents = product?.whatsInside || product?.contents || product?.items;
   if (!Array.isArray(contents)) return [];
@@ -302,7 +314,7 @@ const ProductDetail = () => {
   const showContents = product?.showWhatsInside ?? contents.length > 0;
   const showPackaging = product?.showPackaging ?? Boolean(packaging);
   const sizeOptions = useMemo(
-    () => product?.showSizeOptions ? [...new Set((product.sizeOptions || []).map((value) => String(value).trim()).filter(Boolean))] : [],
+    () => product?.showSizeOptions ? normalizeSizeOptions(product.sizeOptions, product.price) : [],
     [product],
   );
   const colorOptions = useMemo(
@@ -310,6 +322,8 @@ const ProductDetail = () => {
     [product],
   );
   const selectedColorOption = colorOptions.find((option) => option.name === selectedColor) || null;
+  const selectedSizeOption = sizeOptions.find((option) => option.name === selectedSize) || sizeOptions[0] || null;
+  const selectedPrice = selectedSizeOption?.price || Number(product?.price) || 0;
   const faqContent = useMemo(() => getProductFaqContent(product, category), [product, category]);
   const stockLimit = getStockLimit(product);
   const unavailable = isUnavailableProduct(product);
@@ -346,7 +360,7 @@ const ProductDetail = () => {
   }, [product?.id, showContents, showPackaging]);
 
   useEffect(() => {
-    setSelectedSize(sizeOptions[0] || "");
+    setSelectedSize(sizeOptions[0]?.name || "");
     const firstColor = colorOptions[0] || null;
     setSelectedColor(firstColor?.name || "");
     if (firstColor?.image) setSelectedImage(firstColor.image);
@@ -456,7 +470,7 @@ const ProductDetail = () => {
           personalization.message || "",
         ].join("|")
       : "without-card";
-    const variantKey = [selectedSize || "no-size", selectedColor || "no-color"].join("|");
+    const variantKey = [selectedSizeOption?.name || "no-size", selectedColor || "no-color"].join("|");
     const cartKey = `${category}-${product.id}-${encodeURIComponent(`${variantKey}|${personalizationKey}`)}`;
 
     addingRef.current = true;
@@ -468,9 +482,10 @@ const ProductDetail = () => {
         quantity,
         cartKey,
         personalization,
-        selectedSize: selectedSize || undefined,
+        selectedSize: selectedSizeOption?.name || undefined,
         selectedColor: selectedColor || undefined,
         selectedColorHex: selectedColorOption?.hex || undefined,
+        price: selectedPrice,
         image: selectedColorOption?.image || product.image || product.images?.[0],
       });
       setNotification({
@@ -577,8 +592,8 @@ const ProductDetail = () => {
               </div>
             )}
             <div className="gu-pdp-price-row">
-              <strong>{formatPrice(product.price)} PKR</strong>
-              {Number(product.originalPrice) > Number(product.price) && (
+              <strong>{formatPrice(selectedPrice)} PKR</strong>
+              {Number(product.originalPrice) > selectedPrice && (
                 <del>{formatPrice(product.originalPrice)} PKR</del>
               )}
               {unavailable && <span className="gu-pdp-unavailable">Unavailable</span>}
@@ -594,8 +609,8 @@ const ProductDetail = () => {
                     <span>Size</span>
                     <div role="radiogroup" aria-label="Choose a size">
                       {sizeOptions.map((size) => (
-                        <button key={size} className={selectedSize === size ? "is-selected" : ""} type="button" role="radio" aria-checked={selectedSize === size} onClick={() => setSelectedSize(size)}>
-                          {size}
+                        <button key={size.name} className={selectedSize === size.name ? "is-selected" : ""} type="button" role="radio" aria-checked={selectedSize === size.name} onClick={() => setSelectedSize(size.name)}>
+                          {size.name}
                         </button>
                       ))}
                     </div>
