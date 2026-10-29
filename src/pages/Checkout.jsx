@@ -116,9 +116,7 @@ const Checkout = () => {
   const [cardName, setCardName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("creditCard");
   const [saveCardDetails, setSaveCardDetails] = useState(false);
-  const [showDiscountApplied, setShowDiscountApplied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [notification, setNotification] = useState({ show: false, type: "success", message: "" });
@@ -161,10 +159,6 @@ const Checkout = () => {
   const discountAmount = 0;
   const totalOrderAmount = subtotal + shippingCost - discountAmount;
 
-  useEffect(() => {
-    setShowDiscountApplied(subtotal >= 500);
-  }, [subtotal]);
-
   const handleSubmitOrder = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -179,11 +173,9 @@ const Checkout = () => {
     if (!formData.city) newErrors.city = "City is required.";
     if (!formData.state) newErrors.state = "State is required.";
     if (!formData.postalCode || Number.isNaN(Number(formData.postalCode))) newErrors.postalCode = "Postal code must be a number.";
-    if (paymentMethod === "creditCard") {
-      if (!cardName) newErrors.cardName = "Account name is required.";
-      if (!cardNumber) newErrors.cardNumber = "Account number is required.";
-      if (!expiry) newErrors.expiry = "Transfer date is required.";
-    }
+    if (!cardName) newErrors.cardName = "Account name is required.";
+    if (!cardNumber) newErrors.cardNumber = "Account number is required.";
+    if (!expiry) newErrors.expiry = "Transfer date is required.";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -206,10 +198,8 @@ const Checkout = () => {
     const orderData = {
       userId: localStorage.getItem("userId"),
       shippingInfo: formData,
-      paymentMethod,
-      cardDetails: paymentMethod === "creditCard"
-        ? { cardName, cardNumber, expiry, cvv: "bank-transfer", saveCardDetails }
-        : null,
+      paymentMethod: "creditCard",
+      cardDetails: { cardName, cardNumber, expiry, cvv: "bank-transfer", saveCardDetails },
       orderItems: giftBoxBundle
         ? giftBoxBundle.giftBox.items
         : cartItems.map((item) => ({
@@ -256,7 +246,6 @@ const Checkout = () => {
         shippingCost,
         discountAmount,
         totalOrderAmount,
-        showDiscountApplied,
       };
       const shippingDetails = {
         email: formData.email,
@@ -328,28 +317,20 @@ const Checkout = () => {
             <section className="gu-checkout-payment" aria-labelledby="checkout-payment-heading">
               <h2 id="checkout-payment-heading">Choose payment Option:</h2>
               <div className="gu-checkout-payment-options">
-                <div className={`gu-checkout-transfer${paymentMethod === "creditCard" ? " is-selected" : ""}`}>
+                <div className="gu-checkout-transfer is-selected">
                   <label className="gu-checkout-radio-heading">
-                    <input type="radio" name="paymentMethod" value="creditCard" checked={paymentMethod === "creditCard"} onChange={() => setPaymentMethod("creditCard")} disabled={isLoading} />
+                    <input type="radio" name="paymentMethod" value="creditCard" checked readOnly disabled={isLoading} />
                     <span>Online Money Transfer</span>
                   </label>
-                  {paymentMethod === "creditCard" && (
-                    <>
-                      <p>Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.</p>
-                      <p className="gu-checkout-bank-details"><strong>Account Name:</strong> Hamid Ali<br /><strong>Account Number:</strong> 06027901681003</p>
-                      <div className="gu-checkout-transfer-fields">
-                        <label><span className="sr-only">Your Account Name</span><input value={cardName} onChange={(event) => { setCardName(event.target.value); setErrors((previous) => ({ ...previous, cardName: null })); }} placeholder="Your Account Name*" aria-invalid={Boolean(errors.cardName)} disabled={isLoading} />{errors.cardName && <small>{errors.cardName}</small>}</label>
-                        <label><span className="sr-only">Your Account Number</span><input value={cardNumber} onChange={(event) => { setCardNumber(event.target.value); setErrors((previous) => ({ ...previous, cardNumber: null })); }} placeholder="Your Account Number*" aria-invalid={Boolean(errors.cardNumber)} disabled={isLoading} />{errors.cardNumber && <small>{errors.cardNumber}</small>}</label>
-                        <label><span className="sr-only">Transfer date</span><input value={expiry} onChange={(event) => { setExpiry(event.target.value); setErrors((previous) => ({ ...previous, expiry: null })); }} placeholder="dd/mm/yy*" aria-invalid={Boolean(errors.expiry)} disabled={isLoading} />{errors.expiry && <small>{errors.expiry}</small>}</label>
-                      </div>
-                      <label className="gu-checkout-save-details"><input type="checkbox" checked={saveCardDetails} onChange={(event) => setSaveCardDetails(event.target.checked)} disabled={isLoading} /><span>Save Account Details</span></label>
-                    </>
-                  )}
+                  <p>Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.</p>
+                  <p className="gu-checkout-bank-details"><strong>Account Name:</strong> Hamid Ali<br /><strong>Account Number:</strong> 06027901681003</p>
+                  <div className="gu-checkout-transfer-fields">
+                    <label><span className="sr-only">Your Account Name</span><input value={cardName} onChange={(event) => { setCardName(event.target.value); setErrors((previous) => ({ ...previous, cardName: null })); }} placeholder="Your Account Name*" aria-invalid={Boolean(errors.cardName)} disabled={isLoading} />{errors.cardName && <small>{errors.cardName}</small>}</label>
+                    <label><span className="sr-only">Your Account Number</span><input value={cardNumber} onChange={(event) => { setCardNumber(event.target.value); setErrors((previous) => ({ ...previous, cardNumber: null })); }} placeholder="Your Account Number*" aria-invalid={Boolean(errors.cardNumber)} disabled={isLoading} />{errors.cardNumber && <small>{errors.cardNumber}</small>}</label>
+                    <label><span className="sr-only">Transfer date</span><input value={expiry} onChange={(event) => { setExpiry(event.target.value); setErrors((previous) => ({ ...previous, expiry: null })); }} placeholder="dd/mm/yy*" aria-invalid={Boolean(errors.expiry)} disabled={isLoading} />{errors.expiry && <small>{errors.expiry}</small>}</label>
+                  </div>
+                  <label className="gu-checkout-save-details"><input type="checkbox" checked={saveCardDetails} onChange={(event) => setSaveCardDetails(event.target.checked)} disabled={isLoading} /><span>Save Account Details</span></label>
                 </div>
-                <label className={`gu-checkout-cod${paymentMethod === "cod" ? " is-selected" : ""}`}>
-                  <input type="radio" name="paymentMethod" value="cod" checked={paymentMethod === "cod"} onChange={() => setPaymentMethod("cod")} disabled={isLoading} />
-                  <span>Cash On Delivery</span>
-                </label>
               </div>
             </section>
 
@@ -361,7 +342,6 @@ const Checkout = () => {
           <div className="gu-checkout-divider" aria-hidden="true" />
 
           <aside className="gu-checkout-summary" aria-labelledby="checkout-cart-heading">
-            {showDiscountApplied && <p className="gu-checkout-discount-pill">Discount Code Has Been Applied!</p>}
             <div className="gu-checkout-cart">
               <h2 id="checkout-cart-heading">Shopping Cart</h2>
               {cartItems.length > 0 ? (
@@ -376,14 +356,8 @@ const Checkout = () => {
                 </div>
               ) : <p className="gu-checkout-empty">No items in this order.</p>}
 
-              <div className="gu-checkout-discount">
-                <div><span>{showDiscountApplied ? "ONI6810" : "Discount code"}</span><button type="button" disabled>{showDiscountApplied ? "Applied" : "Apply"}</button></div>
-                <p>Discount code is only used for orders with a total value of products over 500PKR</p>
-              </div>
-
               <div className="gu-checkout-totals">
                 <div><span>Shipping</span><span>{shippingCost === 0 ? "Free" : formatPkr(shippingCost)}</span></div>
-                <div><span>Discounts</span><span>{formatPkr(discountAmount)}</span></div>
                 <div className="gu-checkout-total"><strong>Subtotal</strong><strong>{formatPkr(totalOrderAmount)}</strong></div>
               </div>
             </div>

@@ -543,11 +543,9 @@
 }
 .gu-checkout-transfer.is-selected { min-height: 422px; }
 .gu-checkout-radio-heading,
-.gu-checkout-cod,
 .gu-checkout-save-details { align-items: center; display: flex; gap: 8px; }
 .gu-checkout-radio-heading { color: #1f1f1f; font-weight: 500; line-height: 24px; }
-.gu-checkout-radio-heading input,
-.gu-checkout-cod input {
+.gu-checkout-radio-heading input {
   accent-color: #2e72d2;
   flex: 0 0 14px;
   height: 14px;
@@ -567,19 +565,6 @@
   margin: 0;
   width: 20px;
 }
-.gu-checkout-cod {
-  background: #fff;
-  border: 1px solid #e9e9e9;
-  border-radius: 50px;
-  color: #1f1f1f;
-  cursor: pointer;
-  font-size: 16px;
-  height: 48px;
-  letter-spacing: -.32px;
-  line-height: 24px;
-  padding: 11px 20px;
-}
-.gu-checkout-cod.is-selected { border-color: #2e72d2; }
 .gu-checkout-pay {
   align-items: center;
   background: var(--gu-red);
@@ -631,7 +616,7 @@
   background: #fff;
   border-radius: 20px;
   height: 130px;
-  object-fit: contain;
+  object-fit: cover;
   width: 130px;
 }
 .gu-checkout-product-copy { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
