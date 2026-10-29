@@ -73,6 +73,19 @@ const getProductImages = (product) => {
   return [...new Set([...(product.images || []), product.image].filter(Boolean))];
 };
 
+const normalizeColorOptions = (values) => (Array.isArray(values) ? values : [])
+  .map((value) => {
+    const option = typeof value === "string" ? { name: value } : (value || {});
+    const name = String(option.name || option.color || "").trim();
+    if (!name) return null;
+    return {
+      name,
+      hex: /^#[0-9a-f]{6}$/i.test(String(option.hex || "").trim()) ? String(option.hex).trim() : "#000000",
+      image: String(option.image || "").trim(),
+    };
+  })
+  .filter(Boolean);
+
 const normalizeContents = (product) => {
   const contents = product?.whatsInside || product?.contents || product?.items;
   if (!Array.isArray(contents)) return [];
@@ -293,9 +306,10 @@ const ProductDetail = () => {
     [product],
   );
   const colorOptions = useMemo(
-    () => product?.showColorOptions ? [...new Set((product.colorOptions || []).map((value) => String(value).trim()).filter(Boolean))] : [],
+    () => product?.showColorOptions ? normalizeColorOptions(product.colorOptions) : [],
     [product],
   );
+  const selectedColorOption = colorOptions.find((option) => option.name === selectedColor) || null;
   const faqContent = useMemo(() => getProductFaqContent(product, category), [product, category]);
   const stockLimit = getStockLimit(product);
   const unavailable = isUnavailableProduct(product);
@@ -333,7 +347,9 @@ const ProductDetail = () => {
 
   useEffect(() => {
     setSelectedSize(sizeOptions[0] || "");
-    setSelectedColor(colorOptions[0] || "");
+    const firstColor = colorOptions[0] || null;
+    setSelectedColor(firstColor?.name || "");
+    if (firstColor?.image) setSelectedImage(firstColor.image);
   }, [product?.id, sizeOptions, colorOptions]);
 
   if (status === "loading") {
@@ -454,6 +470,8 @@ const ProductDetail = () => {
         personalization,
         selectedSize: selectedSize || undefined,
         selectedColor: selectedColor || undefined,
+        selectedColorHex: selectedColorOption?.hex || undefined,
+        image: selectedColorOption?.image || product.image || product.images?.[0],
       });
       setNotification({
         show: true,
@@ -588,8 +606,19 @@ const ProductDetail = () => {
                     <span>Color</span>
                     <div role="radiogroup" aria-label="Choose a color">
                       {colorOptions.map((color) => (
-                        <button key={color} className={selectedColor === color ? "is-selected" : ""} type="button" role="radio" aria-checked={selectedColor === color} onClick={() => setSelectedColor(color)}>
-                          {color}
+                        <button
+                          key={color.name}
+                          className={`gu-pdp-color-option${selectedColor === color.name ? " is-selected" : ""}`}
+                          type="button"
+                          role="radio"
+                          aria-checked={selectedColor === color.name}
+                          onClick={() => {
+                            setSelectedColor(color.name);
+                            if (color.image) setSelectedImage(color.image);
+                          }}
+                        >
+                          <span className="gu-pdp-color-swatch" style={{ backgroundColor: color.hex }} aria-hidden="true" />
+                          <span>{color.name}</span>
                         </button>
                       ))}
                     </div>

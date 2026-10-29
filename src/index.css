@@ -906,6 +906,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-option-group > span { color: var(--gu-ink); font-size: 14px; font-weight: 600; letter-spacing: .08em; line-height: 40px; text-transform: uppercase; }
 .gu-pdp-option-group > div { display: flex; flex-wrap: wrap; gap: 10px; }
 .gu-pdp-option-group button { background: #fff; border: 1px solid var(--gu-orange); border-radius: 999px; color: var(--gu-ink); cursor: pointer; font-family: "Inter", sans-serif; font-size: 14px; min-height: 40px; min-width: 76px; padding: 8px 18px; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
+.gu-pdp-color-option { align-items: center; display: inline-flex; gap: 8px; }
+.gu-pdp-color-swatch { border: 1px solid rgb(0 0 0 / 18%); border-radius: 999px; box-shadow: 0 0 0 2px #fff; flex: 0 0 18px; height: 18px; width: 18px; }
 .gu-pdp-option-group button:hover, .gu-pdp-option-group button:focus-visible { border-color: var(--gu-red); color: var(--gu-red); outline: none; }
 .gu-pdp-option-group button.is-selected { background: var(--gu-red); border-color: var(--gu-red); color: #fff; }
 
