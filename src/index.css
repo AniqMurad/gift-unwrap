@@ -901,15 +901,17 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-price-row del { color: #8b8580; font-size: 21px; }
 .gu-pdp-unavailable { background: #fff; border: 1px solid var(--gu-red); border-radius: 999px; color: var(--gu-red); font-size: 14px; font-weight: 600; padding: 6px 12px; }
 .gu-pdp-description { color: var(--gu-body); font-size: 18px; line-height: 1.55; margin-top: 18px; max-width: 725px; }
-.gu-pdp-options { display: grid; gap: 16px; margin-top: 24px; }
-.gu-pdp-option-group { align-items: flex-start; display: grid; gap: 12px; grid-template-columns: 68px minmax(0, 1fr); }
-.gu-pdp-option-group > span { color: var(--gu-ink); font-size: 14px; font-weight: 600; letter-spacing: .08em; line-height: 40px; text-transform: uppercase; }
-.gu-pdp-option-group > div { display: flex; flex-wrap: wrap; gap: 10px; }
-.gu-pdp-option-group button { background: #fff; border: 1px solid var(--gu-orange); border-radius: 999px; color: var(--gu-ink); cursor: pointer; font-family: "Inter", sans-serif; font-size: 14px; min-height: 40px; min-width: 76px; padding: 8px 18px; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
-.gu-pdp-color-option { align-items: center; display: inline-flex; gap: 8px; }
-.gu-pdp-color-swatch { border: 1px solid rgb(0 0 0 / 18%); border-radius: 999px; box-shadow: 0 0 0 2px #fff; flex: 0 0 18px; height: 18px; width: 18px; }
-.gu-pdp-option-group button:hover, .gu-pdp-option-group button:focus-visible { border-color: var(--gu-red); color: var(--gu-red); outline: none; }
-.gu-pdp-option-group button.is-selected { background: var(--gu-red); border-color: var(--gu-red); color: #fff; }
+.gu-pdp-variant-panel { background: #fff; border: 1px solid var(--gu-orange); border-radius: 16px; margin-top: 24px; overflow: hidden; width: 100%; }
+.gu-pdp-variant-tabs { border-bottom: 1px solid var(--gu-orange); display: flex; gap: 55px; height: 47px; margin: 0 18px; }
+.gu-pdp-variant-tabs button { color: #2b2320; cursor: pointer; font-family: "Recoleta", serif; font-size: 20px; font-weight: 500; letter-spacing: -.3px; line-height: 20px; padding: 16px 0 10px; position: relative; }
+.gu-pdp-variant-tabs button::after { background: transparent; bottom: -1px; content: ""; height: 4px; left: 0; position: absolute; right: 0; }
+.gu-pdp-variant-tabs button:hover, .gu-pdp-variant-tabs button:focus-visible, .gu-pdp-variant-tabs button.is-active { color: var(--gu-red); outline: none; }
+.gu-pdp-variant-tabs button.is-active::after { background: var(--gu-red); }
+.gu-pdp-variant-options { min-height: 72px; padding: 21px 18px 22px; }
+.gu-pdp-variant-options > div { display: flex; flex-wrap: wrap; gap: 16px; }
+.gu-pdp-variant-options button { align-items: center; background: #fff; border: 1px solid var(--gu-orange); border-radius: 999px; color: #1f1f1f; cursor: pointer; display: inline-flex; font-family: "Inter", sans-serif; font-size: 16px; font-weight: 500; justify-content: center; line-height: 20px; min-height: 28px; padding: 3px 10px; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
+.gu-pdp-variant-options button:hover, .gu-pdp-variant-options button:focus-visible { border-color: var(--gu-red); color: var(--gu-red); outline: none; }
+.gu-pdp-variant-options button.is-selected { background: var(--gu-red); border-color: var(--gu-red); color: #fff; }
 
 .gu-pdp-info-panel, .gu-pdp-card-panel { background: #fff; border: 1px solid var(--gu-orange); border-radius: 16px; margin-top: 30px; overflow: hidden; }
 .gu-pdp-info-panel { width: 100%; }
@@ -1194,10 +1196,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .gu-pdp-price-row > strong { font-size: 28px; }
   .gu-pdp-price-row del { font-size: 16px; }
   .gu-pdp-description { font-size: 15px; margin-top: 14px; }
-  .gu-pdp-options { gap: 14px; margin-top: 20px; }
-  .gu-pdp-option-group { gap: 8px; grid-template-columns: minmax(0, 1fr); }
-  .gu-pdp-option-group > span { line-height: 1.2; }
-  .gu-pdp-option-group button { min-height: 44px; min-width: 72px; padding-inline: 16px; }
+  .gu-pdp-variant-panel { margin-top: 20px; }
+  .gu-pdp-variant-tabs { gap: 36px; margin-inline: 15px; }
+  .gu-pdp-variant-tabs button { font-size: 18px; }
+  .gu-pdp-variant-options { padding: 18px 15px; }
+  .gu-pdp-variant-options > div { gap: 10px; }
+  .gu-pdp-variant-options button { min-height: 36px; padding-inline: 13px; }
 
   .gu-pdp-info-tabs { gap: 22px; margin-inline: 15px; overflow-x: auto; padding-top: 14px; }
   .gu-pdp-info-tabs button { flex: 0 0 auto; font-size: 17px; }

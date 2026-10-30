@@ -169,6 +169,7 @@ const ProductDetail = () => {
   const [messageErrors, setMessageErrors] = useState({});
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [activeVariantTab, setActiveVariantTab] = useState("colors");
   const [isAdding, setIsAdding] = useState(false);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: "success", message: "" });
@@ -364,6 +365,7 @@ const ProductDetail = () => {
     const firstColor = colorOptions[0] || null;
     setSelectedColor(firstColor?.name || "");
     if (firstColor?.image) setSelectedImage(firstColor.image);
+    setActiveVariantTab(firstColor ? "colors" : "sizes");
   }, [product?.id, sizeOptions, colorOptions]);
 
   if (status === "loading") {
@@ -603,37 +605,68 @@ const ProductDetail = () => {
             </p>
 
             {(sizeOptions.length > 0 || colorOptions.length > 0) && (
-              <section className="gu-pdp-options" aria-label="Choose product options">
-                {sizeOptions.length > 0 && (
-                  <div className="gu-pdp-option-group">
-                    <span>Size</span>
-                    <div role="radiogroup" aria-label="Choose a size">
-                      {sizeOptions.map((size) => (
-                        <button key={size.name} className={selectedSize === size.name ? "is-selected" : ""} type="button" role="radio" aria-checked={selectedSize === size.name} onClick={() => setSelectedSize(size.name)}>
-                          {size.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {colorOptions.length > 0 && (
-                  <div className="gu-pdp-option-group">
-                    <span>Color</span>
+              <section className="gu-pdp-variant-panel" aria-label="Choose product options">
+                <div className="gu-pdp-variant-tabs" role="tablist" aria-label="Product options">
+                  {colorOptions.length > 0 && (
+                    <button
+                      className={activeVariantTab === "colors" ? "is-active" : ""}
+                      type="button"
+                      role="tab"
+                      aria-selected={activeVariantTab === "colors"}
+                      aria-controls="gu-pdp-color-options"
+                      onClick={() => setActiveVariantTab("colors")}
+                    >
+                      Colors
+                    </button>
+                  )}
+                  {sizeOptions.length > 0 && (
+                    <button
+                      className={activeVariantTab === "sizes" ? "is-active" : ""}
+                      type="button"
+                      role="tab"
+                      aria-selected={activeVariantTab === "sizes"}
+                      aria-controls="gu-pdp-size-options"
+                      onClick={() => setActiveVariantTab("sizes")}
+                    >
+                      Sizes
+                    </button>
+                  )}
+                </div>
+
+                {activeVariantTab === "colors" && colorOptions.length > 0 ? (
+                  <div className="gu-pdp-variant-options" id="gu-pdp-color-options" role="tabpanel">
                     <div role="radiogroup" aria-label="Choose a color">
                       {colorOptions.map((color) => (
                         <button
                           key={color.name}
-                          className={`gu-pdp-color-option${selectedColor === color.name ? " is-selected" : ""}`}
+                          className={selectedColor === color.name ? "is-selected" : ""}
                           type="button"
                           role="radio"
                           aria-checked={selectedColor === color.name}
+                          title={`${color.name} (${color.hex})`}
                           onClick={() => {
                             setSelectedColor(color.name);
                             if (color.image) setSelectedImage(color.image);
                           }}
                         >
-                          <span className="gu-pdp-color-swatch" style={{ backgroundColor: color.hex }} aria-hidden="true" />
-                          <span>{color.name}</span>
+                          {color.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="gu-pdp-variant-options" id="gu-pdp-size-options" role="tabpanel">
+                    <div role="radiogroup" aria-label="Choose a size">
+                      {sizeOptions.map((size) => (
+                        <button
+                          key={size.name}
+                          className={selectedSize === size.name ? "is-selected" : ""}
+                          type="button"
+                          role="radio"
+                          aria-checked={selectedSize === size.name}
+                          onClick={() => setSelectedSize(size.name)}
+                        >
+                          {size.name}
                         </button>
                       ))}
                     </div>
