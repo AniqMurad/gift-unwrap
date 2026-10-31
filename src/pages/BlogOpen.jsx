@@ -13,6 +13,7 @@ import { fetchBlogs } from '../config/api';
 import TableOfContents from '../components/TableOfContents';
 import { generateSlug, findBlogBySlug } from '../utils/slugify';
 import { blogArticleSeoMetadata } from '../config/seoMetadata';
+import { SITE_ORIGIN } from '../lib/catalogRouting';
 
 const BlogOpen = () => {
   const { slug } = useParams();
@@ -89,6 +90,8 @@ const BlogOpen = () => {
     }
     return blogPost.subHeading || '';
   };
+
+  const canonicalUrl = `${SITE_ORIGIN}/blog/${generateSlug(blog.title)}`;
 
   // Parse [text](url) markdown links and **bold** text within a paragraph string
   const parseParagraphLinks = (text) => {
@@ -224,11 +227,12 @@ const BlogOpen = () => {
       <Helmet>
         <title>{generateMetaTitle(blog)}</title>
         <meta name="description" content={generateMetaDescription(blog)} />
-        <link rel="canonical" href={`${window.location.origin}${window.location.pathname}`} />
+        <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={generateMetaTitle(blog)} />
         <meta property="og:description" content={generateMetaDescription(blog)} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={blog.mainImage || ''} />
+        <meta property="og:url" content={canonicalUrl} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={generateMetaTitle(blog)} />
         <meta name="twitter:description" content={generateMetaDescription(blog)} />

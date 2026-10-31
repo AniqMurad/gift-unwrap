@@ -114,6 +114,7 @@ function App() {
               <Route path="/refund-return-policy" element={<StorefrontPage kind="policy"><RefundReturnPolicy /></StorefrontPage>} />
               <Route path="/terms-conditions" element={<StorefrontPage kind="policy"><TermsConditions /></StorefrontPage>} />
               <Route path="/build-gift-box" element={<BuildGiftBox />} />
+              <Route path="*" element={<StorefrontPage kind="error"><Error /></StorefrontPage>} />
             </Routes>
             </Suspense>
         </CartProvider>

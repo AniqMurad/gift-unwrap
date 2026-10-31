@@ -3,6 +3,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchBlogs, fetchProductCollections } from "../config/api";
 import { generateSlug } from "../utils/slugify";
+import { getCanonicalProductPath } from "../lib/catalogRouting";
 import { keyGiftSearchText } from "../utils/keyGifts";
 import stepChooseBox from "../assets/redesign/step-choose-box.png";
 import stepPickGifts from "../assets/redesign/step-pick-gifts.png";
@@ -231,9 +232,8 @@ const productTabs = ["GIFT BOX", "FLORAL ARRANGEMENTS", "SWEET TREATS", "GREETIN
 
 const ProductCard = ({ product, interactive = true, tabbable = interactive }) => {
   const navigate = useNavigate();
-  const slug = generateSlug(product.name);
   const image = product.image || product.images?.[0];
-  const productPath = `/product/${encodeURIComponent(product.category)}/${encodeURIComponent(slug)}`;
+  const productPath = getCanonicalProductPath(product.category, product);
   const openProduct = interactive
     ? () => navigate(productPath, { state: { productData: product } })
     : undefined;

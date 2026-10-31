@@ -7,7 +7,7 @@ import {
   CloseIcon,
 } from "./icons";
 import { useCart } from "../context/CartContext";
-import { generateSlug } from "../utils/slugify";
+import { getCanonicalProductPath } from "../lib/catalogRouting";
 import RequestQuoteModal from "./RequestQuoteModal";
 import BuilderMessageModal from "./gift-box-builder/BuilderMessageModal";
 import { emptyCardDetails } from "./gift-box-builder/builder-card-state";
@@ -31,11 +31,10 @@ const Product = ({ product, columns, variant = "default", eager = false, directP
   if (!product) return null;
 
   const category = product.category || "unknown";
-  const productSlug = generateSlug(product.name);
   const isCorporateGift = category === "giftsForCompany";
   const isStandaloneGreetingCard = directPurchaseOnly && category === "greetingCards";
   const imageSrc = product.image || product.images?.[0] || fallbackImage;
-  const productHref = `/product/${category}/${productSlug}`;
+  const productHref = getCanonicalProductPath(category, product);
   const currentPrice = Number(product.price);
   const compareAtPrice = Number(product.originalPrice);
   const hasValidDiscount =
@@ -54,7 +53,7 @@ const Product = ({ product, columns, variant = "default", eager = false, directP
   const handleNavigateToDetail = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    if (productSlug && category !== "unknown") {
+    if (productHref && category !== "unknown") {
       navigate(productHref, {
         state: { productData: product },
       });
