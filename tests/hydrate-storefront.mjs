@@ -1,8 +1,7 @@
 import assert from "node:assert/strict";
 import process from "node:process";
 import { JSDOM } from "jsdom";
-import React from "react";
-import axios from "axios";
+import { hydrateStorefront } from "../test-dist/hydrate.js";
 
 let input = "";
 for await (const chunk of process.stdin) input += chunk;
@@ -22,14 +21,35 @@ dom.window.HTMLElement.prototype.scrollIntoView = () => {};
 const restoredCart = [{ id: 880, category: "giftsForHim", name: "Existing cart item", price: 500, quantity: 2 }];
 localStorage.setItem("cartItems", JSON.stringify(restoredCart));
 const cards = [{ id: 904, name: "Sending You Love", price: 150, image: "https://example.com/card.jpg", inStock: true }];
-axios.defaults.adapter = async (config) => ({ data: config.url.includes("cards") ? cards : [], status: 200, statusText: "OK", headers: {}, config });
-const { hydrateRoot } = await import("react-dom/client");
-const { StorefrontApp } = await import("../server-dist/handler.js");
-const snapshot = JSON.parse(document.getElementById("__STOREFRONT_DATA__").textContent);
+const requestUrl = (request) => typeof request === "string" ? request : request?.url || String(request);
+const jsonResponse = (url) => new Response(JSON.stringify(requestUrl(url).includes("cards") ? cards : []), { status: 200, headers: { "Content-Type": "application/json" } });
+globalThis.fetch = async (url) => jsonResponse(url);
+window.fetch = globalThis.fetch;
+class MockXMLHttpRequest {
+  constructor() { this.upload = { addEventListener() {} }; this.readyState = 0; this.status = 0; this.responseText = ""; }
+  open(method, url) { this.method = method; this.url = url; this.readyState = 1; }
+  setRequestHeader() {}
+  addEventListener(type, listener) { this[`on${type}`] = listener; }
+  getAllResponseHeaders() { return "content-type: application/json\r\n"; }
+  abort() {}
+  send() {
+    this.status = 200;
+    this.statusText = "OK";
+    this.responseText = JSON.stringify(requestUrl(this.url).includes("cards") ? cards : []);
+    this.response = this.responseText;
+    this.readyState = 4;
+    queueMicrotask(() => { this.onloadend?.(); this.onreadystatechange?.(); this.onload?.(); });
+  }
+}
+window.XMLHttpRequest = MockXMLHttpRequest;
+globalThis.XMLHttpRequest = MockXMLHttpRequest;
 const errors = [];
 const oldError = console.error;
 console.error = (...args) => { errors.push(args.map(String).join(" ")); };
-const root = hydrateRoot(document.getElementById("root"), React.createElement(React.StrictMode, null, React.createElement(StorefrontApp, { initialData: snapshot })), { onRecoverableError: (error) => errors.push(error.message) });
+const snapshot = JSON.parse(document.getElementById("__STOREFRONT_DATA__").textContent);
+const root = hydrateStorefront(document.getElementById("root"), snapshot, {
+  onRecoverableError: (error) => errors.push(error.message),
+});
 const tick = () => new Promise((resolve) => setTimeout(resolve, 100));
 await tick(); await tick();
 assert.equal(errors.filter((error) => /hydration|didn.t match|server rendered|react error #/i.test(error)).length, 0, errors.join("\n"));
@@ -46,6 +66,7 @@ if (path.startsWith("/product/")) {
   clickText("Sizes"); await tick();
   clickText("Large"); await tick();
   assert.match(document.querySelector(".gu-pdp-price-row").textContent, /2,990/);
+  for (let attempt = 0; attempt < 20 && !document.querySelector('img[alt="Sending You Love"]'); attempt += 1) await tick();
   assert.ok(document.querySelector('[role="radio"][aria-label="Sending You Love"]') || document.querySelector('img[alt="Sending You Love"]'));
   clickText("Add to cart"); await tick();
   const cart = JSON.parse(localStorage.getItem("cartItems"));

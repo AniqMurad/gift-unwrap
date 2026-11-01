@@ -8,7 +8,7 @@
     "build": "vite build && vite build --config vite.server.config.js",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vite build --config vite.server.config.js && node --test tests/*.test.js",
+    "test": "vite build --config vite.server.config.js && vite build --config vite.hydration-test.config.js && node --test tests/*.test.js",
     "sitemap:generate": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {

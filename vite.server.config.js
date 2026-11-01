@@ -5,7 +5,10 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   resolve: { alias: { "@": path.resolve("src") } },
-  ssr: { noExternal: ["react-helmet-async"] },
+  ssr: {
+    target: "node",
+    noExternal: true,
+  },
   build: {
     ssr: "server/handler.js",
     outDir: "server-dist",
