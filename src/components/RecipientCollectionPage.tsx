@@ -8,6 +8,7 @@ import stepAddMessage from "../assets/redesign/step-add-message.png";
 import stepChooseBox from "../assets/redesign/step-choose-box.png";
 import stepPickGifts from "../assets/redesign/step-pick-gifts.png";
 import stepSend from "../assets/redesign/step-send-updated.png";
+import { useStorefrontData } from "../context/StorefrontData";
 import { fetchGreetingCards, fetchProductCollections } from "../config/api";
 import type { RecipientCollectionConfig } from "../config/recipientCollections";
 import {
@@ -163,11 +164,24 @@ const matchesSweetTreatScope = (product: StoreProduct) => {
     .match(SWEET_TREAT_TERMS) !== null;
 };
 
+const collectionProducts = (config: RecipientCollectionConfig, collections: ProductCollection[] = [], cards: GreetingCardRecord[] = []) => {
+  if (config.dataSource === "greetingCards") return cards.filter((card) => card.inStock !== false);
+  const ids = config.sourceCollectionIds || [config.collectionId];
+  const products = collections.filter((entry) => ids.includes(entry.category))
+    .flatMap((entry) => (entry.products || []).map((product) => ({ ...product, category: entry.category })));
+  return config.productScope === "birthday" ? products.filter(matchesBirthdayScope)
+    : config.productScope === "personalized" ? products.filter(matchesPersonalizedScope)
+    : config.productScope === "floral" ? products.filter(matchesFloralScope)
+    : config.productScope === "sweetTreats" ? products.filter(matchesSweetTreatScope)
+    : products;
+};
+
 export default function RecipientCollectionPage({
   config,
 }: RecipientCollectionPageProps) {
-  const [products, setProducts] = useState<StoreProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+  const snapshot = useStorefrontData();
+  const [products, setProducts] = useState<StoreProduct[]>(() => collectionProducts(config, snapshot?.collections, snapshot?.cards));
+  const [loading, setLoading] = useState(!snapshot);
   const [error, setError] = useState("");
   const [retryKey, setRetryKey] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -183,6 +197,7 @@ export default function RecipientCollectionPage({
   const requestedPage = Math.max(1, Number(searchParams.get("page")) || 1);
 
   useEffect(() => {
+    if (snapshot && retryKey === 0) return;
     let active = true;
     setLoading(true);
     setError("");
@@ -195,34 +210,9 @@ export default function RecipientCollectionPage({
       .then(({ data }: { data: unknown }) => {
         if (!active) return;
         const records = Array.isArray(data) ? data : [];
-        if (config.dataSource === "greetingCards") {
-          setProducts(
-            (records as GreetingCardRecord[]).filter(
-              (card) => card.inStock !== false,
-            ),
-          );
-          return;
-        }
-        const collections = records as ProductCollection[];
-        const sourceCollectionIds = config.sourceCollectionIds || [config.collectionId];
-        const sourceProducts = collections
-          .filter((entry) => sourceCollectionIds.includes(entry.category))
-          .flatMap((entry) =>
-            (Array.isArray(entry.products) ? entry.products : []).map((product) => ({
-              ...product,
-              category: entry.category,
-            })),
-          );
-        const scopedProducts = config.productScope === "birthday"
-          ? sourceProducts.filter(matchesBirthdayScope)
-          : config.productScope === "personalized"
-            ? sourceProducts.filter(matchesPersonalizedScope)
-            : config.productScope === "floral"
-              ? sourceProducts.filter(matchesFloralScope)
-              : config.productScope === "sweetTreats"
-                ? sourceProducts.filter(matchesSweetTreatScope)
-                : sourceProducts;
-        setProducts(scopedProducts);
+        setProducts(collectionProducts(config,
+          config.dataSource === "greetingCards" ? [] : records as ProductCollection[],
+          config.dataSource === "greetingCards" ? records as GreetingCardRecord[] : []));
       })
       .catch(() => {
         if (active) {
@@ -235,7 +225,7 @@ export default function RecipientCollectionPage({
     return () => {
       active = false;
     };
-  }, [config.collectionId, config.dataSource, config.productScope, config.sourceCollectionIds, retryKey]);
+  }, [config.collectionId, config.dataSource, config.productScope, config.sourceCollectionIds, retryKey, snapshot]);
 
   const profiles = useMemo(
     () =>

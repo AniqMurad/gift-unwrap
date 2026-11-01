@@ -1,3 +1,4 @@
+import { useStorefrontData } from "../context/StorefrontData";
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
@@ -23,12 +24,13 @@ import DeliveryMarquee from "@/components/DeliveryMarquee";
 import { hasKeyGift } from "@/utils/keyGifts";
 
 const Forcompanies = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const snapshot = useStorefrontData();
+  const [products, setProducts] = useState(snapshot?.collections?.find((entry) => entry.category === "giftsForCompany")?.products || []);
+  const [loading, setLoading] = useState(!snapshot?.collections);
   const [loadError, setLoadError] = useState(false);
   const location = useLocation();
   const [columns, setColumns] = useState(4); // Default to 4 columns
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [screenWidth, setScreenWidth] = useState(1440);
   const [selectedCategory, setSelectedCategory] = useState(""); // Tracks selected gift category
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
@@ -52,6 +54,7 @@ const Forcompanies = () => {
   const category = "giftsForCompany";
 
   useEffect(() => {
+    if (snapshot?.collections) return;
     setLoading(true);
     axios
       .get("https://giftunwrapbackend.vercel.app/api/products")
@@ -65,7 +68,7 @@ const Forcompanies = () => {
       })
       .catch((err) => { console.error("Failed to load products:", err); setLoadError(true); })
       .finally(() => setLoading(false));
-  }, [category]);
+  }, [category, snapshot]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -79,6 +82,7 @@ const Forcompanies = () => {
   // Track screen width and auto-adjust layout
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);

@@ -1,3 +1,4 @@
+import { useStorefrontData } from "../context/StorefrontData";
 import React, { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { StorefrontTitle as SearchPageNavbar } from "../components/storefront/StorefrontPage";
@@ -17,13 +18,15 @@ import { SITE_ORIGIN } from '../lib/catalogRouting';
 
 const BlogOpen = () => {
   const { slug } = useParams();
-  const [blog, setBlog] = useState(null);
-  const [allBlogs, setAllBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const snapshot = useStorefrontData();
+  const [blog, setBlog] = useState(() => findBlogBySlug(snapshot?.blogs, slug));
+  const [allBlogs, setAllBlogs] = useState(snapshot?.blogs || []);
+  const [loading, setLoading] = useState(!snapshot?.blogs);
   const [loadError, setLoadError] = useState(false);
   const contentRef = useRef(null);
 
   useEffect(() => {
+    if (snapshot?.blogs) return;
     const loadBlogData = async () => {
       try {
         setLoading(true);
@@ -41,7 +44,7 @@ const BlogOpen = () => {
     };
 
     loadBlogData();
-  }, [slug]);
+  }, [slug, snapshot]);
 
   if (loading) {
     return (

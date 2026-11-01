@@ -1,20 +1,10 @@
 import React, { useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
-import ReactGA from "react-ga4";
-import ReactPixel from "react-facebook-pixel";
+import { StaticRouter } from "react-router-dom";
+import { StorefrontDataProvider } from "./context/StorefrontData";
 
-function AnalyticsTracker() {
-  const location = useLocation();
-  useEffect(() => {
-    // Google Analytics
-    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
-    // Facebook Pixel
-    ReactPixel.pageView();
-  }, [location]);
-  return null;
-}
 import { HelmetProvider } from 'react-helmet-async';
-import { CartProvider } from './context/CartContext';
+import { CartProvider, useCart } from './context/CartContext';
 import Loader from "./components/Loader";
 import Home from "./pages/Home";
 import ScrollToTop from './components/ScrollToTop';
@@ -74,11 +64,20 @@ const RefundReturnPolicy = lazy(() => import("./pages/RefundReturnPolicy"));
 const TermsConditions = lazy(() => import("./pages/TermsConditions"));
 const BuildGiftBox = lazy(() => import("./pages/BuildGiftBox"));
 
-function App() {
+// Restoring private browser state must wait until the lazy route has hydrated.
+function CartRestoration() {
+  const { restoreCart } = useCart();
+  useEffect(() => { restoreCart(); }, [restoreCart]);
+  return null;
+}
+
+function App({ serverUrl, initialData = null, helmetContext, analytics = null }) {
+  const Routing = serverUrl ? StaticRouter : Router;
   return (
-    <HelmetProvider>
-      <Router>
-        <AnalyticsTracker />
+    <HelmetProvider context={helmetContext}>
+      <Routing location={serverUrl}>
+        <StorefrontDataProvider value={initialData}>
+        {analytics}
         <ScrollToTop />
         <RouteSeo />
         <CartProvider>
@@ -116,9 +115,11 @@ function App() {
               <Route path="/build-gift-box" element={<BuildGiftBox />} />
               <Route path="*" element={<StorefrontPage kind="error"><Error /></StorefrontPage>} />
             </Routes>
+            <CartRestoration />
             </Suspense>
         </CartProvider>
-    </Router>
+        </StorefrontDataProvider>
+    </Routing>
     </HelmetProvider>
   );
 }

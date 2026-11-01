@@ -1,3 +1,4 @@
+import { useStorefrontData } from "../context/StorefrontData";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Facebook, Instagram } from "lucide-react";
 import BlogArticleCard from "../components/blog/BlogArticleCard";
@@ -82,8 +83,9 @@ function BlogLoading() {
 }
 
 export default function Blog() {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const snapshot = useStorefrontData();
+  const [blogs, setBlogs] = useState(snapshot?.blogs || []);
+  const [loading, setLoading] = useState(!snapshot?.blogs);
   const [loadError, setLoadError] = useState("");
   const [visibleCount, setVisibleCount] = useState(INITIAL_ARTICLE_COUNT);
 
@@ -102,8 +104,8 @@ export default function Blog() {
   }, []);
 
   useEffect(() => {
-    loadBlogs();
-  }, [loadBlogs]);
+    if (!snapshot?.blogs) loadBlogs();
+  }, [loadBlogs, snapshot]);
 
   // The current public API returns published posts in newest-first order and
   // does not expose a featured flag, so the newest post is the documented

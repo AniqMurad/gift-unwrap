@@ -1,3 +1,4 @@
+import { serializeSnapshot } from "../lib/serverPages";
 // Home.js
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
@@ -27,7 +28,7 @@ const Home = () => {
         <link rel="canonical" href="https://www.giftunwrap.com/" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeSnapshot({
             "@context": "https://schema.org",
             "@type": "OnlineStore",
             "@id": "https://www.giftunwrap.com/#store",
@@ -107,7 +108,7 @@ const Home = () => {
           })}
         </script>
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeSnapshot({
             "@context": "https://schema.org",
             "@type": "WebSite",
             "@id": "https://www.giftunwrap.com/#website",
