@@ -15,6 +15,7 @@ export const routeSeoMetadata = {
       "Shop gifts for him in Pakistan. Explore gift boxes and hampers for birthdays, anniversaries and meaningful surprises for the men who matter to you.",
   },
   "/giftforbirthday": {
+    canonicalPath: "/Giftforbirthday",
     title: "Birthday Gifts in Pakistan | Gift Unwrap",
     description:
       "Explore birthday gifts in Pakistan for friends and family. Choose a thoughtful hamper or build a gift box around their favourite things and your budget.",

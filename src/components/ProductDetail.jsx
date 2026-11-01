@@ -18,7 +18,13 @@ import NotificationBar from "./NotificationBar";
 import RequestQuoteModal from "./RequestQuoteModal";
 import { useCart } from "../context/CartContext";
 import { fetchGreetingCards, fetchProductCollections } from "../config/api";
-import { findProductBySlug, generateSlug } from "../utils/slugify";
+import { findProductBySlug } from "../utils/slugify";
+import {
+  getCanonicalProductCategory,
+  getCanonicalProductPath,
+  getProductCategoryCandidates,
+  SITE_ORIGIN,
+} from "../lib/catalogRouting";
 import { getKeyGiftValues, keyGiftSearchText } from "../utils/keyGifts";
 import {
   defaultGiftPackaging,
@@ -57,12 +63,6 @@ const categoryRoutes = {
   giftsForBirthday: "/Giftforbirthday",
   floralArrangements: "/floral-arrangements",
   sweetTreats: "/sweet-treats",
-};
-
-const categoryAliases = {
-  giftsForReligions: ["floralArrangements"],
-  FlowersChocolates: ["floralArrangements", "sweetTreats"],
-  flowerChocolate: ["floralArrangements", "sweetTreats"],
 };
 
 const formatPrice = (value) =>
@@ -174,7 +174,7 @@ const ProductDetail = () => {
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: "success", message: "" });
 
-  const effectiveCategory = product?.category || category;
+  const effectiveCategory = getCanonicalProductCategory(product?.category || category, product || {});
   const isCorporateGift = effectiveCategory === "giftsForCompany" || effectiveCategory === "giftsForCompanies";
   const categoryName = categoryNames[effectiveCategory] || effectiveCategory || "Gifts";
   const categoryRoute = categoryRoutes[effectiveCategory] || "/#featured-gifts";
@@ -182,12 +182,15 @@ const ProductDetail = () => {
   useEffect(() => {
     let active = true;
     const stateProduct = location.state?.productData;
-    const candidateCategories = categoryAliases[category] || [category];
-    const stateMatches = stateProduct && candidateCategories.includes(stateProduct.category);
+    const candidateCategories = getProductCategoryCandidates(category);
+    const stateCategory = stateProduct
+      ? getCanonicalProductCategory(stateProduct.category, stateProduct)
+      : "";
+    const stateMatches = stateProduct && candidateCategories.includes(stateCategory);
 
     setStatus(stateMatches ? "ready" : "loading");
     setRequestError("");
-    setProduct(stateMatches ? { ...stateProduct, category } : null);
+    setProduct(stateMatches ? { ...stateProduct, category: stateCategory } : null);
     setRelatedProducts([]);
     setRelatedStart(0);
     setQuantity(1);
@@ -206,7 +209,9 @@ const ProductDetail = () => {
           .map((candidateCategory) => groups.find((item) => item.category === candidateCategory))
           .find((candidateGroup) => candidateGroup?.products && findProductBySlug(candidateGroup.products, productSlug));
         const found = group?.products ? findProductBySlug(group.products, productSlug) : null;
-        const resolvedCategory = group?.category || category;
+        const resolvedCategory = found
+          ? getCanonicalProductCategory(group?.category || category, found)
+          : group?.category || category;
 
         if (found) {
           const authoritativeProduct = { ...found, category: resolvedCategory };
@@ -214,7 +219,10 @@ const ProductDetail = () => {
           setRelatedProducts(
             group.products
               .filter((item) => item.id !== found.id)
-              .map((item) => ({ ...item, category: resolvedCategory })),
+              .map((item) => ({
+                ...item,
+                category: getCanonicalProductCategory(group.category, item),
+              })),
           );
           setStatus("ready");
           return;
@@ -225,7 +233,10 @@ const ProductDetail = () => {
           setRelatedProducts(
             groupProducts
               .filter((item) => item.id !== stateProduct.id)
-              .map((item) => ({ ...item, category: resolvedCategory })),
+              .map((item) => ({
+                ...item,
+                category: getCanonicalProductCategory(group?.category || category, item),
+              })),
           );
           setStatus("ready");
         } else {
@@ -325,7 +336,10 @@ const ProductDetail = () => {
   const selectedColorOption = colorOptions.find((option) => option.name === selectedColor) || null;
   const selectedSizeOption = sizeOptions.find((option) => option.name === selectedSize) || sizeOptions[0] || null;
   const selectedPrice = selectedSizeOption?.price || Number(product?.price) || 0;
-  const faqContent = useMemo(() => getProductFaqContent(product, category), [product, category]);
+  const faqContent = useMemo(
+    () => getProductFaqContent(product, effectiveCategory),
+    [product, effectiveCategory],
+  );
   const stockLimit = getStockLimit(product);
   const unavailable = isUnavailableProduct(product);
   const reviewCount = product?.reviews?.length || 0;
@@ -473,14 +487,14 @@ const ProductDetail = () => {
         ].join("|")
       : "without-card";
     const variantKey = [selectedSizeOption?.name || "no-size", selectedColor || "no-color"].join("|");
-    const cartKey = `${category}-${product.id}-${encodeURIComponent(`${variantKey}|${personalizationKey}`)}`;
+    const cartKey = `${effectiveCategory}-${product.id}-${encodeURIComponent(`${variantKey}|${personalizationKey}`)}`;
 
     addingRef.current = true;
     setIsAdding(true);
     try {
       addToCart({
         ...product,
-        category,
+        category: effectiveCategory,
         quantity,
         cartKey,
         personalization,
@@ -507,7 +521,8 @@ const ProductDetail = () => {
     }
   };
 
-  const canonicalUrl = `${window.location.origin}${location.pathname}`;
+  const canonicalPath = getCanonicalProductPath(effectiveCategory, product);
+  const canonicalUrl = `${SITE_ORIGIN}${canonicalPath}`;
   const mainImage = selectedImage || images[0] || fallbackImage;
   const shippingLabel = product.shippingTime || product.deliveryTime || product.shippingLabel || "Delivery confirmed at checkout";
   const metaTitle = product.metaTitle || `${product.name} | ${categoryName} | Gift Unwrap Pakistan`;
@@ -860,7 +875,7 @@ const ProductDetail = () => {
                     className="gu-pdp-related-card"
                     key={`${related.category}-${related.id}`}
                     state={{ productData: related }}
-                    to={`/product/${related.category}/${generateSlug(related.name)}`}
+                    to={getCanonicalProductPath(related.category, related)}
                   >
                     <span className="gu-pdp-related-image">
                       <img src={related.image || related.images?.[0] || fallbackImage} alt={related.name} loading="lazy" decoding="async" />

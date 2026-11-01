@@ -1,7 +1,11 @@
 {
-  "rewrites": [
-    { "source": "/((?!sitemap\\.xml|robots\\.txt|favicon\\.png).*)", "destination": "/" }
-  ],
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "proxy": {
+    "entrypoint": "proxy.js",
+    "matcher": [
+      "/((?!assets(?:/|$)|favicon\\.png$|robots\\.txt$|sitemap\\.xml$|.*\\.[^/]+$).*)"
+    ]
+  },
   "headers": [
     {
       "source": "/assets/(.*)",
