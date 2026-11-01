@@ -28,10 +28,7 @@
   ],
   "functions": {
     "api/render.js": {
-      "includeFiles": [
-        "server-dist/**",
-        "dist/index.html"
-      ],
+      "includeFiles": "{server-dist/**,dist/index.html}",
       "maxDuration": 30
     }
   }
