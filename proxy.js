@@ -1,3 +1,4 @@
+import { isServerPage } from "./src/lib/serverPages.js";
 import { rewrite } from "@vercel/functions";
 import {
   BLOG_CATALOGUE_URL,
@@ -24,6 +25,13 @@ const fetchJson = async (url) => {
 export default async function proxy(request) {
   if (request.method !== "GET" && request.method !== "HEAD") {
     return new Response("Method Not Allowed", { status: 405, headers: { Allow: "GET, HEAD" } });
+  }
+
+  const url = new URL(request.url);
+  if (isServerPage(url.pathname)) {
+    const target = new URL("/api/render", url);
+    target.searchParams.set("__path", `${url.pathname}${url.search}`);
+    return rewrite(target);
   }
 
   const decision = await resolveSeoRequest(request.url, {

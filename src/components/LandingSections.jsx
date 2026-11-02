@@ -1,3 +1,4 @@
+import { useStorefrontData } from "../context/StorefrontData";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -231,23 +232,20 @@ export const GiftFinder = () => {
 const productTabs = ["GIFT BOX", "FLORAL ARRANGEMENTS", "SWEET TREATS", "GREETING CARDS"];
 
 const ProductCard = ({ product, interactive = true, tabbable = interactive }) => {
-  const navigate = useNavigate();
   const image = product.image || product.images?.[0];
   const productPath = getCanonicalProductPath(product.category, product);
-  const openProduct = interactive
-    ? () => navigate(productPath, { state: { productData: product } })
-    : undefined;
+
 
   return (
     <article className="gu-featured-card">
-      <button className="gu-product-image" type="button" tabIndex={tabbable ? 0 : -1} onClick={openProduct}>
+      <Link className="gu-product-image" to={productPath} state={{ productData: product }} tabIndex={tabbable ? 0 : -1} aria-disabled={!interactive || undefined}>
         {product.discountPercentage > 0 && <span className="gu-sale-chip">SALE</span>}
         <span className="gu-product-artwork"><img src={image} alt={product.name} loading="lazy" decoding="async" /></span>
-      </button>
-      <button className="gu-product-copy" type="button" tabIndex={tabbable ? 0 : -1} onClick={openProduct}>
+      </Link>
+      <Link className="gu-product-copy" to={productPath} state={{ productData: product }} tabIndex={tabbable ? 0 : -1} aria-disabled={!interactive || undefined}>
         <h3>{product.name}</h3>
         <p><strong>{product.price} PKR</strong>{product.originalPrice && <del>{product.originalPrice} PKR</del>}</p>
-      </button>
+      </Link>
     </article>
   );
 };
@@ -422,19 +420,21 @@ const ContinuousProductCarousel = ({ products }) => {
 };
 
 export const FeaturedGifts = () => {
+  const snapshot = useStorefrontData();
   const [activeTab, setActiveTab] = useState(productTabs[0]);
   const [gender, setGender] = useState("Male");
-  const [groups, setGroups] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [groups, setGroups] = useState(snapshot?.collections || []);
+  const [loading, setLoading] = useState(!snapshot?.collections);
 
   useEffect(() => {
     let active = true;
+    if (snapshot?.collections) return;
     fetchProductCollections()
       .then(({ data }) => active && setGroups(Array.isArray(data) ? data : []))
       .catch((error) => console.error("Failed to load homepage products:", error))
       .finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, []);
+  }, [snapshot]);
 
   const products = useMemo(() => {
     const getGroup = (category) => groups.find((group) => group.category === category)?.products || [];
@@ -509,13 +509,15 @@ export const Testimonials = ({ variant = "default" }) => (
 );
 
 export const GiftGuides = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const snapshot = useStorefrontData();
+  const [blogs, setBlogs] = useState((snapshot?.blogs || []).slice(0, 3));
+  const [loading, setLoading] = useState(!snapshot?.blogs);
   useEffect(() => {
     let active = true;
+    if (snapshot?.blogs) return;
     fetchBlogs().then(({ data }) => active && setBlogs((Array.isArray(data) ? data : []).slice(0, 3))).catch((error) => console.error("Failed to load gift guides:", error)).finally(() => active && setLoading(false));
     return () => { active = false; };
-  }, []);
+  }, [snapshot]);
 
   return (
     <section className="gu-section gu-guides-section" aria-labelledby="guides-title">

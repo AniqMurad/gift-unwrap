@@ -16,9 +16,10 @@ export function StorefrontHeader({ showUtilities = true }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const [signedIn, setSignedIn] = useState(() => Boolean(localStorage.getItem("token")));
+  const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
     const refresh = () => setSignedIn(Boolean(localStorage.getItem("token")));
+    refresh();
     window.addEventListener("authChanged", refresh);
     window.addEventListener("storage", refresh);
     return () => {

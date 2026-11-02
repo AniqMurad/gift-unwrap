@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback, useMemo, startTransition } from 'react';
 import { getCartItemLinePrice } from '../utils/cartPricing';
 
 const CartContext = createContext();
@@ -11,16 +11,23 @@ const matchesCartLine = (item, productId, productCategory, cartKey) => {
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => {
-    // Load cart items from local storage on initial load
-    const savedCart = localStorage.getItem('cartItems');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-
+  // The server and hydration start with an empty public cart. Restore private
+  // browser storage after hydration, before enabling persistence.
+  const [cartItems, setCartItems] = useState([]);
+  const [cartRestored, setCartRestored] = useState(false);
+  const restoreCart = useCallback(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('cartItems') || '[]');
+      startTransition(() => {
+        if (Array.isArray(saved)) setCartItems(saved);
+        setCartRestored(true);
+      });
+    } catch { setCartRestored(true); /* Invalid or unavailable storage must not break the storefront. */ }
+  }, []);
   useEffect(() => {
-    // Save cart items to local storage whenever they change
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (!cartRestored) return;
+    try { localStorage.setItem('cartItems', JSON.stringify(cartItems)); } catch { /* In-memory cart remains usable. */ }
+  }, [cartItems, cartRestored]);
 
   const addToCart = useCallback((productToAdd) => {
     setCartItems((prevItems) => {
@@ -104,6 +111,7 @@ export const CartProvider = ({ children }) => {
 
   const value = useMemo(() => ({
     cartItems,
+    restoreCart,
     addToCart,
     upsertCartItem,
     removeFromCart,
@@ -111,7 +119,7 @@ export const CartProvider = ({ children }) => {
     clearCart,
     getTotalCartAmount,
     getTotalCartItems
-  }), [cartItems, addToCart, upsertCartItem, removeFromCart, updateQuantity, clearCart, getTotalCartAmount, getTotalCartItems]);
+  }), [cartItems, restoreCart, addToCart, upsertCartItem, removeFromCart, updateQuantity, clearCart, getTotalCartAmount, getTotalCartItems]);
 
   return (
     <CartContext.Provider value={value}>

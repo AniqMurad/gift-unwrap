@@ -1,3 +1,4 @@
+import { serializeSnapshot } from "../lib/serverPages";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation, useParams } from "react-router-dom";
@@ -16,6 +17,7 @@ import FAQSection from "./ui/faq1";
 import CartoonButton from "./ui/cartoon-button";
 import NotificationBar from "./NotificationBar";
 import RequestQuoteModal from "./RequestQuoteModal";
+import { useStorefrontData } from "../context/StorefrontData";
 import { useCart } from "../context/CartContext";
 import { fetchGreetingCards, fetchProductCollections } from "../config/api";
 import { findProductBySlug } from "../utils/slugify";
@@ -151,9 +153,11 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const addingRef = useRef(false);
 
-  const [product, setProduct] = useState(null);
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const [status, setStatus] = useState("loading");
+  const snapshot = useStorefrontData();
+  const initialProduct = snapshot?.product || null;
+  const [product, setProduct] = useState(initialProduct);
+  const [relatedProducts, setRelatedProducts] = useState(snapshot?.relatedProducts || []);
+  const [status, setStatus] = useState(initialProduct ? "ready" : "loading");
   const [requestError, setRequestError] = useState("");
   const [selectedImage, setSelectedImage] = useState("");
   const [relatedStart, setRelatedStart] = useState(0);
@@ -180,6 +184,7 @@ const ProductDetail = () => {
   const categoryRoute = categoryRoutes[effectiveCategory] || "/#featured-gifts";
 
   useEffect(() => {
+    if (snapshot?.product) return;
     let active = true;
     const stateProduct = location.state?.productData;
     const candidateCategories = getProductCategoryCandidates(category);
@@ -256,7 +261,7 @@ const ProductDetail = () => {
     return () => {
       active = false;
     };
-  }, [category, productSlug, location.state?.productData]);
+  }, [category, productSlug, location.state?.productData, snapshot]);
 
   useEffect(() => {
     let active = true;
@@ -541,7 +546,7 @@ const ProductDetail = () => {
         <meta property="og:url" content={canonicalUrl} />
         <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json">
-          {JSON.stringify({
+          {serializeSnapshot({
             "@context": "https://schema.org",
             "@type": "Product",
             name: product.name,
