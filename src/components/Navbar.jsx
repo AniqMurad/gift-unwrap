@@ -105,9 +105,9 @@ const Navbar = ({
   const handleLogin = () => navigate("/login");
   const handleRegister = () => navigate("/signup");
   const handleMyProfile = () =>
-    navigate("/myAccount", { state: { activeTab: "account" } });
+    navigate("/myaccount", { state: { activeTab: "account" } });
   const handleMyOrders = () =>
-    navigate("/myAccount", { state: { activeTab: "orders" } });
+    navigate("/myaccount", { state: { activeTab: "orders" } });
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -121,7 +121,7 @@ const Navbar = ({
 
   const handleViewCartPage = () => {
     setIsCartOpen(false);
-    navigate("/ShoppingCart"); // Ensure this matches your route for the shopping cart page
+    navigate("/shoppingcart");
   };
   const handleContinueShoppingInDropdown = () => {
     // Renamed to avoid conflict if you have another handleContinueShopping

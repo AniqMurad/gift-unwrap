@@ -48,7 +48,7 @@ export const buildWebsiteStructuredData = () => ({
   publisher: { "@id": STORE_ID },
   potentialAction: {
     "@type": "SearchAction",
-    target: `${SITE_ORIGIN}/SearchOutput?query={search_term_string}`,
+    target: `${SITE_ORIGIN}/searchoutput?query={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
 });

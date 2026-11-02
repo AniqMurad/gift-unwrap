@@ -631,7 +631,7 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
         upsertCartItem(giftBoxBundle);
         localStorage.removeItem(GIFT_BOX_DRAFT_KEY);
         setIsDrawerOpen(false);
-        navigate("/ShoppingCart");
+        navigate("/shoppingcart");
     };
 
     const handleNextStep = () => {

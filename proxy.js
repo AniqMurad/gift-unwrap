@@ -5,6 +5,7 @@ import {
   PRODUCT_CATALOGUE_URL,
 } from "./src/lib/catalogRouting.js";
 import { resolveSeoRequest } from "./src/lib/seoRequestRouter.js";
+import { isNoindexRoute } from "./src/lib/indexingPolicy.js";
 
 const errorPage = (status, heading, message) => `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -40,7 +41,9 @@ export default async function proxy(request) {
   });
 
   if (decision.type === "render") {
-    return rewrite(new URL("/index.html", request.url));
+    return rewrite(new URL("/index.html", request.url), isNoindexRoute(url.pathname) ? {
+      headers: { "X-Robots-Tag": "noindex, follow" },
+    } : undefined);
   }
   if (decision.type === "redirect") {
     return new Response(null, {

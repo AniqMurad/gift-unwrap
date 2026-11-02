@@ -92,10 +92,10 @@ function App({ serverUrl, initialData = null, helmetContext, analytics = null })
               <Route path="/coming-soon" element={<StorefrontPage kind="coming"><ComingSoon /></StorefrontPage>} />
               <Route path="/giftforher" element={<Giftsforher />} />
               <Route path="/giftforhim" element={<Giftsforhim />} />
-              <Route path="/forgetPassword" element={<StorefrontPage kind="auth"><ForgetPassword /></StorefrontPage>} />
+              <Route path="/forgetpassword" element={<StorefrontPage kind="auth"><ForgetPassword /></StorefrontPage>} />
               <Route path="/login" element={<StorefrontPage kind="auth"><Login /></StorefrontPage>} />
               <Route path="/signup" element={<StorefrontPage kind="auth"><Signup /></StorefrontPage>} />
-              <Route path="/myAccount" element={<StorefrontPage kind="account"><MyAccount /></StorefrontPage>} />
+              <Route path="/myaccount" element={<StorefrontPage kind="account"><MyAccount /></StorefrontPage>} />
               <Route path="/product/:category/:productSlug" element={<ProductDetail />} />
               <Route path="/giftforcompanies" element={<StorefrontPage kind="catalog"><Forcompanies /></StorefrontPage>} />
               <Route path="/giftforwedding" element={<StorefrontPage kind="catalog"><Giftsforwedding /></StorefrontPage>} />
@@ -104,9 +104,9 @@ function App({ serverUrl, initialData = null, helmetContext, analytics = null })
               <Route path="/greeting-cards" element={<GreetingCards />} />
               <Route path="/floral-arrangements" element={<FloralArrangements />} />
               <Route path="/sweet-treats" element={<SweetTreats />} />
-              <Route path="/Checkout" element={<StorefrontPage kind="checkout"><Checkout /></StorefrontPage>} />
-              <Route path="/ShoppingCart" element={<StorefrontPage kind="cart"><ShoppingCart /></StorefrontPage>} />
-              <Route path="/SearchOutput" element={<StorefrontPage kind="search"><SearchOutput /></StorefrontPage>} />
+              <Route path="/checkout" element={<StorefrontPage kind="checkout"><Checkout /></StorefrontPage>} />
+              <Route path="/shoppingcart" element={<StorefrontPage kind="cart"><ShoppingCart /></StorefrontPage>} />
+              <Route path="/searchoutput" element={<StorefrontPage kind="search"><SearchOutput /></StorefrontPage>} />
               <Route path="/order-confirmation" element={<StorefrontPage kind="success"><SuccessScreen/></StorefrontPage>}></Route>
               <Route path="/shipping-policy" element={<StorefrontPage kind="policy"><ShippingPolicy /></StorefrontPage>} />
               <Route path="/privacy-policy" element={<StorefrontPage kind="policy"><PrivacyPolicy /></StorefrontPage>} />

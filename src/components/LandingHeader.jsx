@@ -325,7 +325,7 @@ const LandingHeader = ({ variant = "default" }) => {
     const query = searchTerm.trim();
     if (!query) return;
     setIsMobileMenuOpen(false);
-    navigate(`/SearchOutput?query=${encodeURIComponent(query)}`);
+    navigate(`/searchoutput?query=${encodeURIComponent(query)}`);
   };
 
   const shopSubmenu = recipientMenus[shopMenuLevel];
@@ -522,7 +522,7 @@ const LandingHeader = ({ variant = "default" }) => {
                   className="gu-cart-checkout"
                   color="#ff2b3a"
                   label="View Cart & Checkout"
-                  onClick={() => { setIsCartOpen(false); navigate("/ShoppingCart"); }}
+                  onClick={() => { setIsCartOpen(false); navigate("/shoppingcart"); }}
                 />
                 <button className="gu-cart-continue" type="button" onClick={closeCart}>Continue Shopping</button>
               </div>
