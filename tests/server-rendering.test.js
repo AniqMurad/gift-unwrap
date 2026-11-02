@@ -4,10 +4,13 @@ import { createHandler } from "../server-dist/handler.js";
 import { spawn } from "node:child_process";
 import process from "node:process";
 
-const product = { id: 901, name: "Anniversary Rose Promise", price: 1990, inStock: true, images: ["https://example.com/rose.jpg"], shortDescription: "Fresh roses chosen with care.", sizeOptions: [{ name: "Small", price: 1990 }, { name: "Large", price: 2990 }] };
+const product = { id: 901, name: "Anniversary Rose Promise", price: 1490, inStock: true, images: ["https://example.com/rose.jpg"], shortDescription: "Fresh roses chosen with care.", sizeOptions: [{ name: "Small", price: 1990 }, { name: "Large", price: 2990 }], showSizeOptions: true, reviews: [{ rating: 5 }] };
 const collections = [{ category: "FlowersChocolates", products: [product] }, { category: "giftsForHim", products: [{ ...product, id: 902, name: "Thoughtful Gift Box" }] }];
 const blogs = [{ id: 903, title: "A Thoughtful Gift Guide", subHeading: "Make their day personal", content: "## Choosing a gift\nChoose something they love.", mainImage: "https://example.com/guide.jpg" }];
 const template = '<!doctype html><html><head><title>Generic title</title><link rel="stylesheet" href="/assets/app.css"></head><body><div id="root"></div><script type="module" src="/assets/app.js"></script></body></html>';
+
+const structuredData = (html) => [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
+  .map((match) => JSON.parse(match[1]));
 
 const run = async (path, overrides = {}) => {
   const headers = {};
@@ -39,6 +42,16 @@ test("product HTML contains visible catalogue content and matching canonical met
   assert.doesNotMatch(root, /Loading product details/);
   assert.equal((page.html.match(/<title/g) || []).length, 1);
   assert.equal(page.headers["Cache-Control"], "no-store");
+
+  const [schema] = structuredData(page.html);
+  assert.equal(schema["@type"], "Product");
+  assert.equal(schema["@id"], "https://www.giftunwrap.com/product/floralArrangements/anniversary-rose-promise#product");
+  assert.deepEqual(schema.image, ["https://example.com/rose.jpg"]);
+  assert.equal(schema.offers.price, 1990);
+  assert.equal(schema.offers.priceCurrency, "PKR");
+  assert.equal(schema.offers.availability, "https://schema.org/InStock");
+  assert.equal(schema.offers.url, "https://www.giftunwrap.com/product/floralArrangements/anniversary-rose-promise");
+  assert.equal("aggregateRating" in schema, false);
 });
 
 test("homepage, collection and article initial HTML include their real content and navigation", async () => {
@@ -58,6 +71,31 @@ test("homepage, collection and article initial HTML include their real content a
   assert.match(collection.html, /href="\/product\/floralArrangements\/anniversary-rose-promise"/);
   assert.match(article.html, /Choosing a gift/);
   assert.match(article.html, /Choose something they love/);
+
+  const homeSchemas = structuredData(home.html);
+  assert.deepEqual(homeSchemas.map((schema) => schema["@type"]), ["OnlineStore", "WebSite"]);
+  const store = homeSchemas[0];
+  assert.equal(store.address.streetAddress, "Shop No. 226 PIB Colony near Jail Chowrangi");
+  assert.equal(store.address.addressLocality, "Karachi");
+  assert.deepEqual(store.sameAs, ["https://www.instagram.com/gift_unwrap/"]);
+  for (const unsupported of ["aggregateRating", "priceRange", "openingHours", "makesOffer"]) {
+    assert.equal(unsupported in store, false);
+  }
+  assert.equal("contactOption" in store.contactPoint, false);
+  assert.doesNotMatch(JSON.stringify(store), /24\/7|14-day|TollFree|nationwide shipping/i);
+  assert.notEqual(store.logo, "https://www.giftunwrap.com/logo.png");
+  assert.notEqual(store.image, "https://www.giftunwrap.com/hero-banner.jpg");
+
+  const collectionSchemas = structuredData(collection.html);
+  assert.equal(collectionSchemas.length, 1);
+  assert.equal(collectionSchemas[0]["@type"], "CollectionPage");
+  assert.equal(collectionSchemas[0].url, "https://www.giftunwrap.com/floral-arrangements");
+
+  const articleSchemas = structuredData(article.html);
+  assert.equal(articleSchemas.length, 1);
+  assert.equal(articleSchemas[0]["@type"], "BlogPosting");
+  assert.equal(articleSchemas[0].headline, "A Thoughtful Gift Guide");
+  assert.equal(articleSchemas[0].url, "https://www.giftunwrap.com/blog/a-thoughtful-gift-guide");
 });
 
 test("server snapshots are request isolated and script-safe", async () => {

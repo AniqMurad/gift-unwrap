@@ -15,6 +15,8 @@ import TableOfContents from '../components/TableOfContents';
 import { generateSlug, findBlogBySlug } from '../utils/slugify';
 import { blogArticleSeoMetadata } from '../config/seoMetadata';
 import { SITE_ORIGIN } from '../lib/catalogRouting';
+import { serializeSnapshot } from '../lib/serverPages';
+import { buildArticleStructuredData } from '../lib/structuredData';
 
 const BlogOpen = () => {
   const { slug } = useParams();
@@ -240,6 +242,14 @@ const BlogOpen = () => {
         <meta name="twitter:title" content={generateMetaTitle(blog)} />
         <meta name="twitter:description" content={generateMetaDescription(blog)} />
         <meta name="twitter:image" content={blog.mainImage || ''} />
+        <script type="application/ld+json">
+          {serializeSnapshot(buildArticleStructuredData({
+            blog,
+            title: generateMetaTitle(blog),
+            description: generateMetaDescription(blog),
+            url: canonicalUrl,
+          }))}
+        </script>
       </Helmet>
       <Navbar showSearchInput={false} bgColor="#FBF4E8" />
       <SearchPageNavbar title="Blog" titleHome="Home Page" backgroundColor='#FBF4E8' />

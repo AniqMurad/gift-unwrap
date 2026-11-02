@@ -37,6 +37,7 @@ import packagingKeepsake from "../assets/redesign/product/packaging-keepsake.svg
 import packagingWrapped from "../assets/redesign/product/packaging-wrapped.svg";
 import packagingReady from "../assets/redesign/product/packaging-ready.svg";
 import fallbackImage from "../assets/error.png";
+import { buildProductStructuredData } from "../lib/structuredData";
 
 const packagingIcons = [packagingKeepsake, packagingWrapped, packagingReady];
 
@@ -347,11 +348,6 @@ const ProductDetail = () => {
   );
   const stockLimit = getStockLimit(product);
   const unavailable = isUnavailableProduct(product);
-  const reviewCount = product?.reviews?.length || 0;
-  const averageRating = reviewCount
-    ? product.reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / reviewCount
-    : 0;
-
   const labels = useMemo(
     () =>
       [...new Set([product?.subcategory, ...getKeyGiftValues(product?.keyGift), categoryName].filter(Boolean))].slice(0, 3),
@@ -541,36 +537,19 @@ const ProductDetail = () => {
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
-        <meta property="og:image" content={images[0] || ""} />
+        <meta property="og:image" content={mainImage} />
         <meta property="og:type" content="product" />
         <meta property="og:url" content={canonicalUrl} />
         <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json">
-          {serializeSnapshot({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: product.name,
-            image: images,
-            description: product.shortDescription || product.longDescription || product.name,
-            sku: String(product.id || product._id || productSlug),
-            brand: { "@type": "Brand", name: "Gift Unwrap" },
-            offers: {
-              "@type": "Offer",
-              priceCurrency: "PKR",
-              price: Number(product.price) || 0,
-              availability: unavailable
-                ? "https://schema.org/OutOfStock"
-                : "https://schema.org/InStock",
-              url: canonicalUrl,
-            },
-            ...(reviewCount > 0 && {
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: averageRating.toFixed(1),
-                reviewCount,
-              },
-            }),
-          })}
+          {serializeSnapshot(buildProductStructuredData({
+            product,
+            canonicalUrl,
+            images: [mainImage, ...images.filter((image) => image !== mainImage)],
+            price: selectedPrice,
+            unavailable,
+            productSlug,
+          }))}
         </script>
       </Helmet>
 

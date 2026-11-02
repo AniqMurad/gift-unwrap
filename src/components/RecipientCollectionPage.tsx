@@ -23,6 +23,9 @@ import ProductScrollReveal from "./ui/product-scroll-reveal";
 import GreetingCardCollectionItem from "./GreetingCardCollectionItem";
 import CollectionFilterBar from "./CollectionFilterBar";
 import { getKeyGiftValues, hasKeyGift } from "../utils/keyGifts";
+import { serializeSnapshot } from "../lib/serverPages";
+import { SITE_ORIGIN } from "../lib/catalogRouting";
+import { buildCollectionStructuredData } from "../lib/structuredData";
 
 interface StoreProduct {
   id: number | string;
@@ -361,8 +364,15 @@ export default function RecipientCollectionPage({
         <meta name="description" content={config.seoDescription} />
         <link
           rel="canonical"
-          href={`https://www.giftunwrap.com${config.route}`}
+          href={`${SITE_ORIGIN}${config.route}`}
         />
+        <script type="application/ld+json">
+          {serializeSnapshot(buildCollectionStructuredData({
+            name: config.heading,
+            description: config.seoDescription,
+            url: `${SITE_ORIGIN}${config.route}`,
+          }))}
+        </script>
       </Helmet>
 
       <section className="gu-collection-intro" aria-labelledby="collection-title">
