@@ -17,6 +17,12 @@ import {
 } from '../components/LandingSections';
 import LandingCta from '../components/LandingCta';
 import LandingFooter from '../components/LandingFooter';
+import navLogo from '../assets/redesign/nav-logo.png';
+import heroGiftBox from '../assets/redesign/hero-gift-box.png';
+import {
+  buildStoreStructuredData,
+  buildWebsiteStructuredData,
+} from '../lib/structuredData';
 
 const Home = () => {
   return (
@@ -28,98 +34,10 @@ const Home = () => {
         <link rel="canonical" href="https://www.giftunwrap.com/" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         <script type="application/ld+json">
-          {serializeSnapshot({
-            "@context": "https://schema.org",
-            "@type": "OnlineStore",
-            "@id": "https://www.giftunwrap.com/#store",
-            "name": "Gift Unwrap",
-            "url": "https://www.giftunwrap.com/",
-            "logo": "https://www.giftunwrap.com/logo.png",
-            "image": "https://www.giftunwrap.com/hero-banner.jpg",
-            "description": "Premium gift store in Pakistan offering thoughtful gifts for birthdays, weddings, Mother's Day, Women's Day, corporate events, and religious occasions. 24/7 customer support, 14-day returns, nationwide shipping.",
-            "address": {
-              "@type": "PostalAddress",
-              "addressCountry": "PK"
-            },
-            "priceRange": "PKR 2000 - PKR 15000",
-            "telephone": "+92 326 8927354",
-            "email": "giftunwrap@gmail.com",
-            "openingHours": "Mo-Su 00:00-23:59",
-            "sameAs": [
-              "https://www.facebook.com/giftunwrap",
-              "https://www.instagram.com/giftunwrap"
-            ],
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "contactType": "customer service",
-              "availableLanguage": "English",
-              "contactOption": "TollFree"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.9",
-              "bestRating": "5",
-              "worstRating": "1",
-              "ratingCount": "87",
-              "reviewCount": "87"
-            },
-            "makesOffer": [
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Product",
-                  "name": "Gifts for Him",
-                  "url": "https://www.giftunwrap.com/giftforhim"
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Product",
-                  "name": "Gifts for Her",
-                  "url": "https://www.giftunwrap.com/giftforher"
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Product",
-                  "name": "Birthday Gifts",
-                  "url": "https://www.giftunwrap.com/Giftforbirthday"
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Product",
-                  "name": "Wedding Gifts",
-                  "url": "https://www.giftunwrap.com/giftforwedding"
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Product",
-                  "name": "Corporate Gifts",
-                  "url": "https://www.giftunwrap.com/giftforcompanies"
-                }
-              }
-            ]
-          })}
+          {serializeSnapshot(buildStoreStructuredData({ logo: navLogo, image: heroGiftBox }))}
         </script>
         <script type="application/ld+json">
-          {serializeSnapshot({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "@id": "https://www.giftunwrap.com/#website",
-            "url": "https://www.giftunwrap.com/",
-            "name": "Gift Unwrap",
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://www.giftunwrap.com/SearchOutput?query={search_term_string}",
-              "query-input": "required name=search_term_string"
-            }
-          })}
+          {serializeSnapshot(buildWebsiteStructuredData())}
         </script>
       </Helmet>
       <HelloBar />
