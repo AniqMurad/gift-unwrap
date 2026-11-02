@@ -35,15 +35,6 @@ const hoverSubOptions = {
             ],
             url: "/Giftforcompanies"
         },
-        /* {
-            title: "FOR EVERYONE",
-            items: [
-                { name: "Couple", url: "/Giftforeveryone?category=couple" },
-                { name: "Teacher", url: "/Giftforeveryone?category=teacher" },
-                { name: "Relative", url: "/Giftforeveryone?category=relative" }
-            ],
-            url: "/Giftforeveryone"
-        } */
     ],
     occasions: [
         {
@@ -74,11 +65,11 @@ const hoverSubOptions = {
             url: "/Giftforwedding"
         },
         {
-            title: "THANKYOU",
+            title: "THANK YOU CARDS",
             items: [
-                { name: "For Everyone", url: "/Giftforeveryone" },
+                { name: "Browse Thank You Cards", url: "/greeting-cards?occasion=thankyou" },
             ],
-            url: "/Giftforeveryone"
+            url: "/greeting-cards?occasion=thankyou"
         },
         {
             title: "BUSINESS GIFTS",
