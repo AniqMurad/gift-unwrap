@@ -3,6 +3,7 @@ import {
   resolveProductRoute,
   RETIRED_PATHS,
 } from "./catalogRouting.js";
+import { canonicalNoindexPath } from "./indexingPolicy.js";
 
 export const VALID_APP_PATHS = new Set([
   "/",
@@ -104,6 +105,10 @@ export async function resolveSeoRequest(requestUrl, loaders) {
 
   if (lowerPath.startsWith("/blog/")) return notFound("blog article");
   if (VALID_APP_PATHS.has(lowerPath)) {
+    const utilityCanonicalPath = canonicalNoindexPath(normalizedPath);
+    if (utilityCanonicalPath && (normalizedPath !== utilityCanonicalPath || pathname !== normalizedPath)) {
+      return { type: "redirect", status: 301, location: `${utilityCanonicalPath}${url.search}` };
+    }
     if (pathname !== normalizedPath) {
       return { type: "redirect", status: 301, location: `${normalizedPath}${url.search}` };
     }

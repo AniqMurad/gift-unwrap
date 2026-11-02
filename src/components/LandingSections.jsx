@@ -185,7 +185,7 @@ export const GiftFinder = () => {
     if (budget.maximum < budgetValues.at(-1)) {
       params.set("maxPrice", String(budget.maximum));
     }
-    navigate(`/SearchOutput?${params.toString()}`);
+    navigate(`/searchoutput?${params.toString()}`);
   };
 
   return (

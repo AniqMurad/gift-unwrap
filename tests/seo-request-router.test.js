@@ -52,6 +52,21 @@ test("valid collection and blog routes render", async () => {
   assert.equal((await resolveSeoRequest(new URL("https://www.giftunwrap.com/blog/a-useful-gift-guide"), loaders)).status, 200);
 });
 
+test("utility routes use one lowercase URL and preserve query parameters", async () => {
+  const routes = [
+    ["/Checkout?step=payment", "/checkout?step=payment"],
+    ["/ShoppingCart", "/shoppingcart"],
+    ["/myAccount?tab=orders", "/myaccount?tab=orders"],
+    ["/SearchOutput?query=flowers", "/searchoutput?query=flowers"],
+    ["/forgetPassword/", "/forgetpassword"],
+  ];
+
+  for (const [path, location] of routes) {
+    const result = await resolveSeoRequest(new URL(`https://www.giftunwrap.com${path}`), loaders);
+    assert.deepEqual(result, { type: "redirect", status: 301, location });
+  }
+});
+
 test("catalogue failures are temporary errors, not false product or article deletions", async () => {
   const failedLoaders = {
     loadProducts: async () => { throw new Error("backend unavailable"); },

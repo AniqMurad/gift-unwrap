@@ -4,11 +4,8 @@
 User-agent: *
 Allow: /
 
-# Disallow admin and account pages
-Disallow: /myAccount
-Disallow: /ShoppingCart
-Disallow: /Checkout
-Disallow: /forgetPassword
+# Checkout, cart, account, authentication, and search routes remain crawlable
+# so crawlers can process their case-normalized HTTP X-Robots-Tag: noindex.
 
 # Sitemap location
 Sitemap: https://www.giftunwrap.com/sitemap.xml

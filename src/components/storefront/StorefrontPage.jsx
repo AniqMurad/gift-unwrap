@@ -39,14 +39,14 @@ export function StorefrontHeader({ showUtilities = true }) {
       {utilitiesVisible && <div className="gu-migration-utilities">
         <form role="search" onSubmit={(event) => {
           event.preventDefault();
-          if (query.trim()) navigate(`/SearchOutput?query=${encodeURIComponent(query.trim())}`);
+          if (query.trim()) navigate(`/searchoutput?query=${encodeURIComponent(query.trim())}`);
         }}>
           <input aria-label="Search gifts" placeholder="Search gifts" value={query} onChange={(event) => setQuery(event.target.value)} />
           <button type="submit" aria-label="Search"><Search size={18} /></button>
         </form>
         <nav aria-label="Customer account">
-          <Link to={signedIn ? "/myAccount" : "/login"}>{signedIn ? "My account" : "Sign in"}</Link>
-          <Link to={signedIn ? "/myAccount" : "/login"} state={{ activeTab: "orders" }}>Orders</Link>
+          <Link to={signedIn ? "/myaccount" : "/login"}>{signedIn ? "My account" : "Sign in"}</Link>
+          <Link to={signedIn ? "/myaccount" : "/login"} state={{ activeTab: "orders" }}>Orders</Link>
           {signedIn ? <button type="button" onClick={logout}>Sign out</button> : <Link to="/signup">Register</Link>}
         </nav>
       </div>}
