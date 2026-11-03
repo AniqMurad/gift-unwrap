@@ -56,6 +56,16 @@ const productSearchText = (product = {}) => [
   product.metaDescription,
 ].filter(Boolean).join(" ");
 
+// Use only catalogue taxonomy fields when deciding whether a legacy mixed
+// product should also appear in Sweet Treats. Marketing copy commonly uses
+// words such as "sweet" for non-edible gifts and must not change collection
+// membership.
+const productTaxonomyText = (product = {}) => [
+  product.name,
+  ...(Array.isArray(product.keyGift) ? product.keyGift : [product.keyGift]),
+  product.subcategory,
+].filter(Boolean).join(" ");
+
 const findCategory = (collections, category) => (Array.isArray(collections) ? collections : [])
   .find((entry) => entry?.category === category);
 
@@ -115,7 +125,7 @@ export const normalizeProductCollections = (collections) => {
     const text = productSearchText(product);
     return FLORAL_PRODUCT_TERMS.test(text) || !SWEET_PRODUCT_TERMS.test(text);
   });
-  const sweetFromMixed = mixedProducts.filter((product) => SWEET_PRODUCT_TERMS.test(productSearchText(product)));
+  const sweetFromMixed = mixedProducts.filter((product) => SWEET_PRODUCT_TERMS.test(productTaxonomyText(product)));
   const normalized = current.filter((entry) => !["floralArrangements", "sweetTreats"].includes(entry.category));
 
   normalized.push({
