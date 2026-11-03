@@ -13,6 +13,12 @@ const catalogue = [
       { id: "rose", name: "Anniversary Rose Promise", keyGift: "bouquets" },
       { id: "cake", name: "Chocolate Kisses Forever Box", keyGift: "cakebouquets" },
       { id: "combo", name: "Sweet Blooms Celebration", keyGift: "cakebouquets" },
+      {
+        id: "sunflower",
+        name: "Sunflower Duo",
+        keyGift: "bouquets",
+        longDescription: "This cheerful bouquet makes a sweet everyday surprise.",
+      },
     ],
   },
   {
@@ -35,6 +41,8 @@ test("catalogue migration preserves products while assigning one preferred URL",
   assert.ok(floral.products.some((product) => product.id === "eid"));
   assert.ok(sweet.products.some((product) => product.id === "cake"));
   assert.ok(sweet.products.some((product) => product.id === "combo"));
+  assert.ok(floral.products.some((product) => product.id === "sunflower"));
+  assert.ok(!sweet.products.some((product) => product.id === "sunflower"));
   assert.equal(
     getCanonicalProductPath("FlowersChocolates", catalogue[0].products[0]),
     "/product/floralArrangements/anniversary-rose-promise",
