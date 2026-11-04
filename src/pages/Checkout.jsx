@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Upload, X } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { FREE_SHIPPING_THRESHOLD, getCartItemCardPrice, getCartItemLinePrice } from "../utils/cartPricing";
 import { getStandaloneCardMessageSummary } from "../utils/cardPersonalization";
@@ -113,10 +114,8 @@ function CountryCombobox({ disabled, error, onChange, value }) {
 const Checkout = () => {
   const { cartItems, getTotalCartAmount, clearCart } = useCart();
   const navigate = useNavigate();
-  const [cardName, setCardName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [saveCardDetails, setSaveCardDetails] = useState(false);
+  const [paymentProof, setPaymentProof] = useState(null);
+  const [paymentProofPreview, setPaymentProofPreview] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [notification, setNotification] = useState({ show: false, type: "success", message: "" });
@@ -139,6 +138,10 @@ const Checkout = () => {
     return () => clearTimeout(timer);
   }, [notification.show]);
 
+  useEffect(() => () => {
+    if (paymentProofPreview) URL.revokeObjectURL(paymentProofPreview);
+  }, [paymentProofPreview]);
+
   const showNotification = (type, message) => setNotification({ show: true, type, message });
 
   const handleChange = (event) => {
@@ -151,6 +154,31 @@ const Checkout = () => {
   const handleCountryChange = (country) => {
     setFormData((previous) => ({ ...previous, country }));
     if (errors.country) setErrors((previous) => ({ ...previous, country: null }));
+  };
+
+  const handlePaymentProofChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setErrors((previous) => ({ ...previous, paymentProof: "Upload a JPG, PNG, or WEBP image." }));
+      event.target.value = "";
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      setErrors((previous) => ({ ...previous, paymentProof: "The payment screenshot must be 8 MB or smaller." }));
+      event.target.value = "";
+      return;
+    }
+    setPaymentProof(file);
+    setPaymentProofPreview(URL.createObjectURL(file));
+    setErrors((previous) => ({ ...previous, paymentProof: null }));
+    event.target.value = "";
+  };
+
+  const clearPaymentProof = () => {
+    setPaymentProof(null);
+    setPaymentProofPreview("");
+    setErrors((previous) => ({ ...previous, paymentProof: null }));
   };
 
   const subtotal = getTotalCartAmount();
@@ -173,9 +201,7 @@ const Checkout = () => {
     if (!formData.city) newErrors.city = "City is required.";
     if (!formData.state) newErrors.state = "State is required.";
     if (!formData.postalCode || Number.isNaN(Number(formData.postalCode))) newErrors.postalCode = "Postal code must be a number.";
-    if (!cardName) newErrors.cardName = "Account name is required.";
-    if (!cardNumber) newErrors.cardNumber = "Account number is required.";
-    if (!expiry) newErrors.expiry = "Transfer date is required.";
+    if (!paymentProof) newErrors.paymentProof = "Upload your payment transfer screenshot.";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -198,8 +224,7 @@ const Checkout = () => {
     const orderData = {
       userId: localStorage.getItem("userId"),
       shippingInfo: formData,
-      paymentMethod: "creditCard",
-      cardDetails: { cardName, cardNumber, expiry, cvv: "bank-transfer", saveCardDetails },
+      paymentMethod: "bankTransfer",
       orderItems: giftBoxBundle
         ? giftBoxBundle.giftBox.items
         : cartItems.map((item) => ({
@@ -222,10 +247,12 @@ const Checkout = () => {
     };
 
     try {
+      const requestBody = new FormData();
+      requestBody.append("orderData", JSON.stringify(orderData));
+      requestBody.append("paymentProof", paymentProof);
       const response = await fetch("https://giftunwrapbackend.vercel.app/api/orders/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
+        body: requestBody,
       });
       const data = await response.json();
       if (!response.ok) {
@@ -323,17 +350,36 @@ const Checkout = () => {
               <div className="gu-checkout-payment-options">
                 <div className="gu-checkout-transfer is-selected">
                   <label className="gu-checkout-radio-heading">
-                    <input type="radio" name="paymentMethod" value="creditCard" checked readOnly disabled={isLoading} />
+                    <input type="radio" name="paymentMethod" value="bankTransfer" checked readOnly disabled={isLoading} />
                     <span>Online Money Transfer</span>
                   </label>
                   <p>Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared in our account.</p>
                   <p className="gu-checkout-bank-details"><strong>Account Name:</strong> Hamid Ali<br /><strong>Account Number:</strong> 06027901681003</p>
-                  <div className="gu-checkout-transfer-fields">
-                    <label><span className="sr-only">Your Account Name</span><input value={cardName} onChange={(event) => { setCardName(event.target.value); setErrors((previous) => ({ ...previous, cardName: null })); }} placeholder="Your Account Name*" aria-invalid={Boolean(errors.cardName)} disabled={isLoading} />{errors.cardName && <small>{errors.cardName}</small>}</label>
-                    <label><span className="sr-only">Your Account Number</span><input value={cardNumber} onChange={(event) => { setCardNumber(event.target.value); setErrors((previous) => ({ ...previous, cardNumber: null })); }} placeholder="Your Account Number*" aria-invalid={Boolean(errors.cardNumber)} disabled={isLoading} />{errors.cardNumber && <small>{errors.cardNumber}</small>}</label>
-                    <label><span className="sr-only">Transfer date</span><input className="gu-checkout-date-input" type="date" value={expiry} onClick={(event) => event.currentTarget.showPicker?.()} onChange={(event) => { setExpiry(event.target.value); setErrors((previous) => ({ ...previous, expiry: null })); }} aria-label="Transfer date" aria-invalid={Boolean(errors.expiry)} required disabled={isLoading} />{errors.expiry && <small>{errors.expiry}</small>}</label>
+                  <div className="gu-checkout-payment-proof">
+                    <div className="gu-checkout-payment-proof-heading">
+                      <strong>Upload payment screenshot</strong>
+                      <span>JPG, PNG, or WEBP · maximum 8 MB</span>
+                    </div>
+                    {paymentProofPreview ? (
+                      <div className="gu-checkout-payment-proof-preview">
+                        <img src={paymentProofPreview} alt="Selected payment transfer screenshot" />
+                        <div>
+                          <strong>{paymentProof.name}</strong>
+                          <span>{(paymentProof.size / (1024 * 1024)).toFixed(2)} MB</span>
+                          <label className="gu-checkout-payment-proof-replace" htmlFor="payment-proof">Replace image</label>
+                        </div>
+                        <button type="button" onClick={clearPaymentProof} aria-label="Remove payment screenshot" disabled={isLoading}><X size={18} /></button>
+                      </div>
+                    ) : (
+                      <label className={`gu-checkout-payment-proof-dropzone${errors.paymentProof ? " has-error" : ""}`} htmlFor="payment-proof">
+                        <Upload size={24} aria-hidden="true" />
+                        <strong>Choose payment screenshot</strong>
+                        <span>Upload the receipt after transferring the amount</span>
+                      </label>
+                    )}
+                    <input id="payment-proof" className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={handlePaymentProofChange} required={!paymentProof} disabled={isLoading} />
+                    {errors.paymentProof && <small className="gu-checkout-payment-proof-error">{errors.paymentProof}</small>}
                   </div>
-                  <label className="gu-checkout-save-details"><input type="checkbox" checked={saveCardDetails} onChange={(event) => setSaveCardDetails(event.target.checked)} disabled={isLoading} /><span>Save Account Details</span></label>
                 </div>
               </div>
             </section>
