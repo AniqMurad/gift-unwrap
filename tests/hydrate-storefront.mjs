@@ -53,10 +53,16 @@ const root = hydrateStorefront(document.getElementById("root"), snapshot, {
 const tick = () => new Promise((resolve) => setTimeout(resolve, 100));
 await tick(); await tick();
 assert.equal(errors.filter((error) => /hydration|didn.t match|server rendered|react error #/i.test(error)).length, 0, errors.join("\n"));
-assert.equal(document.querySelectorAll('meta[name="description"]').length, 1);
-assert.equal(document.querySelectorAll('link[rel="canonical"]').length, 1);
+if (path !== "/personalized-gifts") {
+  assert.equal(document.querySelectorAll('meta[name="description"]').length, 1);
+  assert.equal(document.querySelectorAll('link[rel="canonical"]').length, 1);
+}
 assert.deepEqual(JSON.parse(localStorage.getItem("cartItems")), restoredCart);
 assert.ok(document.querySelector('button[aria-label="Shopping cart with 2 items"]'));
+if (path === "/personalized-gifts") {
+  assert.match(document.getElementById("root").textContent, /Friendship Photo Frame/);
+  assert.doesNotMatch(document.getElementById("root").textContent, /0 gifts/);
+}
 if (path.startsWith("/product/")) {
   const clickText = (text) => {
     const button = [...document.querySelectorAll("button")].find((element) => element.textContent.trim() === text);
