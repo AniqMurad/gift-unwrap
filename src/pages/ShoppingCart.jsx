@@ -187,6 +187,9 @@ const ShoppingCart = () => {
                           {(item.selectedSize || item.selectedColor) && (
                             <p>{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>
                           )}
+                          {item.personalization?.customerImages?.length > 0 && (
+                            <p>Personalization photos: {item.personalization.customerImages.length}</p>
+                          )}
                           {item.personalization?.card && (
                             <p>
                               Card: {item.personalization.card.name}

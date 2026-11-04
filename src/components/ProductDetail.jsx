@@ -9,6 +9,8 @@ import {
   Minus,
   Plus,
   Truck,
+  Upload,
+  X,
 } from "lucide-react";
 import LandingHeader from "./LandingHeader";
 import LandingFooter from "./LandingFooter";
@@ -19,7 +21,7 @@ import NotificationBar from "./NotificationBar";
 import RequestQuoteModal from "./RequestQuoteModal";
 import { useStorefrontData } from "../context/StorefrontData";
 import { useCart } from "../context/CartContext";
-import { fetchGreetingCards, fetchProductCollections } from "../config/api";
+import { fetchGreetingCards, fetchProductCollections, uploadCustomerPersonalizationImage } from "../config/api";
 import { findProductBySlug } from "../utils/slugify";
 import {
   getCanonicalProductCategory,
@@ -53,6 +55,7 @@ const categoryNames = {
   giftsForBirthday: "Birthday Gifts",
   floralArrangements: "Floral Arrangements",
   sweetTreats: "Sweet Treats",
+  personalized: "Personalized Gifts",
   flowerChocolate: "Gifts",
   FlowersChocolates: "Gifts",
 };
@@ -66,6 +69,7 @@ const categoryRoutes = {
   giftsForBirthday: "/Giftforbirthday",
   floralArrangements: "/floral-arrangements",
   sweetTreats: "/sweet-treats",
+  personalized: "/personalized-gifts",
 };
 
 const formatPrice = (value) =>
@@ -178,6 +182,8 @@ const ProductDetail = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [notification, setNotification] = useState({ show: false, type: "success", message: "" });
+  const [customerPhotoFiles, setCustomerPhotoFiles] = useState([]);
+  const [customerPhotoError, setCustomerPhotoError] = useState("");
 
   const effectiveCategory = getCanonicalProductCategory(product?.category || category, product || {});
   const isCorporateGift = effectiveCategory === "giftsForCompany" || effectiveCategory === "giftsForCompanies";
@@ -206,6 +212,8 @@ const ProductDetail = () => {
     setMessageMode("write");
     setMessageDraft({ from: "", to: "", message: "" });
     setMessageErrors({});
+    setCustomerPhotoFiles([]);
+    setCustomerPhotoError("");
 
     fetchProductCollections()
       .then(({ data }) => {
@@ -339,6 +347,16 @@ const ProductDetail = () => {
     () => product?.showColorOptions ? normalizeColorOptions(product.colorOptions) : [],
     [product],
   );
+  const requiresCustomerImages = Boolean(product?.requiresCustomerImages);
+  const customerImageLimit = Math.min(30, Math.max(1, Number(product?.customerImageLimit) || 1));
+  const customerPhotoPreviews = useMemo(
+    () => customerPhotoFiles.map((file) => ({ file, url: URL.createObjectURL(file) })),
+    [customerPhotoFiles],
+  );
+
+  useEffect(() => () => {
+    customerPhotoPreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
+  }, [customerPhotoPreviews]);
   const selectedColorOption = colorOptions.find((option) => option.name === selectedColor) || null;
   const selectedSizeOption = sizeOptions.find((option) => option.name === selectedSize) || sizeOptions[0] || null;
   const selectedPrice = selectedSizeOption?.price || Number(product?.price) || 0;
@@ -444,7 +462,26 @@ const ProductDetail = () => {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleAddToCart = () => {
+  const handleCustomerPhotos = (event) => {
+    const incoming = Array.from(event.target.files || []);
+    event.target.value = "";
+    const valid = incoming.filter((file) => (
+      ["image/jpeg", "image/png", "image/webp"].includes(file.type)
+      && file.size <= 4 * 1024 * 1024
+    ));
+    const remainingSlots = Math.max(0, customerImageLimit - customerPhotoFiles.length);
+    const accepted = valid.slice(0, remainingSlots);
+    if (valid.length > remainingSlots) {
+      setCustomerPhotoError(`This product accepts up to ${customerImageLimit} photo${customerImageLimit === 1 ? "" : "s"}.`);
+    } else if (valid.length !== incoming.length) {
+      setCustomerPhotoError("Use JPG, PNG, or WEBP photos up to 4 MB each.");
+    } else {
+      setCustomerPhotoError("");
+    }
+    setCustomerPhotoFiles((current) => [...current, ...accepted]);
+  };
+
+  const handleAddToCart = async () => {
     if (addingRef.current) return;
     if (isCorporateGift) {
       setShowQuoteModal(true);
@@ -455,8 +492,30 @@ const ProductDetail = () => {
       return;
     }
     if (!validatePersonalization()) return;
+    if (requiresCustomerImages && customerPhotoFiles.length === 0) {
+      setCustomerPhotoError(`Upload at least one photo for this personalized product (maximum ${customerImageLimit}).`);
+      return;
+    }
 
-    const personalization = cardChoice === "card" && selectedCard
+    let uploadedCustomerImages = [];
+    if (requiresCustomerImages) {
+      addingRef.current = true;
+      setIsAdding(true);
+      setCustomerPhotoError("");
+      try {
+        for (const file of customerPhotoFiles) {
+          const response = await uploadCustomerPersonalizationImage(product.id, file);
+          uploadedCustomerImages.push(response.data);
+        }
+      } catch (error) {
+        addingRef.current = false;
+        setIsAdding(false);
+        setCustomerPhotoError(error.response?.data?.message || "We couldn’t upload your photos. Please try again.");
+        return;
+      }
+    }
+
+    const cardPersonalization = cardChoice === "card" && selectedCard
       ? {
           card: {
             id: selectedCard.id,
@@ -477,14 +536,21 @@ const ProductDetail = () => {
             : {}),
         }
       : null;
+    const personalization = (cardPersonalization || uploadedCustomerImages.length)
+      ? {
+          ...(cardPersonalization || {}),
+          ...(uploadedCustomerImages.length ? { customerImages: uploadedCustomerImages } : {}),
+        }
+      : null;
 
     const personalizationKey = personalization
       ? [
-          personalization.card.id,
-          personalization.messageMode,
+          personalization.card?.id || "no-card",
+          personalization.messageMode || "no-message",
           personalization.from || "",
           personalization.to || "",
           personalization.message || "",
+          ...(personalization.customerImages || []).map((image) => image.publicId),
         ].join("|")
       : "without-card";
     const variantKey = [selectedSizeOption?.name || "no-size", selectedColor || "no-color"].join("|");
@@ -509,9 +575,10 @@ const ProductDetail = () => {
         show: true,
         type: "success",
         message: personalization
-          ? "Added to cart with your card selection. Checkout will flag the current order-system limitation before submission."
+          ? "Added to cart with your personalization details."
           : `${product.name} (Qty: ${quantity}) added to cart.`,
       });
+      if (uploadedCustomerImages.length) setCustomerPhotoFiles([]);
     } catch {
       setNotification({ show: true, type: "error", message: "We couldn’t add this gift to your cart. Please try again." });
     } finally {
@@ -671,6 +738,38 @@ const ProductDetail = () => {
                     </div>
                   </div>
                 )}
+              </section>
+            )}
+
+            {requiresCustomerImages && (
+              <section className="gu-pdp-photo-upload" aria-labelledby="gu-pdp-photo-upload-title">
+                <div>
+                  <h2 id="gu-pdp-photo-upload-title">Add your photos</h2>
+                  <p>Upload up to {customerImageLimit} photo{customerImageLimit === 1 ? "" : "s"} for this personalized gift.</p>
+                </div>
+                <label className="gu-pdp-photo-upload-button">
+                  <Upload aria-hidden="true" />
+                  <span>Choose photo{customerImageLimit === 1 ? "" : "s"}</span>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple={customerImageLimit > 1}
+                    onChange={handleCustomerPhotos}
+                    disabled={customerPhotoFiles.length >= customerImageLimit || isAdding}
+                  />
+                </label>
+                {customerPhotoPreviews.length > 0 && (
+                  <div className="gu-pdp-photo-previews" aria-label="Selected personalization photos">
+                    {customerPhotoPreviews.map((preview, index) => (
+                      <div key={`${preview.file.name}-${preview.file.lastModified}-${index}`}>
+                        <img src={preview.url} alt={`Selected personalization ${index + 1}`} />
+                        <button type="button" aria-label={`Remove photo ${index + 1}`} onClick={() => setCustomerPhotoFiles((files) => files.filter((_, fileIndex) => fileIndex !== index))}><X /></button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <small>{customerPhotoFiles.length}/{customerImageLimit} selected · JPG, PNG or WEBP · 4 MB each</small>
+                {customerPhotoError && <p className="gu-pdp-photo-error" role="alert">{customerPhotoError}</p>}
               </section>
             )}
 
