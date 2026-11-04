@@ -5,7 +5,19 @@ import { spawn } from "node:child_process";
 import process from "node:process";
 
 const product = { id: 901, name: "Anniversary Rose Promise", price: 1490, inStock: true, images: ["https://example.com/rose.jpg"], shortDescription: "Fresh roses chosen with care.", sizeOptions: [{ name: "Small", price: 1990 }, { name: "Large", price: 2990 }], showSizeOptions: true, reviews: [{ rating: 5 }] };
-const collections = [{ category: "FlowersChocolates", products: [product] }, { category: "giftsForHim", products: [{ ...product, id: 902, name: "Thoughtful Gift Box" }] }];
+const personalizedProduct = {
+  ...product,
+  id: 905,
+  name: "Friendship Photo Frame",
+  price: 1590,
+  requiresCustomerImages: true,
+  customerImageLimit: 1,
+};
+const collections = [
+  { category: "FlowersChocolates", products: [product] },
+  { category: "giftsForHim", products: [{ ...product, id: 902, name: "Thoughtful Gift Box" }] },
+  { category: "personalized", products: [personalizedProduct] },
+];
 const blogs = [{ id: 903, title: "A Thoughtful Gift Guide", subHeading: "Make their day personal", content: "## Choosing a gift\nChoose something they love.", mainImage: "https://example.com/guide.jpg" }];
 const template = '<!doctype html><html><head><title>Generic title</title><link rel="stylesheet" href="/assets/app.css"></head><body><div id="root"></div><script type="module" src="/assets/app.js"></script></body></html>';
 
@@ -96,6 +108,25 @@ test("homepage, collection and article initial HTML include their real content a
   assert.equal(articleSchemas[0]["@type"], "BlogPosting");
   assert.equal(articleSchemas[0].headline, "A Thoughtful Gift Guide");
   assert.equal(articleSchemas[0].url, "https://www.giftunwrap.com/blog/a-thoughtful-gift-guide");
+});
+
+test("personalized collection renders admin-managed products before and after hydration", async () => {
+  const path = "/personalized-gifts";
+  const page = await run(path);
+  assert.equal(page.statusCode, 200);
+  assert.match(page.html, /Friendship Photo Frame/);
+  assert.doesNotMatch(page.html, />0 gifts</);
+
+  const output = await new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, ["tests/hydrate-storefront.mjs"], { stdio: ["pipe", "pipe", "pipe"] });
+    let log = "";
+    child.stdout.on("data", (chunk) => { log += chunk; });
+    child.stderr.on("data", (chunk) => { log += chunk; });
+    child.on("error", reject);
+    child.on("close", (code) => code === 0 ? resolve(log) : reject(new Error(log)));
+    child.stdin.end(JSON.stringify({ html: page.html, path }));
+  });
+  assert.match(output, /Hydration.*passed/);
 });
 
 test("server snapshots are request isolated and script-safe", async () => {
