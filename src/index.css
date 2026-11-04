@@ -915,6 +915,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-photo-upload { margin-top: 20px; padding: 18px 15px; border: 1px solid var(--gu-yellow, #ffbd59); border-radius: 18px; background: #fff; }
 .gu-pdp-photo-upload h2 { margin: 0; font-family: var(--gu-serif); font-size: 24px; font-weight: 500; }
 .gu-pdp-photo-upload p { margin: 5px 0 14px; color: #3c3636; }
+.gu-pdp-photo-bundle-select { display: grid; gap: 6px; max-width: 420px; margin-bottom: 14px; font-weight: 600; }
+.gu-pdp-photo-bundle-select select { width: 100%; min-height: 46px; padding: 0 40px 0 14px; border: 1px solid var(--gu-yellow, #ffbd59); border-radius: 12px; background: #fff; color: #181414; font: inherit; font-weight: 400; cursor: pointer; }
+.gu-pdp-photo-upload > small a { color: #ff2b3a; }
 .gu-pdp-photo-upload-button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 9px 15px; border: 1px dashed #ff2b3a; border-radius: 12px; color: #ff2b3a; cursor: pointer; }
 .gu-pdp-photo-upload-button input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .gu-pdp-photo-upload-button:has(input:disabled) { opacity: .55; cursor: not-allowed; }

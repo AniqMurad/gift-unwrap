@@ -105,6 +105,18 @@ const normalizeSizeOptions = (values, fallbackPrice) => (Array.isArray(values) ?
   })
   .filter(Boolean);
 
+const normalizePhotoBundleOptions = (values) => {
+  const byCount = new Map();
+  (Array.isArray(values) ? values : []).forEach((value) => {
+    const photoCount = Number(value?.photoCount ?? value?.count);
+    const price = Number(value?.price);
+    if (!Number.isInteger(photoCount) || photoCount < 1 || photoCount > 30) return;
+    if (!Number.isFinite(price) || price <= 0) return;
+    byCount.set(photoCount, { photoCount, price });
+  });
+  return [...byCount.values()].sort((a, b) => a.photoCount - b.photoCount);
+};
+
 const normalizeContents = (product) => {
   const contents = product?.whatsInside || product?.contents || product?.items;
   if (!Array.isArray(contents)) return [];
@@ -178,6 +190,7 @@ const ProductDetail = () => {
   const [messageErrors, setMessageErrors] = useState({});
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
+  const [selectedPhotoBundleCount, setSelectedPhotoBundleCount] = useState(0);
   const [activeVariantTab, setActiveVariantTab] = useState("colors");
   const [isAdding, setIsAdding] = useState(false);
   const [showQuoteModal, setShowQuoteModal] = useState(false);
@@ -214,6 +227,7 @@ const ProductDetail = () => {
     setMessageErrors({});
     setCustomerPhotoFiles([]);
     setCustomerPhotoError("");
+    setSelectedPhotoBundleCount(0);
 
     fetchProductCollections()
       .then(({ data }) => {
@@ -348,7 +362,15 @@ const ProductDetail = () => {
     [product],
   );
   const requiresCustomerImages = Boolean(product?.requiresCustomerImages);
-  const customerImageLimit = Math.min(30, Math.max(1, Number(product?.customerImageLimit) || 1));
+  const photoBundleOptions = useMemo(
+    () => product?.showPhotoBundleOptions ? normalizePhotoBundleOptions(product.photoBundleOptions) : [],
+    [product],
+  );
+  const selectedPhotoBundle = photoBundleOptions.find((option) => option.photoCount === selectedPhotoBundleCount)
+    || photoBundleOptions[0]
+    || null;
+  const customerImageLimit = selectedPhotoBundle?.photoCount
+    || Math.min(30, Math.max(1, Number(product?.customerImageLimit) || 1));
   const customerPhotoPreviews = useMemo(
     () => customerPhotoFiles.map((file) => ({ file, url: URL.createObjectURL(file) })),
     [customerPhotoFiles],
@@ -359,7 +381,7 @@ const ProductDetail = () => {
   }, [customerPhotoPreviews]);
   const selectedColorOption = colorOptions.find((option) => option.name === selectedColor) || null;
   const selectedSizeOption = sizeOptions.find((option) => option.name === selectedSize) || sizeOptions[0] || null;
-  const selectedPrice = selectedSizeOption?.price || Number(product?.price) || 0;
+  const selectedPrice = selectedPhotoBundle?.price || selectedSizeOption?.price || Number(product?.price) || 0;
   const faqContent = useMemo(
     () => getProductFaqContent(product, effectiveCategory),
     [product, effectiveCategory],
@@ -400,6 +422,12 @@ const ProductDetail = () => {
     if (firstColor?.image) setSelectedImage(firstColor.image);
     setActiveVariantTab(firstColor ? "colors" : "sizes");
   }, [product?.id, sizeOptions, colorOptions]);
+
+  useEffect(() => {
+    setSelectedPhotoBundleCount(photoBundleOptions[0]?.photoCount || 0);
+    setCustomerPhotoFiles([]);
+    setCustomerPhotoError("");
+  }, [product?.id, photoBundleOptions]);
 
   if (status === "loading") {
     return (
@@ -536,10 +564,11 @@ const ProductDetail = () => {
             : {}),
         }
       : null;
-    const personalization = (cardPersonalization || uploadedCustomerImages.length)
+    const personalization = (cardPersonalization || uploadedCustomerImages.length || selectedPhotoBundle)
       ? {
           ...(cardPersonalization || {}),
           ...(uploadedCustomerImages.length ? { customerImages: uploadedCustomerImages } : {}),
+          ...(selectedPhotoBundle ? { photoBundle: selectedPhotoBundle } : {}),
         }
       : null;
 
@@ -550,6 +579,7 @@ const ProductDetail = () => {
           personalization.from || "",
           personalization.to || "",
           personalization.message || "",
+          personalization.photoBundle?.photoCount || "no-photo-bundle",
           ...(personalization.customerImages || []).map((image) => image.publicId),
         ].join("|")
       : "without-card";
@@ -747,6 +777,26 @@ const ProductDetail = () => {
                   <h2 id="gu-pdp-photo-upload-title">Add your photos</h2>
                   <p>Upload up to {customerImageLimit} photo{customerImageLimit === 1 ? "" : "s"} for this personalized gift.</p>
                 </div>
+                {photoBundleOptions.length > 0 && (
+                  <label className="gu-pdp-photo-bundle-select">
+                    <span>Number of photos</span>
+                    <select
+                      value={selectedPhotoBundle?.photoCount || ""}
+                      onChange={(event) => {
+                        const nextCount = Number(event.target.value);
+                        setSelectedPhotoBundleCount(nextCount);
+                        setCustomerPhotoFiles((files) => files.slice(0, nextCount));
+                        setCustomerPhotoError("");
+                      }}
+                    >
+                      {photoBundleOptions.map((option) => (
+                        <option key={option.photoCount} value={option.photoCount}>
+                          {option.photoCount} photos — {formatPrice(option.price)} PKR
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
                 <label className="gu-pdp-photo-upload-button">
                   <Upload aria-hidden="true" />
                   <span>Choose photo{customerImageLimit === 1 ? "" : "s"}</span>
@@ -769,6 +819,9 @@ const ProductDetail = () => {
                   </div>
                 )}
                 <small>{customerPhotoFiles.length}/{customerImageLimit} selected · JPG, PNG or WEBP · 4 MB each</small>
+                {photoBundleOptions.length > 0 && (
+                  <small>Need more than 30 photos? <a href="https://wa.me/923268927354" target="_blank" rel="noreferrer">Contact us on WhatsApp.</a></small>
+                )}
                 {customerPhotoError && <p className="gu-pdp-photo-error" role="alert">{customerPhotoError}</p>}
               </section>
             )}

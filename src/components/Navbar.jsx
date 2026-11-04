@@ -320,6 +320,9 @@ const Navbar = ({
                             Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})
                           </p>
                         )}
+                        {item.personalization?.photoBundle?.photoCount && (
+                          <p className="gu-cart-personalization">Photo bundle: {item.personalization.photoBundle.photoCount} photos</p>
+                        )}
                         {getStandaloneCardMessageSummary(item) && (
                           <p className="text-xs text-red-500">
                             {getStandaloneCardMessageSummary(item)}
