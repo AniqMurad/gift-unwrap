@@ -17,5 +17,12 @@ export const fetchProductCollections = () => api.get('/products').then((response
   data: normalizeProductCollections(response.data),
 }));
 export const fetchGreetingCards = () => api.get('/cards');
+export const uploadCustomerPersonalizationImage = (productId, file) => {
+  const formData = new FormData();
+  formData.append('image', file);
+  return api.post(`/products/${productId}/personalization-images`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};
 
 export default api;

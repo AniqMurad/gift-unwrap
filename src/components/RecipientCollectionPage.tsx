@@ -128,11 +128,8 @@ const matchesBirthdayScope = (product: StoreProduct) =>
     .toLocaleLowerCase()
     .includes("birthday");
 
-// The current catalogue contract does not expose an approved personalization
-// category, tag, or boolean. Keep this scope empty rather than presenting
-// ordinary products as personalizable. Once the backend provides a classifier,
-// this is the single place where it can be connected to the shared collection.
-const matchesPersonalizedScope = (_product: StoreProduct) => false;
+const matchesPersonalizedScope = (product: StoreProduct) =>
+  product.category === "personalized" || product.requiresCustomerImages === true;
 
 const matchesFloralScope = (product: StoreProduct) =>
   product.category === "floralArrangements" || [
