@@ -508,6 +508,7 @@ const LandingHeader = ({ variant = "default" }) => {
                       {(item.selectedSize || item.selectedColor) && <p className="gu-cart-personalization">{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>}
                       {item.personalization?.card && <p className="gu-cart-personalization">Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})</p>}
                       {getStandaloneCardMessageSummary(item) && <p className="gu-cart-personalization">{getStandaloneCardMessageSummary(item)}</p>}
+                      {item.personalization?.photoBundle?.photoCount && <p className="gu-cart-personalization">Photo bundle: {item.personalization.photoBundle.photoCount} photos</p>}
                     </div>
                     <strong>PKR {getCartItemLinePrice(item)}</strong>
                     <button type="button" aria-label={`Remove ${item.name} from cart`} onClick={() => removeFromCart(item.id, item.category, item.cartKey)}><CloseIcon className="h-4 w-4" /></button>

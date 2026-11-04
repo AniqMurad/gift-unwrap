@@ -66,6 +66,9 @@ const OrderSummary = ({
                       Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})
                     </p>
                   )}
+                  {item.personalization?.photoBundle?.photoCount && (
+                    <p className="gu-cart-personalization">Photo bundle: {item.personalization.photoBundle.photoCount} photos</p>
+                  )}
                   {getStandaloneCardMessageSummary(item) && (
                     <p className="text-[#696C70] text-[12px]">
                       {getStandaloneCardMessageSummary(item)}

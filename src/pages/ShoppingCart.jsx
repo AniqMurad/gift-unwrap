@@ -190,6 +190,9 @@ const ShoppingCart = () => {
                           {item.personalization?.customerImages?.length > 0 && (
                             <p>Personalization photos: {item.personalization.customerImages.length}</p>
                           )}
+                          {item.personalization?.photoBundle?.photoCount && (
+                            <p>Photo bundle: {item.personalization.photoBundle.photoCount} photos</p>
+                          )}
                           {item.personalization?.card && (
                             <p>
                               Card: {item.personalization.card.name}
