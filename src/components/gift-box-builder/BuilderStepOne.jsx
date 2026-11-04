@@ -28,7 +28,17 @@ const SORT_OPTIONS = [
   ["low-high", "Price: Low to High"],
 ];
 const OCCASION_KEYS = ["occasion", "occasions", "tags", "collection", "collections"];
-const PROFILE_KEYS = ["profile", "profiles", "recipient", "recipients", "audience", "tags"];
+
+function matchesProfile(product, selectedProfile) {
+  if (!selectedProfile) return true;
+
+  const productProfile = String(product.profile || "unisex").trim().toLowerCase();
+  if (["unisex", "both", "all"].includes(productProfile)) return true;
+
+  return selectedProfile === "For Him"
+    ? productProfile === "for-him"
+    : productProfile === "for-her";
+}
 
 function FilterDropdown({ label, value, open, onToggle, children, className = "" }) {
   return (
@@ -338,17 +348,16 @@ export default function BuilderStepOne({
   }, []);
 
   const hasOccasionMetadata = products.some((product) => getProductSearchText(product, OCCASION_KEYS));
-  const hasProfileMetadata = products.some((product) => getProductSearchText(product, PROFILE_KEYS));
 
   const visibleProducts = useMemo(() => products
     .filter((product) => getProductPrice(product) >= range[0] && getProductPrice(product) <= range[1])
     .filter((product) => !occasion || !hasOccasionMetadata || getProductSearchText(product, OCCASION_KEYS).includes(occasion.toLowerCase()))
-    .filter((product) => !profile || !hasProfileMetadata || getProductSearchText(product, PROFILE_KEYS).includes(profile.replace("For ", "").toLowerCase()))
+    .filter((product) => matchesProfile(product, profile))
     .sort((a, b) => {
       if (sort === "high-low") return getProductPrice(b) - getProductPrice(a);
       if (sort === "low-high") return getProductPrice(a) - getProductPrice(b);
       return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-    }), [products, range, occasion, profile, sort, hasOccasionMetadata, hasProfileMetadata]);
+    }), [products, range, occasion, profile, sort, hasOccasionMetadata]);
 
   const selectedItemFor = (product) => {
     const productId = getProductId(product);
