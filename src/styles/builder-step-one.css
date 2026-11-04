@@ -22,12 +22,12 @@
   width: 100%;
 }
 .gu-builder-page--drawer .gu-builder-product-image img {
-  height: auto;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  width: 335px;
-  aspect-ratio: 1;
+  aspect-ratio: auto;
+  height: 100%;
+  max-height: none;
+  max-width: none;
+  object-fit: cover;
+  width: 100%;
 }
 .gu-builder-page--drawer .gu-builder-product-copy {
   padding-top: 16px;
@@ -237,16 +237,16 @@
     aspect-ratio: 4 / 5;
     border-radius: 16px;
     height: auto;
-    padding: 10px;
+    padding: 0;
     width: 100%;
   }
 
   .gu-builder-page--drawer .gu-builder-product-image img {
     aspect-ratio: auto;
     height: 100%;
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
+    max-height: none;
+    max-width: none;
+    object-fit: cover;
     width: 100%;
   }
 
