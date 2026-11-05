@@ -1451,12 +1451,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 /* Build a Gift Box — Figma-accurate Step 1 overrides */
 .gu-builder-hero { height: 622px; }
-.gu-builder-hero .gu-landing-header--builder .gu-desktop-navigation,
-.gu-builder-hero .gu-landing-header--builder .gu-desktop-navigation:hover { background: transparent; }
+.gu-builder-hero .gu-landing-header--builder:not(.gu-landing-header--floating) .gu-desktop-navigation,
+.gu-builder-hero .gu-landing-header--builder:not(.gu-landing-header--floating) .gu-desktop-navigation:hover { background: transparent; }
 .gu-builder-hero .gu-landing-header--builder .gu-audience-switcher { background: #fff; }
-.gu-builder-hero .gu-landing-header--builder .gu-cart-action,
-.gu-builder-hero .gu-landing-header--builder .gu-cart-action:hover,
-.gu-builder-hero .gu-landing-header--builder .gu-cart-action:focus-visible { background: transparent; }
+.gu-builder-hero .gu-landing-header--builder:not(.gu-landing-header--floating) .gu-cart-action,
+.gu-builder-hero .gu-landing-header--builder:not(.gu-landing-header--floating) .gu-cart-action:hover,
+.gu-builder-hero .gu-landing-header--builder:not(.gu-landing-header--floating) .gu-cart-action:focus-visible { background: transparent; }
 
 /* Shared landing-page header: the hero artwork remains visible through the
    navigation until the scroll-aware header becomes fixed. */
