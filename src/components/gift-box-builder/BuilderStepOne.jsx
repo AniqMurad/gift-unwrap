@@ -15,19 +15,50 @@ import {
   formatPrice,
   getProductId,
   getProductPrice,
-  getProductSearchText,
   getStockLimit,
   isUnavailable,
 } from "./builder-utils";
 
-const OCCASIONS = ["Birthday", "Anniversary", "Thank You"];
+const CATEGORY_OPTIONS = [
+  ["chocolates-snacks", "Chocolates & Snacks"],
+  ["flowers", "Flowers"],
+  ["customised-items", "Customised Items"],
+  ["jewellery-accessories", "Jewellery & Accessories"],
+  ["fragrances", "Fragrances"],
+  ["clothing", "Clothing"],
+  ["shoes", "Shoes"],
+  ["beauty-personal-care", "Beauty & Personal Care"],
+  ["gift-cards", "Gift Cards"],
+];
 const PROFILES = ["For Him", "For Her"];
 const SORT_OPTIONS = [
   ["new", "New"],
   ["high-low", "Price: High to Low"],
   ["low-high", "Price: Low to High"],
 ];
-const OCCASION_KEYS = ["occasion", "occasions", "tags", "collection", "collections"];
+
+const CATEGORY_ALIASES = {
+  "beauty-and-personal-care": "beauty-personal-care",
+  "chocolate-and-snacks": "chocolates-snacks",
+  "chocolate-snacks": "chocolates-snacks",
+  "chocolates-and-snacks": "chocolates-snacks",
+  "customized-items": "customised-items",
+  "giftcards": "gift-cards",
+  "jewelry-and-accessories": "jewellery-accessories",
+  "jewelry-accessories": "jewellery-accessories",
+  "jewellery-and-accessories": "jewellery-accessories",
+};
+
+function normalizeCategory(value) {
+  const normalized = String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return CATEGORY_ALIASES[normalized] || normalized;
+}
 
 function matchesProfile(product, selectedProfile) {
   if (!selectedProfile) return true;
@@ -319,7 +350,7 @@ export default function BuilderStepOne({
 }) {
   const filterAreaRef = useRef(null);
   const [openFilter, setOpenFilter] = useState("");
-  const [occasion, setOccasion] = useState("");
+  const [category, setCategory] = useState("");
   const [profile, setProfile] = useState("");
   const [sort, setSort] = useState("");
   const bounds = useMemo(() => {
@@ -347,17 +378,15 @@ export default function BuilderStepOne({
     };
   }, []);
 
-  const hasOccasionMetadata = products.some((product) => getProductSearchText(product, OCCASION_KEYS));
-
   const visibleProducts = useMemo(() => products
     .filter((product) => getProductPrice(product) >= range[0] && getProductPrice(product) <= range[1])
-    .filter((product) => !occasion || !hasOccasionMetadata || getProductSearchText(product, OCCASION_KEYS).includes(occasion.toLowerCase()))
+    .filter((product) => !category || normalizeCategory(product.category || product.itemCategory) === category)
     .filter((product) => matchesProfile(product, profile))
     .sort((a, b) => {
       if (sort === "high-low") return getProductPrice(b) - getProductPrice(a);
       if (sort === "low-high") return getProductPrice(a) - getProductPrice(b);
       return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
-    }), [products, range, occasion, profile, sort, hasOccasionMetadata]);
+    }), [products, range, category, profile, sort]);
 
   const selectedItemFor = (product) => {
     const productId = getProductId(product);
@@ -381,9 +410,9 @@ export default function BuilderStepOne({
       <main className="gu-builder-main">
         <div className="gu-builder-filter-row" ref={filterAreaRef}>
           <div className="gu-builder-filter-group">
-            <FilterDropdown label="Occasion" value={occasion} open={openFilter === "occasion"} onToggle={() => setOpenFilter(openFilter === "occasion" ? "" : "occasion")}>
-              <div role="menu" aria-label="Occasion">
-                {OCCASIONS.map((choice) => <FilterChoice key={choice} active={occasion === choice} onClick={() => { setOccasion(occasion === choice ? "" : choice); setOpenFilter(""); }}>{choice}</FilterChoice>)}
+            <FilterDropdown label="Category" value={CATEGORY_OPTIONS.find(([value]) => value === category)?.[1]} open={openFilter === "category"} onToggle={() => setOpenFilter(openFilter === "category" ? "" : "category")} className="gu-builder-filter--category">
+              <div role="menu" aria-label="Category">
+                {CATEGORY_OPTIONS.map(([value, label]) => <FilterChoice key={value} active={category === value} onClick={() => { setCategory(category === value ? "" : value); setOpenFilter(""); }}>{label}</FilterChoice>)}
               </div>
             </FilterDropdown>
             <FilterDropdown label="Profile" value={profile} open={openFilter === "profile"} onToggle={() => setOpenFilter(openFilter === "profile" ? "" : "profile")} className="gu-builder-filter--profile">
@@ -421,7 +450,7 @@ export default function BuilderStepOne({
             ) : (
               <div className="gu-builder-catalog-state">
                 <p>No goodies match those filters.</p>
-                <button type="button" onClick={() => { setOccasion(""); setProfile(""); setRange([lowerBound, upperBound]); setSort(""); }}>Clear filters</button>
+                <button type="button" onClick={() => { setCategory(""); setProfile(""); setRange([lowerBound, upperBound]); setSort(""); }}>Clear filters</button>
               </div>
             )}
           </section>
