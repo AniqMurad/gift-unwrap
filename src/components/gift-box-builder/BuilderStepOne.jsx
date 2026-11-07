@@ -19,17 +19,15 @@ import {
   isUnavailable,
 } from "./builder-utils";
 
-const CATEGORY_OPTIONS = [
-  ["chocolates-snacks", "Chocolates & Snacks"],
-  ["flowers", "Flowers"],
-  ["customised-items", "Customised Items"],
-  ["jewellery-accessories", "Jewellery & Accessories"],
-  ["fragrances", "Fragrances"],
-  ["clothing", "Clothing"],
-  ["shoes", "Shoes"],
-  ["beauty-personal-care", "Beauty & Personal Care"],
-  ["gift-cards", "Gift Cards"],
-];
+const DEFAULT_CATEGORY_LABELS = {
+  "chocolates-snacks": "Chocolates & Snacks",
+  "customised-items": "Customised Items",
+  "jewellery-accessories": "Jewellery & Accessories",
+  fragrances: "Fragrances",
+  clothing: "Clothing",
+  "beauty-personal-care": "Beauty & Personal Care",
+};
+const RETIRED_CATEGORIES = new Set(["flowers", "shoes", "gift-cards"]);
 const PROFILES = ["For Him", "For Her"];
 const SORT_OPTIONS = [
   ["new", "New"],
@@ -58,6 +56,12 @@ function normalizeCategory(value) {
     .replace(/^-+|-+$/g, "");
 
   return CATEGORY_ALIASES[normalized] || normalized;
+}
+
+function humanizeCategory(value) {
+  return String(value || "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
 function matchesProfile(product, selectedProfile) {
@@ -353,6 +357,15 @@ export default function BuilderStepOne({
   const [category, setCategory] = useState("");
   const [profile, setProfile] = useState("");
   const [sort, setSort] = useState("");
+  const categoryOptions = useMemo(() => {
+    const options = new Map(Object.entries(DEFAULT_CATEGORY_LABELS));
+    products.forEach((product) => {
+      const value = normalizeCategory(product.category || product.itemCategory);
+      if (!value || RETIRED_CATEGORIES.has(value)) return;
+      options.set(value, DEFAULT_CATEGORY_LABELS[value] || humanizeCategory(value));
+    });
+    return Array.from(options.entries()).sort((left, right) => left[1].localeCompare(right[1]));
+  }, [products]);
   const bounds = useMemo(() => {
     const prices = products.map(getProductPrice).filter(Number.isFinite);
     return prices.length
@@ -365,6 +378,9 @@ export default function BuilderStepOne({
   const [range, setRange] = useState(normalizedBounds);
 
   useEffect(() => setRange([lowerBound, upperBound]), [lowerBound, upperBound]);
+  useEffect(() => {
+    if (category && !categoryOptions.some(([value]) => value === category)) setCategory("");
+  }, [category, categoryOptions]);
   useEffect(() => {
     const close = (event) => {
       if (!filterAreaRef.current?.contains(event.target)) setOpenFilter("");
@@ -410,9 +426,9 @@ export default function BuilderStepOne({
       <main className="gu-builder-main">
         <div className="gu-builder-filter-row" ref={filterAreaRef}>
           <div className="gu-builder-filter-group">
-            <FilterDropdown label="Category" value={CATEGORY_OPTIONS.find(([value]) => value === category)?.[1]} open={openFilter === "category"} onToggle={() => setOpenFilter(openFilter === "category" ? "" : "category")} className="gu-builder-filter--category">
+            <FilterDropdown label="Category" value={categoryOptions.find(([value]) => value === category)?.[1]} open={openFilter === "category"} onToggle={() => setOpenFilter(openFilter === "category" ? "" : "category")} className="gu-builder-filter--category">
               <div role="menu" aria-label="Category">
-                {CATEGORY_OPTIONS.map(([value, label]) => <FilterChoice key={value} active={category === value} onClick={() => { setCategory(category === value ? "" : value); setOpenFilter(""); }}>{label}</FilterChoice>)}
+                {categoryOptions.map(([value, label]) => <FilterChoice key={value} active={category === value} onClick={() => { setCategory(category === value ? "" : value); setOpenFilter(""); }}>{label}</FilterChoice>)}
               </div>
             </FilterDropdown>
             <FilterDropdown label="Profile" value={profile} open={openFilter === "profile"} onToggle={() => setOpenFilter(openFilter === "profile" ? "" : "profile")} className="gu-builder-filter--profile">

@@ -1512,7 +1512,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-builder-filter-row { align-items: flex-start; gap: 0; justify-content: space-between; min-height: 47px; }
 .gu-builder-filter-group { align-items: flex-start; display: flex; gap: 38px; }
 .gu-builder-filter { width: 164px; }
-.gu-builder-filter--category { width: 238px; }
+.gu-builder-filter--category { width: 308px; }
 .gu-builder-filter--profile { width: 138px; }
 .gu-builder-filter--price { width: 270px; }
 .gu-builder-filter--sort { margin-left: 0; width: 210px; }
@@ -1522,7 +1522,19 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-builder-filter-menu [role="menu"] { gap: 0; }
 .gu-builder-filter-menu [role^="menu"] > button { border-radius: 0; min-height: 45px; padding: 10px 25px; }
 .gu-builder-filter-menu [role^="menu"] > button:last-child { padding-bottom: 15px; }
-.gu-builder-filter--category .gu-builder-filter-menu { max-height: min(420px, 60vh); overflow-y: auto; }
+.gu-builder-filter--category > button,
+.gu-builder-filter--category .gu-builder-filter-menu { width: 100%; }
+.gu-builder-filter--category > button span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gu-builder-filter--category .gu-builder-filter-menu {
+  max-height: min(420px, 60vh);
+  overflow-y: auto;
+}
+.gu-builder-filter--category .gu-builder-filter-menu button { white-space: nowrap; }
 .gu-builder-filter--price .gu-builder-filter-menu { height: 184px; padding: 18px 20px 20px; width: 270px; }
 .gu-builder-price-filter > p { line-height: 23px; }
 .gu-builder-range { height: 25px; margin: 5px 0 3px; }
