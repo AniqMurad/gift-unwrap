@@ -32,6 +32,16 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
 
     const getItemId = (item) => String(item?.builderKey ?? item?.id ?? item?._id ?? "");
 
+const normalizeCollectionCategory = (value) =>
+    String(value || "").trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const PERSONALIZED_COLLECTION_KEYS = new Set([
+    "personalized",
+    "personalizedgifts",
+    "personalised",
+    "personalisedgifts",
+]);
+
     const getItemLimit = getStockLimit;
 
     const BuildGiftBox = () => {
@@ -123,6 +133,37 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                 const boxesData = await boxesRes.json();
                 const cardsData = await cardsRes.json();
                 const productCollections = await productCollectionsRes.json();
+            const personalizedProducts = productCollections
+                .filter((collection) => PERSONALIZED_COLLECTION_KEYS.has(normalizeCollectionCategory(collection.category)))
+                .flatMap((collection) => collection.products || [])
+                .map((product) => {
+                    const sourceId = product.id ?? product._id ?? product.slug ?? product.name;
+                    const images = Array.isArray(product.images) && product.images.length
+                        ? product.images.filter(Boolean)
+                        : [product.image].filter(Boolean);
+
+                    return {
+                        ...product,
+                        builderKey: `catalog-personalized-${sourceId}`,
+                        source: "product",
+                        productCategory: "personalized",
+                        category: "personalized",
+                        profile: product.profile || "unisex",
+                        image: product.image || images[0],
+                        images,
+                    };
+                })
+                .filter((product) => product.inStock !== false && Number(product.price) > 0 && product.image);
+            const existingProductNames = new Set(
+                itemsData.map((item) => String(item.name || "").trim().toLowerCase()).filter(Boolean),
+            );
+            const uniquePersonalizedProducts = personalizedProducts.filter((product) => {
+                const normalizedName = String(product.name || "").trim().toLowerCase();
+                if (normalizedName && existingProductNames.has(normalizedName)) return false;
+                if (normalizedName) existingProductNames.add(normalizedName);
+                return true;
+            });
+            const builderProducts = [...itemsData, ...uniquePersonalizedProducts];
                 const greetingCardProducts = (productCollections.find((collection) => collection.category === "greetingCards")?.products || [])
                     .map((card) => ({
                         ...card,
@@ -142,13 +183,13 @@ import StorefrontPage, { StorefrontHeader as Navbar } from "../components/storef
                     ...greetingCardProducts,
                 ].filter((card) => Number(card.price) > 0);
 
-                setProducts(itemsData);
+            setProducts(builderProducts);
                 setBoxOptions(boxesData);
                 setCardOptions(builderCards);
                 const savedDraft = savedDraftRef.current;
                 if (savedDraft) {
                     const restoredItems = (savedDraft.items || []).flatMap((savedItem) => {
-                        const currentProduct = itemsData.find((product) => getItemId(product) === String(savedItem.id));
+                    const currentProduct = builderProducts.find((product) => getItemId(product) === String(savedItem.id));
                         if (!currentProduct || currentProduct.inStock === false) return [];
                         const selectedColor = savedItem.selectedColor && currentProduct.colorVariants?.some((variant) => variant.color === savedItem.selectedColor)
                             ? savedItem.selectedColor

@@ -2,10 +2,9 @@ import { useStorefrontData } from "../context/StorefrontData";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { fetchBlogs, fetchProductCollections } from "../config/api";
+import { fetchBlogs, fetchGreetingCards, fetchProductCollections } from "../config/api";
 import { generateSlug } from "../utils/slugify";
 import { getCanonicalProductPath } from "../lib/catalogRouting";
-import { keyGiftSearchText } from "../utils/keyGifts";
 import stepChooseBox from "../assets/redesign/step-choose-box.png";
 import stepPickGifts from "../assets/redesign/step-pick-gifts.png";
 import stepAddMessage from "../assets/redesign/step-add-message.png";
@@ -425,6 +424,11 @@ export const FeaturedGifts = () => {
   const [gender, setGender] = useState("Male");
   const [groups, setGroups] = useState(snapshot?.collections || []);
   const [loading, setLoading] = useState(!snapshot?.collections);
+  const [greetingCards, setGreetingCards] = useState(() =>
+    Array.isArray(snapshot?.cards) ? snapshot.cards.filter((card) => card.inStock !== false) : []
+  );
+  const [cardsLoaded, setCardsLoaded] = useState(Array.isArray(snapshot?.cards));
+  const [cardsLoading, setCardsLoading] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -436,13 +440,32 @@ export const FeaturedGifts = () => {
     return () => { active = false; };
   }, [snapshot]);
 
+  useEffect(() => {
+    let active = true;
+    if (activeTab !== "GREETING CARDS" || cardsLoaded) return undefined;
+
+    setCardsLoading(true);
+    fetchGreetingCards()
+      .then(({ data }) => {
+        if (!active) return;
+        setGreetingCards(Array.isArray(data) ? data.filter((card) => card.inStock !== false) : []);
+        setCardsLoaded(true);
+      })
+      .catch((error) => console.error("Failed to load homepage greeting cards:", error))
+      .finally(() => active && setCardsLoading(false));
+
+    return () => {
+      active = false;
+    };
+  }, [activeTab, cardsLoaded]);
+
   const products = useMemo(() => {
     const getGroup = (category) => groups.find((group) => group.category === category)?.products || [];
     let items = [];
     if (activeTab === "GIFT BOX") items = getGroup(gender === "Male" ? "giftsForHim" : "giftsForHer");
     if (activeTab === "FLORAL ARRANGEMENTS") items = getGroup("floralArrangements");
     if (activeTab === "SWEET TREATS") items = getGroup("sweetTreats");
-    if (activeTab === "GREETING CARDS") items = groups.flatMap((group) => (group.products || []).map((item) => ({ ...item, category: group.category }))).filter((item) => /card/i.test(`${item.name} ${keyGiftSearchText(item.keyGift)}`));
+    if (activeTab === "GREETING CARDS") items = greetingCards;
     const category = activeTab === "GIFT BOX"
       ? (gender === "Male" ? "giftsForHim" : "giftsForHer")
       : activeTab === "FLORAL ARRANGEMENTS"
@@ -451,9 +474,17 @@ export const FeaturedGifts = () => {
           ? "sweetTreats"
           : "greetingCards";
     return items.map((item) => ({ ...item, category: item.category || category }));
-  }, [activeTab, gender, groups]);
+  }, [activeTab, gender, greetingCards, groups]);
 
-  const visibleProducts = products.length ? products : groups.flatMap((group) => (group.products || []).map((item) => ({ ...item, category: group.category }))).slice(0, 8);
+  const fallbackProducts = groups
+    .flatMap((group) => (group.products || []).map((item) => ({ ...item, category: group.category })))
+    .slice(0, 8);
+  const visibleProducts = products.length
+    ? products
+    : activeTab === "GREETING CARDS"
+      ? []
+      : fallbackProducts;
+  const productsLoading = loading || (activeTab === "GREETING CARDS" && cardsLoading);
 
   return (
     <section className="gu-section gu-featured-section" id="featured-gifts" aria-labelledby="featured-title">
@@ -465,9 +496,11 @@ export const FeaturedGifts = () => {
         {productTabs.map((tab) => <button className={activeTab === tab ? "is-active" : ""} type="button" role="tab" aria-selected={activeTab === tab} key={tab} onClick={() => setActiveTab(tab)}>{tab}</button>)}
       </div>
       {activeTab === "GIFT BOX" && <div className="gu-gender-tabs"><button className={gender === "Male" ? "is-active" : ""} type="button" onClick={() => setGender("Male")}>Male</button><button className={gender === "Female" ? "is-active" : ""} type="button" onClick={() => setGender("Female")}>Female</button></div>}
-      {loading
+      {productsLoading
         ? <div className="gu-product-loading-rail">{Array.from({ length: 4 }).map((_, index) => <div className="gu-product-skeleton" key={index} />)}</div>
-        : <ContinuousProductCarousel products={visibleProducts} />}
+        : visibleProducts.length
+          ? <ContinuousProductCarousel products={visibleProducts} />
+          : <div className="gu-product-loading-rail">No greeting cards are available right now.</div>}
     </section>
   );
 };

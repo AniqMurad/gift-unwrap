@@ -26,6 +26,9 @@ const DEFAULT_CATEGORY_LABELS = {
   fragrances: "Fragrances",
   clothing: "Clothing",
   "beauty-personal-care": "Beauty & Personal Care",
+  personalized: "Personalized",
+  mugs: "Mugs",
+  notebooks: "Notebook",
 };
 const RETIRED_CATEGORIES = new Set(["flowers", "shoes", "gift-cards"]);
 const PROFILES = ["For Him", "For Her"];
@@ -45,6 +48,13 @@ const CATEGORY_ALIASES = {
   "jewelry-and-accessories": "jewellery-accessories",
   "jewelry-accessories": "jewellery-accessories",
   "jewellery-and-accessories": "jewellery-accessories",
+  personalised: "personalized",
+  "personalised-gifts": "personalized",
+  "personalized-gifts": "personalized",
+  "personalised-items": "personalized",
+  "personalized-items": "personalized",
+  mug: "mugs",
+  notebook: "notebooks",
 };
 
 function normalizeCategory(value) {
