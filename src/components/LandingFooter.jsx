@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import footerPerson from "../assets/redesign/footer-falling-girl.png";
 import dividerIcon from "../assets/redesign/footer/divider.svg";
@@ -63,9 +63,35 @@ const socialLinks = [
   },
 ];
 
-export default function LandingFooter({ staticMode = false }) {
+export default function LandingFooter({ staticMode = false, fitViewport = false }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const contentRef = useRef(null);
+  const [needsPageScroll, setNeedsPageScroll] = useState(false);
+
+  useEffect(() => {
+    if (!fitViewport) return;
+
+    const content = contentRef.current;
+    const update = () => {
+      // Measure the content and its inset together so the result stays
+      // stable when the footer switches positioning.
+      const viewportHeight = window.innerHeight;
+      setNeedsPageScroll(
+        window.innerWidth <= 1100 || viewportHeight <= 650 ||
+        content.getBoundingClientRect().height > viewportHeight,
+      );
+    };
+
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(content);
+    window.addEventListener("resize", update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [fitViewport, needsPageScroll]);
 
   const handleNewsletterSubmit = (event) => {
     event.preventDefault();
@@ -78,12 +104,15 @@ export default function LandingFooter({ staticMode = false }) {
   };
 
   return (
-    <StickyFooter className="gu-landing-footer" staticMode={staticMode}>
+    <StickyFooter
+      className={fitViewport ? "gu-landing-footer gu-blog-footer" : "gu-landing-footer"}
+      staticMode={staticMode || (fitViewport && needsPageScroll)}
+    >
       <div className="gu-site-footer-art" aria-hidden="true">
         <img src={footerPerson} alt="" />
       </div>
 
-      <div className="gu-site-footer-content">
+      <div ref={contentRef} className="gu-site-footer-content">
         <div className="gu-site-footer-upper">
           <section className="gu-site-footer-about" aria-labelledby="gu-footer-about-title">
             <div>

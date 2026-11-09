@@ -164,7 +164,7 @@ export default function Blog() {
           </section>
         )}
       </main>
-      <LandingFooter />
+      <LandingFooter fitViewport />
     </div>
   );
 }
