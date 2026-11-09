@@ -1536,3 +1536,6 @@
   .gu-contact-name-row { gap: 12px; grid-template-columns: minmax(0, 1fr); }
   .gu-contact-submit { font-size: 16px; }
 }
+
+/* Keep article content above the fixed footer until the reveal slot scrolls in. */
+.gu-blog-article-cover { background: #fbf4e8; display: flow-root; position: relative; z-index: 2; }

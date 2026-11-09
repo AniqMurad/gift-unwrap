@@ -95,7 +95,7 @@ const BrandMark = () => {
   );
 };
 
-const LandingHeader = ({ variant = "default" }) => {
+const LandingHeader = ({ variant = "default", showGiftSearch = true }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { cartItems, removeFromCart, getTotalCartAmount, getTotalCartItems } = useCart();
@@ -480,10 +480,10 @@ const LandingHeader = ({ variant = "default" }) => {
       </div>
       {isMobileMenuOpen && (
         <div className="gu-mobile-menu">
-          <div className="gu-mobile-search">
+          {showGiftSearch && <div className="gu-mobile-search">
             <input value={searchTerm} aria-label="Search gifts" placeholder="Search gifts" onChange={(event) => setSearchTerm(event.target.value)} onKeyDown={(event) => event.key === "Enter" && handleSearch()} />
             <button type="button" aria-label="Submit search" onClick={handleSearch}><Search size={20} /></button>
-          </div>
+          </div>}
           <button className="is-active" type="button" onClick={() => goTo("/personalized-gifts")}>Personalized</button>
           <button type="button" onClick={() => goTo("/giftforcompanies")}>Corporate</button>
           {mobileLinks.map((item) => <button key={`${item.label}-${item.route}`} type="button" onClick={() => goTo(item.route)}>{item.label}</button>)}

@@ -119,7 +119,7 @@ export default function Blog() {
     <div className="gu-blog-page">
       <main className="gu-blog-main">
         <section className="gu-blog-top" aria-label="Featured GiftUnwrap guide">
-          <LandingHeader />
+          <LandingHeader showGiftSearch={false} />
           {loading ? (
             <BlogLoading />
           ) : loadError ? (

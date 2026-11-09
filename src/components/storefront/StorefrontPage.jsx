@@ -9,10 +9,10 @@ import { MigrationContext } from "./migration-context";
 
 // Only the remaining legacy routes opt into this presentation layer.
 export default function StorefrontPage({ children, kind = "content" }) {
-  return <MigrationContext.Provider value={true}><div className={`gu-migrated gu-migrated--${kind}`}><Suspense fallback={<><StorefrontHeader /><StorefrontLoading /></>}>{children}</Suspense></div></MigrationContext.Provider>;
+  return <MigrationContext.Provider value={true}><div className={`gu-migrated gu-migrated--${kind}`}><Suspense fallback={<><StorefrontHeader showUtilities={kind !== "article"} showGiftSearch={kind !== "article"} /><StorefrontLoading /></>}>{children}</Suspense></div></MigrationContext.Provider>;
 }
 
-export function StorefrontHeader({ showUtilities = true }) {
+export function StorefrontHeader({ showUtilities = true, showGiftSearch = true }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -35,7 +35,7 @@ export function StorefrontHeader({ showUtilities = true }) {
   const utilitiesVisible = showUtilities && location.pathname.toLowerCase() !== "/checkout";
   return (
     <div className="gu-migration-header">
-      <div className="gu-migration-nav-space"><LandingHeader /></div>
+      <div className="gu-migration-nav-space"><LandingHeader showGiftSearch={showGiftSearch} /></div>
       {utilitiesVisible && <div className="gu-migration-utilities">
         <form role="search" onSubmit={(event) => {
           event.preventDefault();

@@ -335,3 +335,25 @@
 @media (max-width: 1100px) {
   .sticky-footer.gu-static-footer { height: auto; }
 }
+
+/* Blog footers need room for the full wordmark when the desktop viewport
+   is shorter than the fixed reveal layout. Let the page scroll the footer
+   in this range, as it already does on smaller screens. */
+@media (min-width: 1101px) and (max-height: 1024px) {
+  :is(.gu-blog-page, .gu-migrated--article) .sticky-footer-slot {
+    height: auto;
+    pointer-events: auto;
+  }
+  :is(.gu-blog-page, .gu-migrated--article) .sticky-footer.gu-landing-footer {
+    height: auto;
+    position: relative;
+  }
+  :is(.gu-blog-page, .gu-migrated--article) .gu-site-footer-content {
+    left: auto;
+    margin-inline: auto;
+    padding-block: clamp(80px, 20svh, 220px) 24px;
+    position: relative;
+    top: auto;
+    transform: none;
+  }
+}
