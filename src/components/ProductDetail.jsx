@@ -187,6 +187,7 @@ const ProductDetail = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [messageMode, setMessageMode] = useState("write");
   const [messageDraft, setMessageDraft] = useState({ from: "", to: "", message: "" });
+  const [cakeMessage, setCakeMessage] = useState("");
   const [messageErrors, setMessageErrors] = useState({});
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
@@ -224,6 +225,7 @@ const ProductDetail = () => {
     setSelectedCard(null);
     setMessageMode("write");
     setMessageDraft({ from: "", to: "", message: "" });
+    setCakeMessage("");
     setMessageErrors({});
     setCustomerPhotoFiles([]);
     setCustomerPhotoError("");
@@ -424,6 +426,10 @@ const ProductDetail = () => {
   }, [product?.id, sizeOptions, colorOptions]);
 
   useEffect(() => {
+    setCakeMessage("");
+  }, [product?.id]);
+
+  useEffect(() => {
     setSelectedPhotoBundleCount(photoBundleOptions[0]?.photoCount || 0);
     setCustomerPhotoFiles([]);
     setCustomerPhotoError("");
@@ -564,9 +570,11 @@ const ProductDetail = () => {
             : {}),
         }
       : null;
-    const personalization = (cardPersonalization || uploadedCustomerImages.length || selectedPhotoBundle)
+    const trimmedCakeMessage = product.allowCakeMessage ? cakeMessage.trim() : "";
+    const personalization = (cardPersonalization || uploadedCustomerImages.length || selectedPhotoBundle || trimmedCakeMessage)
       ? {
           ...(cardPersonalization || {}),
+          ...(trimmedCakeMessage ? { cakeMessage: trimmedCakeMessage } : {}),
           ...(uploadedCustomerImages.length ? { customerImages: uploadedCustomerImages } : {}),
           ...(selectedPhotoBundle ? { photoBundle: selectedPhotoBundle } : {}),
         }
@@ -579,9 +587,10 @@ const ProductDetail = () => {
           personalization.from || "",
           personalization.to || "",
           personalization.message || "",
+          personalization.cakeMessage || "",
           personalization.photoBundle?.photoCount || "no-photo-bundle",
           ...(personalization.customerImages || []).map((image) => image.publicId),
-        ].join("|")
+        ].map((value) => encodeURIComponent(value)).join("|")
       : "without-card";
     const variantKey = [selectedSizeOption?.name || "no-size", selectedColor || "no-color"].join("|");
     const cartKey = `${effectiveCategory}-${product.id}-${encodeURIComponent(`${variantKey}|${personalizationKey}`)}`;
@@ -768,6 +777,25 @@ const ProductDetail = () => {
                     </div>
                   </div>
                 )}
+              </section>
+            )}
+
+            {product.allowCakeMessage && (
+              <section className="gu-pdp-cake-message" aria-label="Cake message">
+                <label className="gu-pdp-message-field" htmlFor="gu-pdp-cake-message">
+                  <span>Message on cake (optional)</span>
+                  <input
+                    id="gu-pdp-cake-message"
+                    type="text"
+                    value={cakeMessage}
+                    maxLength={50}
+                    onChange={(event) => setCakeMessage(event.target.value)}
+                    placeholder="e.g. Happy Birthday, Ali!"
+                    aria-describedby="gu-pdp-cake-message-help"
+                  />
+                  <span>{cakeMessage.length}/50</span>
+                </label>
+                <p id="gu-pdp-cake-message-help">Leave empty if you don't want writing on the cake.</p>
               </section>
             )}
 

@@ -304,7 +304,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .gu-round-action { height: 54px; width: 54px; }
   .gu-round-action img { transform: scale(0.75); }
   .gu-mobile-menu-trigger { align-items: center; background: rgb(255 255 255 / 64%); border-radius: 100px; cursor: pointer; display: flex; height: 54px; justify-content: center; width: 54px; }
-  .gu-mobile-menu { background: #fff; border-radius: 20px; box-shadow: 0 18px 60px rgb(0 0 0 / 16%); display: flex; flex-direction: column; gap: 4px; padding: 16px; position: absolute; right: 28px; top: 88px; width: min(360px, calc(100vw - 56px)); z-index: 60; }
+  .gu-mobile-menu { background: #fff; border-radius: 20px; box-shadow: 0 18px 60px rgb(0 0 0 / 16%); display: flex; flex-direction: column; gap: 4px; overflow-y: auto; overscroll-behavior: contain; padding: 16px; position: fixed; right: 28px; top: 88px; width: min(360px, calc(100vw - 56px)); z-index: 100; }
+  .gu-mobile-menu > * { flex-shrink: 0; }
   .gu-mobile-menu > button { border-radius: 12px; cursor: pointer; padding: 11px 12px; text-align: left; }
   .gu-mobile-menu > button:hover, .gu-mobile-menu > button.is-active { background: #fff1dc; }
   .gu-mobile-search { border: 1px solid #d8d3cc; border-radius: 999px; display: flex; margin-bottom: 8px; overflow: hidden; }
@@ -321,18 +322,19 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .gu-hello-copy > span:first-child { align-self: flex-start; }
   .gu-hello-link { display: none; }
   .gu-hello-close { right: 8px; }
-  .gu-hero-shell, .gu-hero { height: 720px; }
+  .gu-hero-shell, .gu-hero { height: auto; }
+  .gu-hero { display: flex; flex-direction: column; padding-top: 78px; padding-bottom: 48px; }
   .gu-landing-header { height: 78px; padding: 8px 16px 0; }
   .gu-brand-mark { flex-basis: 82px; transform: scale(0.68); transform-origin: left top; }
   .gu-header-actions { gap: 8px; }
   .gu-round-action, .gu-mobile-menu-trigger { height: 44px; width: 44px; }
   .gu-action-count { border-width: 1px; font-size: 9px; height: 17px; min-width: 17px; right: 0; top: 0; }
   .gu-mobile-menu { right: 16px; top: 72px; width: calc(100vw - 32px); }
-  .gu-hero-media { height: auto; left: 50%; top: 36px; transform: translateX(-58%); width: 620px; }
-  .gu-hero-content { bottom: 42px; left: 20px; top: auto; width: calc(100% - 40px); }
+  .gu-hero-media { flex: 0 0 auto; height: 348.75px; left: 50%; position: relative; top: auto; transform: translateX(-58%); width: 620px; }
+  .gu-hero-content { bottom: auto; left: auto; margin-top: 24px; padding-inline: 20px; position: relative; top: auto; width: 100%; }
   .gu-hero-content h1 { font-size: clamp(38px, 11vw, 46px); letter-spacing: -0.8px; line-height: 1.04; }
   .gu-hero-content p { font-size: 14px; letter-spacing: -0.1px; line-height: 1.35; margin-top: 14px; width: 100%; }
-  .gu-hero-actions { gap: 14px; margin-top: 24px; }
+  .gu-hero-actions { flex-wrap: wrap; gap: 14px; margin-top: 24px; }
   .gu-pill-button { font-size: 14px; height: 42px; padding: 8px 15px; }
   .cartoon-button { font-size: 14px; height: 44px; padding: 8px 15px; }
   .gu-cart-panel { border-radius: 20px; padding: 20px; }
@@ -990,6 +992,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .gu-pdp-message-fields [aria-invalid="true"] { border-color: var(--gu-red); }
 .gu-pdp-message-fields small { color: #b31420; font-size: 12px; }
 .gu-pdp-message-field { grid-column: 1 / -1; }
+.gu-pdp-cake-message { margin: 20px 0; }
+.gu-pdp-cake-message label { display: grid; gap: 6px; color: #5a514c; font-size: 16px; }
+.gu-pdp-cake-message input { width: 100%; min-height: 44px; padding: 10px; background: #efefef; border: 1px solid transparent; border-radius: 6px; font: inherit; }
+.gu-pdp-cake-message input:focus { outline: 2px solid var(--gu-red); outline-offset: 2px; }
+.gu-pdp-cake-message label > span:last-child { text-align: right; font-size: 12px; }
+.gu-pdp-cake-message p { color: #5a514c; font-size: 14px; margin-top: 4px; }
 .gu-pdp-message-field textarea { height: 64px; min-height: 64px; padding-bottom: 24px; resize: vertical; }
 .gu-pdp-character-count { bottom: 8px; color: #5a514c; font-size: 16px; font-weight: 400 !important; line-height: 24px; position: absolute; right: 10px; }
 

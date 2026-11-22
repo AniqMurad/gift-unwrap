@@ -110,6 +110,8 @@ const LandingHeader = ({ variant = "default", showGiftSearch = true }) => {
   const [hasKeyboardFocus, setHasKeyboardFocus] = useState(false);
   const keyboardInputRef = useRef(false);
   const headerRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const [mobileMenuPosition, setMobileMenuPosition] = useState(null);
   const shopTriggerRef = useRef(null);
   const shopMenuPanelRef = useRef(null);
   const shopMenuContentRef = useRef(null);
@@ -126,6 +128,29 @@ const LandingHeader = ({ variant = "default", showGiftSearch = true }) => {
   });
   const isFloating = navigationState !== "initial";
   const isHidden = navigationState === "hidden";
+
+  useLayoutEffect(() => {
+    if (!isMobileMenuOpen) return undefined;
+    const update = () => {
+      const viewportHeight = window.visualViewport?.height || window.innerHeight;
+      const top = Math.max(12, Math.min((headerRef.current?.getBoundingClientRect().bottom || 78) + 8, viewportHeight - 100));
+      setMobileMenuPosition({ top, maxHeight: Math.max(0, viewportHeight - top - 16) });
+    };
+    const dismiss = (event) => {
+      if (!mobileMenuRef.current?.contains(event.target) && !headerRef.current?.contains(event.target)) setIsMobileMenuOpen(false);
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    window.visualViewport?.addEventListener("resize", update);
+    document.addEventListener("pointerdown", dismiss);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+      window.visualViewport?.removeEventListener("resize", update);
+      document.removeEventListener("pointerdown", dismiss);
+    };
+  }, [isMobileMenuOpen, isFloating]);
 
   useEffect(() => {
     const handleKeyboardInput = (event) => {
@@ -478,8 +503,8 @@ const LandingHeader = ({ variant = "default", showGiftSearch = true }) => {
           {isMobileMenuOpen ? <X /> : <Menu />}
         </button>
       </div>
-      {isMobileMenuOpen && (
-        <div className="gu-mobile-menu">
+      {isMobileMenuOpen && createPortal(
+        <nav ref={mobileMenuRef} className="gu-mobile-menu" aria-label="Mobile navigation" style={mobileMenuPosition || { visibility: "hidden" }}>
           {showGiftSearch && <div className="gu-mobile-search">
             <input value={searchTerm} aria-label="Search gifts" placeholder="Search gifts" onChange={(event) => setSearchTerm(event.target.value)} onKeyDown={(event) => event.key === "Enter" && handleSearch()} />
             <button type="button" aria-label="Submit search" onClick={handleSearch}><Search size={20} /></button>
@@ -487,7 +512,8 @@ const LandingHeader = ({ variant = "default", showGiftSearch = true }) => {
           <button className="is-active" type="button" onClick={() => goTo("/personalized-gifts")}>Personalized</button>
           <button type="button" onClick={() => goTo("/giftforcompanies")}>Corporate</button>
           {mobileLinks.map((item) => <button key={`${item.label}-${item.route}`} type="button" onClick={() => goTo(item.route)}>{item.label}</button>)}
-        </div>
+          <button type="button" onClick={() => goTo(localStorage.getItem("token") ? "/myaccount" : "/login")}>My Account</button>
+        </nav>, document.body
       )}
       {isCartOpen && createPortal(
         <>
@@ -506,6 +532,7 @@ const LandingHeader = ({ variant = "default", showGiftSearch = true }) => {
                       <h3>{item.name}</h3>
                       <p>Qty: {item.quantity}</p>
                       {(item.selectedSize || item.selectedColor) && <p className="gu-cart-personalization">{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>}
+                      {item.personalization?.cakeMessage && <p className="gu-cart-personalization" style={{ overflowWrap: 'anywhere' }}>Cake message: {item.personalization.cakeMessage}</p>}
                       {item.personalization?.card && <p className="gu-cart-personalization">Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})</p>}
                       {getStandaloneCardMessageSummary(item) && <p className="gu-cart-personalization">{getStandaloneCardMessageSummary(item)}</p>}
                       {item.personalization?.photoBundle?.photoCount && <p className="gu-cart-personalization">Photo bundle: {item.personalization.photoBundle.photoCount} photos</p>}

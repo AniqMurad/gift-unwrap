@@ -61,6 +61,7 @@ const OrderSummary = ({
                       {[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}
                     </p>
                   )}
+                  {item.personalization?.cakeMessage && <p className="gu-cart-personalization" style={{ overflowWrap: 'anywhere' }}>Cake message: {item.personalization.cakeMessage}</p>}
                   {item.personalization?.card && (
                     <p className="text-[#696C70] text-[12px]">
                       Card: {item.personalization.card.name} (+PKR {getCartItemCardPrice(item)})

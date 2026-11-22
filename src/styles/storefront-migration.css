@@ -281,6 +281,13 @@
 .gu-migration-catalog .gu-collection-product:hover .gu-collection-product-actions { transform: translateX(-50%); }
 .gu-migration-search { margin-inline: auto; max-width: 900px; padding: 64px 20px 0; text-align: center; }
 .gu-migration-search input { width: 100%; }
+.gu-migrated--search .gu-migration-search { display: flex; flex-direction: column; gap: 20px; padding-bottom: 32px; }
+.gu-migrated--search .gu-migration-search > h2 { margin-bottom: 0; }
+.gu-migrated--search .gu-migration-search > div { order: -1; }
+@media (max-width: 640px) {
+  .gu-migrated--search .gu-migration-title { padding: 24px 20px; }
+  .gu-migrated--search .gu-migration-search { padding: 24px 20px 32px; }
+}
 .gu-migration-state { background: #f4effb; border-radius: 24px; margin: 24px auto; max-width: 900px; padding: 48px 24px; text-align: center; }
 .gu-migration-loading { align-items: center; background: var(--gu-cream-soft); color: var(--gu-body); display: flex; flex-direction: column; gap: 24px; justify-content: center; min-height: 260px; padding: 40px 20px; text-align: center; }
 .gu-migration-loading img { height: auto; width: 90px; }

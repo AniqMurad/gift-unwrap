@@ -231,10 +231,10 @@ export default function RecipientCollectionPage({
     () =>
       config.profileFilteringSupported === false
         ? []
-        : Array.from(
+        : config.profileOptions || Array.from(
           new Set(products.flatMap((product) => getKeyGiftValues(product.keyGift))),
         ) as string[],
-    [config.profileFilteringSupported, products],
+    [config.profileFilteringSupported, config.profileOptions, products],
   );
 
   const catalogueOccasions = useMemo(() => {

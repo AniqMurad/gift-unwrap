@@ -51,6 +51,7 @@ test("product HTML contains visible catalogue content and matching canonical met
   assert.match(root, /application\/ld\+json/);
   assert.match(root, /og:title/);
   assert.match(root, /Add to cart/);
+  assert.doesNotMatch(root, /id="gu-pdp-cake-message"/);
   assert.doesNotMatch(root, /Loading product details/);
   assert.equal((page.html.match(/<title/g) || []).length, 1);
   assert.equal(page.headers["Cache-Control"], "no-store");
@@ -129,6 +130,34 @@ test("personalized collection renders admin-managed products before and after hy
   assert.match(output, /Hydration.*passed/);
 });
 
+test("Sweet Treats filters admin item types and combines them with prices", async () => {
+  const treats = [
+    ...Array.from({ length: 17 }, (_, index) => ({ ...product, id: 1000 + index, name: `Celebration Cake ${index + 1}`, keyGift: ['cake'], price: 2000 })),
+    { ...product, id: 1100, name: 'Fudge Brownies', keyGift: ['brownies'], price: 500 },
+    { ...product, id: 1101, name: 'Chocolate Cookies', keyGift: 'cookies, chocolates', price: 1500 },
+  ];
+  const overrides = { fetchData: async () => [{ category: 'sweetTreats', products: treats }] };
+  const filtered = await run('/sweet-treats?profile=brownies&maxPrice=1000', overrides);
+  const visible = filtered.html.split('<script id="__STOREFRONT_DATA__"')[0];
+  assert.match(visible, /Fudge Brownies/);
+  assert.doesNotMatch(visible, /Celebration Cake 1|Chocolate Cookies/);
+  const empty = await run('/sweet-treats?profile=cake&maxPrice=1000', overrides);
+  assert.match(empty.html, /No gifts match those filters/);
+  assert.match(empty.html, /Try a different profile or price range/);
+  const page = await run('/sweet-treats?page=2', overrides);
+  assert.match(page.html, /Profile/);
+  const output = await new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, ['tests/hydrate-storefront.mjs'], { stdio: ['pipe', 'pipe', 'pipe'] });
+    let log = '';
+    child.stdout.on('data', (chunk) => { log += chunk; });
+    child.stderr.on('data', (chunk) => { log += chunk; });
+    child.on('error', reject);
+    child.on('close', (code) => code === 0 ? resolve(log) : reject(new Error(log)));
+    child.stdin.end(JSON.stringify({ html: page.html, path: '/sweet-treats?page=2' }));
+  });
+  assert.match(output, /Hydration.*passed/);
+});
+
 test("server snapshots are request isolated and script-safe", async () => {
   const malicious = { ...product, shortDescription: '</script><script>alert("catalogue")</script>' };
   const [first, second] = await Promise.all([
@@ -154,9 +183,10 @@ test("SSR preserves permanent redirects, missing content and temporary failure r
 
 test("server HTML hydrates without mismatches and preserves shopping controls", async () => {
   const path = "/product/floralArrangements/anniversary-rose-promise";
-  const variant = { ...product, showSizeOptions: true };
+  const variant = { ...product, showSizeOptions: true, allowCakeMessage: true };
   const page = await run(path, { fetchData: async () => [{ category: "FlowersChocolates", products: [variant] }] });
   assert.equal(page.statusCode, 200);
+  assert.match(page.html, /id="gu-pdp-cake-message"/);
   const output = await new Promise((resolve, reject) => {
     const child = spawn(process.execPath, ["tests/hydrate-storefront.mjs"], { stdio: ["pipe", "pipe", "pipe"] });
     let log = "";

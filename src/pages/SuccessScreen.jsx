@@ -117,6 +117,7 @@ export default function SuccessScreen() {
                         {(item.selectedSize || item.selectedColor) && (
                           <p>{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>
                         )}
+                        {item.personalization?.cakeMessage && <p style={{ overflowWrap: 'anywhere' }}>Cake message: {item.personalization.cakeMessage}</p>}
                         {item.personalization?.photoBundle?.photoCount && <p>Photo bundle: {item.personalization.photoBundle.photoCount} photos</p>}
                       </div>
                       <strong>{formatPkr(Number(item.price || 0) * quantity)}</strong>

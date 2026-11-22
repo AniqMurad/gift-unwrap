@@ -176,9 +176,9 @@ const OrderHistory = () => {
             <div className="space-y-4">
                 {loading ? <p role="status" className="gu-migration-state">Loading your orders…</p> : loadError ? <p role="alert" className="gu-migration-state">We couldn’t load your orders. Please refresh the page to try again.</p> : filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => (
-                        order.orderItems.map((orderItem) => (
+                        order.orderItems.map((orderItem, itemIndex) => (
                             <div
-                                key={`${order._id}-${orderItem.productId}`}
+                                key={`${order._id}-${orderItem._id || itemIndex}`}
                                 className="border border-[#E9E9E9] py-[11px] px-[16px] rounded-[8px] shadow-sm hover:shadow-md transition"
                             >
                                 <div className="flex items-center justify-between">
@@ -201,6 +201,7 @@ const OrderHistory = () => {
                                             <div>
                                                 <p className='text-[16px]'>Order ID: {order._id}</p>
                                                 <p className="text-[16px]">{orderItem?.name}</p>
+                                                {orderItem.personalization?.cakeMessage && <p className="text-[14px]" style={{ overflowWrap: 'anywhere' }}>Cake message: {orderItem.personalization.cakeMessage}</p>}
                                                 {(orderItem?.selectedSize || orderItem?.selectedColor) && <p className="text-[14px]">{[orderItem.selectedSize && `Size: ${orderItem.selectedSize}`, orderItem.selectedColor && `Color: ${orderItem.selectedColor}`].filter(Boolean).join(' · ')}</p>}
                                                 <p className="text-[24px] font-bold">Rs {orderItem?.priceAtTimeOfOrder.toFixed(2)}</p>
                                             </div>

@@ -14,6 +14,7 @@ export interface RecipientCollectionConfig {
   sourceCollectionIds?: string[];
   productScope?: "birthday" | "personalized" | "floral" | "sweetTreats";
   profileFilteringSupported?: boolean;
+  profileOptions?: string[];
   fixedOccasion?: {
     value: string;
     label: string;
@@ -611,7 +612,7 @@ export const recipientCollectionConfigs: Record<
     collectionId: "sweetTreats",
     sourceCollectionIds: ["sweetTreats"],
     productScope: "sweetTreats",
-    profileFilteringSupported: false,
+    profileOptions: ["cake", "brownies", "cookies", "chocolates"],
     featuredSortLabel: "Sorting unavailable",
     sortingSupported: false,
     alwaysShowPagination: true,
@@ -683,7 +684,7 @@ export const recipientCollectionConfigs: Record<
         linkLabel: "Contact us on WhatsApp",
       },
     ],
-    profileLabels: {},
+    profileLabels: { cake: "Cakes", brownies: "Brownies", cookies: "Cookies", chocolates: "Chocolates" },
     occasionLabels: {},
   },
 };

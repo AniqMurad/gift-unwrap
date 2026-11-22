@@ -187,6 +187,7 @@ const ShoppingCart = () => {
                           {(item.selectedSize || item.selectedColor) && (
                             <p>{[item.selectedSize && `Size: ${item.selectedSize}`, item.selectedColor && `Color: ${item.selectedColor}`].filter(Boolean).join(' · ')}</p>
                           )}
+                          {item.personalization?.cakeMessage && <p className="gu-cart-personalization" style={{ overflowWrap: 'anywhere' }}>Cake message: {item.personalization.cakeMessage}</p>}
                           {item.personalization?.customerImages?.length > 0 && (
                             <p>Personalization photos: {item.personalization.customerImages.length}</p>
                           )}
