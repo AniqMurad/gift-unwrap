@@ -107,7 +107,37 @@ if (path.startsWith("/sweet-treats")) {
   assert.equal(names().length, 16);
   assert.equal(document.querySelector('[aria-label="Product pages"] [aria-current="page"]').textContent, '1');
 }
-if (path.startsWith("/product/")) {
+if (path.startsWith('/product/') && snapshot.product?.ringSizeMode) {
+  const click = async (text) => {
+    const button = [...document.querySelectorAll('button')].find((element) => element.textContent.trim() === text);
+    assert.ok(button, `Missing ring control: ${text}`);
+    button.click();
+    await tick();
+  };
+  if (snapshot.product.ringSizeMode === 'adjustable') {
+    assert.match(document.querySelector('.gu-pdp-purchase').textContent, /Size: Adjustable/);
+    assert.equal(document.querySelector('[role="radiogroup"][aria-label="Choose a size"]'), null);
+    await click('Add to cart');
+    assert.equal(JSON.parse(localStorage.getItem('cartItems'))[1].selectedSize, 'Adjustable');
+  } else {
+    assert.equal(document.querySelector('[aria-label="Choose a size"] [aria-checked="true"]'), null);
+    await click('Add to cart');
+    assert.equal(JSON.parse(localStorage.getItem('cartItems')).length, 1);
+    await click('US 6');
+    await click('Add to cart');
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    await click('US 7');
+    await click('Add to cart');
+    const cart = JSON.parse(localStorage.getItem('cartItems'));
+    assert.equal(cart.length, 3);
+    assert.equal(cart[1].selectedSize, 'US 6');
+    assert.equal(cart[2].selectedSize, 'US 7');
+    assert.notEqual(cart[1].cartKey, cart[2].cartKey);
+    assert.equal(cart[1].price, 2100);
+    assert.equal(cart[2].price, 2200);
+  }
+}
+if (path.startsWith("/product/") && !snapshot.product?.ringSizeMode) {
   const clickText = (text) => {
     const button = [...document.querySelectorAll("button")].find((element) => element.textContent.trim() === text);
     assert.ok(button, `Missing control: ${text}`);

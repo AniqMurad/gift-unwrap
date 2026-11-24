@@ -66,6 +66,8 @@ const Product = ({ product, columns, variant = "default", eager = false, directP
     if (isUnavailable) return;
     if (isCorporateGift) {
       setShowQuoteModal(true);
+    } else if (product.ringSizeMode && product.ringSizeMode !== 'none') {
+      handleNavigateToDetail(e);
     } else if (isStandaloneGreetingCard) {
       messageReturnFocusRef.current = e.currentTarget;
       setShowMessageModal(true);

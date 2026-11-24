@@ -356,7 +356,7 @@ const ProductDetail = () => {
   const showContents = product?.showWhatsInside ?? contents.length > 0;
   const showPackaging = product?.showPackaging ?? Boolean(packaging);
   const sizeOptions = useMemo(
-    () => product?.showSizeOptions ? normalizeSizeOptions(product.sizeOptions, product.price) : [],
+    () => product?.ringSizeMode !== 'adjustable' && (product?.showSizeOptions || product?.ringSizeMode === 'available') ? normalizeSizeOptions(product.sizeOptions, product.price) : [],
     [product],
   );
   const colorOptions = useMemo(
@@ -382,7 +382,7 @@ const ProductDetail = () => {
     customerPhotoPreviews.forEach((preview) => URL.revokeObjectURL(preview.url));
   }, [customerPhotoPreviews]);
   const selectedColorOption = colorOptions.find((option) => option.name === selectedColor) || null;
-  const selectedSizeOption = sizeOptions.find((option) => option.name === selectedSize) || sizeOptions[0] || null;
+  const selectedSizeOption = sizeOptions.find((option) => option.name === selectedSize) || (product?.ringSizeMode === 'available' ? null : sizeOptions[0]) || null;
   const selectedPrice = selectedPhotoBundle?.price || selectedSizeOption?.price || Number(product?.price) || 0;
   const faqContent = useMemo(
     () => getProductFaqContent(product, effectiveCategory),
@@ -418,12 +418,12 @@ const ProductDetail = () => {
   }, [product?.id, showContents, showPackaging]);
 
   useEffect(() => {
-    setSelectedSize(sizeOptions[0]?.name || "");
+    setSelectedSize(product?.ringSizeMode === 'available' ? "" : sizeOptions[0]?.name || "");
     const firstColor = colorOptions[0] || null;
     setSelectedColor(firstColor?.name || "");
     if (firstColor?.image) setSelectedImage(firstColor.image);
-    setActiveVariantTab(firstColor ? "colors" : "sizes");
-  }, [product?.id, sizeOptions, colorOptions]);
+    setActiveVariantTab(product?.ringSizeMode === 'available' ? "sizes" : firstColor ? "colors" : "sizes");
+  }, [product?.id, product?.ringSizeMode, sizeOptions, colorOptions]);
 
   useEffect(() => {
     setCakeMessage("");
@@ -525,6 +525,10 @@ const ProductDetail = () => {
       setNotification({ show: true, type: "error", message: "This product is currently unavailable." });
       return;
     }
+    if (product.ringSizeMode === 'available' && !selectedSizeOption) {
+      setNotification({ show: true, type: 'error', message: 'Please select an available ring size before adding to cart.' });
+      return;
+    }
     if (!validatePersonalization()) return;
     if (requiresCustomerImages && customerPhotoFiles.length === 0) {
       setCustomerPhotoError(`Upload at least one photo for this personalized product (maximum ${customerImageLimit}).`);
@@ -592,7 +596,8 @@ const ProductDetail = () => {
           ...(personalization.customerImages || []).map((image) => image.publicId),
         ].map((value) => encodeURIComponent(value)).join("|")
       : "without-card";
-    const variantKey = [selectedSizeOption?.name || "no-size", selectedColor || "no-color"].join("|");
+    const ringSize = product.ringSizeMode === 'adjustable' ? 'Adjustable' : selectedSizeOption?.name;
+    const variantKey = [ringSize || "no-size", selectedColor || "no-color"].join("|");
     const cartKey = `${effectiveCategory}-${product.id}-${encodeURIComponent(`${variantKey}|${personalizationKey}`)}`;
 
     addingRef.current = true;
@@ -604,7 +609,7 @@ const ProductDetail = () => {
         quantity,
         cartKey,
         personalization,
-        selectedSize: selectedSizeOption?.name || undefined,
+        selectedSize: ringSize || undefined,
         selectedColor: selectedColor || undefined,
         selectedColorHex: selectedColorOption?.hex || undefined,
         price: selectedPrice,
@@ -709,6 +714,8 @@ const ProductDetail = () => {
               {product.shortDescription || product.longDescription || "Product details are being updated."}
             </p>
 
+            {product.ringSizeMode === 'adjustable' && <p className="gu-pdp-description"><strong>Size: Adjustable</strong></p>}
+            {product.ringSizeMode === 'available' && <p className="gu-pdp-description">Choose your ring size before adding to cart.</p>}
             {(sizeOptions.length > 0 || colorOptions.length > 0) && (
               <section className="gu-pdp-variant-panel" aria-label="Choose product options">
                 <div className="gu-pdp-variant-tabs" role="tablist" aria-label="Product options">

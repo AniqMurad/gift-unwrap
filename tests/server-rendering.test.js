@@ -158,6 +158,24 @@ test("Sweet Treats filters admin item types and combines them with prices", asyn
   assert.match(output, /Hydration.*passed/);
 });
 
+test('ring sizing displays adjustable rings and requires an explicit available size', async () => {
+  const path = '/product/floralArrangements/anniversary-rose-promise';
+  for (const ringSizeMode of ['adjustable', 'available']) {
+    const ring = { ...product, ringSizeMode, showSizeOptions: ringSizeMode === 'available', sizeOptions: [{ name: 'US 6', price: 2100 }, { name: 'US 7', price: 2200 }] };
+    const page = await run(path, { fetchData: async () => [{ category: 'FlowersChocolates', products: [ring] }] });
+    assert.equal(page.statusCode, 200);
+    await new Promise((resolve, reject) => {
+      const child = spawn(process.execPath, ['tests/hydrate-storefront.mjs'], { stdio: ['pipe', 'pipe', 'pipe'] });
+      let output = '';
+      child.stdout.on('data', (chunk) => { output += chunk; });
+      child.stderr.on('data', (chunk) => { output += chunk; });
+      child.on('error', reject);
+      child.on('close', (code) => code === 0 ? resolve(output) : reject(new Error(output)));
+      child.stdin.end(JSON.stringify({ html: page.html, path }));
+    });
+  }
+});
+
 test("server snapshots are request isolated and script-safe", async () => {
   const malicious = { ...product, shortDescription: '</script><script>alert("catalogue")</script>' };
   const [first, second] = await Promise.all([
